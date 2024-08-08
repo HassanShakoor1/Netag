@@ -1,0 +1,114 @@
+.productContainer {
+  width: 100%;
+  position: relative;
+ 
+  }
+  
+  .Product-design {
+
+    width: 100%;
+    max-width: 430px;
+    margin: 20px auto;
+  
+  }
+  
+  .bck-head-btn{
+    display: flex;
+   justify-content:space-between;
+ 
+   
+  }
+
+  .add-btn{
+    width: 60px;
+    height: 30px;
+    cursor: pointer;
+    border-radius:20px;
+    background-color:white;
+    border:2px solid #E93428;
+    color: #E93428;
+    margin-right: 6px;
+   
+  
+  }
+  .search-field{
+display: flex;
+justify-content: center;
+ 
+   
+  }
+  .search-field input{
+    width: 100%;
+    max-width:410px;
+    height: 40px;
+    border-radius: 30px;
+    margin-top: 2rem;
+  }
+
+  .HairoilContainer{
+    width: 100%;
+   
+    background-color:#F5F5F5 ;
+    border-radius: 10px;
+
+  }
+  .hair-img{
+    width: 100%;
+    height: 150px;
+    padding-top: 10px;
+  
+  }
+
+  .p-dots{
+display: flex; 
+justify-content: space-between;
+margin-top: -24px;
+
+  }
+
+  .product-btn{
+    
+    background-color:#FFDEDE;
+    width: 95%;
+    margin-left: 0.5rem;
+    height: 40px;
+    box-shadow:1px 1px 1px 2px gainsboro;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+  
+  }
+
+  /* edited part....... */
+
+
+  .Edit-product-Design{
+    width: 100%;
+   border-radius: 20px;
+
+  }
+  .item-img{
+width: 30%;
+height: 140px;
+ 
+  border-radius: 10px;
+  }
+  .items{
+    background-color: #F5F5F5;
+    display: flex;
+    padding: 10px;
+    width: 100%;
+  
+  }
+  .item-data{
+padding-left: 10px;
+width: 60%;
+  }
+
+  .dot-img{
+    width: 10%;
+  }
+
+  .custom-box {
+    border-radius: 20px;
+  }

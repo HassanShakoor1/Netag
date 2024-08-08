@@ -1,0 +1,155 @@
+
+
+.Icon-nav{
+    background-color: white;
+    width: 100%;
+    margin-top: 2rem;
+  
+ 
+}
+.crox-dlt{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 55px;
+    
+}
+
+.x-space{
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+    background-color:#DADADA;
+    margin-top: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.image-section{
+   width: 100%;
+   margin-top: 1rem;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+
+.input-q{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+  
+}
+.input-qq{
+    width: 100%;
+    display: flex;
+    justify-content:center;
+   
+  
+}
+
+.x-space22{
+
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ 
+    color:red;
+    font-size:25px;
+    font-weight:600;
+   margin-right: 100px;
+  
+  
+    
+
+}
+
+
+
+
+.quest{
+    border: none;
+    text-align:center;
+    outline:none;
+    background-color:#F7F7F7;
+    border:1px solid #DADADA ;
+    border-radius:10px;
+    width:250px;
+    height:45px;
+}
+
+.x-space2{
+
+    height: 44px;
+    width: 44px;
+    border-radius: 100%;
+    background-color:#F7F7F7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #F7F7F7;
+    color:red;
+    font-size:25px;
+    font-weight:600;
+    margin-left: 20px;
+     border: 1px solid #DADADA
+  
+    
+
+}
+
+.two-btns {
+    width: 100%;
+display: flex;
+justify-content: center;
+
+}
+
+.cancel{
+  background-color: rgb(255, 255, 255);
+  width: 150px;
+  height: 40px;
+  box-shadow:1px 1px 1px 2px gainsboro;
+  border: none;
+  cursor: pointer;
+  border-radius: 12px;
+
+}
+
+.save{
+    background-color: #EE0000;
+    width: 150px;
+    margin-left: 20px;
+    height: 40px;
+    box-shadow:1px 1px 1px 2px gainsboro;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+
+
+
+
+
+  

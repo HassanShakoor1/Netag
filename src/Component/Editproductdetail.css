@@ -1,0 +1,58 @@
+/* General Styles */
+.newContainer {
+    width: 100%;
+}
+
+.new-details-design {
+    width: 100%;
+    max-width: 430px;
+    margin: 20px auto;
+}
+
+input::placeholder {
+    color: #727272;
+}
+
+/* Form Container */
+.formContainer {
+    display: flex;
+    flex-direction: column;
+   margin-left: 1.5rem; /* Adjusted margin */
+    gap: 1rem; /* Space between rows */
+    width: 95%;
+   
+}
+
+/* Flexbox for Rows and Columns */
+.formRow {
+    display: flex;
+    flex-wrap: wrap; /* Ensure items wrap to the next line on smaller screens */
+    gap:2px; /* Space between columns */
+}
+
+.formColumn {
+    flex: 1; /* Make columns flexible */
+    min-width: 0; /* Prevent columns from being too narrow */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Space between heading and input field */
+}
+
+.formHeading {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.formInput {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Ensure input takes full width of column */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+
+
+
+
+

@@ -1,0 +1,74 @@
+.Editcontainer{
+
+    width: 100%;
+   position: relative;
+}
+
+.edit-Contact{
+   width: 100%;
+   max-width: 430px;
+   
+   margin: 20px auto;
+}
+.nav2{
+    width: 100%;
+    display: flex;
+    
+  
+}
+.Upload-p{
+    width: 100%;
+    border: 2px solid black;
+   
+ 
+    border-radius: 30px;
+    border: 2px solid #C6C6C6;
+}
+.Upload-p h2{
+    text-align: center;
+    color: red;
+}
+
+.upload-1{
+    background-color: #F5F5F5;
+   margin: 20px auto;
+    width: 90%;
+    height: 140px;
+    border-radius: 30px;
+    border: 1px dashed #6D6D6D;
+
+}
+
+.save22{
+    background-color: #EE0000;
+    width: 100px;
+    margin-left: 20px;
+    height: 30px;
+    box-shadow:1px 1px 1px 2px gainsboro;
+    border: none;
+    cursor: pointer;
+    color: aliceblue;
+    border-radius: 12px;
+   
+}
+
+
+.grid-container {
+    width: 90%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:10px;
+   margin: 20px auto 20px;
+   
+
+}
+
+.grid-item {
+    background-color:#F5F5F5;
+    color: white;
+    padding: 20px;
+   max-height: 70px;
+    text-align: center;
+    border-radius: 15px;
+    border: 1px solid #ACACAC;
+}

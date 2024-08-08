@@ -1,0 +1,54 @@
+.container{
+    width: 100%;
+    position: relative;
+
+
+}
+
+.edit-profile{
+width: 100%;
+max-width: 430px;
+
+margin: 20px auto;
+   
+}
+.lgo{
+    width: 40px;
+    height: 40px;
+}
+.bck{
+    font-size: 29px;
+    color: red;
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+
+.input-data{
+    width: 100%;
+}
+
+.edit-field{
+    width: 100%;
+    display: flex;
+    justify-content:center;
+    gap:10px;
+    margin-top: 20px;
+
+}
+
+.btn-s{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.save2{
+    background-color: #EE0000;
+    width: 250px;
+   
+    height: 50px;
+    box-shadow:1px 1px 1px 2px gainsboro;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+}
