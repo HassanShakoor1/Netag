@@ -9,6 +9,7 @@ import Addcatagory from './Component/Addcatagory';
 import EditProduct from './Component/EditProduct';
 import Editproductdetail from './Component/Editproductdetail';
 import Gallery from './Component/Gallery';
+import ActiveCard from './SettingComponent/ActiveCard';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/edit-product-catagory" element={<EditProduct />} /> Add this route
           <Route path="/edit-product-detail" element={<Editproductdetail />} /> Add this route
           <Route path="/gallery" element={<Gallery />} /> Add this route
+          <Route path="/active-card" element={<ActiveCard />} /> Add this route
         </Routes>
    
       </div>

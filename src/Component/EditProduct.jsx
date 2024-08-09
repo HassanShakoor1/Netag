@@ -110,9 +110,9 @@ function EditProduct() {
         </div>
         <br /><br />
 
-        <div className="Edit-product-Design">
+        <div style={{width:'95%'}} className="Edit-product-Design">
           {products.map(product => (
-            <div className="items" key={product.id}>
+            <div style={{marginTop:"20px"}} className="items" key={product.id}>
               <img className='item-img' src={product.imageUrl} alt={product.heading} onClick={() => handleOpen(product)} />
               <div className="item-data">
                 <h1 style={{ color: 'red', margin: 0, fontSize: 20 }}>
@@ -166,6 +166,7 @@ function EditProduct() {
                   </div>
                    
                   </MenuItem>
+                  <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div> {/* Separator Line */}
                   <MenuItem style={{ fontSize: "15px", color: 'red' }} onClick={handleClose}>
                     <DeleteIcon style={{ marginRight: '8px', color: 'red' }} />
                     Delete Product

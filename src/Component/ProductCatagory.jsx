@@ -1,23 +1,20 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import './product.css';
 import { IoChevronBack } from "react-icons/io5";
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import hairimg from '../images/hairimg.jpeg';
 import dots from '../images/dots.png';
-import line from '../images/line.png';
-import edcat from '../images/edcat.png';
-import dltcat from '../images/dltcat.png';
 import Slide from '@mui/material/Slide';
-import './Slide.css';
-import { MdBorderBottom } from 'react-icons/md';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function ProductCatagory() {
   const navigate = useNavigate();
-  const [setting, setSetting] = useState(false);
-  const handleSlide = () => {
-  
-    setSetting(!setting);
-  };
+  const [hairOilMenuAnchor, setHairOilMenuAnchor] = useState(null);
+  const [shoesMenuAnchor, setShoesMenuAnchor] = useState(null);
+
   const handleBackscreen = () => {
     navigate('/');
   };
@@ -26,16 +23,31 @@ function ProductCatagory() {
     navigate('/product-catagory');
   };
 
-  const handleEditproductcatagory = () => {
+  const handleEditProductCategory = () => {
     navigate('/edit-product-catagory');
   };
-  
+
+  const handleOpenHairOilMenu = (event) => {
+    setHairOilMenuAnchor(event.currentTarget);
+  };
+
+  const handleOpenShoesMenu = (event) => {
+    setShoesMenuAnchor(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setHairOilMenuAnchor(null);
+    setShoesMenuAnchor(null);
+  };
+
+  const ITEM_HEIGHT = 48;
+
   return (
     <div className="productContainer">
       <div className="Product-design">
         <div className="bck-head-btn">
           <IoChevronBack onClick={handleBackscreen} className="bck" style={{ paddingTop: "1.5rem", paddingRight: "2rem" }} />
-          <h4 style={{ color: "red", fontSize: '20px', fontWeight: '100' }}>Product catagory</h4>
+          <h4 style={{ color: "red", fontSize: '20px', fontWeight: '100' }}>Product Category</h4>
           <button onClick={handleAddClick} style={{ marginTop: '1.5rem' }} className='add-btn'>Add</button>
         </div>
 
@@ -45,45 +57,50 @@ function ProductCatagory() {
         <br />
         <div className="HairoilContainer">
           <div className="hair-img">
-            <img style={{ width: "100%", height: "170px", objectFit: 'cover', borderRadius: "20px" }} src={hairimg} alt="" />
+            <img style={{ width: "100%", height: "170px", objectFit: 'cover', borderRadius: "20px" }} src={hairimg} alt="Hair Oil" />
           </div>
           <div className="hair-data" style={{ backgroundColor: "#F5F5F5" }}>
             <h3 style={{ marginTop: "2rem", paddingLeft: '1rem', color: "red", fontWeight: '100', fontSize: '26px' }}>
-              Hair oil <span style={{ fontSize: '13px', color: "rgb(197, 197, 197)" }}>(299 products)</span>
+              Hair Oil <span style={{ fontSize: '13px', color: "rgb(197, 197, 197)" }}>(299 products)</span>
             </h3>
             <div className="p-dots">
               <p style={{ fontSize: '12px', textAlign: "left", paddingLeft: "1rem", width: '70%', paddingTop: '0px', paddingBottom: "0px" }}>
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto quibusdam nobis sapiente dolorem aspernatur iste neque quos vero aperiam corrupti.
               </p>
-
-              <Slide in={setting} direction="right" timeout={{ appear: 500, enter: 500, exit: 500 }}>
-                <div className="slide_main_div relative" style={{height:"90px", marginBottom:"10rem",width:'200px',borderRadius:"10px"}}>
-                <div style={{display:"flex",flexDirection:"column",justifyContent:'center',alignItems:'center',margin:"20px auto",padding:"4px"}} >
-            
-                   <img onClick={handleEditproductcatagory}  style={{width:"90%",borderBottom:'2px solid grey',paddingBottom:'2px',cursor:"pointer"}} src={edcat} alt="line" />
-
-
-                   <img onClick={handleSlide}  style={{width:"90%",cursor:"pointer"}} src={dltcat} alt="line" />
-
-                
-                </div>
-                
-                </div>
-              </Slide>
-
-
-
-
-
-
-              
-              <img  onClick={handleSlide} style={{ height: '15px', paddingTop: '16px', marginRight: '13px', cursor: "pointer" }} src={dots} alt="" />
-
-            
-            
-            
-            
-            
+              <img onClick={handleOpenHairOilMenu} style={{ height: '15px', paddingTop: '16px', marginRight: '13px', cursor: "pointer" }} src={dots} alt="Menu" />
+              <Menu
+                id="hair-oil-menu"
+                MenuListProps={{
+                  'aria-labelledby': 'hair-oil-button',
+                }}
+                anchorEl={hairOilMenuAnchor}
+                open={Boolean(hairOilMenuAnchor)}
+                onClose={handleCloseMenu}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                PaperProps={{
+                  style: {
+                    maxHeight: ITEM_HEIGHT * 4.5,
+                    width: '20ch',
+                  },
+                }}
+              >
+                <MenuItem style={{ fontSize: "15px" }} onClick={() => { handleEditProductCategory(); handleCloseMenu(); }}>
+                  <DoneAllIcon style={{ marginRight: '8px' }} />
+                  Edit Product
+                </MenuItem>
+                <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div> {/* Separator Line */}
+                <MenuItem style={{ fontSize: "15px", color: 'red' }} onClick={handleCloseMenu}>
+                  <DeleteIcon style={{ marginRight: '8px', color: 'red' }} />
+                  Delete Product
+                </MenuItem>
+              </Menu>
             </div>
             <button style={{ border: '1px solid #EE0000', color: "red" }} className='product-btn'> Explore Products</button>
             <br /><br />
@@ -92,7 +109,7 @@ function ProductCatagory() {
         <br />
         <div className="HairoilContainer">
           <div className="hair-img">
-            <div style={{ width: "100%", height: "170px", objectFit: 'cover', backgroundColor: "#D9D9D9", borderRadius: "20px" }} ></div>
+            <div style={{ width: "100%", height: "170px", objectFit: 'cover', backgroundColor: "#D9D9D9", borderRadius: "20px" }}></div>
           </div>
           <div className="hair-data" style={{ backgroundColor: "#F5F5F5" }}>
             <h3 style={{ marginTop: "2rem", paddingLeft: '1rem', color: "red", fontWeight: '100', fontSize: '26px' }}>
@@ -102,12 +119,40 @@ function ProductCatagory() {
               <p style={{ fontSize: '12px', textAlign: "left", paddingLeft: "1rem", width: '70%' }}>
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto quibusdam nobis sapiente dolorem aspernatur iste neque quos vero aperiam corrupti.
               </p>
-
-
-
-
-
-              <img onClick={handleSlide} style={{ height: '15px', paddingTop: '16px', marginRight: '13px', cursor: "pointer" }} src={dots} alt="" />
+              <img onClick={handleOpenShoesMenu} style={{ height: '15px', paddingTop: '16px', marginRight: '13px', cursor: "pointer" }} src={dots} alt="Menu" />
+              <Menu
+                id="shoes-menu"
+                MenuListProps={{
+                  'aria-labelledby': 'shoes-button',
+                }}
+                anchorEl={shoesMenuAnchor}
+                open={Boolean(shoesMenuAnchor)}
+                onClose={handleCloseMenu}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                PaperProps={{
+                  style: {
+                    maxHeight: ITEM_HEIGHT * 4.5,
+                    width: '20ch',
+                  },
+                }}
+              >
+                <MenuItem style={{ fontSize: "15px" }} onClick={() => { handleEditProductCategory(); handleCloseMenu(); }}>
+                  <DoneAllIcon style={{ marginRight: '8px' }} />
+                  Edit Product
+                </MenuItem>
+                <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div> {/* Separator Line */}
+                <MenuItem style={{ fontSize: "15px", color: 'red' }} onClick={handleCloseMenu}>
+                  <DeleteIcon style={{ marginRight: '8px', color: 'red' }} />
+                  Delete Product
+                </MenuItem>
+              </Menu>
             </div>
             <button style={{ border: '1px solid #EE0000', color: 'red' }} className='product-btn'> Explore Products</button>
             <br /><br />

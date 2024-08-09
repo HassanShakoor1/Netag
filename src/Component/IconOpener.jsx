@@ -61,6 +61,8 @@ console.log(linkdata)
             <h1 style={{color:"#DE3227",paddingLeft:"20px"}}>Instructions:</h1>
 
   <h3 style={{textAlign:"center",fontWeight:'100'} }> <li> {linkdata?.instruction}  </li></h3>
+
+  <input style={{display:'flex',justifyContent:"center",margin:'20px auto',width:"60%",height:'30px',borderRadius:'10px',outline:'none',border:'1px solid grey'}} type="text" placeholder={linkdata?.instruction} />
  
             
             

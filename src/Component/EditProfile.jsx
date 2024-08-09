@@ -100,9 +100,9 @@ function EditProfile() {
               size="small"
             />
           </div>
-
+          <br /><br /><br /><br />
           <div className="btn-s">
-            <button style={{ color: 'white', position: "fixed", bottom: "60px",fontSize:"20px" }} className='save2'>Save</button>
+            <button style={{ color: 'white',fontSize:"20px" }} className='save2'>Save</button>
           </div>
         </div>
       </div>
