@@ -29,9 +29,9 @@ function Setting() {
 </div>
 
         <br /><br />
-        {/* <div className="qr-code-container" style={{ textAlign: 'center', marginTop: '20px' }}>
+        <div className="qr-code-container" style={{ textAlign: 'center', marginTop: '20px' }}>
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://example.com" alt="QR Code" />
-        </div> */}
+        </div>
         <br /><br />
 
         <div style={{
