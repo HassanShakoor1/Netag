@@ -16,10 +16,9 @@
     "@mui/material": "^5.16.6",
     "@zxing/browser": "^0.1.5",
     "qrcode.react": "^3.1.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-icons": "^5.2.1",
-    "react-qr-reader": "^3.0.0-beta-1",
     "react-router-dom": "^6.26.0"
   },
   "devDependencies": {
@@ -31,5 +30,8 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "vite": "^5.3.4"
+  },
+  "build": {
+    "command": "npm install --legacy-peer-deps && npm run build"
   }
 }
