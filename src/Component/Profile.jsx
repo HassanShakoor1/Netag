@@ -116,7 +116,7 @@ function Profile() {
               <br /> <span style={{ marginLeft: '145px', fontWeight: '100' }} className='para'>Married</span></h2>
           </div>
           <div className="data" style={{ lineHeight: '0', display: 'flex', justifyContent: 'space-between' }}>
-            <h2 className='head'>Company: <span style={{ fontWeight: '100',paddingLeft:'8px' }} className='para'>Avicenna Solutions</span></h2>
+            <h2 className='head'>Company: <span style={{ fontWeight: '100',paddingLeft:'8px' }} className='para'>Avicenna </span></h2>
             <button className='p-btn' onClick={handleEditProfile}>Edit Profile</button>
           </div>
 
@@ -180,14 +180,14 @@ function Profile() {
 
           <div className="i-menu">
             <div className="menus">
-              <Slide in={setting} direction="up" timeout={{ appear: 500, enter: 500, exit: 500 }}>
+              <Slide style={{width:"96%"}} in={setting} direction="up" timeout={{ appear: 500, enter: 500, exit: 500 }}>
                 <div className="slide_main_div relative">
                   <IconOpener handleSlide={handleSlide} ReturnIcon={ReturnIcon} linkdata={linkdata} />
                 </div>
               </Slide>
 
               {links.map(link => (
-                <div key={link.id} className="fon">
+                <div key={link.id} className="fon" style={{margin:0,padding:0}}>
                   <img src={link.imageUrl} alt={link.linkName} onClick={() => handleSlide(link)} />
                   <p style={{ paddingLeft: '12px', fontSize: '12px' }}>{link.linkName}</p>
                 </div>

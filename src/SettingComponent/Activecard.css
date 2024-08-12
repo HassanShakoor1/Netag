@@ -1,0 +1,21 @@
+.Active-container{
+width: 100%;
+position: relative;
+
+
+}
+.Active-design{
+    width: 100%;
+    max-width: 430px;
+    
+    margin: 0 auto;
+  
+    
+}
+.active-head{
+display: flex;
+justify-content: center;
+font-weight: 300;
+color: red;
+font-size: 23px;
+}
