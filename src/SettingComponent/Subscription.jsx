@@ -9,14 +9,18 @@ import All from '../images/alltime.png';
 import one from '../images/one.png';
 
 // Configuration for the carousel
+// Configuration for the carousel
 const carouselSettings = {
-  dots: true,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1,
-  arrows: true,
-};
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+    autoplay: true,           // Enable auto-scroll
+    autoplaySpeed: 3000,      // Adjust the speed (3000ms = 3 seconds)
+  };
+  
 
 function Subscription() {
   const [selectedPlan, setSelectedPlan] = useState('monthly'); // Default to 'monthly'
