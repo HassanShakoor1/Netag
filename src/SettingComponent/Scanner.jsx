@@ -3,13 +3,19 @@ import Footer from '../Component/Footer';
 import { IoChevronBack } from "react-icons/io5";
 import { IoCopy } from "react-icons/io5"; // Import the copy icon
 import './Setting.css';
+import { useNavigate} from 'react-router-dom';
+function Scanner() {
+  const navigate = useNavigate();
 
-function Setting() {
+const GoBack=()=>{
+  navigate(-1);
+}
+
   return (
     <div className="setting-container">
       <div className="setting-design" >
         <div className="bak-hed">
-          <IoChevronBack style={{ fontSize: '22px', color: 'red' }} />
+          <IoChevronBack onClick={GoBack} style={{ fontSize: '22px', color: 'red',cursor:'pointer' }} />
           <p style={{ marginLeft: '7rem', color: 'red', fontSize: '22px' }}>QR Code</p>
         </div>
 
@@ -72,4 +78,4 @@ function Setting() {
   );
 }
 
-export default Setting;
+export default Scanner;

@@ -11,7 +11,8 @@ import Editproductdetail from './Component/Editproductdetail';
 import Gallery from './Component/Gallery';
 import ActiveCard from './SettingComponent/ActiveCard';
 import Analytics from './SettingComponent/Analytics';
-import Setting from './SettingComponent/Setting';
+import Scanner from './SettingComponent/Scanner';
+import Subscription from './SettingComponent/Subscription';
 
 
 function App() {
@@ -29,7 +30,8 @@ function App() {
           <Route path="/gallery" element={<Gallery />} /> Add this route
           <Route path="/active-card" element={<ActiveCard />} /> Add this route
           <Route path="/Analytics-page" element={<Analytics />} /> Add this route
-          <Route path="/setting-page" element={<Setting />} /> Add this route
+          <Route path="/setting-page" element={<Scanner />} /> Add this route
+          <Route path="/subscription" element={<Subscription />} /> Add this route
         </Routes>
    
       </div>

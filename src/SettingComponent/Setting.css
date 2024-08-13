@@ -5,6 +5,13 @@
     width: 100%;
   }
   
+.Subs-Container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
   .setting-design {
     width: 100%;
     max-width: 430px;
@@ -14,6 +21,12 @@
 
   }
   
+ .subs-design{
+  width: 100%;
+  max-width: 430px;
+  margin: 2px auto;
+ 
+  }
   .bak-hed {
     display: flex;
     align-items: center;
@@ -93,3 +106,21 @@
     justify-content: center;
 }
 
+
+
+
+/* ...........Subscription */
+.pic-p{
+  display: flex;
+  align-items: center;
+padding-left: 20px;
+
+gap:9px;
+}
+
+
+.gradient-text {
+  background: linear-gradient(to bottom, #000AEE, #00D1EE);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
