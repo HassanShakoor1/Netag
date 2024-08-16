@@ -7,22 +7,21 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import All from '../images/alltime.png';
 import one from '../images/one.png';
+import { useNavigate } from 'react-router-dom';
 
-// Configuration for the carousel
-// Configuration for the carousel
 const carouselSettings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
-    autoplay: true,           // Enable auto-scroll
-    autoplaySpeed: 3000,      // Adjust the speed (3000ms = 3 seconds)
-  };
-  
+    autoplay: true,
+    autoplaySpeed: 2000, 
+};
 
 function Subscription() {
+  const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState('monthly'); // Default to 'monthly'
 
   const handleMonthlyClick = () => {
@@ -31,6 +30,9 @@ function Subscription() {
 
   const handleYearlyClick = () => {
     setSelectedPlan('yearly');
+  };
+  const handleHome = () => {
+    navigate('/');
   };
 
   // Styles for the container and options
@@ -49,7 +51,6 @@ function Subscription() {
     cursor: 'pointer',
     fontSize: '18px',
     textAlign: 'center',
-  
     transition: 'background-color 0.3s ease, color 0.3s ease, border 0.3s ease',
   };
 
@@ -57,96 +58,55 @@ function Subscription() {
     ...optionStyle,
     backgroundColor: selectedPlan === 'monthly' ? 'rgb(255, 228, 228)' : 'rgb(240, 240, 240)',
     color: selectedPlan === 'monthly' ? 'red' : 'black',
-    border: selectedPlan === 'monthly' ? '1px solid red' : '1px solid grey', // Full border when selected
-    // borderRight: selectedPlan === 'monthly' ? '' : "",
-    borderRight: 'none', // Remove right border for the first option
-    borderRadius: '5px 0 0 5px', // Add border radius to the left side
+    border: selectedPlan === 'monthly' ? '1px solid red' : '1px solid grey',
+    borderRight: 'none',
+    borderRadius: '5px 0 0 5px',
   };
 
   const yearlyStyle = {
     ...optionStyle,
     backgroundColor: selectedPlan === 'yearly' ? 'rgb(255, 228, 228)' : 'rgb(240, 240, 240)',
     color: selectedPlan === 'yearly' ? 'red' : 'black',
-    border: selectedPlan === 'yearly' ? '1px solid red' : '1px solid grey', // Full border when selected
-    // borderLeft: selectedPlan === 'yearly' ? '1px solid red' : "none",
-    borderLeft: 'none', // Remove left border for the second option
-    borderRadius: '0 5px 5px 0', // Add border radius to the right side
+    border: selectedPlan === 'yearly' ? '1px solid red' : '1px solid grey',
+    borderLeft: 'none',
+    borderRadius: '0 5px 5px 0',
   };
-
-  
 
   const slideStyle = {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: 'white',
     borderRadius: '20px',
-  margin:'15px',
-
-
-    border: '1px solid #ddd', // Optional border to outline the slide
-   
+    margin: '15px',
+    border: '1px solid #ddd',
   };
-  
+
   const rateStyle = {
     textAlign: 'center',
-    width: '100%', // This will make sure the rate takes the full width of the parent container
+    width: '100%',
     backgroundColor: 'rgb(255, 214, 214)',
     height: '120px',
-    display:'flex',
-    flexDirection:'column',
-    alignItems:'center',
-    justifyContent:'center',
-    marginTop:'50px',
-
-
- 
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '50px',
   };
+
   const rateStyle2 = {
-    textAlign: 'center',
-    width: '100%', // This will make sure the rate takes the full width of the parent container
+    ...rateStyle,
     backgroundColor: 'rgb(201, 255, 206)',
-    height: '120px',
-    display:'flex',
-    flexDirection:'column',
-    alignItems:'center',
-    justifyContent:'center',
-    marginTop:'50px',
-
-
- 
   };
+
   const rateStyle3 = {
-    textAlign: 'center',
-    width: '100%', // This will make sure the rate takes the full width of the parent container
+    ...rateStyle,
     backgroundColor: '#DDD8FF',
-    height: '120px',
-    display:'flex',
-    flexDirection:'column',
-    alignItems:'center',
-    justifyContent:'center',
-    marginTop:'50px',
-
-
- 
   };
-  
+
   const rateStyle4 = {
-    textAlign: 'center',
-    width: '100%', // This will make sure the rate takes the full width of the parent container
+    ...rateStyle,
     backgroundColor: '#D8F3FF',
-    height: '120px',
-    display:'flex',
-    flexDirection:'column',
-    alignItems:'center',
-    justifyContent:'center',
-    marginTop:'50px',
-
-
- 
   };
-  
-
-
 
   const saveButtonStyle = {
     color: 'white',
@@ -159,54 +119,29 @@ function Subscription() {
     borderRadius: '20px',
     backgroundColor: 'red',
     cursor: 'pointer',
-    fontWeight:"700"
-  };
-  const saveButtonStyle2 = {
-    color: 'white',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '90%',
-    fontSize: '18px',
-    height: '60px',
-    borderRadius: '20px',
-    backgroundColor: 'rgb(35, 239, 2)',
-    cursor: 'pointer',
-    fontWeight:"700"
-  };
-  const saveButtonStyle3 = {
-    color: 'white',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '90%',
-    fontSize: '18px',
-    height: '60px',
-    borderRadius: '20px',
-    backgroundColor: '#7700EE',
-    cursor: 'pointer',
-    fontWeight:"700"
-  };
-  const saveButtonStyle4 = {
-    color: 'white',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '90%',
-    fontSize: '18px',
-    height: '60px',
-    borderRadius: '20px',
-    background: 'linear-gradient(to bottom, #00D1EE, #000AEE)',
-    cursor: 'pointer',
-    fontWeight:"700"
+    fontWeight: '700',
   };
 
+  const saveButtonStyle2 = {
+    ...saveButtonStyle,
+    backgroundColor: 'rgb(35, 239, 2)',
+  };
+
+  const saveButtonStyle3 = {
+    ...saveButtonStyle,
+    backgroundColor: '#7700EE',
+  };
+
+  const saveButtonStyle4 = {
+    ...saveButtonStyle,
+    background: 'linear-gradient(to bottom, #00D1EE, #000AEE)',
+  };
 
   return (
     <div className='Subs-Container'>
       <div className="subs-design">
         <div className="bak-hed">
-          <IoChevronBack style={{ fontSize: '22px', color: 'red', cursor: 'pointer' }} />
+          <IoChevronBack onClick={handleHome} style={{ fontSize: '22px', color: 'red', cursor: 'pointer',marginLeft:'5px' }} />
           <p style={{ marginLeft: '4rem', color: 'red', fontSize: '22px' }}>Subscription Plans</p>
         </div>
         <br />
@@ -219,18 +154,8 @@ function Subscription() {
         <div className="many" style={{ margin: '2px auto', display: 'flex', flexDirection: "column", alignItems: 'center' }}>
           <p style={{ textAlign: 'center' }}>Select Plan</p>
           <div style={containerStyle}>
-            <div 
-              style={monthlyStyle}
-              onClick={handleMonthlyClick}
-            >
-              Monthly
-            </div>
-            <div 
-              style={yearlyStyle}
-              onClick={handleYearlyClick}
-            >
-              Yearly
-            </div>
+            <div style={monthlyStyle} onClick={handleMonthlyClick}>Monthly</div>
+            <div style={yearlyStyle} onClick={handleYearlyClick}>Yearly</div>
           </div>
         </div>
         <br /><br /><br />
@@ -238,172 +163,136 @@ function Subscription() {
         {/* Carousel Section */}
         <div style={{ width: '90%', margin: '0 auto' }}>
           <Slider {...carouselSettings}>
-      <div >
-           <div style={slideStyle}>
-              <h3 style={{ textAlign: 'center' ,margin:0,marginTop:'20px',color:'red',fontSize:'20px'}}>Professional</h3>
-              <p style={{ textAlign: "center",margin:'0',fontSize:'18px',letterSpacing:'1px',color:'rgb(136, 136, 136' }}>For small Business</p>
-              <div className="rate" style={rateStyle}>
-                <h1 style={{ margin: 0, color: 'red', fontSize: '3rem' }}>$4.99</h1>
-                <p style={{ margin: 0 }}>per month</p>
+            <div>
+              <div style={slideStyle}>
+                <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: 'red', fontSize: '20px' }}>Professional</h3>
+                <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>For small Business</p>
+                <div className="rate" style={rateStyle}>
+                  <h1 style={{ margin: 0, color: 'red', fontSize: '3rem' }}>$4.99</h1>
+                  <p style={{ margin: 0 }}>per month</p>
+                </div>
+                <br /><br />
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Manage 1 Social And Business Profile</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Access your Profile ON/OFF Feature</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Activate Your own Tag</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px", background: "white" }} src={one} alt="all" />
+                  <p>Customize Your Profile Colouring</p>
+                </div>
+                <br /><br /><br /><br />
+                <div style={saveButtonStyle} className="save">Subscribe Plan</div>
+                <br /><br />
               </div>
-              <br /><br />
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Manage 1 Social And Business Profile</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Access your Profile ON/OFF Feature</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Activate Your own Tag</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px", background: "white" }} src={one} alt="all" />
-                <p>Customize Your Profile Colouring</p>
-              </div>
-              <br /><br /><br /><br />
-              <div style={saveButtonStyle} className="save">
-                Subscribe Plan
-              </div>
-              <br /><br />
             </div>
 
-
-      </div>
-         
-
-         
-      <div >
-           <div style={slideStyle}>
-              <h3 style={{ textAlign: 'center' ,margin:0,marginTop:'20px',color:'rgb(117, 244, 96)',fontSize:'20px'}}>Premium</h3>
-              <p style={{ textAlign: "center",margin:'0',fontSize:'18px',letterSpacing:'1px',color:'rgb(136, 136, 136' }}>For Medium Business</p>
-              <div className="rate" style={rateStyle2}>
-                <h1 style={{ margin: 0, color: 'rgb(117, 244, 96)', fontSize: '3rem' }}>$18.99</h1>
-                <p style={{ margin: 0 }}>per month</p>
+            <div>
+              <div style={slideStyle}>
+                <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: 'rgb(117, 244, 96)', fontSize: '20px' }}>Premium</h3>
+                <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>For Medium Business</p>
+                <div className="rate" style={rateStyle2}>
+                  <h1 style={{ margin: 0, color: 'rgb(117, 244, 96)', fontSize: '3rem' }}>$18.99</h1>
+                  <p style={{ margin: 0 }}>per month</p>
+                </div>
+                <br /><br />
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Create upto 10 Business Profiles</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Access your Profile ON/OFF Feature</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Activate Your own Tag</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px", background: "white" }} src={one} alt="all" />
+                  <p>Customize Your Profile Colouring</p>
+                </div>
+                <br /><br /><br /><br />
+                <div style={saveButtonStyle2} className="save">Subscribe Plan</div>
+                <br /><br />
               </div>
-              <br /><br />
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Create upto 10 Business Profiles</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Access your Profile ON/OFF Feature</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Activate Your own Tag</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px", background: "white" }} src={one} alt="all" />
-                <p>Customize Your Profile Colouring</p>
-              </div>
-              <br /><br /><br /><br />
-              <div style={saveButtonStyle2} className="save">
-                Subscribe Plan
-              </div>
-              <br /><br />
             </div>
 
-
-      </div>
-
-
-      <div >
-           <div style={slideStyle}>
-              <h3 style={{ textAlign: 'center' ,margin:0,marginTop:'20px',color:'#7700EE',fontSize:'20px'}}>Business</h3>
-              <p style={{ textAlign: "center",margin:'0',fontSize:'18px',letterSpacing:'1px',color:'rgb(136, 136, 136' }}>For Huge Business</p>
-              <div className="rate" style={rateStyle3}>
-                <h1 style={{ margin: 0, color: '#7700EE', fontSize: '3rem' }}>$28.99</h1>
-                <p style={{ margin: 0 }}>per month</p>
+            <div>
+              <div style={slideStyle}>
+                <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: '#4F00CF', fontSize: '20px' }}>Business</h3>
+                <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>For Large Business</p>
+                <div className="rate" style={rateStyle3}>
+                  <h1 style={{ margin: 0, color: '#4F00CF', fontSize: '3rem' }}>$49.99</h1>
+                  <p style={{ margin: 0 }}>per month</p>
+                </div>
+                <br /><br />
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Create Unlimited Business Profiles</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Access your Profile ON/OFF Feature</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Activate Your own Tag</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px", background: "white" }} src={one} alt="all" />
+                  <p>Customize Your Profile Colouring</p>
+                </div>
+                <br /><br /><br /><br />
+                <div style={saveButtonStyle3} className="save">Subscribe Plan</div>
+                <br /><br />
               </div>
-              <br /><br />
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Create upto 15 Business Profiles</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Access your Profile ON/OFF Feature</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Activate Your own Tag</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px", background: "white" }} src={All} alt="all" />
-                <p>Customize Your Profile Colouring</p>
-              </div>
-              <br /><br /><br /><br />
-              <div style={saveButtonStyle3} className="save">
-                Subscribe Plan
-              </div>
-              <br /><br />
             </div>
 
-
-      </div>
-
-
-      <div >
-           <div style={slideStyle}>
-              <h3 className='gradient-text' style={{ textAlign: 'center' ,margin:0,marginTop:'20px',color:'#7700EE',fontSize:'20px'}}>Enterprices</h3>
-              <p style={{ textAlign: "center",margin:'0',fontSize:'18px',letterSpacing:'1px',color:'rgb(136, 136, 136' }}>For Group of companies</p>
-              <div className="rate" style={rateStyle4}>
-      
-              <h1 className="gradient-text" style={{ margin: 0, fontSize: '3rem' }}>
-  Submit Form
-</h1>
-
-            
+            <div>
+              <div style={slideStyle}>
+                <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: '#00D1EE', fontSize: '20px' }}>Enterprise</h3>
+                <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>For Enterprises</p>
+                <div className="rate" style={rateStyle4}>
+                  <h1 style={{ margin: 0, color: '#00D1EE', fontSize: '3rem' }}>$99.99</h1>
+                  <p style={{ margin: 0 }}>per month</p>
+                </div>
+                <br /><br />
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Create Unlimited Business Profiles</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Access your Profile ON/OFF Feature</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
+                  <p>Activate Your own Tag</p>
+                </div>
+                <div className="pic-p">
+                  <img style={{ width: '30px', height: "30px", background: "white" }} src={one} alt="all" />
+                  <p>Customize Your Profile Colouring</p>
+                </div>
+                <br /><br /><br /><br />
+                <div style={saveButtonStyle4} className="save">Subscribe Plan</div>
+                <br /><br />
               </div>
-              <br /><br />
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Create upto 15 Business Profiles</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Access your Profile ON/OFF Feature</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                <p>Activate Your own Tag</p>
-              </div>
-
-              <div className="pic-p">
-                <img style={{ width: '30px', height: "30px", background: "white" }} src={All} alt="all" />
-                <p>Customize Your Profile Colouring</p>
-              </div>
-              <br /><br /><br /><br />
-              <div style={saveButtonStyle4} className="save">
-                Subscribe Plan
-              </div>
-              <br /><br />
             </div>
-
-
-      </div>
-
-        
           </Slider>
         </div>
-        <br /><br />
+        <br /><br /><br />
+        <div style={{display:'flex',justifyContent:'center',alignItems:'center',width:'40%',margin:'2px auto',backgroundColor:'rgb(255, 222, 222)',border:'1px solid red',boxShadow:'none',color:'red'}} className="save">
+          Contact with us
+        </div>
       </div>
-
       <Footer />
     </div>
   );

@@ -115,10 +115,58 @@ function Profile() {
             <h2 className='head'>Marital Status:
               <br /> <span style={{ marginLeft: '145px', fontWeight: '100' }} className='para'>Married</span></h2>
           </div>
-          <div className="data" style={{ lineHeight: '0', display: 'flex', justifyContent: 'space-between' }}>
-            <h2 className='head'>Company: <span style={{ fontWeight: '100',paddingLeft:'8px' }} className='para'>Avicenna </span></h2>
-            <button className='p-btn' onClick={handleEditProfile}>Edit Profile</button>
-          </div>
+         
+      
+          <div 
+  className="data" 
+  style={{ 
+    lineHeight: '1.5', 
+    display: 'flex', 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    flexWrap: 'nowrap',
+    gap: '10px'
+  }}
+>
+  <h2 
+    className="head" 
+    style={{ 
+      margin: 0, 
+      flex: '1 1 auto', 
+      minWidth: '0',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    }}
+  >
+    Company: 
+    <span 
+      className="para" 
+      style={{ 
+        fontWeight: '400', 
+        paddingLeft: '8px',
+      }}
+    >
+      Avicenna Enterprises
+    </span>
+  </h2>
+  <button 
+    className="p-btn" 
+    onClick={handleEditProfile} 
+    style={{ 
+      padding: '6px 12px', 
+      fontSize: '14px', 
+      cursor: 'pointer', 
+      flexShrink: 0 
+    }}
+  >
+    Edit Profile
+  </button>
+</div>
+
+
+
+
 
           <div className="row">
             <div className="col">
@@ -178,7 +226,7 @@ function Profile() {
 
           <br /><br /><br />
 
-          <div className="i-menu">
+          <div className="i-menu" >
             <div className="menus">
               <Slide style={{width:"96%"}} in={setting} direction="up" timeout={{ appear: 500, enter: 500, exit: 500 }}>
                 <div className="slide_main_div relative">
@@ -189,7 +237,7 @@ function Profile() {
               {links.map(link => (
                 <div key={link.id} className="fon" style={{margin:0,padding:0}}>
                   <img src={link.imageUrl} alt={link.linkName} onClick={() => handleSlide(link)} />
-                  <p style={{ paddingLeft: '12px', fontSize: '12px' }}>{link.linkName}</p>
+                  <p style={{ fontSize: '12px' }}>{link.linkName}</p>
                 </div>
               ))}
             </div>

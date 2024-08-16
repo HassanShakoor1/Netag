@@ -124,3 +124,30 @@ gap:9px;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.slick-dots li{
+  font-size: 74px !important;
+}
+
+.slick-dots li.slick-active button:before {
+  opacity: .75 !important;
+  color: rgb(255, 0, 0) !important;
+  font-size: 15px !important;
+}
+.slick-dots li button:before {
+  font-family: 'slick';
+  font-size: 20px;
+  line-height: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  content: '•';
+  text-align: center;
+  opacity: .25;
+  color: rgb(255, 0, 0) !important ; 
+  -webkit-font-smoothing: grey !important;
+}
+
+

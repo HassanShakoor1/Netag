@@ -19,12 +19,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative; /* Add relative positioning */
 }
 
 .nav-logo {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
+  position: absolute; /* Center the logo using absolute positioning */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav-logo img {
@@ -32,11 +33,13 @@
 }
 
 .nav-icon {
-  color: #E93428;
-  font-size: 3rem;
-  padding-top: 1.8rem;
+  margin-left: auto; /* Push the icon to the right */
   margin-right: 20px;
+  color: #E93428;
+  font-size: 25px; /* Adjust font size */
+  margin-bottom:0.7rem;/* Adjust padding to align vertically */
 }
+
 
 
 .rel-div{
@@ -317,19 +320,46 @@ align-items: center;
 
  
 
+
 .menus {
-  
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-gap: 35px;
-  
-  
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 15px;
+  max-width: 430px;
+  margin: 0 auto;
 }
 
-.menus img{
+.fon {
+  flex: 1 1 calc(25% - 15px); /* 25% width minus the gap to account for spacing */
+  box-sizing: border-box;
+  text-align: center;
+}
 
+.fon img {
+  width: 60%;
   cursor: pointer;
 }
+
+.fon p {
+  font-size: 12px;
+
+  line-height: 1.2; /* Consistent line height */
+
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis to overflowing text */
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

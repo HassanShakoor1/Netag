@@ -14,13 +14,13 @@ function Gallery() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
       <div style={{ maxWidth: '430px', width: '100%' }}>
-        <div  className="back-head">
+        <div className="back-head" style={{ display: 'flex', alignItems: 'center' }}>
           <IoChevronBack 
             onClick={goback} 
             className="Gobck" 
             style={{ paddingTop: "1.6rem", color: "red", fontSize: '25px', paddingLeft: '15px', cursor: "pointer" }} 
           />
-          <h4 style={{ color: "red", fontSize: '20px', fontWeight: '100', marginRight: "40px" }}>
+          <h4 style={{ color: "red", fontSize: '20px', fontWeight: '100', marginLeft: '15px' }}>
             Product Gallery
           </h4>
         </div>
@@ -34,10 +34,10 @@ function Gallery() {
             alignItems: 'center',
           }}
         >
-          {images.map((img, index) => (
+          {images.map((imgUrl, index) => (
             <div key={index} style={{ width: '100%', height: 'auto' }}>
               <img 
-                src={URL.createObjectURL(img)} 
+                src={imgUrl} // Use the URL directly
                 alt={`gallery-img-${index}`} 
                 style={{ 
                   width: '100%', 

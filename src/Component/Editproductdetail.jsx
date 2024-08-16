@@ -1,37 +1,91 @@
 import React, { useState } from 'react';
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { set, ref as dbRef, push } from 'firebase/database';
+import { storage, database } from '../firebase'; // import Firebase Realtime Database
 import './Editproductdetail.css';
 import edit from '../images/edit.png';
-import { lineHeight, width } from '@mui/system';
 
 function Editproductdetail() {
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
+  const [formData, setFormData] = useState({
+    productName: '',
+    price: '',
+    size: '',
+    color: '',
+    description: ''
+  });
   const [showAll, setShowAll] = useState(false);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
-    setImages(prevImages => [...prevImages, ...imageFiles]);
+
+    // Upload images to Firebase Storage
+    const uploadPromises = imageFiles.map(async (file) => {
+      const storageRef = ref(storage, `images/${file.name}`);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      return url;
+    });
+
+    const imageUrls = await Promise.all(uploadPromises);
+
+    // Update local state with Firebase Storage URLs
+    setImages(prevImages => [...prevImages, ...imageUrls]);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({ ...prevData, [name]: value }));
+  };
+
+  const saveData = async () => {
+    // Extract URLs without the 'images/' prefix
+    const sanitizedImageUrls = images.map(url => {
+      return url.split('/').pop(); // Keeps only the file name from the URL
+    });
+
+    const productData = {
+      ...formData,
+      images: sanitizedImageUrls, // Include sanitized image URLs in the product data
+      timestamp: new Date().toISOString()
+    };
+
+    // Save to Firebase Realtime Database
+    const newProductRef = push(dbRef(database, 'products'));
+    await set(newProductRef, productData);
+
+    alert("Data saved");
+    console.log("Data saved to Realtime Database with key:", newProductRef.key);
+    setFormData({
+      productName: '',
+      price: '',
+      size: '',
+      color: '',
+      description: ''
+    });
+    setImages([]);
   };
 
   const goToGallery = () => {
     navigate('/gallery', { state: { images: images } });
-    setShowAll(true);
   };
 
   const displayedImages = showAll ? images : images.slice(0, 3);
   const remainingImagesCount = images.length - 3;
 
+
   return (
-    <div className='newContainer' >
+    <div className='newContainer'>
       <div className="new-details-design">
         <div style={{ paddingLeft: '1rem' }} className="back-head">
-          <IoChevronBack 
-            onClick={() => navigate(-1)} 
-            className="Gobck" 
-            style={{ paddingTop: "1.6rem", color: "red", fontSize: '25px', paddingLeft: '15px', cursor: "pointer" }} 
+          <IoChevronBack
+            onClick={() => navigate(-1)}
+            className="Gobck"
+            style={{ paddingTop: "1.6rem", color: "red", fontSize: '25px', paddingLeft: '15px', cursor: "pointer" }}
           />
           <h4 style={{ color: "red", fontSize: '20px', fontWeight: '100', marginRight: "132px" }}>
             Product category
@@ -45,10 +99,10 @@ function Editproductdetail() {
           <h5 style={{ margin: 'auto', paddingLeft: '1rem', fontWeight: '100', fontSize: "15px" }}>
             Business Name
           </h5>
-          <input 
-            style={{ paddingTop: '0px', paddingBottom: '0px', width: '100%', height: "40px", border: 'none', borderRadius: "17px", backgroundColor: '#F7F7F7' }} 
-            type="search" 
-            placeholder='Enter business name' 
+          <input
+            style={{ paddingTop: '0px', paddingBottom: '0px', width: '100%', height: "40px", border: 'none', borderRadius: "17px", backgroundColor: '#F7F7F7' }}
+            type="text"
+            placeholder='Enter business name'
           />
         </div>
 
@@ -62,22 +116,28 @@ function Editproductdetail() {
               <label style={{ paddingLeft: "10px", fontWeight: '100' }} className="formHeading">
                 Product name
               </label>
-              <input 
-                style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: "90%" }} 
-                type="text" 
-                className="formInput" 
-                placeholder='Hair oil' 
+              <input
+                style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: "90%" }}
+                type="text"
+                className="formInput"
+                placeholder='Hair oil'
+                name="productName"
+                value={formData.productName}
+                onChange={handleInputChange}
               />
             </div>
             <div className="formColumn">
               <label style={{ paddingLeft: "10px", fontWeight: '100' }} className="formHeading">
                 Price
               </label>
-              <input 
-                style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: "90%" }} 
-                type="text" 
-                className="formInput" 
-                placeholder='$44' 
+              <input
+                style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: "90%" }}
+                type="text"
+                className="formInput"
+                placeholder='$44'
+                name="price"
+                value={formData.price}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -86,41 +146,45 @@ function Editproductdetail() {
               <label style={{ paddingLeft: "10px", fontWeight: '100' }} className="formHeading">
                 Size
               </label>
-              <input 
-                style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: "90%" }} 
-                type="text" 
-                className="formInput" 
-                placeholder='Small' 
+              <input
+                style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: "90%" }}
+                type="text"
+                className="formInput"
+                placeholder='Small'
+                name="size"
+                value={formData.size}
+                onChange={handleInputChange}
               />
             </div>
             <div className="formColumn">
               <label style={{ paddingLeft: "10px", fontWeight: '100' }} className="formHeading">
                 Color
               </label>
-              <input 
-                style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: '90%' }} 
-                type="text" 
-                className="formInput" 
-                placeholder='Green' 
+              <input
+                style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: '90%' }}
+                type="text"
+                className="formInput"
+                placeholder='Green'
+                name="color"
+                value={formData.color}
+                onChange={handleInputChange}
               />
             </div>
-            
           </div>
         </div>
         <br />
-        <label style={{ paddingLeft: "10px",marginLeft:'1.7rem', fontWeight: '100',lineHeight:'2' }} className="formHeading">
-                Description
-              </label>
-              <input  
-                style={{ borderRadius: '20px',marginLeft:'1.7rem', backgroundColor: "#F7F7F7", width: '90%',paddingBottom:'7rem',outline:"none" }} 
-                type="text" 
-                className="formInput" 
-                placeholder='please eneter your product details.......' 
-              />
-       
-
-
-
+        <label style={{ paddingLeft: "10px", marginLeft: '1.7rem', fontWeight: '100', lineHeight: '2' }} className="formHeading">
+          Description
+        </label>
+        <input
+          style={{ borderRadius: '20px', marginLeft: '1.7rem', backgroundColor: "#F7F7F7", width: '90%', paddingBottom: '7rem', outline: "none" }}
+          type="text"
+          className="formInput"
+          placeholder='Please enter your product details.......'
+          name="description"
+          value={formData.description}
+          onChange={handleInputChange}
+        />
 
         <div>
           {/* First Row */}
@@ -172,11 +236,24 @@ function Editproductdetail() {
             {/* First Uploaded Image */}
             <div style={{ flex: '1 1 50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               {displayedImages[0] && (
-                <img
-                  src={URL.createObjectURL(displayedImages[0])}
-                  alt="img-0"
-                  style={{ width: '100%', height: "150px", objectFit: 'cover', borderRadius: "20px" }}
-                />
+                <div
+                  style={{
+                    width: '100%',
+                    height: '150px',
+                    borderRadius: '20px',
+                    backgroundColor: '#F4F4F4',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <img
+                    src={displayedImages[0]}
+                    alt="Uploaded"
+                    style={{ maxWidth: '100%', maxHeight: '100%' }}
+                  />
+                </div>
               )}
             </div>
           </div>
@@ -186,53 +263,88 @@ function Editproductdetail() {
             {/* Second Uploaded Image */}
             <div style={{ flex: '1 1 50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               {displayedImages[1] && (
-                <img
-                  src={URL.createObjectURL(displayedImages[1])}
-                  alt="img-1"
-                  style={{ width: '100%', height: "150px", objectFit: 'cover', borderRadius: "20px" }}
-                />
+                <div
+                  style={{
+                    width: '100%',
+                    height: '150px',
+                    borderRadius: '20px',
+                    backgroundColor: '#F4F4F4',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <img
+                    src={displayedImages[1]}
+                    alt="Uploaded"
+                    style={{ maxWidth: '100%', maxHeight: '100%' }}
+                  />
+                </div>
               )}
             </div>
-            {/* Third Uploaded Image and More Button */}
-            <div style={{ flex: '1 1 50%', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+            {/* Third Uploaded Image + 'More' Button */}
+            <div style={{ flex: '1 1 50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               {displayedImages[2] && (
-                <>
+                <div
+                  style={{
+                    width: '100%',
+                    height: '150px',
+                    borderRadius: '20px',
+                    backgroundColor: '#F4F4F4',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'relative',
+                    overflow: 'hidden',
+                  }}
+                >
                   <img
-                    src={URL.createObjectURL(displayedImages[2])}
-                    alt="img-2"
-                    style={{ width: '100%', height: "150px", objectFit: 'cover', borderRadius: "20px" }}
+                    src={displayedImages[2]}
+                    alt="Uploaded"
+                    style={{ maxWidth: '100%', maxHeight: '100%' }}
                   />
-                  {!showAll && remainingImagesCount > 0 && (
-                    <div
+                  {remainingImagesCount > 0 && (
+                    <button
                       style={{
                         position: 'absolute',
-                        width: '100%',
-                        height: '100%',
                         top: 0,
-                        left: 0,
-                        color: 'white',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
+                        right: 0,
                         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        color: 'white',
+                        border: 'none',
+                        padding: '5px 10px',
+                        borderRadius: '5px',
+                        cursor: 'pointer',
                       }}
                       onClick={goToGallery}
                     >
                       +{remainingImagesCount} more
-                    </div>
+                    </button>
                   )}
-                </>
+                </div>
               )}
             </div>
           </div>
         </div>
-        <br /><br />
-        <div style={{display:'flex',justifyContent:"start"}}>
-              <button style={{color:'white',width:"90%"}} className='save'>Edit Product</button>
-        </div>
-    
-      <br />
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
+        <button
+          style={{
+            backgroundColor: 'red',
+            color: 'white',
+            padding: '10px 20px',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontSize: '16px',
+          }}
+          onClick={saveData}
+        >
+          Save Details
+        </button>
       </div>
     </div>
   );
