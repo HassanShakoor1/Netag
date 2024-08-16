@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Profile from "./Component/Profile";
 import EditProfile from "./Component/EditProfile";
-import Footer from "./Component/Footer";
+
 import EditContact from './Component/EditContact';
 import ProductCatagory from './Component/ProductCatagory';
 import Addcatagory from './Component/Addcatagory';
