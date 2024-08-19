@@ -15,14 +15,17 @@ function EditContact() {
     
         <div className="edit-Contact">
 
-        <nav className='nav2' style={{paddingTop:"3rem"}}>
-         
-          <IoChevronBack onClick={handlegoBack} style={{color:"red",fontSize:"25px",paddingTop:"1rem",marginLeft:"1rem",cursor:'pointer'}} />
-         
-          
-            <p style={{fontSize:'20px',paddingLeft:"6rem",color:'red'}}>Photos and Videos</p>
-         
-        </nav>
+        <nav className='nav2' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', position: 'relative' }}>
+  <IoChevronBack 
+    onClick={handlegoBack} 
+    style={{ color: "red", fontSize: "25px", cursor: 'pointer', position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }} 
+  />
+  <p style={{ fontSize: '20px', color: 'red', margin: '0' }}>
+    Photos and Videos
+  </p>
+</nav>
+
+
 <br />
 <div className="Upload-p" >
     <h2 >Upload Photo</h2>

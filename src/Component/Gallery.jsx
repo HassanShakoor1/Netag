@@ -14,16 +14,17 @@ function Gallery() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
       <div style={{ maxWidth: '430px', width: '100%' }}>
-        <div className="back-head" style={{ display: 'flex', alignItems: 'center' }}>
-          <IoChevronBack 
-            onClick={goback} 
-            className="Gobck" 
-            style={{ paddingTop: "1.6rem", color: "red", fontSize: '25px', paddingLeft: '15px', cursor: "pointer" }} 
-          />
-          <h4 style={{ color: "red", fontSize: '20px', fontWeight: '100', marginLeft: '15px' }}>
-            Product Gallery
-          </h4>
-        </div>
+      <div className="back-head" style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+  <IoChevronBack
+    onClick={goback}
+    className="Gobck"
+    style={{ paddingTop: '1.6rem', color: 'red', fontSize: '25px', paddingLeft: '15px', cursor: 'pointer', position: 'absolute', left: '0' }}
+  />
+  <h4 style={{ color: 'red', fontSize: '20px', fontWeight: '100', margin: '0 auto',marginTop:"1rem" }}>
+    Product Gallery
+  </h4>
+</div>
+<br /><br /><br /><br /><br />
 
         <div 
           style={{

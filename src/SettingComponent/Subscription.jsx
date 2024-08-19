@@ -140,11 +140,17 @@ function Subscription() {
   return (
     <div className='Subs-Container'>
       <div className="subs-design">
-        <div className="bak-hed">
-          <IoChevronBack onClick={handleHome} style={{ fontSize: '22px', color: 'red', cursor: 'pointer',marginLeft:'5px' }} />
-          <p style={{ marginLeft: '4rem', color: 'red', fontSize: '22px' }}>Subscription Plans</p>
-        </div>
-        <br />
+      <div className="bak-hed" style={{ display: 'flex', alignItems: 'center', position: 'relative', marginTop:"20px"}}>
+  <IoChevronBack 
+    onClick={handleHome} 
+    style={{ fontSize: '22px', color: 'red', cursor: 'pointer', position: 'absolute', left: '5px' }} 
+  />
+  <p style={{ color: 'red', fontSize: '22px', margin: '0 auto' }}>
+    Subscription Plans
+  </p>
+</div>
+
+        <br /><br /><br />
 
         <h4 style={{ color: "red", textAlign: "center", width: '70%', fontSize: "23px", margin: '0px auto' }}>
           Please Buy Subscription Plans to Uncloak This Feature

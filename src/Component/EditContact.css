@@ -2,13 +2,15 @@
 
     width: 100%;
    position: relative;
+   display: flex;
+   justify-content: center;
 }
 
 .edit-Contact{
    width: 100%;
    max-width: 430px;
    
-   margin: 20px auto;
+
 }
 .nav2{
     width: 100%;

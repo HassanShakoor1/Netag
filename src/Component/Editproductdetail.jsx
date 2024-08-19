@@ -81,16 +81,17 @@ function Editproductdetail() {
   return (
     <div className='newContainer'>
       <div className="new-details-design">
-        <div style={{ paddingLeft: '1rem' }} className="back-head">
-          <IoChevronBack
-            onClick={() => navigate(-1)}
-            className="Gobck"
-            style={{ paddingTop: "1.6rem", color: "red", fontSize: '25px', paddingLeft: '15px', cursor: "pointer" }}
-          />
-          <h4 style={{ color: "red", fontSize: '20px', fontWeight: '100', marginRight: "132px" }}>
-            Product category
-          </h4>
-        </div>
+      <div className="back-head" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', paddingLeft: '1rem' }}>
+  <IoChevronBack
+    onClick={() => navigate(-1)}
+    className="Gobck"
+    style={{ paddingTop: '1.6rem', color: 'red', fontSize: '25px', paddingLeft: '15px', cursor: 'pointer', position: 'absolute', left: '0' }}
+  />
+  <h4 style={{ color: 'red', fontSize: '20px', fontWeight: '100',marginTop:"3rem" }}>
+    Product category
+  </h4>
+</div>
+
 
         <div style={{ margin: '20px' }} className="headings">
           <h4 style={{ paddingLeft: "1rem", color: 'red', fontWeight: '100', fontSize: "20px" }}>

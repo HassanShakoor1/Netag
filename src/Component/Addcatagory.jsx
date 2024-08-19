@@ -14,10 +14,14 @@ function Addcatagory() {
 
       <div className="Addcatagory-design">
 
-      <div className="back-head">
-      <IoChevronBack onClick={goback} className="Gobck" style={{paddingTop:"1.6rem",color:"red",fontSize:'25px',paddingLeft:'15px',cursor:"pointer"}} />
-            <h4 style={{color:"red",fontSize:'20px',fontWeight:'100',marginRight:"132px"}}>Product catagory</h4>
-      </div>
+      <div className="back-head" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+  <IoChevronBack onClick={goback} className="Gobck" style={{ paddingTop: '1.6rem', color: 'red', fontSize: '25px', paddingLeft: '15px', cursor: 'pointer' }} />
+  <h4 style={{ color: 'red', fontSize: '20px', fontWeight: '100', position: 'absolute', left: '50%', transform: 'translateX(-50%)',marginTop:"3rem" }}>
+    Product category
+  </h4>
+  <div style={{ width: '25px' }}></div> {/* Placeholder div to balance the flexbox */}
+</div>
+
       
       <h3 style={{color:'red',fontWeight:'100',paddingLeft:'15px',fontSize:'20px'}}>Product</h3>
 <div className="name-input">
