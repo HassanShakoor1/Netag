@@ -16,7 +16,7 @@ function ProductCatagory() {
   const [shoesMenuAnchor, setShoesMenuAnchor] = useState(null);
 
   const handleBackscreen = () => {
-    navigate('/');
+    navigate(-1);
   };
 
   const handleAddClick = () => {

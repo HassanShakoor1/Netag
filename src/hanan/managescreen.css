@@ -20,6 +20,7 @@
 }
 .managescreen-boxwidth{
     width:100%;
+    max-width: 92%;
     background-color:#F1F1F1;
     border-radius:12px;
     
