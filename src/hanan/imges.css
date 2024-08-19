@@ -1,0 +1,17 @@
+.welcome-center{
+    display: flex;
+    justify-content: center;
+}
+.welcome-widt{
+   
+    width: 430px;
+    min-height: 100vh;
+    /* min-height: 1080px; */
+    background-color: #FFFFFF;
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}

@@ -1,0 +1,47 @@
+
+.reddiv{
+    background-color:#EE0000;
+    width:100%;
+    height:35vh
+
+}
+.reddiv-flex{
+   
+    display:flex;
+    align-items:center;
+    padding:10%
+}
+.settingcard{
+ width: 100%;
+
+ border-radius: 12px;
+border: 1px solid #F3F3F3; 
+ box-shadow: 0 0 4.5px rgba(0, 0, 0, 0.25);
+ 
+             
+           
+}
+.profile-positionn{
+    width:100%;
+    height:25vh;
+    position:relative;
+    /* border:2px solid #EE0000; */
+    border-radius:36px
+}
+.profile-position{
+    width:100%;
+    height:25vh;
+    border:2px solid #EE0000;
+    border-radius:36px
+}
+
+.aboulte{
+    /* position:absolute */
+    background-color:#EE0000;
+   width:30%;
+   display:flex;
+   justify-content:center;
+    /* -moz-border-radius: 0px;
+    -webkit-border-radius: 13px 13px 0px 0px; */
+    border-radius: 37px 37px 0px 0px;
+}

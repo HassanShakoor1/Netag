@@ -1,3 +1,8 @@
+body{
+
+  font-family: Arial, Helvetica, sans-serif;
+
+}
 
 .ProfileContainer {
   width: 100%;
@@ -69,7 +74,7 @@
   height: 100px;
   border-radius: 100%;
   bottom:0;
-  margin-right: 54px;
+margin-right: 34px;
   right: 0;
   border: 2px solid red;
   

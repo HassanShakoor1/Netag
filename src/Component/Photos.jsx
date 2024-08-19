@@ -10,7 +10,7 @@ function Photos() {
 <div className="p-vContainer">
             <div className="data" style={{ display: 'flex', justifyContent: 'space-between' }}>
               <h2 className='head' style={{ fontSize: '22px', fontWeight: '100', color: 'rgb(238, 2, 0)' }}>Photos:</h2>
-              <button className='pnk-btn'>Edit Profile</button>
+              
             </div>
 
             <br /><br />

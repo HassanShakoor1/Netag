@@ -1,0 +1,50 @@
+.Manageorder-main{
+    display:flex;
+    justify-content:center;
+    margin-top:10px;
+    margin-bottom:20px
+}
+.Manageorder-width{
+    width:430px;
+    min-height:100vh;
+    /* border:1px solid black */
+}
+.Manageorder-center{
+    display:flex;
+    justify-content:center
+}
+.Manageorder-width1{
+    width:96%;
+    height:100%
+}
+.vieworder-width{
+    margin-top:3rem;
+    background-color:#F1F1F1;
+    width:100%;
+    /* height:10vh; */
+    border-radius:12px;
+    padding:25px 10px 15px 20px
+}
+.ist-div{
+    display:flex;
+    justify-content:center
+}
+.box1-width{
+    margin-top:3rem;
+    width:100%;
+    /* background-color:#DAFFE2; */
+    /* border:1px solid #019021; */
+    border-radius:12px;
+    /* height:20vh; */
+    position:relative
+
+}
+.box1-width1{
+    
+    width:100%;
+    background-color:#DAFFE2;
+    border:1px solid #019021;
+    border-radius:12px;
+    /* height:20vh */
+
+}

@@ -22,7 +22,7 @@ import main from '../images/main.jpeg';
 import nav from '../images/nav-img.png';
 import bag from '../images/bag.png';
 import settingIcon from '../images/seting-icon.png';
-
+import { Link } from 'react-router-dom';
 function Profile() {
   const navigate = useNavigate(); // Use the hook here
   const links = [
@@ -36,20 +36,25 @@ function Profile() {
     { id: 8, imageUrl: add, linkName: "", place: "", instruction: "Add new Links" },
   ];
 
-  const [isChecked, setIsChecked] = useState(false);
+
   const [setting, setSetting] = useState(false);
   const [linkdata, setLinkdata] = useState(null);
+  const [activeToggle, setActiveToggle] = useState(null);
+
+  const handleToggle = (toggleId) => {
+    setActiveToggle(prevId => (prevId === toggleId ? null : toggleId));
+  };
 
   const handleSlide = (link) => {
     setLinkdata(link);
     setSetting(!setting);
   };
 
-  const handleToggle = () => {
-    setIsChecked(!isChecked);
-    console.log(`Toggle is ${!isChecked ? 'ON' : 'OFF'}`);
-    console.log("hello");
-  };
+  // const handleToggle = () => {
+  //   setIsChecked(!isChecked);
+  //   console.log(`Toggle is ${!isChecked ? 'ON' : 'OFF'}`);
+  //   console.log("hello");
+  // };
 
   const handleEditProfile = () => {
     navigate('/edit-profile');
@@ -57,6 +62,15 @@ function Profile() {
   
   const handleEditproduct = () => {
     navigate('/edit-product');
+  };
+  const handlenotifi = () => {
+    navigate('/home/notifi');
+  };
+  const handlManageorder = () => {
+    navigate('/home/order');
+  };
+  const handleservice = () => {
+    navigate('/home/services');
   };
 
 
@@ -87,8 +101,11 @@ function Profile() {
           <div className="nav-logo">
             <img src={nav} alt="nav-img" />
           </div>
+
           <div className="nav-icon">
-            <FaBell style={{ fontSize: '25px' }} />
+         
+            <FaBell onClick={handlenotifi} style={{ fontSize: '25px' }} />
+            
           </div>
         </nav>
 
@@ -106,10 +123,10 @@ function Profile() {
             <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> (Burden)</span>
           </h2>
           <div className="data">
-            <h2 className='head'>Username: <span style={{ fontWeight: '100',textAlign:'justify' }} className='para'>@Hassan</span></h2>
+            <h2 className='head'>Username: <span style={{ fontWeight: '100', }} className='para'>@Hassan</span></h2>
           </div>
           <div className="data" style={{ lineHeight: '0' }}>
-            <h2 className='head'>Designation:<span style={{ fontWeight: '100', }} className='para'>Software Developer</span></h2>
+            <h2 className='head'>Designation:<span style={{ fontWeight: '100',margin:'53px' }} className='para'>Software Developer</span></h2>
           </div>
           <div className="data" style={{ lineHeight: '0' }}>
             <h2 className='head'>Marital Status:
@@ -175,16 +192,24 @@ function Profile() {
                   <img style={{cursor:'pointer'}} src={settingIcon} alt="set-icon" onClick={handleEditproduct} />
                 </div>
               </div>
-              <p style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold' }}>Product/Services</p>
+              <p style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"12px" }}>Product/Services</p>
             </div>
 
             <div className="col">
               <div className="div">
                 <div className="col-icon">
-                  <img src={bag} alt="bag-icon" />
+                  <img src={bag} alt="bag-icon" onClick={handlManageorder} />
                 </div>
               </div>
-              <p style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold' }}>Manage Orders</p>
+              <p  style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"12px" }}>Manage Orders</p>
+            </div>
+            <div className="col">
+              <div className="div">
+                <div className="col-icon">
+                  <img src={bag} alt="bag-icon" onClick={handleservice} />
+                </div>
+              </div>
+              <p  style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"12px" }}>Services/Catagory</p>
             </div>
           </div>
 
@@ -192,37 +217,41 @@ function Profile() {
           <Contact />
           <br /><br /><br /><br />
 
+
           <div className="ip-btn">
-            <div className="n-head">
-              <h3 style={{cursor:"pointer"}} className="link-heading">Links</h3>
-            </div>
-            <div className="ii-btn">
-              <h2 className="mode-heading" style={{ marginLeft: '7rem', marginRight: '2px' }}>Lead Mode</h2>
-              <div className="toggle-container">
-                <input
-                  type="checkbox"
-                  id="toggle-lead"
-                  className="toggle-input"
-                  checked={isChecked}
-                  onChange={handleToggle}
-                />
-                <label htmlFor="toggle-lead" className="toggle-label"></label>
-              </div>
-            </div>
-            <div className="ii-btn">
-              <h2 className="mode-heading" style={{ marginRight: '2px' }}>Direct Mode</h2>
-              <div className="toggle-container">
-                <input
-                  type="checkbox"
-                  id="toggle-direct"
-                  className="toggle-input"
-                  checked={isChecked}
-                  onChange={handleToggle}
-                />
-                <label htmlFor="toggle-direct" className="toggle-label"></label>
-              </div>
-            </div>
-          </div>
+      <div className="n-head">
+        <h3 style={{ cursor: "pointer" }} className="link-heading">Links</h3>
+      </div>
+      <div className="ii-btn">
+        <h2 className="mode-heading" style={{ marginLeft: '7rem', marginRight: '2px' ,fontSize:'11px'}}>Lead Mode</h2>
+        <div className="toggle-container">
+          <input
+            type="checkbox"
+            id="toggle-lead"
+            className="toggle-input"
+            checked={activeToggle === 'lead'}
+            onChange={() => handleToggle('lead')}
+          />
+          <label htmlFor="toggle-lead" className="toggle-label"></label>
+        </div>
+      </div>
+      <div className="ii-btn">
+        <h2 className="mode-heading" style={{ marginRight: '2px',fontSize:'11px' }}>Direct Mode</h2>
+        <div className="toggle-container">
+          <input
+            type="checkbox"
+            id="toggle-direct"
+            className="toggle-input"
+            checked={activeToggle === 'direct'}
+            onChange={() => handleToggle('direct')}
+          />
+          <label htmlFor="toggle-direct" className="toggle-label"></label>
+        </div>
+      </div>
+    </div>
+
+
+         
 
           <br /><br /><br />
 

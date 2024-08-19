@@ -21,7 +21,7 @@ function Footer() {
     navigate('/setting-page');
   };
   const handleSubscription = () => {
-    navigate('/subscription');
+    navigate('/home/setting');
   };
 
   const handleHome = () => {

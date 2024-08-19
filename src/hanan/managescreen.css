@@ -1,0 +1,33 @@
+
+.managescreen-main{
+    display:flex;
+    justify-content:center;
+    margin-top:10px;
+    margin-bottom:10px
+}
+.managescreen-width{
+    width:430px;
+    min-height:100vh;
+    /* border:1px solid black */
+}
+.managescreen-divcenter{
+    display:flex;
+    justify-content:center;
+}
+.managescreen-divwidth{
+    width:96%;
+    
+}
+.managescreen-boxwidth{
+    width:100%;
+    background-color:#F1F1F1;
+    border-radius:12px;
+    
+    padding:18px 13px
+}
+.managescreen-line{
+    width:100%;
+    height:2px;
+    background-color:#D2D2D2;
+
+}

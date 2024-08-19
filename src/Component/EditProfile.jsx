@@ -22,7 +22,7 @@ function EditProfile() {
   });
 
   const handleBack = () => {
-    navigate('/');
+    navigate(-1);
   };
 
   return (

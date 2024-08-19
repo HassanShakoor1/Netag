@@ -1,0 +1,45 @@
+.notification-maibdiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2%; /* Use percentage for margin */
+    width: 100%;
+}
+
+.notification-width {
+    width: 100%;
+    max-width: 430px; /* Use percentage for max-width */
+    padding: 0 2%; /* Add padding to avoid content touching the edges */
+}
+
+.notification-centerdiv {
+    display: flex;
+    flex-direction: column; /* Stack items vertically to fit better on smaller screens */
+    align-items: center;
+    width: 100%;
+}
+
+.secondwidth {
+    width: 100%; /* Use percentage for width */
+    max-width: 100%; /* Ensure it doesn’t exceed parent width */
+    box-sizing: border-box; /* Include padding and border in the element’s total width and height */
+}
+
+.notification-boxwidth {
+    width: 100%;
+    background-color: #F2F2F2;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    padding: 2%; /* Use percentage for padding */
+    margin-top: 1%; /* Use percentage for margin */
+    box-sizing: border-box; /* Include padding in the element’s total width and height */
+    font-size: 1rem; /* Use rem for font-size to scale with root font size */
+}
+
+.notification-boxwidth div {
+    margin-bottom: 1rem; /* Use rem for spacing */
+}
+
+/* To ensure content scales well, you may need to adjust font size or padding based on your design preferences */
