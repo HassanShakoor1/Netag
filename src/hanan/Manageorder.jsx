@@ -97,7 +97,7 @@ function Manageorder() {
                         {/*1 view order  */}
                         <div className="vieworder-width">
                             <div className="ist-div">
-                                <div style={{ width: "95%" }}>
+                                <div style={{ width: "90%" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                         <div style={{ color: "#EE0000", fontWeight: "500" }}>Robin Denio</div>
                                         <div style={{ fontSize: "12px", fontWeight: "500" }}>12:34PM - 12/02/2024</div>
@@ -127,7 +127,7 @@ function Manageorder() {
                         {/* 2 view order */}
                         <div style={{ marginTop: "1rem" }} className="vieworder-width">
                             <div className="ist-div">
-                                <div style={{ width: "95%" }}>
+                                <div style={{ width: "90%" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                         <div style={{ color: "#EE0000", fontWeight: "500" }}>Robin Denio</div>
                                         <div style={{ fontSize: "12px", fontWeight: "500" }}>12:34PM - 12/02/2024</div>
@@ -157,7 +157,7 @@ function Manageorder() {
                         {/* 3 view order */}
                         <div style={{ marginTop: "1rem" }} className="vieworder-width">
                             <div className="ist-div">
-                                <div style={{ width: "95%" }}>
+                                <div style={{ width: "90%" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                         <div style={{ color: "#EE0000", fontWeight: "500" }}>Robin Denio</div>
                                         <div style={{ fontSize: "12px", fontWeight: "500" }}>12:34PM - 12/02/2024</div>
@@ -187,7 +187,7 @@ function Manageorder() {
                         {/* 4 view order */}
                         <div style={{ marginTop: "1rem" }} className="vieworder-width">
                             <div className="ist-div">
-                                <div style={{ width: "95%" }}>
+                                <div style={{ width: "90%" }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                         <div style={{ color: "#EE0000", fontWeight: "500" }}>Robin Denio</div>
                                         <div style={{ fontSize: "12px", fontWeight: "500" }}>12:34PM - 12/02/2024</div>
