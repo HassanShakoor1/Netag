@@ -1,107 +1,82 @@
-import vector from "../images/vector.png"
+
+import vector from "../images/vector.png";
+import logo from "../images/logo.png";
+import { Link } from 'react-router-dom';
 import "./imges.css";
 
-
-
-import logo from "../images/logo.png"
-import {Link} from 'react-router-dom'
-
-
 function Create() {
+  return (
+    <div style={{ maxWidth: "430px", margin: "0 auto", width: "90%" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+        {/* logo */}
+        <div style={{ textAlign: "center" }}>
+          <img src={logo} alt="Logo" style={{ width: "100px" }} />
+          <div style={{ color: "red", fontSize: "20px" }}>
+            Let's get Connected
+          </div>
+          <div style={{ color: "red", fontSize: "40px" }}>
+            Create Account
+          </div>
+        </div>
 
-    return (
-        <div className="welcome-center">
-           
-            <div className="welcome-widt">
-                {/* <div style={{display:"flex",justifyContent:"flex-start"}}>
-             <img src={vector} alt="" />
-            </div> */}
+        {/* para */}
+        <div style={{ textAlign: "center", color: "#C9CCC5", margin: "10px 0" }}>
+          Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet
+        </div>
 
-                {/* logo */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", }}>
-                    <div>
-                        <img src={logo} alt="" />
-                    </div>
-                    <div style={{ color: "red", fontSize: "15px" }}>
-                        Lets get Connected
-                    </div>
-                    <div style={{ color: "red", fontSize: "30px" }}>
-                        Create Account
-                    </div>
+        {/* INPUT  */}
+        <div style={{ width: "100%" }}>
+          <input style={inputStyle} type="text" placeholder="Full Name" />
+          <input style={inputStyle} type="text" placeholder="Username" />
+          <input style={inputStyle} type="text" placeholder="Email" />
+          <input style={inputStyle} type="password" placeholder="Password" />
+          <input style={inputStyle} type="password" placeholder="Confirm Password" />
 
-                </div>
+          {/* para */}
+          <p style={{ fontSize: "12px", color: "#C3C1C1", textAlign: "center" }}>
+            <span style={{ fontSize: "15px", fontWeight: "bold" }}>Lorem</span> ipsum dolor sit amet, consectetur elit. Neque sunt enim incidunt inventore consequatur possimus blanditiis provident debitis atque beatae.
+          </p>
 
-                {/* para */}
+          {/* tick */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <input style={{ marginRight: "4px" }} type="checkbox" id="" name="" value="Bike" />
+            <p style={{ fontSize: "9px", color: "#C3C1C1", textAlign: "center" }}>
+              By Signing up you agree to our <span style={{ color: "#EE0000", fontWeight: "bold" }}>Privacy Policy</span> and <span style={{ color: "#EE0000", fontWeight: "bold" }}>Terms of Use</span>
+            </p>
+          </div>
 
-                <div style={{width:"92%"}}>
-                    <p style={{textAlign:"center",color:"#C9CCC5"}}>
-                    Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet
-                    </p>
-                    
-                </div>
-
-                {/* INPUT  */}
-
-                <div style={{width:"92%",height:"470px",display:"flex",justifyContent:"space-between",flexDirection:"column"}}>
-                    <div style={{width:"100%"}}>
-                        
-                        <input style={{width:"100%",padding:"15px",border:"1px solid gray",borderRadius:"12px"}} type="text" placeholder="Full Name" />
-                    </div>
-                    {/* 2nd */}
-                    <div style={{width:"100%"}}>
-                        <input style={{width:"100%",padding:"15px",border:"1px solid gray",borderRadius:"12px"}} type="text" placeholder="UserName"/>
-                    </div>
-                    {/* 3rd */}
-                    <div style={{width:"100%"}}>
-                        <input style={{width:"100%",padding:"15px",border:"1px solid gray",borderRadius:"12px"}} type="text" placeholder="Email"/>
-                    </div>
-                    {/* 4th */}
-                    <div style={{width:"100%"}}>
-                        <input style={{width:"100%",padding:"15px",border:"1px solid gray",borderRadius:"12px"}} type="text" placeholder="Password"/>
-                    </div>
-                    {/* 5th */}
-                     <div style={{width:"100%"}}>
-                        <input style={{width:"100%",padding:"15px",border:"1px solid gray",borderRadius:"12px"}} type="text" placeholder="Confirm Password"/>
-                    </div>
-                    
-                    {/* para  */}
-                    
-                    <div>
-                        <p style={{fontSize:"12px",color:"#C3C1C1"}}>
-                         <span style={{fontSize:"15px",fontWeight:"bold"}}> Lorem</span>    ipsum dolor sit amet, consectetur  elit. Neque sunt enim incidunt inventore consequatur possimus blanditiis provident debitis atque beatae.
-                        </p>
-                    </div>
-                    {/* tick */}
-                    <div style={{display:"flex",alignItems:"center",width:"100%"}}>
-                    <input style={{border:"1px solid red",backgroundColor:"red",marginRight:"4px"}} type="checkbox" id="" name="" value="Bike"/>
-                        <p style={{fontSize:"9px",color:"#C3C1C1",width:"100%"}}>
-                            By Signing up you agree to our <span style={{color:"#EE0000",fontWeight:"bold"}}>Privacy Policy </span> and <span style={{color:"#EE0000",fontWeight:"bold"}}>Terms of Use</span> 
-                        </p>
-                    </div>
-                    {/* buttonn */}
-                    <div style={{display:"flex",width:"98%",alignItems:"center",flexDirection:"column",justifyContent:"space-between",height:"65px"}}>
-                        <div style={{width:"100%"}}>
-                        <button style={{borderRadius:"12px",color:"white",width:"100%"}} className="btn-colr">Sign Up</button>
-                        </div>
-                        <div style={{marginTop:"8px"}}>
-                           <span style={{color:"#C3C1C1"}}>
-                           Already have an account?
-                            </span>  
-                            <span style={{marginLeft:"3px"}}>
-                                <Link to="/signup" style={{color:"#EE0000",fontWeight:"bold"}}>
-                                Sign In
-                                </Link>
-                                </span>
-                        </div>
-                    </div>
-                </div>
-                </div>
-
+          {/* button */}
+          <div style={{ textAlign: "center", marginTop: "15px" }}>
+            <button style={buttonStyle} className="btn-colr">Sign Up</button>
+            <div style={{ marginTop: "8px", color: "#C3C1C1" }}>
+              Already have an account? 
+              <Link to="/signup" style={{ color: "#EE0000", fontWeight: "bold", marginLeft: "3px" }}>Sign In</Link>
             </div>
-           
-            
-
-      
-    )
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
-export default Create 
+
+const inputStyle = {
+  width: "100%",
+  padding: "15px",
+  border: "1px solid gray",
+  borderRadius: "12px",
+  marginBottom: "10px",
+  boxSizing: "border-box", // Ensure padding doesn't affect the width
+};
+
+const buttonStyle = {
+  width: "100%",
+  borderRadius: "12px",
+  color: "white",
+  backgroundColor: "#F24040",
+  padding: "10px 20px",
+  border: "none",
+  cursor: "pointer",
+  boxSizing: "border-box", // Ensure padding doesn't affect the width
+};
+
+export default Create;

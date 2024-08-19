@@ -52,7 +52,7 @@ function Signup(){
                     </div>
                     {/* 2nd */}
                     <div style={{width:"90%"}}>
-                        <input style={{width:"90%",padding:"15px",border:"1px solid gray",borderRadius:"12px",display:'flex',justifyContent:'center',margin:'20px auto',alignItems:'center'}} type="text" placeholder="UserName"/>
+                        <input style={{width:"90%",padding:"15px",border:"1px solid gray",borderRadius:"12px",display:'flex',justifyContent:'center',margin:'2px auto',alignItems:'center'}} type="text" placeholder="UserName"/>
                     </div>
                     <div style={{display:"flex",justifyContent:"flex-end",width:"80%"}}>
                         <Link to="/forget" style={{textDecoration:'none'}} >

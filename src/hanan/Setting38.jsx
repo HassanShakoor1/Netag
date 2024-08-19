@@ -161,7 +161,7 @@ function Setting() {
                                                 <div>
                                                 <img src={member} alt="" />
                                                 </div>
-                                                <div style={{color:"#868686",marginLeft:"6px",fontSize:"16px"}}>Membership</div>
+                                                <div style={{color:"#868686",marginLeft:"6px",fontSize:"16px",cursor:'pointer'}}>Membership</div>
                                             </div>
                                             <div>
                                                 <img src={vectorrr} alt="" />
