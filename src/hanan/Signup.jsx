@@ -45,18 +45,18 @@ function Signup(){
                 </div>
 
                 {/* inputt */}
-                <div style={{width:"341px",height:"331px",display:"flex",justifyContent:"space-between",flexDirection:"column"}}>
-                    <div style={{width:"92%"}}>
+                <div style={{width:'100%',maxWidth:"430px",display:'flex',justifyContent:'center',margin:'2px auto',alignItems:'center',flexDirection:'column',gap:'10px'}}>
+                    <div style={{width:"90%"}}>
                         
-                        <input style={{width:"100%",padding:"15px",border:"1px solid gray",borderRadius:"12px"}} type="text" placeholder="Full Name" />
+                        <input style={{width:"90%",padding:"15px",border:"1px solid gray",borderRadius:"12px"}} type="text" placeholder="Full Name" />
                     </div>
                     {/* 2nd */}
-                    <div style={{width:"92%"}}>
-                        <input style={{width:"100%",padding:"15px",border:"1px solid gray",borderRadius:"12px"}} type="text" placeholder="UserName"/>
+                    <div style={{width:"90%"}}>
+                        <input style={{width:"90%",padding:"15px",border:"1px solid gray",borderRadius:"12px",display:'flex',justifyContent:'center',margin:'20px auto',alignItems:'center'}} type="text" placeholder="UserName"/>
                     </div>
-                    <div style={{display:"flex",justifyContent:"flex-end",width:"90%"}}>
-                        <Link to="/forget" >
-                        <span style={{color:"#F24040",borderBottom:"2px solid red",fontWeight:"600"}}>
+                    <div style={{display:"flex",justifyContent:"flex-end",width:"80%"}}>
+                        <Link to="/forget" style={{textDecoration:'none'}} >
+                        <span style={{color:"#F24040",borderBottom:"1px solid red",fontWeight:"600"}}>
                             Forget Password 
                             </span> 
                         </Link>
@@ -64,8 +64,22 @@ function Signup(){
                     </div>
                     <div style={{display:"flex",width:"92%",alignItems:"center",flexDirection:"column",justifyContent:"space-between",height:"180px"}}>
                         <div>
-                       <Link to="/home"> 
-                        <button style={{borderRadius:"12px",color:"white"}} className="btn-colr">Login</button>
+                       <Link to="/home" style={{textDecoration:'none'}}> 
+                        <button   style={{
+    backgroundColor: "red",
+    width: "380px",
+    padding: "10px",
+    height:'50px',
+    fontSize: "15px",
+    border: "transparent",
+    borderRadius: "15px",
+    color: "white",
+    display: "flex",
+    justifyContent: "center",
+    margin: "2px auto",
+    alignItems: "center",
+    cursor: "pointer",
+  }}>Login</button>
                         </Link>
                         </div>
                         <div>

@@ -192,7 +192,7 @@ function Profile() {
                   <img style={{cursor:'pointer'}} src={settingIcon} alt="set-icon" onClick={handleEditproduct} />
                 </div>
               </div>
-              <p style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"12px" }}>Product/Services</p>
+              <p style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"10px" }}>Product/Services</p>
             </div>
 
             <div className="col">
@@ -201,7 +201,7 @@ function Profile() {
                   <img src={bag} alt="bag-icon" onClick={handlManageorder} />
                 </div>
               </div>
-              <p  style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"12px" }}>Manage Orders</p>
+              <p  style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"10px" }}>Manage Orders</p>
             </div>
             <div className="col">
               <div className="div">
@@ -209,7 +209,7 @@ function Profile() {
                   <img src={bag} alt="bag-icon" onClick={handleservice} />
                 </div>
               </div>
-              <p  style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"12px" }}>Services/Catagory</p>
+              <p  style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"10px" }}>Services/Catagory</p>
             </div>
           </div>
 
