@@ -11,6 +11,7 @@ import IconOpener from './IconOpener';
 import Footer from '../Components/Footer';
 import whatsapp from '../images/whatsapp.png';
 import call from '../images/call.png';
+
 import fb from '../images/fb.png';
 import mail from '../images/mail.png';
 import website from '../images/website.png';
@@ -119,11 +120,11 @@ function Profile() {
             Master Burdener <br />
             <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> (Burden)</span>
           </h2>
-          <div className="data">
-            <h2 className='head'>Username: <span style={{ fontWeight: '100', }} className='para'>@Hassan</span></h2>
+          <div className="data" style={{lineHeight:'1'}}>
+            <h2 className='head' style={{margin:'0'}}>Username: <span style={{ fontWeight: '100', }} className='para'>@Hassan</span></h2>
           </div>
-          <div className="data" style={{ lineHeight: '0' }}>
-            <h2 className='head'>Designation:<span style={{ fontWeight: '100',margin:'53px' }} className='para'>Software Developer</span></h2>
+          <div className="data" style={{ lineHeight: '1' }}>
+            <h2 className='head' >Designation:<span style={{ fontWeight: '100',margin:'53px' }} className='para'>Software Developer</span></h2>
           </div>
           <div className="data" style={{ lineHeight: '0' }}>
             <h2 className='head'>Marital Status:
@@ -145,7 +146,7 @@ function Profile() {
   <h2 
     className="head" 
     style={{ 
-      margin: 0, 
+      margin: '0px', 
       flex: '1 1 auto', 
       minWidth: '0',
       whiteSpace: 'nowrap',
