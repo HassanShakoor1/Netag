@@ -2,7 +2,7 @@ import React from 'react';
 import Footer from '../Components/Footer';
 import { IoChevronBack } from "react-icons/io5";
 import { IoCopy } from "react-icons/io5"; // Import the copy icon
-import './Setting.css';
+import './setting.css';
 import { useNavigate} from 'react-router-dom';
 function Scanner() {
   const navigate = useNavigate();
