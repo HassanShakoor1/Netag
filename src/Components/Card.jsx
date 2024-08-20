@@ -36,7 +36,7 @@ function Card() {
       <div
         style={{
           
-          width: '33%',
+          width: '34%',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems:"center"

@@ -18,7 +18,7 @@ console.log(linkdata)
           <div className="Icon-nav">
             <div className="crox-dlt">
               <div className="x-space">
-                <img style={{ width: "10px" }} src={crox} alt="X" onClick={handleSlide} />
+                <img style={{ width: "13px" }} src={crox} alt="X" onClick={handleSlide} />
               </div>
               <p style={{ fontSize: '16px', color: "#EE0000", marginRight: "20px" }}>Delete</p>
             </div>

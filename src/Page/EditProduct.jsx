@@ -20,17 +20,18 @@ const ITEM_HEIGHT = 48;
 
 const style = {
   position: 'absolute',
-  top: '50%',
+  top: '60%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '100%',
-  maxWidth: "300px",
-  bgcolor: 'background.paper',
+  width: 300,
+  bgcolor: 'white',
   boxShadow: 24,
-  outline: 'none',
-  marginRight: '2rem',
-};
+  outline:'none',
+  marginRight:'30px',
+  p: 4,
 
+  borderRadius: '20px', // Ensure this is included
+}
 const products = [
   {
     id: 1,
@@ -179,30 +180,31 @@ function EditProduct() {
         </div>
 
         <Modal
-          open={openn}
-          onClose={handleClosee}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            {selectedProduct && (
-              <div className="items" style={{ display: 'flex', flexDirection: 'column', justifyContent: "center" }}>
-                <img style={{ width: "100%", height: "200px", objectFit: 'center' }} className='item-img' src={selectedProduct.imageUrl} alt={selectedProduct.heading} />
-                <br />
-                <div className="item-data">
-                  <h1 style={{ color: 'red', margin: 0, fontSize: 20 }}>
-                    {selectedProduct.heading}
-                  </h1>
-                  <p style={{ lineHeight: 1, paddingTop: 0, paddingBottom: 0, margin: 0 }}>
-                    Mental Health Clinic
-                  </p>
-                  <h4 style={{ lineHeight: 2, paddingTop: 0, paddingBottom: 0, margin: 0 }}>{selectedProduct.price}</h4>
-                  <p style={{ lineHeight: 1, paddingTop: 0, paddingBottom: 0, margin: 0, width: '100%' }}>{selectedProduct.description}</p>
-                </div>
-              </div>
-            )}
-          </Box>
-        </Modal>
+  open={openn}
+  onClose={handleClosee}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style }>
+    {selectedProduct && (
+      <div className="items" style={{ display: 'flex', flexDirection: 'column', justifyContent: "center",margin:'-9px' }}>
+        <img style={{ width: "100%", height: "200px", objectFit: 'center', borderRadius: '10px 10px 0 0' }} className='item-img' src={selectedProduct.imageUrl} alt={selectedProduct.heading} />
+        <br />
+        <div className="item-data">
+          <h1 style={{ color: 'red', margin: 0, fontSize: 20 }}>
+            {selectedProduct.heading}
+          </h1>
+          <p style={{ lineHeight: 1, paddingTop: 0, paddingBottom: 0, margin: 0 }}>
+            Mental Health Clinic
+          </p>
+          <h4 style={{ lineHeight: 2, paddingTop: 0, paddingBottom: 0, margin: 0 }}>{selectedProduct.price}</h4>
+          <p style={{ lineHeight: 1, paddingTop: 0, paddingBottom: 0, margin: 0, width: '100%' }}>{selectedProduct.description}</p>
+        </div>
+      </div>
+    )}
+  </Box>
+</Modal>
+
       </div>
     </div>
   );

@@ -1,29 +1,29 @@
-
-
-.Icon-nav{
-    background-color: white;
-    width: 100%;
-    margin-top: 2rem;
+.crox-dlt {
+    display: flex;
+    align-items: center; /* Vertically center the items */
+    justify-content: flex-start; /* Align items to the start */
+    gap: 10px; /* Add space between items */
+    padding: 10px; /* Add padding if needed */
+  }
   
- 
-}
-.crox-dlt{
+  .x-space {
     display: flex;
-    justify-content: space-between;
-    padding: 0 55px;
-    
-}
-
-.x-space{
-    height: 20px;
-    width: 20px;
-    border-radius: 100%;
-    background-color:#DADADA;
-    margin-top: 22px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    align-items: center; /* Center the icon vertically */
+  }
+  
+  .crox-dlt img {
+    width: 10px;
+    cursor: pointer; /* Add pointer cursor for clickable image */
+  }
+  
+  .crox-dlt p {
+    font-size: 16px;
+    color: #EE0000;
+    margin: 0; /* Remove any default margin */
+    flex: 1; /* Allow the text to take up remaining space */
+    text-align: right; /* Align text to the right */
+  }
+  
 
 
 
