@@ -8,7 +8,7 @@ function EditContact() {
     const navigate = useNavigate(); // Use the hook here
 
     const handlegoBack = () => {
-        navigate('/');
+        navigate('/home');
       };
   return (
     <div className="Editcontainer">

@@ -25,7 +25,7 @@ function Footer() {
   };
 
   const handleHome = () => {
-    navigate('/');
+    navigate('/home');
   };
 
   // Define styles for each icon based on the current path
@@ -58,7 +58,7 @@ function Footer() {
             <div className="h-icon">
               <IoIosHome
                 onClick={handleHome}
-                style={location.pathname === '/' ? activeStyle : iconStyle}
+                style={location.pathname === '/home' ? activeStyle : iconStyle}
               />
             </div>
             <IoIosQrScanner
@@ -71,7 +71,7 @@ function Footer() {
             />
             <IoMdSettings
               onClick={handleSubscription}
-              style={location.pathname === '/subscription' ? activeStyle : iconStyle}
+              style={location.pathname === '/home/setting' ? activeStyle : iconStyle}
             />
             <div className="extra">
               <div className='scn' style={scnStyle}>

@@ -10,7 +10,7 @@ import languages from "../images/Languages.png"
 import privacy from "../images/privacy.png"
  
 import Delete from "../images/Delete.png"
-
+import Footer from "../Components/Footer"
 import Logout from "../images/Logout.png"
 import vectorrr from "../images/vectorrr.png"
 import { useNavigate } from "react-router-dom"
@@ -289,7 +289,9 @@ function Setting() {
 
                     </div>
                 </div>
+                <Footer/>
             </div>
+           
         </div>
     )
 }
