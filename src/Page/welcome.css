@@ -1,11 +1,18 @@
 .welcome-center{
     display: flex;
     justify-content: center;
+    
 }
 
 .welcome-widt{
-    width: 430px;
-    min-height: 100vh;
+    width: 100%;
+    max-width:430px;
+    /* height:100%;
+    max-height: 100vh; */
+
+
+    /* width: 430px;
+    min-height: 100vh; */
     /* min-height: 1080px; */
     background-color: #FFFFFF;
     /* border: 1px solid black; */
@@ -13,20 +20,20 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+   
 }
 .welcome-para{
-    width: 320px;
+    width: 75%;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 1rem;
 }
 .btn-colr{
-    background-color: red;
-    width:291px;
+    background-color: #EE0000;
+    width:100%;
     padding:10px;
     font-size: 15px;
     border: transparent;
-    border-radius: 48px;
+    border-radius: 12px;
 }
