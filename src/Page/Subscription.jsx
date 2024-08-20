@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Footer from '../Components/Footer';
-import './Setting.css';
+import './setting.css';
 
 import { IoChevronBack } from "react-icons/io5";
 import Slider from 'react-slick';
