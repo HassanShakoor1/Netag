@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)http://localhost:5174/home/setting/subscript -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="module">
+import RefreshRuntime from "/@react-refresh"
+RefreshRuntime.injectIntoGlobalHook(window)
+window.$RefreshReg$ = () => {}
+window.$RefreshSig$ = () => (type) => type
+window.__vite_plugin_react_preamble_installed__ = true
+</script>
+
+    <script type="module" src="./Vite + React_files/client"></script>
+
+    
+    <link rel="icon" type="image/svg+xml" href="http://localhost:5174/vite.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+   
+    <title>Vite + React</title>
+  <style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/Edit.css">.container{
+    width: 100%;
+    position: relative;
+
+
+}
+
+.edit-profile{
+width: 100%;
+max-width: 430px;
+
+margin: 20px auto;
+   
+}
+.lgo{
+    width: 40px;
+    height: 40px;
+}
+.bck{
+    font-size: 29px;
+    color: red;
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+
+.input-data{
+    width: 100%;
+}
+
+.edit-field{
+    width: 100%;
+    display: flex;
+    justify-content:center;
+    gap:10px;
+    margin-top: 20px;
+
+}
+
+.btn-s{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.save2{
+    background-color: #EE0000;
+    width: 250px;
+   
+    height: 50px;
+    box-shadow:1px 1px 1px 2px gainsboro;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+}</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/App.css">body{
+
+  font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.ProfileContainer {
+  width: 100%;
+}
+
+.profile-design {
+  background-color: rgb(255, 255, 255);
+  width: 100%;
+  max-width: 430px;
+  margin: 20px auto;
+
+ 
+}
+
+.nav {
+  width: 100%;
+  max-width: 430px;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative; /* Add relative positioning */
+}
+
+.nav-logo {
+  position: absolute; /* Center the logo using absolute positioning */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-logo img {
+  width: 100px;
+}
+
+.nav-icon {
+  margin-left: auto; /* Push the icon to the right */
+  margin-right: 20px;
+  color: #E93428;
+  font-size: 25px; /* Adjust font size */
+  margin-bottom:0.7rem;/* Adjust padding to align vertically */
+}
+
+
+
+.rel-div{
+  position: relative;
+  background-color: white;
+  width: 100%;
+  max-height:240px;
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+}
+.main-img{
+
+  width: 100%;
+  max-height: 200px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 2rem;
+}
+
+.lady{
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  bottom:0;
+margin-right: 34px;
+  right: 0;
+  border: 2px solid red;
+  
+
+ 
+}
+
+.data{
+  display: flex;
+  line-height: 1;
+}
+.head{
+  font-size: 15px;
+
+}
+.para{
+  margin-left: 4rem;
+  color: rgb(153, 153, 153);
+  text-align: right;
+}
+.p-btn{
+  width: 100px;
+  height: 40px;
+  cursor: pointer;
+  border-radius:20px;
+  background-color:white;
+  border:2px solid #E93428;
+  color: #E93428;
+  margin-left: 1rem;
+
+}
+
+.row{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  
+}
+
+.col
+{
+ 
+  margin: 0.5rem;
+  width: 200px;
+  box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.1); /* Shadow properties */
+  border-radius: 1rem;
+
+}
+.div{
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+ margin: 20px auto 20px;
+  background-color:rgb(255, 238, 238);
+  border-radius: 100%;
+}
+.col-icon{
+  display: flex;
+  justify-content: center;
+ align-items: center;
+width: 50px;
+}
+
+.pnk-btn{
+  width: 120px;
+  height: 45px;
+  border-radius:9px;
+  background-color:rgb(254, 216, 216);
+ border: none;
+  color: #E93428;
+  margin-left: 1rem;
+margin-left:9rem;
+font-weight: bold;
+
+font-size: 15px;
+}
+
+.seeAll{
+  width: 80px;
+  height: 25px;
+border-radius: 7px;
+  background-color:rgb(254, 216, 216);
+ border: none;
+margin-top: 0.5rem;
+  color: #E93428;
+
+
+font-weight: bold;
+
+font-size: 12px;
+}
+
+
+.p-vContainer{
+  width: 100%;
+
+
+}
+
+
+
+.rows {
+  display: flex;
+  justify-content: space-between;
+
+
+}
+
+.column {
+  max-height: 100px;
+  margin: 0 10px;
+  background-color: lightblue;
+  padding: 0;
+  border-radius: 17px;
+  overflow: hidden; /* Ensures the image doesn't overflow the column */
+}
+
+.column:first-child {
+  margin-left: 0;
+}
+
+.column:last-child {
+  margin-right: 0;
+}
+
+.column img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the entire area without distortion */
+}
+
+.fields{
+  display:grid;
+  margin: auto;
+  grid-gap: 1rem;
+  height: 14rem;
+
+}
+.inpt{
+  border-radius: 20px;
+  background-color: rgb(245, 245, 245);
+  align-items: center;
+
+}
+
+.inpt2{
+  border-radius: 20px;
+  background-color: rgb(245, 245, 245);
+  align-items: center;
+  display: flex;
+  
+
+}
+.i-pic{
+width: 50px;
+height: 50px;
+border-radius: 100%;
+margin-left: 20px;
+object-fit: cover;
+}
+
+
+
+
+
+
+.ip-btn {
+  display: flex;
+  justify-content: space-around;
+
+
+  align-items: center;
+}
+
+
+
+.link-heading {
+  color: rgb(233, 52, 40);
+  font-weight: 100;
+
+}
+
+.ii-btn {
+
+display: flex;
+justify-content: center;
+align-items: center;
+
+
+
+}
+
+.mode-heading {
+
+  font-size: 13px;
+  color: rgb(233, 52, 40);
+  font-weight: 100;
+  flex-grow: 1;
+ 
+}
+
+.toggle-container {
+  position: relative;
+  width: 35px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-label {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: background-color 0.4s;
+  border-radius: 34px;
+}
+
+.toggle-label::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  bottom: 1px;
+  background-color: white;
+  transition: transform 0.4s;
+  border-radius: 50%;
+}
+
+.toggle-input:checked + .toggle-label {
+  background-color: rgb(233, 52, 40);
+}
+
+.toggle-input:checked + .toggle-label::before {
+  transform: translateX(16px);
+}
+
+
+
+
+
+
+.menus {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 15px;
+  max-width: 430px;
+  margin: 0 auto;
+  margin-bottom: 3rem;
+}
+
+.fon {
+  flex: 1 1 calc(25% - 15px); /* 25% width minus the gap to account for spacing */
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.fon img {
+  width: 60%;
+  cursor: pointer;
+}
+
+.fon p {
+  font-size: 12px;
+
+  line-height: 1.2; /* Consistent line height */
+
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Add ellipsis to overflowing text */
+}
+
+
+
+
+
+
+
+
+.footer-Container {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  z-index: 10; /* Ensure it's on top of other content */
+  display: flex;
+  justify-content: center; /* Center the footer */
+}
+
+.Footer {
+  border-top: 2px solid gainsboro;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+  width: 100%;
+  max-width: 430px; /* Match the width of profile-design */
+}
+
+.f-icons {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+
+}
+
+/* .h-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  background-color: rgb(226, 226, 226);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+} */
+
+.extra {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.scn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #E93428;
+  margin-top: -63px;
+  box-shadow: 1px 2px 2px 2px rgb(200, 197, 197);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Components/EditContact.css">.Editcontainer{
+
+    width: 100%;
+   position: relative;
+   display: flex;
+   justify-content: center;
+}
+
+.edit-Contact{
+   width: 100%;
+   max-width: 430px;
+   
+
+}
+.nav2{
+    width: 100%;
+    display: flex;
+    
+  
+}
+.Upload-p{
+    width: 100%;
+    border: 2px solid black;
+   
+ 
+    border-radius: 30px;
+    border: 2px solid #C6C6C6;
+}
+.Upload-p h2{
+    text-align: center;
+    color: red;
+}
+
+.upload-1{
+    background-color: #F5F5F5;
+   margin: 20px auto;
+    width: 90%;
+    height: 140px;
+    border-radius: 30px;
+    border: 1px dashed #6D6D6D;
+
+}
+
+.save22{
+    background-color: #EE0000;
+    width: 100px;
+    margin-left: 20px;
+    height: 30px;
+    box-shadow:1px 1px 1px 2px gainsboro;
+    border: none;
+    cursor: pointer;
+    color: aliceblue;
+    border-radius: 12px;
+   
+}
+
+
+.grid-container {
+    width: 90%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:10px;
+   margin: 20px auto 20px;
+   
+
+}
+
+.grid-item {
+    background-color:#F5F5F5;
+    color: white;
+    padding: 20px;
+   max-height: 70px;
+    text-align: center;
+    border-radius: 15px;
+    border: 1px solid #ACACAC;
+}
+</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/product.css">.productContainer {
+  width: 100%;
+  position: relative;
+ 
+  }
+  
+  .Product-design {
+
+    width: 100%;
+    max-width: 430px;
+    margin: 20px auto;
+  
+  }
+  
+  .bck-head-btn{
+    display: flex;
+   justify-content:space-between;
+ 
+   
+  }
+
+  .add-btn{
+    width: 60px;
+    height: 30px;
+    cursor: pointer;
+    border-radius:20px;
+    background-color:white;
+    border:2px solid #E93428;
+    color: #E93428;
+    margin-right: 6px;
+   
+  
+  }
+  .search-field{
+display: flex;
+justify-content: center;
+ 
+   
+  }
+  .search-field input{
+    width: 100%;
+    max-width:410px;
+    height: 40px;
+    border-radius: 30px;
+    margin-top: 2rem;
+  }
+
+  .HairoilContainer{
+    width: 100%;
+   
+    background-color:#F5F5F5 ;
+    border-radius: 10px;
+
+  }
+  .hair-img{
+    width: 100%;
+    height: 150px;
+    padding-top: 10px;
+  
+  }
+
+  .p-dots{
+display: flex; 
+justify-content: space-between;
+margin-top: -24px;
+
+  }
+
+  .product-btn{
+    
+    background-color:#FFDEDE;
+    width: 95%;
+    margin-left: 0.5rem;
+    height: 40px;
+    box-shadow:1px 1px 1px 2px gainsboro;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+  
+  }
+
+  /* edited part....... */
+
+
+  .Edit-product-Design{
+    width: 100%;
+   border-radius: 20px;
+
+  }
+  .item-img{
+width: 30%;
+height: 140px;
+ 
+  border-radius: 10px;
+  }
+  .items{
+    background-color: #F5F5F5;
+    display: flex;
+    padding: 10px;
+    width: 100%;
+  
+  }
+  .item-data{
+padding-left: 10px;
+width: 60%;
+  }
+
+  .dot-img{
+    width: 10%;
+  }
+
+  .custom-box {
+    border-radius: 20px;
+  }</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/Addcatagory.css">.AddcatagoryContainer{
+    width: 100%;
+    
+
+}
+
+.Addcatagory-design{
+
+    width: 100%;
+    max-width: 430px;
+    margin: 20px auto;
+}
+.back-head{
+    display: flex;
+    justify-content: space-between;
+}
+
+input::placeholder {
+    color:#727272;
+    font-size: 16px;
+    font-weight: 10;
+  padding-left: 13px;
+  
+ 
+  }
+
+  .name-input2 input::placeholder{
+padding-top: 0px;
+padding-bottom: 0px;
+
+  }
+
+  .AddCatagory-img{
+    width: 100%;
+    height: 200px;
+    background-color:#F1F1F1;
+    border-radius: 30px;
+  }</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/Editproductdetail.css">/* General Styles */
+.newContainer {
+    width: 100%;
+}
+
+.new-details-design {
+    width: 100%;
+    max-width: 430px;
+    margin: 20px auto;
+}
+
+input::placeholder {
+    color: #727272;
+}
+
+/* Form Container */
+.formContainer {
+    display: flex;
+    flex-direction: column;
+   margin-left: 1.5rem; /* Adjusted margin */
+    gap: 1rem; /* Space between rows */
+    width: 95%;
+   
+}
+
+/* Flexbox for Rows and Columns */
+.formRow {
+    display: flex;
+    flex-wrap: wrap; /* Ensure items wrap to the next line on smaller screens */
+    gap:2px; /* Space between columns */
+}
+
+.formColumn {
+    flex: 1; /* Make columns flexible */
+    min-width: 0; /* Prevent columns from being too narrow */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Space between heading and input field */
+}
+
+.formHeading {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.formInput {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Ensure input takes full width of column */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+
+
+
+
+
+</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/Activecard.css">.Active-container{
+width: 100%;
+position: relative;
+
+
+}
+.Active-design{
+    width: 100%;
+    max-width: 430px;
+    
+    margin: 0 auto;
+  
+    
+}
+.active-head{
+display: flex;
+justify-content: center;
+font-weight: 300;
+color: red;
+font-size: 23px;
+}
+</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/Analytics.css">.Analytics-container{
+    width: 100%;
+    position: relative;
+
+}
+.analytics-design{
+width: 100%;
+max-width: 430px;
+
+margin: 0 auto;
+
+}
+.analytics-head{
+
+    font-size: 30px;
+}
+.ana-d{
+    display: flex;
+    justify-content: space-between;
+}</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/setting.css">
+.reddiv{
+    background-color:#EE0000;
+    width:100%;
+    height:35vh
+
+}
+.reddiv-flex{
+   
+    display:flex;
+    align-items:center;
+    padding:10%
+}
+.settingcard{
+ width: 100%;
+
+ border-radius: 12px;
+border: 1px solid #F3F3F3; 
+ box-shadow: 0 0 4.5px rgba(0, 0, 0, 0.25);
+ 
+             
+           
+}
+.profile-positionn{
+    width:100%;
+    height:25vh;
+    position:relative;
+    /* border:2px solid #EE0000; */
+    border-radius:36px
+}
+.profile-position{
+    width:100%;
+    height:25vh;
+    border:2px solid #EE0000;
+    border-radius:36px
+}
+
+.aboulte{
+    /* position:absolute */
+    background-color:#EE0000;
+   width:30%;
+   display:flex;
+   justify-content:center;
+    /* -moz-border-radius: 0px;
+    -webkit-border-radius: 13px 13px 0px 0px; */
+    border-radius: 37px 37px 0px 0px;
+}
+
+
+.setting-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+.Subs-Container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+  .setting-design {
+    width: 100%;
+    max-width: 430px;
+    margin: 2px auto;
+   
+ 
+
+  }
+  
+ .subs-design{
+  width: 100%;
+  max-width: 430px;
+  margin: 2px auto;
+ 
+  }
+  .bak-hed {
+    display: flex;
+    align-items: center;
+ margin-left: 1rem;
+  }
+  
+  .saver {
+    background-color: white;
+    width: 70%;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Aligns the text and the toggle switch */
+    margin: 2px auto;
+    height: 70px;
+    border-radius: 30px;
+    font-size: 14px;
+    padding: 0 20px; 
+    border: 1px solid red;
+    box-sizing: border-box;
+    box-shadow: none;
+  }
+  
+  /* The switch - the box around the slider */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  /* The circle inside the slider */
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  /* Toggle the background color when the checkbox is checked */
+  input:checked + .slider {
+    background-color: #E93428;
+  }
+  
+  /* Move the circle when the checkbox is checked */
+  input:checked + .slider:before {
+    transform: translateX(17px);
+  }
+  
+.http{
+    display: flex;
+    justify-content: center;
+}
+
+
+
+
+/* ...........Subscription */
+.pic-p{
+  display: flex;
+  align-items: center;
+padding-left: 20px;
+
+gap:9px;
+}
+
+
+.gradient-text {
+  background: linear-gradient(to bottom, #000AEE, #00D1EE);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.slick-dots li{
+  font-size: 74px !important;
+}
+
+.slick-dots li.slick-active button:before {
+  opacity: .75 !important;
+  color: rgb(255, 0, 0) !important;
+  font-size: 15px !important;
+}
+.slick-dots li button:before {
+  font-family: 'slick';
+  font-size: 20px;
+  line-height: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  content: '•';
+  text-align: center;
+  opacity: .25;
+  color: rgb(255, 0, 0) !important ; 
+  -webkit-font-smoothing: grey !important;
+}</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/node_modules/slick-carousel/slick/slick.css">/* Slider */
+.slick-slider
+{
+    position: relative;
+
+    display: block;
+    box-sizing: border-box;
+
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    -ms-touch-action: pan-y;
+        touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.slick-list
+{
+    position: relative;
+
+    display: block;
+    overflow: hidden;
+
+    margin: 0;
+    padding: 0;
+}
+.slick-list:focus
+{
+    outline: none;
+}
+.slick-list.dragging
+{
+    cursor: pointer;
+    cursor: hand;
+}
+
+.slick-slider .slick-track,
+.slick-slider .slick-list
+{
+    -webkit-transform: translate3d(0, 0, 0);
+       -moz-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+         -o-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+}
+
+.slick-track
+{
+    position: relative;
+    top: 0;
+    left: 0;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.slick-track:before,
+.slick-track:after
+{
+    display: table;
+
+    content: '';
+}
+.slick-track:after
+{
+    clear: both;
+}
+.slick-loading .slick-track
+{
+    visibility: hidden;
+}
+
+.slick-slide
+{
+    display: none;
+    float: left;
+
+    height: 100%;
+    min-height: 1px;
+}
+[dir='rtl'] .slick-slide
+{
+    float: right;
+}
+.slick-slide img
+{
+    display: block;
+}
+.slick-slide.slick-loading img
+{
+    display: none;
+}
+.slick-slide.dragging img
+{
+    pointer-events: none;
+}
+.slick-initialized .slick-slide
+{
+    display: block;
+}
+.slick-loading .slick-slide
+{
+    visibility: hidden;
+}
+.slick-vertical .slick-slide
+{
+    display: block;
+
+    height: auto;
+
+    border: 1px solid transparent;
+}
+.slick-arrow.slick-hidden {
+    display: none;
+}
+</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/node_modules/slick-carousel/slick/slick-theme.css">@charset 'UTF-8';
+/* Slider */
+.slick-loading .slick-list
+{
+    background: #fff url('/node_modules/slick-carousel/slick/ajax-loader.gif') center center no-repeat;
+}
+
+/* Icons */
+@font-face
+{
+    font-family: 'slick';
+    font-weight: normal;
+    font-style: normal;
+
+    src: url('/node_modules/slick-carousel/slick/fonts/slick.eot');
+    src: url('/node_modules/slick-carousel/slick/fonts/slick.eot?#iefix') format('embedded-opentype'), url('/node_modules/slick-carousel/slick/fonts/slick.woff') format('woff'), url('/node_modules/slick-carousel/slick/fonts/slick.ttf') format('truetype'), url('/node_modules/slick-carousel/slick/fonts/slick.svg#slick') format('svg');
+}
+/* Arrows */
+.slick-prev,
+.slick-next
+{
+    font-size: 0;
+    line-height: 0;
+
+    position: absolute;
+    top: 50%;
+
+    display: block;
+
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    -webkit-transform: translate(0, -50%);
+    -ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);
+
+    cursor: pointer;
+
+    color: transparent;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+.slick-prev:hover,
+.slick-prev:focus,
+.slick-next:hover,
+.slick-next:focus
+{
+    color: transparent;
+    outline: none;
+    background: transparent;
+}
+.slick-prev:hover:before,
+.slick-prev:focus:before,
+.slick-next:hover:before,
+.slick-next:focus:before
+{
+    opacity: 1;
+}
+.slick-prev.slick-disabled:before,
+.slick-next.slick-disabled:before
+{
+    opacity: .25;
+}
+
+.slick-prev:before,
+.slick-next:before
+{
+    font-family: 'slick';
+    font-size: 20px;
+    line-height: 1;
+
+    opacity: .75;
+    color: white;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.slick-prev
+{
+    left: -25px;
+}
+[dir='rtl'] .slick-prev
+{
+    right: -25px;
+    left: auto;
+}
+.slick-prev:before
+{
+    content: '←';
+}
+[dir='rtl'] .slick-prev:before
+{
+    content: '→';
+}
+
+.slick-next
+{
+    right: -25px;
+}
+[dir='rtl'] .slick-next
+{
+    right: auto;
+    left: -25px;
+}
+.slick-next:before
+{
+    content: '→';
+}
+[dir='rtl'] .slick-next:before
+{
+    content: '←';
+}
+
+/* Dots */
+.slick-dotted.slick-slider
+{
+    margin-bottom: 30px;
+}
+
+.slick-dots
+{
+    position: absolute;
+    bottom: -25px;
+
+    display: block;
+
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    list-style: none;
+
+    text-align: center;
+}
+.slick-dots li
+{
+    position: relative;
+
+    display: inline-block;
+
+    width: 20px;
+    height: 20px;
+    margin: 0 5px;
+    padding: 0;
+
+    cursor: pointer;
+}
+.slick-dots li button
+{
+    font-size: 0;
+    line-height: 0;
+
+    display: block;
+
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+
+    cursor: pointer;
+
+    color: transparent;
+    border: 0;
+    outline: none;
+    background: transparent;
+}
+.slick-dots li button:hover,
+.slick-dots li button:focus
+{
+    outline: none;
+}
+.slick-dots li button:hover:before,
+.slick-dots li button:focus:before
+{
+    opacity: 1;
+}
+.slick-dots li button:before
+{
+    font-family: 'slick';
+    font-size: 6px;
+    line-height: 20px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 20px;
+    height: 20px;
+
+    content: '•';
+    text-align: center;
+
+    opacity: .25;
+    color: black;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.slick-dots li.slick-active button:before
+{
+    opacity: .75;
+    color: black;
+}
+</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/welcome.css">.welcome-center{
+    display: flex;
+    justify-content: center;
+}
+
+.welcome-widt{
+    width: 430px;
+    min-height: 100vh;
+    /* min-height: 1080px; */
+    background-color: #FFFFFF;
+    /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.welcome-para{
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.btn-colr{
+    background-color: red;
+    width:291px;
+    padding:10px;
+    font-size: 15px;
+    border: transparent;
+    border-radius: 48px;
+}</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/imges.css"></style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/notification.css">.notification-maibdiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2%; /* Use percentage for margin */
+    width: 100%;
+}
+
+.notification-width {
+    width: 100%;
+    max-width: 430px; /* Use percentage for max-width */
+    padding: 0 2%; /* Add padding to avoid content touching the edges */
+}
+
+.notification-centerdiv {
+    display: flex;
+    flex-direction: column; /* Stack items vertically to fit better on smaller screens */
+    align-items: center;
+    width: 100%;
+}
+
+.secondwidth {
+    width: 100%; /* Use percentage for width */
+    max-width: 100%; /* Ensure it doesn’t exceed parent width */
+    box-sizing: border-box; /* Include padding and border in the element’s total width and height */
+}
+
+.notification-boxwidth {
+    width: 100%;
+    background-color: #F2F2F2;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    padding: 2%; /* Use percentage for padding */
+    margin-top: 1%; /* Use percentage for margin */
+    box-sizing: border-box; /* Include padding in the element’s total width and height */
+    font-size: 1rem; /* Use rem for font-size to scale with root font size */
+}
+
+.notification-boxwidth div {
+    margin-bottom: 1rem; /* Use rem for spacing */
+}
+
+/* To ensure content scales well, you may need to adjust font size or padding based on your design preferences */
+</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/manageorder.css">.Manageorder-main{
+    display:flex;
+    justify-content:center;
+    margin-top:10px;
+    margin-bottom:20px
+}
+.Manageorder-width{
+    width:430px;
+    min-height:100vh;
+    /* border:1px solid black */
+}
+.Manageorder-center{
+    display:flex;
+    justify-content:center
+}
+.Manageorder-width1{
+    width:96%;
+    height:100%
+}
+.vieworder-width{
+    margin-top:3rem;
+    background-color:#F1F1F1;
+    width:100%;
+    /* height:10vh; */
+    border-radius:12px;
+    /* padding:16px; */
+    padding-top:4px;
+    padding-bottom:4px
+
+   
+}
+.ist-div{
+    display:flex;
+    justify-content:center
+}
+.box1-width{
+    margin-top:3rem;
+    width:100%;
+    /* background-color:#DAFFE2; */
+    /* border:1px solid #019021; */
+    border-radius:12px;
+    /* height:20vh; */
+    position:relative
+
+}
+.box1-width1{
+    
+    width:100%;
+    background-color:#DAFFE2;
+    border:1px solid #019021;
+    border-radius:12px;
+    /* height:20vh */
+
+}</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/managescreen.css">
+.managescreen-main{
+    display:flex;
+    justify-content:center;
+    margin-top:10px;
+    margin-bottom:10px
+}
+.managescreen-width{
+    width:430px;
+    min-height:100vh;
+    /* border:1px solid black */
+}
+.managescreen-divcenter{
+    display:flex;
+    justify-content:center;
+}
+.managescreen-divwidth{
+    width:96%;
+    
+}
+.managescreen-boxwidth{
+    width:100%;
+    max-width: 92%;
+    background-color:#F1F1F1;
+    border-radius:12px;
+    
+    padding:18px 13px
+}
+.managescreen-line{
+    width:100%;
+    height:2px;
+    background-color:#D2D2D2;
+
+}
+</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/categories.css">
+.categories-maindiv{
+    display:flex;
+    justify-content:center;
+    margin-top:1rem;
+    margin-bottom:1rem
+}
+.categories-width{
+    width:430px;
+    min-height:100vh;
+   
+
+}
+.categories-maindiv1{
+    display:flex;
+    justify-content:center;
+}
+.categories-width1{
+    width:95%;
+    height:100%;
+}
+.categories-input{
+ 
+    border:1px solid #A9A9A9;
+    border-radius:24px;
+    display:flex;
+    align-items:center;
+    justify-content:start;
+    margin-top:2rem;
+    padding:8px;
+    padding-left:25px;
+}
+.cardwidth{
+    margin-top:1rem;
+    width:100%;
+    background-color:#F5F5F5;
+    border-radius:12px
+
+}
+.cardcenter{
+    
+    display:flex;
+    justify-content:center
+}
+.cardcenter-width{
+    width:96%;
+    height:100%
+}
+.managecategories-card{
+    margin-top:1rem;
+    width:100%;
+    height:100%;
+    background-color:#F5F5F5;
+    border:1px solid #DDDDDD;
+    border-radius:12px;
+}
+body.modal-open {
+    overflow: hidden; /* Prevent scrolling */
+    position: fixed; /* Prevent layout shifts */
+    width: 100%; /* Ensure full width */
+  }</style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/Slide.css">.slide_main_div {
+
+
+  position: fixed !important;
+  bottom: 0%;
+position:absolute;
+  background:#FFFFFF;
+  width: 100%;
+  max-width: 430px;
+border-radius: 10px;
+  align-self: center;
+
+
+ 
+  z-index: 100;
+  box-shadow: 0px -5px 5px 0px rgba(0, 0, 0, 0.25);
+  }
+  .slider-container {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.5s ease;
+  }
+  .slider-container.open {
+    max-height: 500px; 
+  }
+  </style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/Page/IconOpener.css">.crox-dlt {
+    display: flex;
+    align-items: center; /* Vertically center the items */
+    justify-content: flex-start; /* Align items to the start */
+    gap: 10px; /* Add space between items */
+    padding: 10px; /* Add padding if needed */
+  }
+  
+  .x-space {
+    display: flex;
+    align-items: center; /* Center the icon vertically */
+  }
+  
+  .crox-dlt img {
+    width: 10px;
+    cursor: pointer; /* Add pointer cursor for clickable image */
+  }
+  
+  .crox-dlt p {
+    font-size: 16px;
+    color: #EE0000;
+    margin: 0; /* Remove any default margin */
+    flex: 1; /* Allow the text to take up remaining space */
+    text-align: right; /* Align text to the right */
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.image-section{
+   width: 100%;
+   margin-top: 1rem;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+
+.input-q{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+  
+}
+.input-qq{
+    width: 100%;
+    display: flex;
+    justify-content:center;
+   
+  
+}
+
+.x-space22{
+
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ 
+    color:red;
+    font-size:25px;
+    font-weight:600;
+   margin-right: 100px;
+  
+  
+    
+
+}
+
+
+
+
+.quest{
+    border: none;
+    text-align:center;
+    outline:none;
+    background-color:#F7F7F7;
+    border:1px solid #DADADA ;
+    border-radius:10px;
+    width:250px;
+    height:45px;
+}
+
+.x-space2{
+
+    height: 44px;
+    width: 44px;
+    border-radius: 100%;
+    background-color:#F7F7F7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #F7F7F7;
+    color:red;
+    font-size:25px;
+    font-weight:600;
+    margin-left: 20px;
+     border: 1px solid #DADADA
+  
+    
+
+}
+
+.two-btns {
+    width: 100%;
+display: flex;
+justify-content: center;
+
+}
+
+.cancel{
+  background-color: rgb(255, 255, 255);
+  width: 150px;
+  height: 40px;
+  box-shadow:1px 1px 1px 2px gainsboro;
+  border: none;
+  cursor: pointer;
+  border-radius: 12px;
+
+}
+
+.save{
+    background-color: #EE0000;
+    width: 150px;
+    margin-left: 20px;
+    height: 40px;
+    box-shadow:1px 1px 1px 2px gainsboro;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+
+
+
+
+
+  </style><style type="text/css" data-vite-dev-id="/Users/zohaib/Desktop/ofctask3/profile/src/index.css"></style></head>
+  <body cz-shortcut-listen="true">
+    <div id="root"><div class="app"><div class="Subs-Container" style="display: flex; justify-content: center;"><div class="subs-design"><div class="bak-hed" style="display: flex; align-items: center; position: relative; margin-top: 20px;"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="color: red; font-size: 22px; cursor: pointer; position: absolute; left: 5px;"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M328 112 184 256l144 144"></path></svg><p style="color: red; font-size: 22px; margin: 0px auto;">Subscription Plans</p></div><br><br><br><h4 style="color: red; text-align: center; width: 70%; font-size: 23px; margin: 0px auto;">Please Buy Subscription Plans to Uncloak This Feature</h4><br><br><div class="many" style="margin: 2px auto; display: flex; flex-direction: column; align-items: center;"><p style="text-align: center;">Select Plan</p><div style="display: flex; width: 300px; height: 50px; overflow: hidden;"><div style="flex: 1 1 0%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; text-align: center; transition: background-color 0.3s, color 0.3s, border 0.3s; background-color: rgb(255, 228, 228); color: red; border-top: 1px solid red; border-right: none; border-bottom: 1px solid red; border-left: 1px solid red; border-image: initial; border-radius: 5px 0px 0px 5px;">Monthly</div><div style="flex: 1 1 0%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; text-align: center; transition: background-color 0.3s, color 0.3s, border 0.3s; background-color: rgb(240, 240, 240); color: black; border-top: 1px solid grey; border-right: 1px solid grey; border-bottom: 1px solid grey; border-left: none; border-image: initial; border-radius: 0px 5px 5px 0px;">Yearly</div></div></div><br><br><br><div style="width: 90%; margin: 0px auto;"><div class="slick-slider slick-initialized" dir="ltr"><button type="button" data-role="none" class="slick-arrow slick-prev" style="display: block;"> Previous</button><div class="slick-list"><div class="slick-track" style="width: 3483px; opacity: 1; transform: translate3d(-1548px, 0px, 0px);"><div data-index="-1" tabindex="-1" class="slick-slide slick-cloned" aria-hidden="true" style="width: 387px;"><div><div tabindex="-1" style="width: 100%; display: inline-block;"><div style="display: flex; flex-direction: column; background-color: white; border-radius: 20px; margin: 15px; border: 1px solid rgb(221, 221, 221);"><h3 style="text-align: center; margin: 20px 0px 0px; color: rgb(0, 209, 238); font-size: 20px;">Enterprise</h3><p style="text-align: center; margin: 0px; font-size: 18px; letter-spacing: 1px; color: rgb(136, 136, 136);">For Enterprises</p><div class="rate" style="text-align: center; width: 100%; background-color: rgb(216, 243, 255); height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 50px;"><h1 style="margin: 0px; color: rgb(0, 209, 238); font-size: 3rem;">$99.99</h1><p style="margin: 0px;">per month</p></div><br><br><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Create Unlimited Business Profiles</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Access your Profile ON/OFF Feature</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Activate Your own Tag</p></div><div class="pic-p"><img src="./Vite + React_files/one.png" alt="all" style="width: 30px; height: 30px; background: white;"><p>Customize Your Profile Colouring</p></div><br><br><br><br><div class="save" style="color: white; display: flex; justify-content: center; align-items: center; width: 90%; font-size: 18px; height: 60px; border-radius: 20px; background: linear-gradient(rgb(0, 209, 238), rgb(0, 10, 238)); cursor: pointer; font-weight: 700;">Subscribe Plan</div><br><br></div></div></div></div><div data-index="0" class="slick-slide" tabindex="-1" aria-hidden="true" style="outline: none; width: 387px;"><div><div tabindex="-1" style="width: 100%; display: inline-block;"><div style="display: flex; flex-direction: column; background-color: white; border-radius: 20px; margin: 15px; border: 1px solid rgb(221, 221, 221);"><h3 style="text-align: center; margin: 20px 0px 0px; color: red; font-size: 20px;">Professional</h3><p style="text-align: center; margin: 0px; font-size: 18px; letter-spacing: 1px; color: rgb(136, 136, 136);">For small Business</p><div class="rate" style="text-align: center; width: 100%; background-color: rgb(255, 214, 214); height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 50px;"><h1 style="margin: 0px; color: red; font-size: 3rem;">$4.99</h1><p style="margin: 0px;">per month</p></div><br><br><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Manage 1 Social And Business Profile</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Access your Profile ON/OFF Feature</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Activate Your own Tag</p></div><div class="pic-p"><img src="./Vite + React_files/one.png" alt="all" style="width: 30px; height: 30px; background: white;"><p>Customize Your Profile Colouring</p></div><br><br><br><br><div class="save" style="color: white; display: flex; justify-content: center; align-items: center; width: 90%; font-size: 18px; height: 60px; border-radius: 20px; background-color: red; cursor: pointer; font-weight: 700;">Subscribe Plan</div><br><br></div></div></div></div><div data-index="1" class="slick-slide" tabindex="-1" aria-hidden="true" style="outline: none; width: 387px;"><div><div tabindex="-1" style="width: 100%; display: inline-block;"><div style="display: flex; flex-direction: column; background-color: white; border-radius: 20px; margin: 15px; border: 1px solid rgb(221, 221, 221);"><h3 style="text-align: center; margin: 20px 0px 0px; color: rgb(117, 244, 96); font-size: 20px;">Premium</h3><p style="text-align: center; margin: 0px; font-size: 18px; letter-spacing: 1px; color: rgb(136, 136, 136);">For Medium Business</p><div class="rate" style="text-align: center; width: 100%; background-color: rgb(201, 255, 206); height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 50px;"><h1 style="margin: 0px; color: rgb(117, 244, 96); font-size: 3rem;">$18.99</h1><p style="margin: 0px;">per month</p></div><br><br><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Create upto 10 Business Profiles</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Access your Profile ON/OFF Feature</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Activate Your own Tag</p></div><div class="pic-p"><img src="./Vite + React_files/one.png" alt="all" style="width: 30px; height: 30px; background: white;"><p>Customize Your Profile Colouring</p></div><br><br><br><br><div class="save" style="color: white; display: flex; justify-content: center; align-items: center; width: 90%; font-size: 18px; height: 60px; border-radius: 20px; background-color: rgb(35, 239, 2); cursor: pointer; font-weight: 700;">Subscribe Plan</div><br><br></div></div></div></div><div data-index="2" class="slick-slide" tabindex="-1" aria-hidden="true" style="outline: none; width: 387px;"><div><div tabindex="-1" style="width: 100%; display: inline-block;"><div style="display: flex; flex-direction: column; background-color: white; border-radius: 20px; margin: 15px; border: 1px solid rgb(221, 221, 221);"><h3 style="text-align: center; margin: 20px 0px 0px; color: rgb(79, 0, 207); font-size: 20px;">Business</h3><p style="text-align: center; margin: 0px; font-size: 18px; letter-spacing: 1px; color: rgb(136, 136, 136);">For Large Business</p><div class="rate" style="text-align: center; width: 100%; background-color: rgb(221, 216, 255); height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 50px;"><h1 style="margin: 0px; color: rgb(79, 0, 207); font-size: 3rem;">$49.99</h1><p style="margin: 0px;">per month</p></div><br><br><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Create Unlimited Business Profiles</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Access your Profile ON/OFF Feature</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Activate Your own Tag</p></div><div class="pic-p"><img src="./Vite + React_files/one.png" alt="all" style="width: 30px; height: 30px; background: white;"><p>Customize Your Profile Colouring</p></div><br><br><br><br><div class="save" style="color: white; display: flex; justify-content: center; align-items: center; width: 90%; font-size: 18px; height: 60px; border-radius: 20px; background-color: rgb(119, 0, 238); cursor: pointer; font-weight: 700;">Subscribe Plan</div><br><br></div></div></div></div><div data-index="3" class="slick-slide slick-active slick-current" tabindex="-1" aria-hidden="false" style="outline: none; width: 387px;"><div><div tabindex="-1" style="width: 100%; display: inline-block;"><div style="display: flex; flex-direction: column; background-color: white; border-radius: 20px; margin: 15px; border: 1px solid rgb(221, 221, 221);"><h3 style="text-align: center; margin: 20px 0px 0px; color: rgb(0, 209, 238); font-size: 20px;">Enterprise</h3><p style="text-align: center; margin: 0px; font-size: 18px; letter-spacing: 1px; color: rgb(136, 136, 136);">For Enterprises</p><div class="rate" style="text-align: center; width: 100%; background-color: rgb(216, 243, 255); height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 50px;"><h1 style="margin: 0px; color: rgb(0, 209, 238); font-size: 3rem;">$99.99</h1><p style="margin: 0px;">per month</p></div><br><br><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Create Unlimited Business Profiles</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Access your Profile ON/OFF Feature</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Activate Your own Tag</p></div><div class="pic-p"><img src="./Vite + React_files/one.png" alt="all" style="width: 30px; height: 30px; background: white;"><p>Customize Your Profile Colouring</p></div><br><br><br><br><div class="save" style="color: white; display: flex; justify-content: center; align-items: center; width: 90%; font-size: 18px; height: 60px; border-radius: 20px; background: linear-gradient(rgb(0, 209, 238), rgb(0, 10, 238)); cursor: pointer; font-weight: 700;">Subscribe Plan</div><br><br></div></div></div></div><div data-index="4" tabindex="-1" class="slick-slide slick-cloned" aria-hidden="true" style="width: 387px;"><div><div tabindex="-1" style="width: 100%; display: inline-block;"><div style="display: flex; flex-direction: column; background-color: white; border-radius: 20px; margin: 15px; border: 1px solid rgb(221, 221, 221);"><h3 style="text-align: center; margin: 20px 0px 0px; color: red; font-size: 20px;">Professional</h3><p style="text-align: center; margin: 0px; font-size: 18px; letter-spacing: 1px; color: rgb(136, 136, 136);">For small Business</p><div class="rate" style="text-align: center; width: 100%; background-color: rgb(255, 214, 214); height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 50px;"><h1 style="margin: 0px; color: red; font-size: 3rem;">$4.99</h1><p style="margin: 0px;">per month</p></div><br><br><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Manage 1 Social And Business Profile</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Access your Profile ON/OFF Feature</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Activate Your own Tag</p></div><div class="pic-p"><img src="./Vite + React_files/one.png" alt="all" style="width: 30px; height: 30px; background: white;"><p>Customize Your Profile Colouring</p></div><br><br><br><br><div class="save" style="color: white; display: flex; justify-content: center; align-items: center; width: 90%; font-size: 18px; height: 60px; border-radius: 20px; background-color: red; cursor: pointer; font-weight: 700;">Subscribe Plan</div><br><br></div></div></div></div><div data-index="5" tabindex="-1" class="slick-slide slick-cloned" aria-hidden="true" style="width: 387px;"><div><div tabindex="-1" style="width: 100%; display: inline-block;"><div style="display: flex; flex-direction: column; background-color: white; border-radius: 20px; margin: 15px; border: 1px solid rgb(221, 221, 221);"><h3 style="text-align: center; margin: 20px 0px 0px; color: rgb(117, 244, 96); font-size: 20px;">Premium</h3><p style="text-align: center; margin: 0px; font-size: 18px; letter-spacing: 1px; color: rgb(136, 136, 136);">For Medium Business</p><div class="rate" style="text-align: center; width: 100%; background-color: rgb(201, 255, 206); height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 50px;"><h1 style="margin: 0px; color: rgb(117, 244, 96); font-size: 3rem;">$18.99</h1><p style="margin: 0px;">per month</p></div><br><br><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Create upto 10 Business Profiles</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Access your Profile ON/OFF Feature</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Activate Your own Tag</p></div><div class="pic-p"><img src="./Vite + React_files/one.png" alt="all" style="width: 30px; height: 30px; background: white;"><p>Customize Your Profile Colouring</p></div><br><br><br><br><div class="save" style="color: white; display: flex; justify-content: center; align-items: center; width: 90%; font-size: 18px; height: 60px; border-radius: 20px; background-color: rgb(35, 239, 2); cursor: pointer; font-weight: 700;">Subscribe Plan</div><br><br></div></div></div></div><div data-index="6" tabindex="-1" class="slick-slide slick-cloned" aria-hidden="true" style="width: 387px;"><div><div tabindex="-1" style="width: 100%; display: inline-block;"><div style="display: flex; flex-direction: column; background-color: white; border-radius: 20px; margin: 15px; border: 1px solid rgb(221, 221, 221);"><h3 style="text-align: center; margin: 20px 0px 0px; color: rgb(79, 0, 207); font-size: 20px;">Business</h3><p style="text-align: center; margin: 0px; font-size: 18px; letter-spacing: 1px; color: rgb(136, 136, 136);">For Large Business</p><div class="rate" style="text-align: center; width: 100%; background-color: rgb(221, 216, 255); height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 50px;"><h1 style="margin: 0px; color: rgb(79, 0, 207); font-size: 3rem;">$49.99</h1><p style="margin: 0px;">per month</p></div><br><br><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Create Unlimited Business Profiles</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Access your Profile ON/OFF Feature</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Activate Your own Tag</p></div><div class="pic-p"><img src="./Vite + React_files/one.png" alt="all" style="width: 30px; height: 30px; background: white;"><p>Customize Your Profile Colouring</p></div><br><br><br><br><div class="save" style="color: white; display: flex; justify-content: center; align-items: center; width: 90%; font-size: 18px; height: 60px; border-radius: 20px; background-color: rgb(119, 0, 238); cursor: pointer; font-weight: 700;">Subscribe Plan</div><br><br></div></div></div></div><div data-index="7" tabindex="-1" class="slick-slide slick-cloned" aria-hidden="true" style="width: 387px;"><div><div tabindex="-1" style="width: 100%; display: inline-block;"><div style="display: flex; flex-direction: column; background-color: white; border-radius: 20px; margin: 15px; border: 1px solid rgb(221, 221, 221);"><h3 style="text-align: center; margin: 20px 0px 0px; color: rgb(0, 209, 238); font-size: 20px;">Enterprise</h3><p style="text-align: center; margin: 0px; font-size: 18px; letter-spacing: 1px; color: rgb(136, 136, 136);">For Enterprises</p><div class="rate" style="text-align: center; width: 100%; background-color: rgb(216, 243, 255); height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 50px;"><h1 style="margin: 0px; color: rgb(0, 209, 238); font-size: 3rem;">$99.99</h1><p style="margin: 0px;">per month</p></div><br><br><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Create Unlimited Business Profiles</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Access your Profile ON/OFF Feature</p></div><div class="pic-p"><img src="./Vite + React_files/alltime.png" alt="all" style="width: 30px; height: 30px;"><p>Activate Your own Tag</p></div><div class="pic-p"><img src="./Vite + React_files/one.png" alt="all" style="width: 30px; height: 30px; background: white;"><p>Customize Your Profile Colouring</p></div><br><br><br><br><div class="save" style="color: white; display: flex; justify-content: center; align-items: center; width: 90%; font-size: 18px; height: 60px; border-radius: 20px; background: linear-gradient(rgb(0, 209, 238), rgb(0, 10, 238)); cursor: pointer; font-weight: 700;">Subscribe Plan</div><br><br></div></div></div></div></div></div><button type="button" data-role="none" class="slick-arrow slick-next" style="display: block;"> Next</button><ul class="slick-dots" style="display: block;"><li class=""><button>1</button></li><li class=""><button>2</button></li><li class=""><button>3</button></li><li class="slick-active"><button>4</button></li></ul></div></div><br><br><br><div class="save" style="display: flex; justify-content: center; align-items: center; width: 40%; margin: 2px auto; background-color: rgb(255, 222, 222); border: 1px solid red; box-shadow: none; color: red;">Contact with us</div></div><div class="profile-design"><div class="footer-Container"><div class="Footer"><div class="f-icons"><div class="h-icon"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="font-size: 30px; cursor: pointer; background-color: transparent; padding: 5px; border-radius: 50%;"><path d="M258.5 104.1c-1.5-1.2-3.5-1.2-5 0l-156 124.8c-.9.8-1.5 1.9-1.5 3.1v230c0 1.1.9 2 2 2h108c1.1 0 2-.9 2-2V322c0-1.1.9-2 2-2h92c1.1 0 2 .9 2 2v140c0 1.1.9 2 2 2h108c1.1 0 2-.9 2-2V232c0-1.2-.6-2.4-1.5-3.1l-156-124.8z"></path><path d="M458.7 204.2l-189-151.4C265.9 49.7 261 48 256 48s-9.9 1.7-13.7 4.8L160 119.7V77.5c0-1.1-.9-2-2-2H98c-1.1 0-2 .9-2 2v92.2l-42.7 35.1c-3.1 2.5-5.1 6.2-5.3 10.2-.2 4 1.3 7.9 4.1 10.7 2.6 2.6 6.1 4.1 9.9 4.1 3.2 0 6.3-1.1 8.8-3.1l183.9-148c.5-.4.9-.4 1.3-.4s.8.1 1.3.4l183.9 147.4c2.5 2 5.6 3.1 8.8 3.1 3.7 0 7.2-1.4 9.9-4.1 2.9-2.8 4.4-6.7 4.2-10.7-.3-4-2.2-7.7-5.4-10.2z"></path></svg></div><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="font-size: 30px; cursor: pointer; background-color: transparent; padding: 5px; border-radius: 50%;"><path d="M174 64h-58.8C78.1 64 48 94.1 48 131.2V190c0 7.7 6.3 14 14 14s14-6.3 14-14v-59.8c0-9.1 4.3-18.7 11.7-26.2 7.5-7.6 17.2-12 26.5-12H174c7.7 0 14-6.3 14-14s-6.3-14-14-14zM397.8 64H338c-7.7 0-14 6.3-14 14s6.3 14 14 14h59.8c9.3 0 19 4.4 26.5 12 7.4 7.5 11.7 17.1 11.7 26.2V190c0 7.7 6.3 14 14 14s14-6.3 14-14v-59.8c0-36.5-29.7-66.2-66.2-66.2zM174 420h-59.8c-9.3 0-19-4.4-26.5-12-7.4-7.5-11.7-17.1-11.7-26.2V322c0-7.7-6.3-14-14-14s-14 6.3-14 14v59.8c0 36.5 29.7 66.2 66.2 66.2H174c7.7 0 14-6.3 14-14s-6.3-14-14-14zM450 308c-7.7 0-14 6.3-14 14v59.8c0 9.1-4.3 18.7-11.7 26.2-7.5 7.6-17.2 12-26.5 12H338c-7.7 0-14 6.3-14 14s6.3 14 14 14h58.8c37 0 67.2-30.1 67.2-67.2V322c0-7.7-6.3-14-14-14z"></path></svg><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="font-size: 30px; cursor: pointer; background-color: transparent; padding: 5px; border-radius: 50%;"><path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="m344 280 88-88m-200 24 64 64M80 320l104-104"></path><circle cx="456" cy="168" r="24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></circle><circle cx="320" cy="304" r="24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></circle><circle cx="208" cy="192" r="24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></circle><circle cx="56" cy="344" r="24" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"></circle></svg><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="font-size: 30px; cursor: pointer; background-color: transparent; padding: 5px; border-radius: 50%;"><path d="M413.967 276.8c1.06-6.235 1.06-13.518 1.06-20.8s-1.06-13.518-1.06-20.8l44.667-34.318c4.26-3.118 5.319-8.317 2.13-13.518L418.215 115.6c-2.129-4.164-8.507-6.235-12.767-4.164l-53.186 20.801c-10.638-8.318-23.394-15.601-36.16-20.801l-7.448-55.117c-1.06-4.154-5.319-8.318-10.638-8.318h-85.098c-5.318 0-9.577 4.164-10.637 8.318l-8.508 55.117c-12.767 5.2-24.464 12.482-36.171 20.801l-53.186-20.801c-5.319-2.071-10.638 0-12.767 4.164L49.1 187.365c-2.119 4.153-1.061 10.399 2.129 13.518L96.97 235.2c0 7.282-1.06 13.518-1.06 20.8s1.06 13.518 1.06 20.8l-44.668 34.318c-4.26 3.118-5.318 8.317-2.13 13.518L92.721 396.4c2.13 4.164 8.508 6.235 12.767 4.164l53.187-20.801c10.637 8.318 23.394 15.601 36.16 20.801l8.508 55.117c1.069 5.2 5.318 8.318 10.637 8.318h85.098c5.319 0 9.578-4.164 10.638-8.318l8.518-55.117c12.757-5.2 24.464-12.482 36.16-20.801l53.187 20.801c5.318 2.071 10.637 0 12.767-4.164l42.549-71.765c2.129-4.153 1.06-10.399-2.13-13.518l-46.8-34.317zm-158.499 52c-41.489 0-74.46-32.235-74.46-72.8s32.971-72.8 74.46-72.8 74.461 32.235 74.461 72.8-32.972 72.8-74.461 72.8z"></path></svg><div class="extra"><div class="scn" style="background-color: red;"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" style="font-size: 30px; cursor: pointer; background-color: transparent; padding: 5px; border-radius: 50%;"><path fill="none" d="M0 0h24v24H0z"></path><path d="M9.5 6.5v3h-3v-3h3M11 5H5v6h6V5zm-1.5 9.5v3h-3v-3h3M11 13H5v6h6v-6zm6.5-6.5v3h-3v-3h3M19 5h-6v6h6V5zm-6 8h1.5v1.5H13V13zm1.5 1.5H16V16h-1.5v-1.5zM16 13h1.5v1.5H16V13zm-3 3h1.5v1.5H13V16zm1.5 1.5H16V19h-1.5v-1.5zM16 16h1.5v1.5H16V16zm1.5-1.5H19V16h-1.5v-1.5zm0 3H19V19h-1.5v-1.5zM22 7h-2V4h-3V2h5v5zm0 15v-5h-2v3h-3v2h5zM2 22h5v-2H4v-3H2v5zM2 2v5h2V4h3V2H2z"></path></svg></div></div></div></div></div></div></div></div></div>
+    <script type="module" src="./Vite + React_files/main.jsx"></script>
+  
+
+</body></html>
