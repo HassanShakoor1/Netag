@@ -16,7 +16,7 @@ function Contact() {
   return (
     <div className='profile-design'>
       <div className="p-vContainer">
-        <div className="data" style={{ display: 'flex', justifyContent: 'space-between',margin:'1rem' }}>
+        <div className="data" style={{ display: 'flex', justifyContent: 'space-between',margin:'0px' }}>
           <h2 className='head' style={{ fontSize: '22px', fontWeight: '100', color: 'rgb(238, 2, 0)' }}>Contact:</h2>
           <button style={{cursor:"pointer",fontSize:'12px',height:"30px",width:'70px',fontWeight:'100'}} className='seeAll' onClick={handleEditContact}>see all</button> {/* Attach the navigation function */}
         </div>

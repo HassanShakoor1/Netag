@@ -7,14 +7,14 @@ function Photos() {
   return (
     <div className='profile-design'>
 
-<div className="p-vContainer">
+<div className="p-vContainer" >
             <div className="data" style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <h2 className='head' style={{ fontSize: '22px', fontWeight: '100', color: 'rgb(238, 2, 0)' }}>Photos:</h2>
+              <h2 className='head' style={{ fontSize: '22px', fontWeight: '100', color: 'rgb(238, 2, 0)',margin:'0px' }}>Photos:</h2>
               
             </div>
 
             <br /><br />
-            <div className="rows">
+            <div className="rows" style={{marginTop:"0px",marginBottom:"0px"}}>
               <div className="column">
                 <img src={f1} alt="f1" />
               </div>
