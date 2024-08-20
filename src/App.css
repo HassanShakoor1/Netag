@@ -14,7 +14,7 @@ body{
   max-width: 430px;
   margin: 20px auto;
 
-  padding-bottom: 80px; /* Ensure space for fixed footer */
+ 
 }
 
 .nav {
@@ -265,6 +265,7 @@ justify-content: center;
 align-items: center;
 
 
+
 }
 
 .mode-heading {
@@ -323,7 +324,6 @@ align-items: center;
 
 
 
- 
 
 
 .menus {
@@ -333,6 +333,7 @@ align-items: center;
   gap: 15px;
   max-width: 430px;
   margin: 0 auto;
+  margin-bottom: 3rem;
 }
 
 .fon {
@@ -355,13 +356,6 @@ align-items: center;
   overflow: hidden; /* Hide overflowing text */
   text-overflow: ellipsis; /* Add ellipsis to overflowing text */
 }
-
-
-
-
-
-
-
 
 
 
