@@ -1,5 +1,5 @@
 import React from 'react'
-import Footer from '../Component/Footer'
+import Footer from '../Components/Footer';
 import './Activecard.css';
 import Activecardimg from '../images/Activeimg.png'
 

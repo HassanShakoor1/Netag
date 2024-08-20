@@ -1,31 +1,30 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Profile from "./Component/Profile";
-import EditProfile from "./Component/EditProfile";
-
-import EditContact from './Component/EditContact';
-import ProductCatagory from './Component/ProductCatagory';
-import Addcatagory from './Component/Addcatagory';
-import EditProduct from './Component/EditProduct';
-import Editproductdetail from './Component/Editproductdetail';
-import Gallery from './Component/Gallery';
-import ActiveCard from './SettingComponent/ActiveCard';
-import Analytics from './SettingComponent/Analytics';
-import Scanner from './SettingComponent/Scanner';
-import Subscription from './SettingComponent/Subscription';
-import Wellcome from './hanan/Welcome'
-import Create from './hanan/Create'
-import Signup from './hanan/Signup'
-import Forgetpassword from './hanan/Forgetpassowrd';
-import Notification from './hanan/Notification';
-import Manageorder from './hanan/Manageorder';
-import Managescreen2 from './hanan/Managescreen2';
-import Manageorder3 from './hanan/Manageorder3';
-import Categories from './hanan/Categories';
-import Managecatagories from './hanan/Managecategories';
-import Setting from './hanan/Setting38';
-import Myprofile from './hanan/Myprofile';
-import Profile1 from './hanan/Profile1';
+import EditProfile from "./Page/EditProfile";
+import EditContact from './Components/EditContact';
+import ProductCatagory from './Page/ProductCatagory';
+import Addcatagory from './Page/Addcatagory';
+import EditProduct from './Page/EditProduct';
+import Editproductdetail from './Page/Editproductdetail';
+import Gallery from './Page/Gallery';
+import ActiveCard from './Page/ActiveCard';
+import Analytics from './Page/Analytics';
+import Scanner from './Page/Scanner';
+import Subscription from './Page/Subscription';
+import Wellcome from './Page/Welcome'
+import Create from './Page/Create'
+import Signup from './Page/Signup'
+import Forgetpassword from './Page/Forgetpassowrd';
+import Notification from './Page/Notification';
+import Manageorder from './Page/Manageorder';
+import Managescreen2 from './Page/Managescreen2';
+import Manageorder3 from './Page/Manageorder3';
+import Categories from './Page/Categories';
+import Managecatagories from './Page/Managecategories';
+import Setting from './Page/Setting38';
+import Myprofile from './Page/Myprofile';
+import Profile1 from './Page/Profile1';
+import Profile from './Page/Profile';
 
 
 
@@ -49,7 +48,6 @@ function App() {
           <Route path="/home/setting/myprofile" element={<Myprofile/>} />
           <Route path="/home/setting/lead" element={<Profile1/>} />
           <Route path="/home/setting/subscript" element={<Subscription/>} />
-
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/edit-contact" element={<EditContact />} /> Add this route
           <Route path="/edit-product" element={<ProductCatagory />} /> Add this route

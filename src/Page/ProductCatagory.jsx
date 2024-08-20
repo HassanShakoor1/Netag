@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import './product.css';
+
+import './product.css'; // Adjust the path if needed
+
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import hairimg from '../images/hairimg.jpeg';

@@ -58,7 +58,7 @@ function Profile1() {
                                                 </div>
                                             </div>
                                             <div style={{display:"flex",flexDirection:"column",color:"white"}}>
-                                                <button style={{backgroundColor:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px"}}>Open</button>
+                                                <button style={{backgroundColor:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px",outline:'none',border:"none"}}>Open</button>
                                                 <button style={{marginTop:"5px",border:"2px solid red",color:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px"}}>Remove</button>
                                               
                                             </div>
@@ -85,7 +85,7 @@ function Profile1() {
                                                 </div>
                                             </div>
                                             <div style={{display:"flex",flexDirection:"column",color:"white"}}>
-                                                <button style={{backgroundColor:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px"}}>Open</button>
+                                                <button style={{backgroundColor:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px",outline:'none',border:"none"}}>Open</button>
                                                 <button style={{marginTop:"5px",border:"2px solid red",color:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px"}}>Remove</button>
                                               
                                             </div>

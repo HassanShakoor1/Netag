@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom'; // Import the hook
 import { FaBell } from "react-icons/fa";
 import '../App.css';
 import './Slide.css';
-import Photos from './Photos';
-import Contact from './Contact';
+import Photos from '../Components/Photos';
+import Contact from '../Components/Contact';
 import Slide from '@mui/material/Slide';
 import IconOpener from './IconOpener';
-import Footer from './Footer';
+import Footer from '../Components/Footer';
 import whatsapp from '../images/whatsapp.png';
 import call from '../images/call.png';
 import fb from '../images/fb.png';
@@ -20,9 +20,9 @@ import instas from '../images/instas.png';
 import circle from '../images/circle.png';
 import main from '../images/main.jpeg';
 import nav from '../images/nav-img.png';
-import bag from '../images/bag.png';
-import settingIcon from '../images/seting-icon.png';
-import { Link } from 'react-router-dom';
+import Card from '../Components/Card';
+
+
 function Profile() {
   const navigate = useNavigate(); // Use the hook here
   const links = [
@@ -35,6 +35,8 @@ function Profile() {
     { id: 7, imageUrl: snap, linkName: "snapchat", place: "Enter Username", instruction: "Enter your Username" },
     { id: 8, imageUrl: add, linkName: "", place: "", instruction: "Add new Links" },
   ];
+
+ 
 
 
   const [setting, setSetting] = useState(false);
@@ -60,18 +62,13 @@ function Profile() {
     navigate('/edit-profile');
   };
   
-  const handleEditproduct = () => {
-    navigate('/edit-product');
-  };
+  // const handleEditproduct = () => {
+  //   navigate('/edit-product');
+  // };
   const handlenotifi = () => {
     navigate('/home/notifi');
   };
-  const handlManageorder = () => {
-    navigate('/home/order');
-  };
-  const handleservice = () => {
-    navigate('/home/services');
-  };
+
 
 
   let ReturnIcon = (id) => {
@@ -184,34 +181,21 @@ function Profile() {
 
 
 
+<div style={{display:'flex',justifyContent:'center',alignItems:'center',margin:'2px auto'}}>
+<div style={{width:"99%"}}>
+<Card />
+</div>
 
-          <div className="row">
-            <div className="col">
-              <div className="div">
-                <div className="col-icon">
-                  <img style={{cursor:'pointer'}} src={settingIcon} alt="set-icon" onClick={handleEditproduct} />
-                </div>
-              </div>
-              <p style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"10px" }}>Product/Services</p>
-            </div>
+</div>
 
-            <div className="col">
-              <div className="div">
-                <div className="col-icon">
-                  <img src={bag} alt="bag-icon" onClick={handlManageorder} />
-                </div>
-              </div>
-              <p  style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"10px" }}>Manage Orders</p>
-            </div>
-            <div className="col">
-              <div className="div">
-                <div className="col-icon">
-                  <img src={bag} alt="bag-icon" onClick={handleservice} />
-                </div>
-              </div>
-              <p  style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"10px" }}>Services/Catagory</p>
-            </div>
-          </div>
+      
+
+          
+
+      
+
+
+            
 
           <Photos />
           <Contact />

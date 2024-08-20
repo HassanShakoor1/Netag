@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Footer from '../Component/Footer'
+import Footer from '../Components/Footer'
 import pop from '../images/pops.png'
 import Order from '../images/order.png'
 import connect from '../images/connection.png'

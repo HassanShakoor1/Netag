@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import Footer from '../Component/Footer';
+import Footer from '../Components/Footer';
 import './Setting.css';
+
 import { IoChevronBack } from "react-icons/io5";
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -32,7 +33,7 @@ function Subscription() {
     setSelectedPlan('yearly');
   };
   const handleHome = () => {
-    navigate('/');
+    navigate(-1);
   };
 
   // Styles for the container and options
@@ -138,7 +139,7 @@ function Subscription() {
   };
 
   return (
-    <div className='Subs-Container'>
+    <div className='Subs-Container' style={{display:'flex',justifyContent:'center'}}>
       <div className="subs-design">
       <div className="bak-hed" style={{ display: 'flex', alignItems: 'center', position: 'relative', marginTop:"20px"}}>
   <IoChevronBack 

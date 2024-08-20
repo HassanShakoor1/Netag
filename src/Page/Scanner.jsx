@@ -1,5 +1,5 @@
 import React from 'react';
-import Footer from '../Component/Footer';
+import Footer from '../Components/Footer';
 import { IoChevronBack } from "react-icons/io5";
 import { IoCopy } from "react-icons/io5"; // Import the copy icon
 import './Setting.css';

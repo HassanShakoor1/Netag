@@ -1,5 +1,5 @@
 import pic from "../images/Ellipse.png"
-import "./setting.css"
+import "./Setting.css"
 import { useState } from "react"
 import person from "../images/personrounded.png"
 import lead from "../images/lead.png"
