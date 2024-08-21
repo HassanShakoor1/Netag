@@ -1,6 +1,5 @@
-// Profile.js
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import the hook
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaBell } from "react-icons/fa";
 import '../App.css';
 import './Slide.css';
@@ -23,129 +22,120 @@ import main from '../images/main.jpeg';
 import nav from '../images/nav-img.png';
 import Card from '../Components/Card';
 
-
 function Profile() {
-  const navigate = useNavigate(); // Use the hook here
+  const navigate = useNavigate();
+
+  // Array of link objects to display
   const links = [
-    { id: 1, imageUrl: whatsapp, linkName: "Call", place: "Enter fon number", instruction: "Enter your Fon Number" },
-    { id: 2, imageUrl: call, linkName: "whatsapp", place: "Enter whatsapp number", instruction: "Enter your Whatsapp Number" },
-    { id: 3, imageUrl: fb, linkName: "facebook", place: "Enter facebook Url", instruction: "Enter your Facebook Url" },
+    { id: 1, imageUrl: whatsapp, linkName: "Call", place: "Enter phone number", instruction: "Enter your Phone Number" },
+    { id: 2, imageUrl: call, linkName: "Whatsapp", place: "Enter whatsapp number", instruction: "Enter your Whatsapp Number" },
+    { id: 3, imageUrl: fb, linkName: "Facebook", place: "Enter Facebook URL", instruction: "Enter your Facebook URL" },
     { id: 4, imageUrl: mail, linkName: "Mail", place: "Enter your Email", instruction: "Enter your Email" },
-    { id: 5, imageUrl: instas, linkName: "insta", place: "Enter Username", instruction: "Enter your Username" },
-    { id: 6, imageUrl: website, linkName: "website", place: "Enter Website Url", instruction: "Enter your Website Url" },
-    { id: 7, imageUrl: snap, linkName: "snapchat", place: "Enter Username", instruction: "Enter your Username" },
+    { id: 5, imageUrl: instas, linkName: "Instagram", place: "Enter Username", instruction: "Enter your Username" },
+    { id: 6, imageUrl: website, linkName: "Website", place: "Enter Website URL", instruction: "Enter your Website URL" },
+    { id: 7, imageUrl: snap, linkName: "Snapchat", place: "Enter Username", instruction: "Enter your Username" },
     { id: 8, imageUrl: add, linkName: "", place: "", instruction: "Add new Links" },
   ];
 
+  const [setting, setSetting] = useState(false); // State to manage Slide component visibility
+  const [linkdata, setLinkdata] = useState(null); // State to store currently selected link data
+  const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
+  const [profileData, setProfileData] = useState({
+    username: '@Hassan',
+    designation: 'Software Developer',
+    status: 'Married',
+    company: 'Avicenna Enterprises Solution',
+    nickname: '', // Added nickname field for profile data
+   
+  });
 
+  // Fetch profile data from localStorage on component mount
+  useEffect(() => {
+    const savedProfileData = localStorage.getItem('profileData');
+    if (savedProfileData) {
+      setProfileData(JSON.parse(savedProfileData));
+    }
+  }, []);
 
-
-  const [setting, setSetting] = useState(false);
-  const [linkdata, setLinkdata] = useState(null);
-  const [activeToggle, setActiveToggle] = useState(null);
-
-
+  // Toggle handler to switch between lead and direct modes
   const handleToggle = (toggleId) => {
     setActiveToggle(prevId => (prevId === toggleId ? null : toggleId));
   };
 
+  // Handler to toggle slide visibility and set link data
   const handleSlide = (link) => {
     setLinkdata(link);
     setSetting(!setting);
   };
 
-  // const handleToggle = () => {
-  //   setIsChecked(!isChecked);
-  //   console.log(`Toggle is ${!isChecked ? 'ON' : 'OFF'}`);
-  //   console.log("hello");
-  // };
-
+  // Navigate to the Edit Profile page
   const handleEditProfile = () => {
     navigate('/edit-profile');
   };
 
-  // const handleEditproduct = () => {
-  //   navigate('/edit-product');
-  // };
+  // Navigate to notifications page
   const handlenotifi = () => {
     navigate('/home/notifi');
   };
 
-
-
-  let ReturnIcon = (id) => {
-    if (id === 1) {
-      return whatsapp;
-    } else if (id === 2) {
-      return call;
-    } else if (id === 3) {
-      return fb;
-    } else if (id === 4) {
-      return mail;
-    } else if (id === 5) {
-      return instas;
-    } else if (id === 6) {
-      return website;
-    } else if (id === 7) {
-      return snap;
-    } else if (id === 8) {
-      return add;
+  // Function to return the appropriate icon based on id
+  const ReturnIcon = (id) => {
+    switch (id) {
+      case 1: return whatsapp;
+      case 2: return call;
+      case 3: return fb;
+      case 4: return mail;
+      case 5: return instas;
+      case 6: return website;
+      case 7: return snap;
+      case 8: return add;
+      default: return null;
     }
   }
 
   return (
     <div className="ProfileContainer">
       <div className="profile-design" style={{ paddingBottom: '0px' }}>
-        <nav className='nav' style={{marginBottom:'10px'}}>
+        {/* Navigation bar with logo and notification icon */}
+        <nav className='nav' style={{ marginBottom: '10px' }}>
           <div className="nav-logo">
             <img src={nav} alt="nav-img" />
           </div>
-
-          <div className="nav-icon" >
-
+          <div className="nav-icon">
             <FaBell onClick={handlenotifi} style={{ fontSize: '25px' }} />
-
           </div>
         </nav>
 
-        {/* nav-completed */}
-
         <div className="rel-div">
+          {/* Profile images */}
           <div>
-            <img className='lady' src={circle} alt="lady" />
+            <img className='lady' src={profileData.ladyImgUrl} alt="lady" />
           </div>
           <div>
-            <img className='main-img' src={main} alt="main-img" />
+            <img className='main-img' src={profileData.mainImgUrl} alt="main-img" />
           </div>
           <div style={{ paddingLeft: "10px", position: 'relative' }}>
-
+            {/* Edit profile icon */}
             <div style={{ position: "absolute", right: '0', paddingRight: "40px", top: '45px' }}>
-
               <AiFillEdit style={{ color: 'red', fontSize: "25px", cursor: "pointer" }}
                 onClick={handleEditProfile} />
-
-
-
             </div>
-
+            {/* Profile details */}
             <h2 style={{ color: 'red', margin: '5px' }}>
-              Master Burdener <br />
-              <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> (Burden)</span>
+              {profileData.username} <br />
+              <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> ({profileData.nickname})</span>
             </h2>
             <div className="data" style={{ lineHeight: '1' }}>
-              <h2 className='head' style={{ marginBottom: '0px' }}>Username: <span style={{ fontWeight: '100', }} className='para'>@Hassan</span></h2>
+              <h2 className='head' style={{ marginBottom: '0px' }}>Username: <span style={{ fontWeight: '100', }} className='para'>{profileData.username}</span></h2>
             </div>
             <div className="data" style={{ lineHeight: '1' }}>
-              <h2 className='head' >Designation:<span style={{ fontWeight: '100', margin: '53px' }} className='para'>Software Developer</span></h2>
+              <h2 className='head'>Designation:<span style={{ fontWeight: '100', margin: '53px' }} className='para'>{profileData.designation}</span></h2>
             </div>
             <div className="data" style={{ lineHeight: '0' }}>
               <h2 className='head'>Marital Status:
-                <br /> <span style={{ marginLeft: '145px', fontWeight: '100' }} className='para'>Married</span></h2>
+                <br /> <span style={{ marginLeft: '145px', fontWeight: '100' }} className='para'>{profileData.status}</span></h2>
             </div>
-
-
-            <div
-              className="data"
+            <div className="data"
               style={{
                 lineHeight: '1.5',
                 display: 'flex',
@@ -174,34 +164,22 @@ function Profile() {
                     paddingLeft: '8px',
                   }}
                 >
-                  Avicenna Enterprises Solution
+                  {profileData.company}
                 </span>
               </h2>
-
-
-
             </div>
-
-
           </div>
-
-
-
-
 
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '2px auto' }}>
             <div style={{ width: "99%" }}>
               <Card />
             </div>
-
           </div>
 
-
-
           <Photos />
-          <Contact />
+          {/* <Contact /> */}
 
-<br /><br /><br /><br /><br /><br /><br />
+
 
           <div className="ip-btn" style={{width:'100%'}}>
             <div className="n-head" style={{  fontSize: "18px" }}>
@@ -245,7 +223,7 @@ function Profile() {
 
 
 
-          <br /><br />
+          <br /><br /><br />
 
           <div className="i-menu" >
             <div className="menus">
