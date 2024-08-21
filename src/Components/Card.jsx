@@ -1,8 +1,8 @@
 import React from 'react';
-import Array from './array'; // Assuming the file is named Array.jsx
+import Array from './Array'
 import settingIcon from '../images/seting-icon.png';
 import bag from '../images/bag.png';
-import prod from '../images/prod.png';
+
 
 function Card() {
   const arr = [
