@@ -5,9 +5,88 @@ import { Link } from 'react-router-dom';
 import "./imges.css";
 import { useNavigate } from 'react-router-dom';
 import eye from "../images/eye.svg";
+import { useState } from "react";
+import {ref,set} from "firebase/database"
+import {database as db} from "../firebase.jsx"
+
+import {getAuth,createUserWithEmailAndPassword} from "firebase/auth"
+
+import { app } from "../firebase.jsx"
 
 function Create() {
   const navigate = useNavigate(); // Use the hook here
+  const auth=getAuth(app)
+
+  const[name,setname]=useState("")
+  const[username,setusername]=useState("")
+  const[email,setemail]=useState("")
+  const[password,setpassword]=useState("")
+  const[confirmpassword,setconfirmpassword]=useState("")
+
+  const clicktosign=async()=>{
+    if (!name || !username || !email || !password || !confirmpassword) {
+      console.log("Please fill out all fields");
+      return; 
+    }
+
+    // Validate email format
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      console.log("Invalid email address");
+      return; 
+    }
+
+    // Validate password match
+    if (password !== confirmpassword) {
+      console.log("Passwords do not match");
+      return; 
+    }
+
+
+
+
+
+    try {
+         const credential= await createUserWithEmailAndPassword(auth,email,password)
+         const user=credential.user
+         console.log(user)
+
+         localStorage.setItem("userId",user?.uid)
+         
+         const id=Date.now()
+
+         const useref=ref(db,"users/"+id)
+
+         set(useref,{
+          name:name,
+          username:username,
+          email:email,
+          password:password,
+          confirmpassword:confirmpassword
+         })
+
+        
+          
+         setname("")
+         setusername("")
+         setemail("")
+         setpassword("")
+         setconfirmpassword("")
+         
+         navigate('/home');
+
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+
+
+
+
+
+
 
   const handlegoBack = () => {
       navigate('/');
@@ -49,9 +128,18 @@ function Create() {
 
         {/* INPUT  */}                             
         <div style={{ width: "100%" }}>
-          <input style={inputStyle} type="text" placeholder="Full Name" />
-          <input style={inputStyle} type="text" placeholder="Username" />
-          <input style={inputStyle} type="text" placeholder="Email" />
+          <input style={inputStyle} type="text" placeholder="Full Name" 
+          required
+          onChange={(e)=>setname(e.target.value)}
+          />
+          <input style={inputStyle} type="text" placeholder="Username" 
+          required
+           onChange={(e)=>setusername(e.target.value)}
+          />
+          <input style={inputStyle} type="text" placeholder="Email"
+          required
+           onChange={(e)=>setemail(e.target.value)}
+          />
 
           <div style={{display:"flex",justifyContent:"center",alignItems:"center",
           width:"100%",borderRadius: "12px", boxShadow: "0px 0px 4.5px 0px #00000040",marginBottom: "10px", height: "45px",}}>
@@ -70,8 +158,10 @@ function Create() {
               // marginBottom: "10px",
               // boxShadow: "0px 0px 4.5px 0px #00000040"
             }}
+            required
             type="text"
             placeholder="Password"
+            onChange={(e)=>setpassword(e.target.value)}
           />
             </div>
             <div style={{width:"10%"}}>
@@ -82,6 +172,7 @@ function Create() {
           width:"100%",borderRadius: "12px", boxShadow: "0px 0px 4.5px 0px #00000040",marginBottom: "10px", height: "45px",}}>
             <div style={{width:"87%"}}>
             <input
+            required
             style={{
               
               width: "100%",
@@ -97,6 +188,7 @@ function Create() {
             }}
             type="text"
             placeholder="Confirm Password"
+            onChange={(e)=>setconfirmpassword(e.target.value)}
           />
             </div>
             <div style={{width:"10%"}}>
@@ -117,17 +209,20 @@ function Create() {
           {/* tick */}
           <div style={{ display: "flex", alignItems: "center",width:"100%" }}>
             <input style={{ marginRight: "4px",marginLeft:"0px" }} type="checkbox" id="" name="" value="Bike" />
-            <p style={{ fontSize: "10px", color: "#C3C1C1", textAlign: "center" }}>
+            <p style={{ fontSize: "9px", color: "#C3C1C1", textAlign: "center" }}>
               By Signing up you agree to our <span style={{ color: "#EE0000", fontWeight: "bold" }}>Privacy Policy</span> and <span style={{ color: "#EE0000", fontWeight: "bold" }}>Terms of Use</span>
             </p>
           </div>
 
           {/* button */}
           <div style={{ textAlign: "center", marginTop: "15px" }}>
-            <button style={buttonStyle} className="btn-colr">Sign Up</button>
+          
+            <button style={buttonStyle} onClick={clicktosign} className="btn-colr">Sign Up</button>
+           
+            
             <div style={{ marginTop: "13px", color: "#C3C1C1" }}>
               Already have an account? 
-              <Link to="/signup" style={{ color: "#EE0000", fontWeight: "bold", marginLeft: "3px" }}>Sign In</Link>
+              <Link to="/signup"  style={{ color: "#EE0000", fontWeight: "bold", marginLeft: "3px" }}>Sign In</Link>
             </div>
           </div>
         </div>

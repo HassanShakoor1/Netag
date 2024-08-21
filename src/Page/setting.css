@@ -23,14 +23,14 @@ border: 1px solid #F3F3F3;
 }
 .profile-positionn{
     width:100%;
-    height:25vh;
+    /* height:25vh; */
     position:relative;
     /* border:2px solid #EE0000; */
     border-radius:36px
 }
 .profile-position{
     width:100%;
-    height:25vh;
+    /* height:25vh; */
     border:2px solid #EE0000;
     border-radius:36px
 }

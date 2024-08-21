@@ -25,10 +25,22 @@ import Setting from './Page/Setting38';
 import Myprofile from './Page/Myprofile';
 import Profile1 from './Page/Profile1';
 import Profile from './Page/Profile';
+import Serviceaddcategory from "./Page/Serviceaddcategory"
 
+import { Navigate } from "react-router-dom";
 
 
 function App() {
+
+const Protectedroute=()=>{
+
+  const userid=localStorage.getItem("userId")
+  return userid? <Navigate to="/home"/> : <Navigate to="/create" />
+}
+
+
+
+
   return (
     <Router>
       <div className="app">
@@ -37,7 +49,7 @@ function App() {
         <Route path="/create" element={<Create/>} />
         <Route path="/signup" element={<Signup/>} />
         <Route path="/forget" element={<Forgetpassword/>} />
-          <Route path="/home" element={<Profile />} />
+          <Route path="/home" element={ <> <Protectedroute/>     <Profile />   </>} />
           <Route path="/home/notifi" element={<Notification />} />
           <Route path="/home/order" element={<Manageorder/>} />
           <Route path="/home/order/singleorder" element={<Managescreen2/>} />
@@ -58,6 +70,7 @@ function App() {
           <Route path="/active-card" element={<ActiveCard />} /> Add this route
           <Route path="/Analytics-page" element={<Analytics />} /> Add this route
           <Route path="/setting-page" element={<Scanner />} /> Add this route
+          <Route path='/home/services/serviceaddcategory' element={<Serviceaddcategory/>}></Route>
         
         </Routes>
    

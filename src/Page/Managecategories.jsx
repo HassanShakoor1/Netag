@@ -1,6 +1,6 @@
-import vector from "../images/vector.png"
+import vector from "../images/Vector.svg"
 import search from "../images/search.png"
-import doctor1 from "../images/doctor1.png"
+import doctor1 from "../images/doctor1.svg"
 import React, { useState,useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import pic4 from "../images/pic4.png"
+import pic4 from "../images/pic4.svg"
 import { useNavigate } from "react-router-dom";
 // Style for the modal
 const style = {
@@ -116,7 +116,7 @@ const goback=()=>{
           <div className="categories-width1">
 
             {/* top */}
-            <div style={{ display: "flex", justifyContent: "start" }}>
+            {/* <div style={{ display: "flex", justifyContent: "start" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                 <div>
                   <img onClick={goback} style={{cursor:'pointer'}} src={vector} alt="" />
@@ -126,7 +126,16 @@ const goback=()=>{
                 </div>
 
               </div>
-            </div>
+            </div> */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                    <div>
+                        <img style={{ cursor: "pointer" }} onClick={goback} src={vector} alt="" />
+                    </div>
+                    <div style={{ color: "#EE0000", fontWeight: "500",  }}>
+                    Manage Service Categories
+                    </div>
+                    <div></div>
+                </div>
             {/* input  */}
             <div className="categories-input">
               <div style={{ width: "23%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>

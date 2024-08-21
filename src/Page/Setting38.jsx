@@ -1,7 +1,7 @@
 import pic from "../images/Ellipse.png"
 import "./setting.css"
 import { useState } from "react"
-import person from "../images/personrounded.png"
+import person from "../images/personrounded.svg"
 import lead from "../images/lead.png"
 import member from "../images/membership.png"
 
@@ -12,7 +12,7 @@ import privacy from "../images/privacy.png"
 import Delete from "../images/Delete.png"
 import Footer from "../Components/Footer"
 import Logout from "../images/Logout.png"
-import vectorrr from "../images/vectorrr.png"
+import vectorrr from "../images/vectorrr.svg"
 import { useNavigate } from "react-router-dom"
 
 function Setting() {

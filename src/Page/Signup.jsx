@@ -8,8 +8,35 @@ import { useNavigate } from 'react-router-dom';
 import vector from "../images/Vector.svg";
 import eye from "../images/eye.svg";
 
+import {getAuth,signInWithEmailAndPassword} from "firebase/auth"
+
+import {app} from "../firebase.jsx"
+import { useState } from "react";
+
 function Signup() {
   const navigate = useNavigate(); // Use the hook here
+
+  const auth=getAuth(app)
+
+  const[email,setemail]=useState("")
+  const[password,setpassword]=useState("")
+  const signin=async()=>{
+         
+    try {
+      const credential=await signInWithEmailAndPassword(auth,email,password)
+      const user=credential.user
+
+      localStorage.setItem("userId",user?.uid)
+
+      navigate("/home")
+    } catch (error) {
+      console.log(error)
+    }
+    finally{
+      setemail("")
+      setpassword("")
+    }
+  }
 
   const handlegoBack = () => {
       navigate('/create');
@@ -58,6 +85,8 @@ function Signup() {
             style={inputStyle}
             type="text"
             placeholder="Email"
+            required
+            onChange={(e)=>setemail(e.target.value)}
           />
           {/* <input
             style={inputStyle}
@@ -83,6 +112,7 @@ function Signup() {
             }}
             type="text"
             placeholder="Password"
+            onChange={(e)=>setpassword(e.target.value)}
           />
             </div>
             <div style={{width:"10%"}}>
@@ -100,9 +130,9 @@ function Signup() {
             </Link>
           </div>
 
-          <Link to="/home" style={{ textDecoration: 'none', width: '100%', textAlign: 'center' }}>
-            <button style={buttonStyle}>Login</button>
-          </Link>
+          
+            <button onClick={signin} style={buttonStyle}>Login</button>
+          
 
           <div style={{ textAlign: 'center', color: "#C3C1C1", marginTop: "10px" }}>
             Don't have an account?

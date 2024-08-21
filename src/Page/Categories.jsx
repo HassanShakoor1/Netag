@@ -1,6 +1,6 @@
 import "./categories.css"
 import search from "../images/search.png"
-import vector from "../images/vector.png"
+import vector from "../images/Vector.svg"
 import doctor from "../images/doctor.png"
 import lung from "../images/lungs.png"
 import dot from "../images/dot.png"
@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useNavigate } from "react-router-dom"
+import { useNavigate,Link } from "react-router-dom"
 
 const options = [
     { text: 'Edit Category', color: '#7C7C7C' }, // Change color as needed
@@ -70,8 +70,10 @@ function Categories() {
                             <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "400", marginLeft: "2rem" }}>
                                 Services Categories
                             </div>
-                            <div >
-                                <button style={{ border: "2px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", color: '#EE0000' }}>Add</button>
+                            <div style={{backgroundColor:"none"}}>
+                                <Link to={"/home/services/serviceaddcategory"}>
+                                <button style={{ border: "2px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", color: '#EE0000',backgroundColor:"white" }}>Add</button>
+                                </Link>
                             </div>
 
                         </div>

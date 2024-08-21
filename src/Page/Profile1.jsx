@@ -1,5 +1,5 @@
 import search from "../images/search.png"
-import vector from "../images/vector.png"
+import vector from "../images/vector.svg"
 import pic from "../images/Ellipse.png"
 import dotgray from "../images/dotgray.png"
 import { useNavigate } from "react-router-dom"
@@ -16,7 +16,7 @@ function Profile1() {
                     <div className="categories-width1">
 
                         {/* top */}
-                        <div style={{ display: "flex", justifyContent: "start" }}>
+                        {/* <div style={{ display: "flex", justifyContent: "start" }}>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                                 <div>
                                     <img style={{cursor:'pointer'}} onClick={goback} src={vector} alt="" />
@@ -26,6 +26,15 @@ function Profile1() {
                                 </div>
 
                             </div>
+                        </div> */}
+                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                            <div>
+                                <img style={{ cursor: "pointer" }} onClick={goback} src={vector} alt="" />
+                            </div>
+                            <div style={{ color: "#EE0000", fontWeight: "600",}}>
+                            Leads
+                            </div>
+                            <div></div>
                         </div>
                         
                         {/* input  */}
@@ -58,8 +67,8 @@ function Profile1() {
                                                 </div>
                                             </div>
                                             <div style={{display:"flex",flexDirection:"column",color:"white"}}>
-                                                <button style={{backgroundColor:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px",outline:'none',border:"none"}}>Open</button>
-                                                <button style={{marginTop:"5px",border:"2px solid red",color:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px"}}>Remove</button>
+                                                <button style={{backgroundColor:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px",outline:'none',border:"none",color:"white"}}>Open</button>
+                                                <button style={{backgroundColor:"white",marginTop:"5px",border:"2px solid red",color:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px"}}>Remove</button>
                                               
                                             </div>
 
@@ -85,8 +94,8 @@ function Profile1() {
                                                 </div>
                                             </div>
                                             <div style={{display:"flex",flexDirection:"column",color:"white"}}>
-                                                <button style={{backgroundColor:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px",outline:'none',border:"none"}}>Open</button>
-                                                <button style={{marginTop:"5px",border:"2px solid red",color:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px"}}>Remove</button>
+                                                <button style={{color:"white",backgroundColor:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px",outline:'none',border:"none"}}>Open</button>
+                                                <button style={{backgroundColor:"white",marginTop:"5px",border:"2px solid red",color:"red",fontSize: "10px",borderRadius:"18px",paddingTop:"6px",paddingBottom:"6px",paddingLeft:"8px",paddingRight:"8px"}}>Remove</button>
                                               
                                             </div>
 
