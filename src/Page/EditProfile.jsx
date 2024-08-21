@@ -102,7 +102,7 @@ function EditProfile() {
           </div>
           <br /><br /><br /><br />
           <div className="btn-s">
-            <button style={{ color: 'white',fontSize:"20px" }} className='save2'>Save</button>
+            <button style={{ color: 'white',fontSize:"20px",width:"92%" }} className='save2'>Save</button>
           </div>
         </div>
       </div>

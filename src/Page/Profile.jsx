@@ -199,9 +199,9 @@ function Profile() {
 
 
           <Photos />
-          {/* <Contact /> */}
+          <Contact />
 
-
+<br /><br /><br /><br /><br /><br /><br />
 
           <div className="ip-btn" style={{width:'100%'}}>
             <div className="n-head" style={{  fontSize: "18px" }}>
@@ -245,7 +245,7 @@ function Profile() {
 
 
 
-          <br /><br /><br />
+          <br /><br />
 
           <div className="i-menu" >
             <div className="menus">

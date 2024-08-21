@@ -18,7 +18,7 @@ function Photos() {
             Photos:
           </h2>
         </div>
-        <br /><br />
+       
 
         <div className="rows" style={{ display: 'flex', flexWrap: 'wrap',padding:'10px' }}>
           {images.slice(0, 3).map((image, index) => (

@@ -139,12 +139,12 @@ function Subscription() {
   };
 
   return (
-    <div className='Subs-Container' style={{display:'flex',justifyContent:'center'}}>
+    <div className='Subs-Container' style={{display:'flex',justifyContent:'center',marginBottom:'5rem'}}>
       <div className="subs-design">
       <div className="bak-hed" style={{ display: 'flex', alignItems: 'center', position: 'relative', marginTop:"20px"}}>
   <IoChevronBack 
     onClick={handleHome} 
-    style={{ fontSize: '22px', color: 'red', cursor: 'pointer', position: 'absolute', left: '5px' }} 
+    style={{ fontSize: '25px', color: 'red', cursor: 'pointer', position: 'absolute',  }} 
   />
   <p style={{ color: 'red', fontSize: '22px', margin: '0 auto' }}>
     Subscription Plans
@@ -153,13 +153,13 @@ function Subscription() {
 
         <br /><br /><br />
 
-        <h4 style={{ color: "red", textAlign: "center", width: '70%', fontSize: "23px", margin: '0px auto' }}>
+        <h4 style={{ color: "red", textAlign: "center", width: '80%', fontSize: "23px", margin: '0px auto' }}>
           Please Buy Subscription Plans to Uncloak This Feature
         </h4>
         <br /><br />
 
         <div className="many" style={{ margin: '2px auto', display: 'flex', flexDirection: "column", alignItems: 'center' }}>
-          <p style={{ textAlign: 'center' }}>Select Plan</p>
+          <p style={{ textAlign: 'center',color:'#727272' }}>Select Plan</p>
           <div style={containerStyle}>
             <div style={monthlyStyle} onClick={handleMonthlyClick}>Monthly</div>
             <div style={yearlyStyle} onClick={handleYearlyClick}>Yearly</div>
@@ -299,6 +299,13 @@ function Subscription() {
         <div style={{display:'flex',justifyContent:'center',alignItems:'center',width:'40%',margin:'2px auto',backgroundColor:'rgb(255, 222, 222)',border:'1px solid red',boxShadow:'none',color:'red'}} className="save">
           Contact with us
         </div>
+
+<div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+<p style={{textAlign:'center',width:'82px',fontSize:'10px',borderBottom:'1px solid black',}}>Terms of Services</p>
+</div>
+
+    
+
       </div>
       <Footer />
     </div>
