@@ -1,9 +1,9 @@
-import logo from "../images/logo.png";
-import pana from "../images/pana.png";
+import logo from "../images/logo.svg";
+import pana from "../images/pana.svg";
 import { Link } from "react-router-dom";
-import apple from "../images/apple.png";
-import fb from "../images/fb.png";
-import google from "../images/google.png";
+import apple from "../images/apple.svg";
+import fb from "../images/fb.svg";
+import google from "../images/google.svg";
 
 function Signup() {
   return (
@@ -19,7 +19,7 @@ function Signup() {
         </div>
 
         {/* para */}
-        <div style={{ display: "flex", justifyContent: "center", padding: "0 15px" }}>
+        <div style={{ display: "flex", justifyContent: "center", padding: "0 15px",width:"90%" }}>
           <p style={{ textAlign: "center", color: "#C3C7BF" }}>
             Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
           </p>
@@ -62,11 +62,13 @@ function Signup() {
             <Link to="/create" style={{ color: "#EE0000", fontWeight: "bold", marginLeft: "3px" }}>Sign up</Link>
           </div>
 
-          <div style={{ textAlign: 'center', marginTop: "10px" }}>
+          <div style={{ textAlign: 'center', marginTop: "10px",color:"#BCBCBC" }}>
             Continue via Social Networks
           </div>
 
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10px" }}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10px",width:"100%" }}>
+            <div style={{width:"10%"}}>
+              <div style={{display:"flex",justifyContent:"center",}}>
             <div style={socialIconStyle}>
               <img src={google} alt="" />
             </div>
@@ -75,6 +77,10 @@ function Signup() {
             </div>
             <div style={socialIconStyle}>
               <img src={apple} alt="" />
+            </div>
+
+            </div>
+
             </div>
           </div>
         </div>
@@ -112,7 +118,7 @@ const forgetPasswordStyle = {
 };
 
 const socialIconStyle = {
-  padding: "4px",
+  // padding: "4px",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
