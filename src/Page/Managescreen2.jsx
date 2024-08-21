@@ -1,5 +1,5 @@
 import "./managescreen.css"
-import vector from "../images/vector.png"
+import vector from "../images/vector.svg"
 import { useNavigate } from "react-router-dom";
 function Managescreen(){
    const navigate = useNavigate();
@@ -15,14 +15,24 @@ function Managescreen(){
                 <div className="managescreen-divwidth">
                    
                    {/* top */}
-                   <div style={{display:"flex",justifyContent:"space-between",width:"59%",marginLeft:"10px"}}>
+                   {/* <div style={{display:"flex",justifyContent:"space-between",width:"59%",marginLeft:"10px"}}>
                     <div>
                          <img style={{cursor:'pointer'}} onClick={goback} src={vector} alt="" />
                     </div>
                     <div style={{color:"#EE0000",fontWeight:"450"}}>
                     Single Order
                     </div>
-                   </div>
+                   </div> */}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                            <div>
+                                <img style={{ cursor: "pointer" }} onClick={goback} src={vector} alt="" />
+                            </div>
+                            <div style={{ color: "#EE0000", fontWeight: "500" }}>
+                            Manage Orders
+                            </div>
+                            <div></div>
+                        </div>
+
                    {/* box */}
                    <div style={{marginTop:"3rem"}} className="managescreen-boxwidth">
                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
@@ -94,8 +104,8 @@ function Managescreen(){
                      </div>
                      {/* button  */}
                      <div style={{marginTop:"1rem",display:"flex",justifyContent:"space-between"}}>
-                        <button style={{borderRadius:"6px",fontSize:"11px",fontWeight:"500",color:"white",width:"48%",height:"5vh",backgroundColor:"#EE0000",display:"flex",justifyContent:"center",alignItems:"center",padding:"14px"}}>Reject Offer</button>
-                        <button style={{borderRadius:"6px",fontSize:"11px",fontWeight:"500",color:"white",width:"48%",height:"5vh",backgroundColor:"#169923",display:"flex",justifyContent:"center",alignItems:"center",padding:"14px"}}>Accept Offer</button>
+                        <button style={{border:"none",borderRadius:"6px",fontSize:"11px",fontWeight:"500",color:"white",width:"48%",height:"5vh",backgroundColor:"#EE0000",display:"flex",justifyContent:"center",alignItems:"center",padding:"14px"}}>Reject Offer</button>
+                        <button style={{border:"none",borderRadius:"6px",fontSize:"11px",fontWeight:"500",color:"white",width:"48%",height:"5vh",backgroundColor:"#169923",display:"flex",justifyContent:"center",alignItems:"center",padding:"14px"}}>Accept Offer</button>
                      </div>
 
 

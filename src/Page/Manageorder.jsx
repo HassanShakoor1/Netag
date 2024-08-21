@@ -1,19 +1,20 @@
 import "./manageorder.css"
-import vector from "../images/vector.png"
+import vector from "../images/vector.svg"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 function Manageorder() {
     const navigate = useNavigate();
 
-    const goback=()=>{
-      navigate(-1);
+
+    const goback = () => {
+        navigate(-1);
     }
-    const handleSingleview=()=>{
+    const handleSingleview = () => {
         navigate('/home/order/singleorder');
-      }
-    const handleorder3=()=>{
+    }
+    const handleorder3 = () => {
         navigate('/home/order/order3');
-      }
+    }
     const [activeTab, setActiveTab] = useState('newOrders'); // State to track the active tab
 
     // Define styles for active and inactive tabs
@@ -36,17 +37,27 @@ function Manageorder() {
                     <div className="Manageorder-width1">
 
                         {/* top manage order */}
-                        <div style={{ display: "flex", justifyContent: "space-between", width: "67%" }}>
+                        {/* <div style={{ display: "flex", justifyContent: "space-between", width: "67%" }}>
                             <div>
-                                <img onClick={goback} style={{cursor:"pointer"}} src={vector} alt="" />
+                                <img onClick={goback} style={{ cursor: "pointer" }} src={vector} alt="" />
                             </div>
                             <div style={{ color: "#EE0000", fontWeight: "500" }}>
                                 Manage Orders
                             </div>
+                        </div> */}
+
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                            <div>
+                                <img style={{ cursor: "pointer" }} onClick={goback} src={vector} alt="" />
+                            </div>
+                            <div style={{ color: "#EE0000", fontWeight: "500" }}>
+                            Manage Orders
+                            </div>
+                            <div></div>
                         </div>
 
                         {/* new order  */}
-                        <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center',cursor:"pointer" }}>
+                        <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'center', cursor: "pointer" }}>
                             <div style={{ width: '60%', backgroundColor: '#FFE5E5', borderRadius: '48px', display: 'flex', justifyContent: 'space-between', height: '6vh' }}>
                                 <div
                                     style={{
@@ -64,25 +75,25 @@ function Manageorder() {
                                 >
                                     New Orders
                                 </div>
-                                <div 
-    style={{
-        ...inactiveStyle,
-        ...(activeTab === 'ordersHistory' ? activeStyle : {}),
-        borderRadius: '48px',
-        fontSize: '12px',
-        width: '50%',
-        display: 'flex',
-        justifyContent: 'center',
-        height: '100%',
-        alignItems: 'center'
-    }}
-    onClick={() => {
-        setActiveTab('ordersHistory');
-        handleorder3();
-    }}
->
-    Orders History
-</div>
+                                <div
+                                    style={{
+                                        ...inactiveStyle,
+                                        ...(activeTab === 'ordersHistory' ? activeStyle : {}),
+                                        borderRadius: '48px',
+                                        fontSize: '12px',
+                                        width: '50%',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        height: '100%',
+                                        alignItems: 'center'
+                                    }}
+                                    onClick={() => {
+                                        setActiveTab('ordersHistory');
+                                        handleorder3();
+                                    }}
+                                >
+                                    Orders History
+                                </div>
 
                             </div>
                         </div>
@@ -97,7 +108,7 @@ function Manageorder() {
                         {/*1 view order  */}
                         <div className="vieworder-width">
                             <div className="ist-div">
-                                <div style={{ width: "90%" }}>
+                                <div style={{ width: "90%", }}>
                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                         <div style={{ color: "#EE0000", fontWeight: "500" }}>Robin Denio</div>
                                         <div style={{ fontSize: "12px", fontWeight: "500" }}>12:34PM - 12/02/2024</div>
