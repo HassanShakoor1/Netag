@@ -5,7 +5,7 @@ import apple from "../images/apple.svg";
 import fb from "../images/fb.svg";
 import google from "../images/google.svg";
 import { useNavigate } from 'react-router-dom';
-import vector from "../images/vector.svg";
+import vector from "../images/Vector.svg";
 import eye from "../images/eye.svg";
 
 function Signup() {

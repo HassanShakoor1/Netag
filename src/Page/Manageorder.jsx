@@ -1,5 +1,5 @@
 import "./manageorder.css"
-import vector from "../images/vector.svg"
+import vector from "../images/Vector.svg";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 function Manageorder() {

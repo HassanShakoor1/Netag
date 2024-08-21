@@ -1,8 +1,7 @@
 import logo from "../images/logo.png"
 import rafik from "../images/rafik.png"
 import { useNavigate } from 'react-router-dom';
-import vector from "../images/vector.svg";
-
+import vector from "../images/Vector.svg";
 function Forgetpassword() {
     const navigate = useNavigate(); // Use the hook here
 

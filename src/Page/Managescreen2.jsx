@@ -1,5 +1,5 @@
 import "./managescreen.css"
-import vector from "../images/vector.svg"
+import vector from "../images/Vector.svg";
 import { useNavigate } from "react-router-dom";
 function Managescreen(){
    const navigate = useNavigate();

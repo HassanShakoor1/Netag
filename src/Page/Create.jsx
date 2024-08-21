@@ -1,5 +1,5 @@
 
-import vector from "../images/vector.svg";
+import vector from "../images/Vector.svg";
 import logo from "../images/logo.svg";
 import { Link } from 'react-router-dom';
 import "./imges.css";
