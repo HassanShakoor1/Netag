@@ -4,16 +4,36 @@ import { Link } from "react-router-dom";
 import apple from "../images/apple.svg";
 import fb from "../images/fb.svg";
 import google from "../images/google.svg";
+import { useNavigate } from 'react-router-dom';
+import vector from "../images/Vector.svg";
+import eye from "../images/eye.svg";
 
 function Signup() {
+  const navigate = useNavigate(); // Use the hook here
+
+  const handlegoBack = () => {
+      navigate('/create');
+    };
+
+
+
+
   return (
     <div className="welcome-center">
       <div className="welcome-widt">
+        {/* top  */}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"90%"}}>
+       <div>
+          <img style={{cursor:"pointer"}} onClick={handlegoBack} src={vector} alt="" />
+       </div>
+       <div>
+       <img src={logo} alt="Logo" style={{ width: "100px" }} />
+       </div>
+       <div></div>
+        </div>
         {/* logo */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div>
-            <img src={logo} alt="" />
-          </div>
+         
           <div style={{ color: "red", fontSize: "15px" }}>Let's get Connected</div>
           <div style={{ color: "red", fontSize: "30px" }}>Welcome Back</div>
         </div>
@@ -37,13 +57,40 @@ function Signup() {
           <input
             style={inputStyle}
             type="text"
-            placeholder="Full Name"
+            placeholder="Email"
           />
-          <input
+          {/* <input
             style={inputStyle}
             type="text"
-            placeholder="Username"
+            placeholder="Password"
+          /> */}
+
+          <div style={{display:"flex",justifyContent:"center",alignItems:"center",
+          width:"90%",borderRadius: "12px", boxShadow: "0px 0px 4.5px 0px #00000040"}}>
+            <div style={{width:"82%"}}>
+            <input
+            style={{
+              width: "100%",
+              padding: "15px",
+              paddingLeft:"0px",
+              paddingRight:"0px",
+              border: "none",
+              outline:"none"
+              // borderRadius: "12px",
+              // boxSizing: "border-box",
+              // marginBottom: "10px",
+              // boxShadow: "0px 0px 4.5px 0px #00000040"
+            }}
+            type="text"
+            placeholder="Password"
           />
+            </div>
+            <div style={{width:"10%"}}>
+              <img src={eye} alt="" />
+            </div>
+          </div>
+
+
 
           <div style={{ display: "flex", justifyContent: "flex-end", width: "90%" }}>
             <Link to="/forget" style={{ textDecoration: 'none' }}>
@@ -92,10 +139,11 @@ function Signup() {
 const inputStyle = {
   width: "90%",
   padding: "15px",
-  border: "1px solid gray",
+  border: "none",
   borderRadius: "12px",
   boxSizing: "border-box",
   marginBottom: "10px",
+  boxShadow: "0px 0px 4.5px 0px #00000040"
 };
 
 const buttonStyle = {

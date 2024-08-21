@@ -1,16 +1,38 @@
 
-import vector from "../images/vector.png";
+import vector from "../images/Vector.svg";
 import logo from "../images/logo.svg";
 import { Link } from 'react-router-dom';
 import "./imges.css";
+import { useNavigate } from 'react-router-dom';
+import eye from "../images/eye.svg";
 
 function Create() {
+  const navigate = useNavigate(); // Use the hook here
+
+  const handlegoBack = () => {
+      navigate('/');
+    };
+
+
+
+
   return (
     <div style={{ maxWidth: "430px", margin: "0 auto", width: "90%" }}>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-        {/* logo */}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "90%" }}>
+       
+       {/* top  */}
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",width:"100%"}}>
+       <div>
+          <img style={{cursor:"pointer"}} onClick={handlegoBack} src={vector} alt="" />
+       </div>
+       <div>
+       <img src={logo} alt="Logo" style={{ width: "100px" }} />
+       </div>
+       <div></div>
+        </div>
+         {/* logo */}
         <div style={{ textAlign: "center" }}>
-          <img src={logo} alt="Logo" style={{ width: "100px" }} />
+          
           <div style={{ color: "red", fontSize: "17px" }}>
             Let's get Connected
           </div>
@@ -30,8 +52,62 @@ function Create() {
           <input style={inputStyle} type="text" placeholder="Full Name" />
           <input style={inputStyle} type="text" placeholder="Username" />
           <input style={inputStyle} type="text" placeholder="Email" />
-          <input style={inputStyle} type="password" placeholder="Password" />
-          <input style={inputStyle} type="password" placeholder="Confirm Password" />
+
+          <div style={{display:"flex",justifyContent:"center",alignItems:"center",
+          width:"100%",borderRadius: "12px", boxShadow: "0px 0px 4.5px 0px #00000040",marginBottom: "10px", height: "45px",}}>
+            <div style={{width:"87%"}}>
+            <input
+            style={{
+              
+              width: "100%",
+              height: "40px",
+              paddingLeft:"0px",
+              paddingRight:"0px",
+              border: "none",
+              outline:"none",
+              // borderRadius: "12px",
+              boxSizing: "border-box",
+              // marginBottom: "10px",
+              // boxShadow: "0px 0px 4.5px 0px #00000040"
+            }}
+            type="text"
+            placeholder="Password"
+          />
+            </div>
+            <div style={{width:"10%"}}>
+              <img src={eye} alt="" />
+            </div>
+          </div>
+          <div style={{display:"flex",justifyContent:"center",alignItems:"center",
+          width:"100%",borderRadius: "12px", boxShadow: "0px 0px 4.5px 0px #00000040",marginBottom: "10px", height: "45px",}}>
+            <div style={{width:"87%"}}>
+            <input
+            style={{
+              
+              width: "100%",
+              height: "40px",
+              paddingLeft:"0px",
+              paddingRight:"0px",
+              border: "none",
+              outline:"none",
+              // borderRadius: "12px",
+              boxSizing: "border-box",
+              // marginBottom: "10px",
+              // boxShadow: "0px 0px 4.5px 0px #00000040"
+            }}
+            type="text"
+            placeholder="Confirm Password"
+          />
+            </div>
+            <div style={{width:"10%"}}>
+              <img src={eye} alt="" />
+            </div>
+          </div>
+
+
+
+          {/* <input style={inputStyle} type="password" placeholder="Password" /> */}
+          {/* <input style={inputStyle} type="password" placeholder="Confirm Password" /> */}
 
           {/* para */}
           <p style={{ fontSize: "12px", color: "#C3C1C1",width:"100%" }}>
@@ -79,7 +155,7 @@ const buttonStyle = {
   width: "100%",
   borderRadius: "12px",
   color: "white",
-  backgroundColor: "#F24040",
+  backgroundColor: "#EE0000",
   padding: "10px 20px",
   border: "none",
   cursor: "pointer",
