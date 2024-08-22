@@ -112,7 +112,7 @@ function Addcatagory() {
         <div className="name-input">
           <p style={{ paddingLeft: '15px', marginTop: "0px", marginBottom: "7px" }}>Name</p>
           <input
-            style={{ width: "98%", borderRadius: "20px", height: '30px', backgroundColor: '#F7F7F7', border: "none",paddingLeft:'20px' }}
+            style={{ width: "92%", borderRadius: "20px", height: '30px', backgroundColor: '#F7F7F7', border: "none",paddingLeft:'20px' }}
             type="text"
             placeholder='Oil Brand'
             name="brandName"
@@ -125,7 +125,7 @@ function Addcatagory() {
         <div className="name-input2">
           <p style={{ paddingLeft: '15px', marginTop: "0px", marginBottom: "7px" }}>Description</p>
           <textarea
-            style={{ width: "98%", borderRadius: "20px", backgroundColor: '#F7F7F7', outline: "none", border: "none", paddingBottom: "100px", paddingTop: "10px",paddingLeft:"20px" }}
+            style={{ width: "98%", borderRadius: "20px", backgroundColor: '#F7F7F7', outline: "none", border: "none", paddingBottom: "100px", paddingTop: "10px" }}
             placeholder="Type your message here..."
             className="custom-textarea"
             name="brandDescription"

@@ -43,7 +43,7 @@ function ProductCatagory() {
     navigate('/product-catagory');
   };
 
-  const handleEditProductCategory = () => {
+  const handleEditProdu = () => {
     navigate('/edit-product-catagory');
   };
 
@@ -162,7 +162,7 @@ function ProductCatagory() {
                   </MenuItem>
                 </Menu>
               </div>
-              <button style={{ border: '1px solid #EE0000', color: "red" }} className='product-btn'> Explore Products</button>
+              <button onClick={handleEditProdu} style={{ border: '1px solid #EE0000', color: "red" }} className='product-btn'> Explore Products</button>
               <br /><br />
             </div>
           </div>
