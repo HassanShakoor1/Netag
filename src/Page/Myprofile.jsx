@@ -1,4 +1,4 @@
-import vector from '../images/vector.svg'
+import vector from '../images/Vector.svg'
 import pic from "../images/Ellipse.png"
 import addcontact from "../images/addcontact.png"
 import dotgray from "../images/dotgray.png"
