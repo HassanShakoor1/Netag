@@ -1,6 +1,6 @@
 import vector from "../images/vector.svg"
 import person from "../images/personrounded.png"
-import vectorrr from "../images/vectorrr.svg"
+import vector from "../images/vectorrr.svg"
 import pic from "../images/Ellipse.png"
 import addcontact from "../images/addcontact.png"
 import dotgray from "../images/dotgray.png"
