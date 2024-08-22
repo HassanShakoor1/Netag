@@ -41,12 +41,13 @@ function Profile() {
   const [linkdata, setLinkdata] = useState(null); // State to store currently selected link data
   const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
   const [profileData, setProfileData] = useState({
-    username: '@Hassan',
-    designation: 'Software Developer',
-    status: 'Married',
-    company: 'Avicenna Enterprises Solution',
-    nickname: '', // Added nickname field for profile data
-   
+    username: '@username',
+    nickname: 'Burden',
+    status: 'Married...',
+    company: 'your company',
+    designation: 'copmany',
+    ladyImgUrl: '',
+    mainImgUrl: ''
   });
 
   // Fetch profile data from localStorage on component mount
@@ -108,12 +109,17 @@ function Profile() {
 
         <div className="rel-div">
           {/* Profile images */}
-          <div>
-            <img className='lady' src={profileData.ladyImgUrl} alt="lady" />
-          </div>
-          <div>
-            <img className='main-img' src={profileData.mainImgUrl} alt="main-img" />
-          </div>
+          <img
+  className='lady'
+  src={profileData.ladyImgUrl || circle}  // Default profile image
+  alt="lady"
+/>
+<img
+  className='main-img'
+  src={profileData.mainImgUrl || main}  // Default cover image
+  alt="main-img"
+/>
+
           <div style={{ paddingLeft: "10px", position: 'relative' }}>
             {/* Edit profile icon */}
             <div style={{ position: "absolute", right: '0', paddingRight: "40px", top: '45px' }}>
