@@ -1,7 +1,7 @@
 import search from "../images/search.png"
-import vector from "../images/vector.svg"
+import vector from "../images/Vector.svg"
 import pic from "../images/Ellipse.png"
-import dotgray from "../images/dotgray.png"
+
 import { useNavigate } from "react-router-dom"
 
 function Profile1() {
