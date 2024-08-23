@@ -23,7 +23,7 @@ import nav from '../images/nav-img.png';
 import Card from '../Components/Card';
 import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly from 'firebase/database'
 import { database } from '../firebase.jsx'; // Import the initialized database
-
+import CircularProgress from '@mui/material/CircularProgress'; // Import the loader component
 
 function Profile() {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ function Profile() {
     mainImgUrl: ''
   })
   // Fetch profile data from localStorage\
- 
+  const [loading, setLoading] = useState(true); // State for loading
 useEffect(() => {
   const fetchData = async () => {
     const userId = localStorage.getItem('userId'); // Get the UID from localStorage
@@ -72,13 +72,19 @@ useEffect(() => {
       }
     } catch (error) {
       console.error('Error fetching data:', error);
+    } finally{
+      setLoading(false);
     }
   };
 
   fetchData();
 }, []);
   
+const [imageLoading, setImageLoading] = useState(true);
 
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
 
   // Toggle handler to switch between lead and direct modes
   const handleToggle = (toggleId) => {
@@ -115,8 +121,16 @@ useEffect(() => {
       default: return null;
     }
   }
+  if (loading) {
+    return (
+      <div className="loader-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
+    
     <div className="ProfileContainer">
       <div className="profile-design" style={{ paddingBottom: '0px' }}>
         {/* Navigation bar with logo and notification icon */}
@@ -130,17 +144,41 @@ useEffect(() => {
         </nav>
 
         <div className="rel-div">
+        
           {/* Profile images */}
           <img
   className='lady'
+ 
   src={profileData.ladyImgUrl || circle}  // Default profile image
   alt="lady"
+ 
 />
-<img
-  className='main-img'
-  src={profileData.mainImgUrl || main}  // Default cover image
-  alt="main-img"
-/>
+<div>
+  
+</div>
+<div style={{width:'100%',height:'200px',background:'transparent'}}>
+  <div style={{  width: '100%' }}>
+            <img
+              className='main-img'
+              src={profileData.mainImgUrl || main}  // Default cover image
+              alt="main-img"
+              onLoad={handleImageLoad}
+              style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
+            />
+            {imageLoading && (
+              <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 1
+              }}>
+                <CircularProgress />
+              </div>
+            )}
+          </div>
+</div>
+
 
           <div style={{ paddingLeft: "10px", position: 'relative' }}>
             {/* Edit profile icon */}
