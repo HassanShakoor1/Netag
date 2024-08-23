@@ -61,7 +61,7 @@ const Protectedroute=()=>{
           <Route path="/home/setting/lead" element={<Profile1/>} />
           <Route path="/home/setting/subscript" element={<Subscription/>} />
           <Route path="/edit-profile" element={<EditProfile />} />
-          <Route path="/edit-contact" element={<EditContact />} /> 
+          <Route path="/edit-contact" element={<EditContact />} />  
           <Route path="/edit-product" element={<ProductCatagory />} /> Add this route
          
           <Route path="/product-catagory" element={<Addcatagory />} /> Add this route
