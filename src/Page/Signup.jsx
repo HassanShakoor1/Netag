@@ -20,23 +20,24 @@ function Signup() {
 
   const[email,setemail]=useState("")
   const[password,setpassword]=useState("")
-  const signin=async()=>{
-         
-    try {
-      const credential=await signInWithEmailAndPassword(auth,email,password)
-      const user=credential.user
 
-      localStorage.setItem("userId",user?.uid)
 
-      navigate("/home")
-    } catch (error) {
-      console.log(error)
+const signin = async () => {
+  try {
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const user = credential.user;
+
+    if (user) {
+      localStorage.setItem("userId", user.uid); // Store the UID in localStorage
+      navigate("/home"); // Redirect to home after successful login
     }
-    finally{
-      setemail("")
-      setpassword("")
-    }
+  } catch (error) {
+    console.log("Error during sign-in:", error);
+  } finally {
+    setemail(""); // Clear email input
+    setpassword(""); // Clear password input
   }
+};
 
   const handlegoBack = () => {
       navigate('/create');

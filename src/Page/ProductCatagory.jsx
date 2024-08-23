@@ -7,7 +7,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ref, get, remove } from "firebase/database"; // Import remove for deletion
+import { ref, get, remove } from "firebase/database";
 import { database } from '../firebase';
 
 function ProductCatagory() {
@@ -15,13 +15,24 @@ function ProductCatagory() {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [activeBrandId, setActiveBrandId] = useState(null);
   const [brands, setBrands] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch brand data from Firebase
-    const fetchBrands = async () => {
-      const brandsRef = ref(database, 'Brands');
-      const snapshot = await get(brandsRef);
+    const userId = localStorage.getItem('userId'); // Get the UID from localStorage
 
+    if (userId) {
+      fetchBrands(userId);
+    } else {
+      setError("User ID not found in localStorage");
+    }
+  }, []);
+
+
+  const fetchBrands = async (userId) => {
+    try {
+      const brandsRef = ref(database, `Users/${userId}/Brands`);
+      const snapshot = await get(brandsRef);
+  
       if (snapshot.exists()) {
         const data = snapshot.val();
         const brandsArray = Object.keys(data).map((key) => ({
@@ -29,12 +40,17 @@ function ProductCatagory() {
           ...data[key]
         }));
         setBrands(brandsArray);
+      } else {
+        setBrands([]); // Set empty array if no data
+        setError("No brand data found for this user.");
       }
-    };
-
-    fetchBrands();
-  }, []);
-
+    } catch (error) {
+      console.error("Error fetching brand data:", error);
+      setError("Error fetching brand data. Please try again.");
+    }
+  };
+  
+  
   const handleBackscreen = () => {
     navigate(-1);
   };
@@ -57,18 +73,12 @@ function ProductCatagory() {
     setActiveBrandId(null);
   };
 
-  // Function to handle deletion of the brand
   const handleDeleteProduct = async () => {
     if (activeBrandId) {
       try {
-        // Remove the brand from Firebase
-        const brandRef = ref(database, `Brands/${activeBrandId}`);
+        const brandRef = ref(database, `Users/${localStorage.getItem('userId')}/Brands/${activeBrandId}`);
         await remove(brandRef);
-
-        // Update the state to remove the brand from the UI
         setBrands((prevBrands) => prevBrands.filter((brand) => brand.id !== activeBrandId));
-
-        // Close the menu
         handleCloseMenu();
       } catch (error) {
         console.error("Error deleting brand:", error);
@@ -76,11 +86,9 @@ function ProductCatagory() {
     }
   };
 
-  const HandleUpdate=(id)=>{
-
+  const HandleUpdate = (id) => {
     navigate(`/product-catagory/${id}`);
-
-  }
+  };
 
   const ITEM_HEIGHT = 48;
 
@@ -103,7 +111,7 @@ function ProductCatagory() {
             <div className="hair-img">
               <img
                 style={{ width: "100%", height: "170px", objectFit: 'cover', borderRadius: "20px" }}
-                src={brand.brandImageUrl || dots} // Replace dots with a default image if brandImageUrl is unavailable
+                src={brand.brandImageUrl || dots}
                 alt={brand.brandName}
               />
             </div>
@@ -112,20 +120,20 @@ function ProductCatagory() {
                 {brand.brandName} <span style={{ fontSize: '13px', color: "rgb(197, 197, 197)" }}>({brand.productsCount || 0} products)</span>
               </h3>
               <div className="p-dots">
-              <p 
-  style={{ 
-    fontSize: '12px', 
-    textAlign: "left", 
-    padding: "0px 1rem", 
-    width: "90%", 
-    boxSizing: "border-box",
-    wordWrap: "break-word",
-    lineHeight:'1.5',
-  
-  }}
->
-  {brand.brandDescription}
-</p>
+                <p 
+                  style={{ 
+                    fontSize: '12px', 
+                    textAlign: "left", 
+                    padding: "0px 1rem", 
+                    width: "90%", 
+                    boxSizing: "border-box",
+                    wordWrap: "break-word",
+                    lineHeight:'1.5',
+                  }}
+                >
+                  {brand.brandDescription}
+                </p>
+
 
                 <img
                   onClick={(event) => handleOpenMenu(event, brand.id)}
@@ -140,7 +148,7 @@ function ProductCatagory() {
                     'aria-labelledby': `${brand.id}-button`,
                   }}
                   anchorEl={menuAnchor}
-                  open={activeBrandId === brand.id && Boolean(menuAnchor)} // Only open for the active brand
+                  open={activeBrandId === brand.id && Boolean(menuAnchor)}
                   onClose={handleCloseMenu}
                   anchorOrigin={{
                     vertical: 'top',
@@ -157,24 +165,26 @@ function ProductCatagory() {
                     },
                   }}
                 >
-                  <MenuItem style={{ fontSize: "15px" }} onClick={() => { HandleUpdate(`${brand.id}`), handleCloseMenu(); }}>
+                  <MenuItem style={{ fontSize: "15px" }} onClick={() => { HandleUpdate(brand.id), handleCloseMenu(); }}>
                     <DoneAllIcon style={{ marginRight: '8px' }} />
                     Edit Product
                   </MenuItem>
                   <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div> {/* Separator Line */}
                   <MenuItem style={{ fontSize: "15px", color: 'red' }} onClick={handleDeleteProduct}>
-                    <DeleteIcon style={{ marginRight: '8px', color: 'red' }} />
+                    <DeleteIcon style={{ marginRight: '8px' }} />
                     Delete Product
                   </MenuItem>
                 </Menu>
               </div>
-              <button onClick={handleEditProdu} style={{ border: '1px solid #EE0000', color: "red" }} className='product-btn'> Explore Products</button>
-              <br /><br />
+
+    <button style={{color:"red",background:'rgb(255, 222, 222)',width:'80%',display:'flow',justifyContent:"center",alignItems:'center',margin:'0px auto'}} onClick={handleEditProdu} className='save'>Explore more</button>
+         <br />
             </div>
+          
           </div>
         ))}
 
-        <br /><br /><br /><br /><br />
+        {error && <div className="error">{error}</div>}
       </div>
     </div>
   );

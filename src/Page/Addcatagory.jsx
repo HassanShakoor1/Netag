@@ -3,7 +3,8 @@ import './Addcatagory.css';
 import { IoChevronBack } from "react-icons/io5";
 import editcontact from '../images/editcontact.png';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ref, get, update } from "firebase/database";
+import { ref, get, update ,push} from "firebase/database";
+
 import { database } from '../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -11,7 +12,7 @@ function Addcatagory() {
   const navigate = useNavigate();
   const { id } = useParams(); // Get the ID from the URL parameters
   const storage = getStorage();
-  const [imge, setImage] = useState(null);
+  const [image, setImage] = useState(null);
   const [formData, setFormData] = useState({
     brandName: '',
     brandDescription: '',
@@ -19,13 +20,20 @@ function Addcatagory() {
   });
 
   useEffect(() => {
+    const userId = localStorage.getItem('userId'); // Get the UID from localStorage
+  
+    if (!userId) {
+      console.error('User ID not found.');
+      return;
+    }
+  
     // Fetch data if ID is present
     if (id) {
       const fetchData = async () => {
         try {
-          const brandRef = ref(database, `Brands/${id}`);
+          const brandRef = ref(database, `Users/${userId}/Brands/${id}`);
           const snapshot = await get(brandRef);
-
+  
           if (snapshot.exists()) {
             const data = snapshot.val();
             setFormData({
@@ -41,7 +49,7 @@ function Addcatagory() {
           console.error('Error fetching data: ', error);
         }
       };
-
+  
       fetchData();
     }
   }, [id]);
@@ -74,45 +82,60 @@ function Addcatagory() {
     }));
   };
 
+
+
   const handleSubmit = async () => {
-    if (formData.brandName || formData.brandDescription || formData.brandImage) {
-      const brandRef = ref(database, `Brands/${id}`);
+    const userId = localStorage.getItem('userId');
   
-      try {
-        // Get the existing data
-        const snapshot = await get(brandRef);
-        const existingData = snapshot.val();
+    if (!userId) {
+      alert("User ID not found. Please log in again.");
+      return;
+    }
   
-        // Determine the updated fields
+    try {
+      let brandImageUrl = null;
+      if (formData.brandImage) {
+        // Upload the new image
+        const imageRef = storageRef(storage, `Users/${userId}/Brands/${Date.now()}_${formData.brandImage.name}`); // Unique name
+        await uploadBytes(imageRef, formData.brandImage);
+        brandImageUrl = await getDownloadURL(imageRef);
+      }
+  
+      if (id) {
+        // Update existing record
+        const brandRef = ref(database, `Users/${userId}/Brands/${id}`);
+  
         const updatedData = {
-          brandName: formData.brandName || existingData.brandName,
-          brandDescription: formData.brandDescription || existingData.brandDescription,
-          brandImageUrl: existingData.brandImageUrl
+          brandName: formData.brandName,
+          brandDescription: formData.brandDescription,
+          brandImageUrl: brandImageUrl || null,
         };
   
-        if (formData.brandImage) {
-          // Upload the new image
-          const imageRef = storageRef(storage, `Brands/${id}/${formData.brandImage.name}`);
-          await uploadBytes(imageRef, formData.brandImage);
-          updatedData.brandImageUrl = await getDownloadURL(imageRef);
-        }
-  
-        // Update the brand data in Firebase Realtime Database
         await update(brandRef, updatedData);
-  
-        // Show success alert
         alert("Brand data updated successfully!");
+      } else {
+        // Create new record
+        const newBrandRef = ref(database, `Users/${userId}/Brands`);
+        const newBrandRefWithKey = push(newBrandRef); // Generate a new unique key
   
-        // Navigate back after successful update
-        navigate(-1);
-      } catch (error) {
-        console.error("Error updating brand data: ", error);
-        alert("Error updating data. Please try again."); // Show error alert
+        const newRecord = {
+          brandName: formData.brandName,
+          brandDescription: formData.brandDescription,
+          brandImageUrl: brandImageUrl || null,
+        };
+  
+        await update(newBrandRefWithKey, newRecord);
+        alert("New brand data added successfully!");
       }
-    } else {
-      alert("No changes detected."); // Alert if no fields are provided
+  
+      navigate(-1);
+    } catch (error) {
+      console.error("Error handling brand data: ", error);
+      alert("Error handling data. Please try again.");
     }
   };
+  
+  
   
 
   const goback = () => {
@@ -130,7 +153,7 @@ function Addcatagory() {
     width: '20px',
     height: '20px',
     cursor: 'pointer',
-    display: imge ? 'block' : 'none',
+    display: image ? 'block' : 'none',
   };
 
   return (
@@ -148,7 +171,7 @@ function Addcatagory() {
         <div className="name-input">
           <p style={{ paddingLeft: '15px', marginTop: "0px", marginBottom: "7px" }}>Name</p>
           <input
-            style={{ width: "92%", borderRadius: "20px", height: '30px', backgroundColor: '#F7F7F7', border: "none",paddingLeft:'20px' }}
+            style={{ width: "92%", borderRadius: "20px", height: '30px', backgroundColor: '#F7F7F7', border: "none", paddingLeft: '20px' }}
             type="text"
             placeholder='Oil Brand'
             name="brandName"
@@ -171,9 +194,9 @@ function Addcatagory() {
         </div>
         <br />
 
-        {imge ? (
+        {image ? (
           <div style={{ position: 'relative', width: '100%' }}>
-            <img style={{ width: '100%', borderRadius: '5%', maxHeight: '200px' }} src={imge} alt="Uploaded" />
+            <img style={{ width: '100%', borderRadius: '5%', maxHeight: '200px' }} src={image} alt="Uploaded" />
             <button
               style={crossButtonStyle}
               onClick={removeImage}
@@ -215,11 +238,10 @@ function Addcatagory() {
 
         <br />
         <button
-          style={{ width: "100%", color: "white", fontSize: "17px", height: '50px', margin: '0', marginTop: "30px" }}
-          className='save'
+          style={{ width: "100%", color: "white", fontSize: "17px", height: '50px', margin: "10px", borderRadius: "5px", border: 'none', backgroundColor: '#F74C4C' }}
           onClick={handleSubmit}
         >
-          {id ? 'Update' : 'Create'}
+          Save
         </button>
       </div>
     </div>

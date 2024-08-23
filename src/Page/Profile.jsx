@@ -21,6 +21,9 @@ import circle from '../images/circle.png';
 import main from '../images/main.jpeg';
 import nav from '../images/nav-img.png';
 import Card from '../Components/Card';
+import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly from 'firebase/database'
+import { database } from '../firebase.jsx'; // Import the initialized database
+
 
 function Profile() {
   const navigate = useNavigate();
@@ -48,15 +51,34 @@ function Profile() {
     designation: 'copmany',
     ladyImgUrl: '',
     mainImgUrl: ''
-  });
-
-  // Fetch profile data from localStorage on component mount
-  useEffect(() => {
-    const savedProfileData = localStorage.getItem('profileData');
-    if (savedProfileData) {
-      setProfileData(JSON.parse(savedProfileData));
+  })
+  // Fetch profile data from localStorage\
+ 
+useEffect(() => {
+  const fetchData = async () => {
+    const userId = localStorage.getItem('userId'); // Get the UID from localStorage
+    if (!userId) {
+      console.log('No UID found in localStorage');
+      return;
     }
-  }, []);
+
+    const dbRef = ref(database, `usersdata/${userId}`); // Fetch user-specific data
+    try {
+      const snapshot = await get(dbRef);
+      if (snapshot.exists()) {
+        setProfileData(snapshot.val()); // Set fetched data
+      } else {
+        console.log('No data available');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  fetchData();
+}, []);
+  
+
 
   // Toggle handler to switch between lead and direct modes
   const handleToggle = (toggleId) => {

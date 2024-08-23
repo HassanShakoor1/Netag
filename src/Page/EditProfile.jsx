@@ -8,7 +8,7 @@ import '../App.css';
 import nav from '../images/nav-img.png';
 import { TextField } from '@mui/material';
 import { styled } from '@mui/system';
-import { ref, set } from "firebase/database";
+import { ref, set,push } from "firebase/database";
 import { database } from '../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -79,30 +79,45 @@ function EditProfile() {
   };
 
   // Saveing data to firebase 
-
   const handleSave = async () => {
     try {
-      const userId = Date.now().toString();
-      const userRef = ref(database, `User/${userId}`);
-
-      const updatedData = {
-        ...formData,
-        ladyImgUrl: files.ladyImg ? formData.ladyImgUrl : formData.ladyImgUrl,
-        mainImgUrl: files.mainImg ? formData.mainImgUrl : formData.mainImgUrl
-      };
-
-      await set(userRef, updatedData);
+      const userId = localStorage.getItem('userId');
+  
+      if (!userId) {
+        // If no userId is in localStorage, create a new record
+        const userRef = ref(database, 'usersdata');
+        const newUserRef = push(userRef);
+        
+        const updatedData = {
+          ...formData,
+          ladyImgUrl: files.ladyImg ? await uploadImage(files.ladyImg) : formData.ladyImgUrl,
+          mainImgUrl: files.mainImg ? await uploadImage(files.mainImg) : formData.mainImgUrl,
+        };
+  
+        await set(newUserRef, updatedData);
+        localStorage.setItem('userId', newUserRef.key); // Save new userId to localStorage
+  
+      } else {
+        // If userId exists, update the existing record
+        const userRef = ref(database, `usersdata/${userId}`);
+        
+        const updatedData = {
+          ...formData,
+          ladyImgUrl: files.ladyImg ? await uploadImage(files.ladyImg) : formData.ladyImgUrl,
+          mainImgUrl: files.mainImg ? await uploadImage(files.mainImg) : formData.mainImgUrl,
+        };
+  
+        await set(userRef, updatedData);
+      }
+  
       alert("Data saved successfully!");
-
-      localStorage.setItem('userId', userId);
-      localStorage.setItem('profileData', JSON.stringify(updatedData));
-
-      navigate('/home'); // Redirect to profile page after saving
+      navigate('/home');
+  
     } catch (error) {
       console.error("Error saving data:", error);
     }
   };
-
+  
 
   const handleBack = () => {
     navigate(-1);
