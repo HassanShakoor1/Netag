@@ -76,6 +76,12 @@ function ProductCatagory() {
     }
   };
 
+  const HandleUpdate=(id)=>{
+
+    navigate(`/product-catagory/${id}`);
+
+  }
+
   const ITEM_HEIGHT = 48;
 
   return (
@@ -151,7 +157,7 @@ function ProductCatagory() {
                     },
                   }}
                 >
-                  <MenuItem style={{ fontSize: "15px" }} onClick={() => { handleEditProductCategory(); handleCloseMenu(); }}>
+                  <MenuItem style={{ fontSize: "15px" }} onClick={() => { HandleUpdate(`${brand.id}`), handleCloseMenu(); }}>
                     <DoneAllIcon style={{ marginRight: '8px' }} />
                     Edit Product
                   </MenuItem>

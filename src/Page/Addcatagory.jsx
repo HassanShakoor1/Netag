@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Addcatagory.css';
 import { IoChevronBack } from "react-icons/io5";
 import editcontact from '../images/editcontact.png';
-import { useNavigate } from 'react-router-dom';
-import { ref, set, push } from "firebase/database";
+import { useNavigate, useParams } from 'react-router-dom';
+import { ref, get, update } from "firebase/database";
 import { database } from '../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
 function Addcatagory() {
   const navigate = useNavigate();
+  const { id } = useParams(); // Get the ID from the URL parameters
   const storage = getStorage();
   const [imge, setImage] = useState(null);
   const [formData, setFormData] = useState({
@@ -16,6 +17,34 @@ function Addcatagory() {
     brandDescription: '',
     brandImage: null,
   });
+
+  useEffect(() => {
+    // Fetch data if ID is present
+    if (id) {
+      const fetchData = async () => {
+        try {
+          const brandRef = ref(database, `Brands/${id}`);
+          const snapshot = await get(brandRef);
+
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            setFormData({
+              brandName: data.brandName || '',
+              brandDescription: data.brandDescription || '',
+              brandImage: null, // Keep this null initially
+            });
+            setImage(data.brandImageUrl || null); // Set the existing image URL
+          } else {
+            console.error('No data found for this ID');
+          }
+        } catch (error) {
+          console.error('Error fetching data: ', error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [id]);
 
   const handleFile = (e) => {
     const file = e.target.files[0];
@@ -27,7 +56,7 @@ function Addcatagory() {
       const imgurl = URL.createObjectURL(file);
       setImage(imgurl);
     }
-  }
+  };
 
   const removeImage = () => {
     setImage(null);
@@ -46,42 +75,49 @@ function Addcatagory() {
   };
 
   const handleSubmit = async () => {
-    if (formData.brandName && formData.brandDescription && formData.brandImage) {
-      const newBrandRef = push(ref(database, 'Brands'));
-      const brandId = newBrandRef.key;
-  
-      const imageRef = storageRef(storage, `Brands/${brandId}/${formData.brandImage.name}`);
+    if (formData.brandName || formData.brandDescription || formData.brandImage) {
+      const brandRef = ref(database, `Brands/${id}`);
   
       try {
-        // Upload the image to Firebase Storage
-        await uploadBytes(imageRef, formData.brandImage);
-        const imageUrl = await getDownloadURL(imageRef);
+        // Get the existing data
+        const snapshot = await get(brandRef);
+        const existingData = snapshot.val();
   
-        // Save the brand data to Firebase Realtime Database
-        await set(newBrandRef, {
-          brandName: formData.brandName,
-          brandDescription: formData.brandDescription,
-          brandImageUrl: imageUrl
-        });
+        // Determine the updated fields
+        const updatedData = {
+          brandName: formData.brandName || existingData.brandName,
+          brandDescription: formData.brandDescription || existingData.brandDescription,
+          brandImageUrl: existingData.brandImageUrl
+        };
+  
+        if (formData.brandImage) {
+          // Upload the new image
+          const imageRef = storageRef(storage, `Brands/${id}/${formData.brandImage.name}`);
+          await uploadBytes(imageRef, formData.brandImage);
+          updatedData.brandImageUrl = await getDownloadURL(imageRef);
+        }
+  
+        // Update the brand data in Firebase Realtime Database
+        await update(brandRef, updatedData);
   
         // Show success alert
-        alert("Brand data saved successfully!");
+        alert("Brand data updated successfully!");
   
-        // Navigate back after successful upload
-        navigate(-1); 
+        // Navigate back after successful update
+        navigate(-1);
       } catch (error) {
-        console.error("Error uploading brand data: ", error);
-        alert("Error saving data. Please try again."); // Show error alert
+        console.error("Error updating brand data: ", error);
+        alert("Error updating data. Please try again."); // Show error alert
       }
     } else {
-      alert("Please fill in all fields and upload an image."); // Alert if fields are missing
+      alert("No changes detected."); // Alert if no fields are provided
     }
   };
   
-  const goback=()=>{
-    navigate(-1)
 
-  }
+  const goback = () => {
+    navigate(-1);
+  };
 
   const crossButtonStyle = {
     position: 'absolute',
@@ -101,7 +137,7 @@ function Addcatagory() {
     <div className='AddcatagoryContainer'>
       <div className="Addcatagory-design"> 
         <div className="back-head" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <IoChevronBack  onClick={goback} className="Gobck" style={{ paddingTop: '1.6rem', color: 'red', fontSize: '25px', cursor: 'pointer' }} />
+          <IoChevronBack onClick={goback} className="Gobck" style={{ paddingTop: '1.6rem', color: 'red', fontSize: '25px', cursor: 'pointer' }} />
           <h4 style={{ color: 'red', fontSize: '20px', fontWeight: '100', position: 'absolute', left: '50%', transform: 'translateX(-50%)', marginTop: "3rem" }}>
             Product category
           </h4>
@@ -137,7 +173,7 @@ function Addcatagory() {
 
         {imge ? (
           <div style={{ position: 'relative', width: '100%' }}>
-            <img style={{ width: '100%', borderRadius: '5%',maxHeight:'200px' }} src={imge} alt="Uploaded" />
+            <img style={{ width: '100%', borderRadius: '5%', maxHeight: '200px' }} src={imge} alt="Uploaded" />
             <button
               style={crossButtonStyle}
               onClick={removeImage}
@@ -183,7 +219,7 @@ function Addcatagory() {
           className='save'
           onClick={handleSubmit}
         >
-          Create
+          {id ? 'Update' : 'Create'}
         </button>
       </div>
     </div>
