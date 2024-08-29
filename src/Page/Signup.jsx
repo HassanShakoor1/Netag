@@ -9,9 +9,12 @@ import vector from "../images/Vector.svg";
 import eye from "../images/eye.svg";
 
 import {getAuth,signInWithEmailAndPassword} from "firebase/auth"
+import {get,ref} from "firebase/database"
+import {database as db} from "../firebase.jsx"
 
 import {app} from "../firebase.jsx"
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import { Navigate } from "react-router-dom";
 
 function Signup() {
   const navigate = useNavigate(); // Use the hook here
@@ -20,6 +23,7 @@ function Signup() {
 
   const[email,setemail]=useState("")
   const[password,setpassword]=useState("")
+  const[company,setcompany]=useState([])
   const signin=async()=>{
          
     try {
@@ -28,7 +32,37 @@ function Signup() {
 
       localStorage.setItem("userId",user?.uid)
 
-      navigate("/home")
+      const dbref=ref(db,`userdata`)
+     
+      
+    
+       const snap=await get(dbref)
+       const data= await snap.val()
+       console.log(data)
+      //  const data2=data.isCompany 
+      //  console.log(data2)
+   
+      // setcompany(data.isCompany)
+      // localStorage.setItem("iscompany",data?.isCompany)
+   
+      // navigate("/home")
+      
+      // const userid=localStorage.getItem("iscompany")
+      
+  // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
+//   if (data.isCompany  ) {
+//     navigate('/edit-profile');
+//   } 
+
+// else {
+  navigate('/home')
+// }
+      
+  // console.log(userid)
+ 
+
+
+
     } catch (error) {
       console.log(error)
     }
@@ -38,6 +72,10 @@ function Signup() {
     }
   }
 
+
+
+ 
+  
   const handlegoBack = () => {
       navigate('/create');
     };
@@ -131,7 +169,10 @@ function Signup() {
           </div>
 
           
-            <button onClick={signin} style={buttonStyle}>Login</button>
+            <button onClick={() => {
+  signin();
+  // getData();
+}} style={buttonStyle}>Login</button>
           
 
           <div style={{ textAlign: 'center', color: "#C3C1C1", marginTop: "10px" }}>

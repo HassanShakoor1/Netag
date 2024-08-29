@@ -11,7 +11,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import pic4 from "../images/pic4.svg"
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 // Style for the modal
 const style = {
   position: 'absolute',
@@ -31,7 +31,7 @@ const style = {
 
 
 const options = [
-  { text: 'Edit Category', color: '#7C7C7C' }, // Change color as needed
+  { text: 'Edit Category', color: '#7C7C7C',path:"/home/services/catagory/:id/serviceaddcategory" }, // Change color as needed
   { text: 'Delete Category', color: '#EE0000' } // Change color as needed
 ];
 
@@ -131,10 +131,14 @@ const goback=()=>{
                     <div>
                         <img style={{ cursor: "pointer" }} onClick={goback} src={vector} alt="" />
                     </div>
-                    <div style={{ color: "#EE0000", fontWeight: "500",  }}>
-                    Manage Service Categories
+                    <div style={{ color: "#EE0000",   }}>
+                    Manage Health Categories
                     </div>
-                    <div></div>
+                    <div style={{ backgroundColor: "none" }}>
+                                <Link to={"/home/services/serviceaddcategory"}>
+                                    <button style={{ border: "2px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", color: '#EE0000', backgroundColor: "white" }}>Add</button>
+                                </Link>
+                            </div>
                 </div>
             {/* input  */}
             <div className="categories-input">
@@ -250,4 +254,4 @@ const goback=()=>{
 
   )
 }
-export default Managecategories
+export default Managecategories 

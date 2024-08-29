@@ -1,5 +1,6 @@
 
 
+
 import "./serviceaddcategory.css"
 import vector from "../images/Vector.svg"
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 
 
 
-function Serviceaddcategory() {
+function ServiceaddcategoryAddnew() {
     const navigate = useNavigate()
 
     const [image, setImage] = useState(null);
@@ -80,13 +81,12 @@ function Serviceaddcategory() {
             // get url of image 
             const url=await getDownloadURL(snapshot.ref)
 
-            const categorypath=sRef(db,`AddCategory`)
+            const categorypath=sRef(db,`categories/${localStorage.getItem("userId")}/brands`)
 
             const categorydata={
                 name1:name1,
                 description:description,
-                image:url,
-                userId:localStorage.getItem("userId")
+                image:url
             }
 
             const newcategories=push(categorypath,categorydata).key
@@ -294,4 +294,4 @@ function Serviceaddcategory() {
         </div>
     )
 }
-export default Serviceaddcategory
+export default ServiceaddcategoryAddnew

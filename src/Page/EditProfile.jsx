@@ -11,6 +11,10 @@ import { styled } from '@mui/system';
 import { ref, set } from "firebase/database";
 import { database } from '../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useEffect } from 'react';
+import {database as db} from "../firebase.jsx"
+import {get,ref as uRef} from "firebase/database"
+
 
 const CustomTextField = styled(TextField)({
   '& .MuiOutlinedInput-root': {
@@ -22,6 +26,7 @@ const CustomTextField = styled(TextField)({
 
 function EditProfile() {
   const navigate = useNavigate();
+  const[navigatedata,setnavigatedata]=useState(navigate.onCompany)
   const [formData, setFormData] = useState({
     username: '',
     designation: '',
@@ -94,6 +99,102 @@ function EditProfile() {
   const handleBack = () => {
     navigate(-1);
   };
+
+  useEffect(()=>{
+    const signin=async()=>{
+         
+      try {
+        // const credential=await signInWithEmailAndPassword(auth,email,password)
+        // const user=credential.user
+  
+        // localStorage.setItem("userId",user?.uid)
+  
+        const dbref=ref(db,`users/${localStorage.getItem("userId")}`)
+       
+        
+      
+         const snap=await get(dbref)
+         const data= await snap.val()
+         console.log(data)
+         const data2=data.isCompany 
+         setnavigatedata(data2)
+        
+     
+        // setcompany(data.isCompany)
+        // localStorage.setItem("iscompany",data?.isCompany)
+      
+     
+    
+  
+        // navigate("/home")
+        
+        // const userid=localStorage.getItem("iscompany")
+        
+    // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
+    if (navigatedata === false) {
+      navigate('/home')
+    } 
+  
+  // else {
+  //   navigate('/home')
+  // }
+        
+    // console.log(userid)
+ 
+      } catch (error) {
+        console.log(error)
+      }
+    
+    }
+    signin()
+  },[navigatedata])
+//   const signin=async()=>{
+         
+//     try {
+//       // const credential=await signInWithEmailAndPassword(auth,email,password)
+//       // const user=credential.user
+
+//       // localStorage.setItem("userId",user?.uid)
+
+//       const dbref=ref(db,`users/${localStorage.getItem("userId")}`)
+     
+      
+    
+//        const snap=await get(dbref)
+//        const data= await snap.val()
+//        console.log(data)
+//        const data2=data.isCompany 
+      
+   
+//       // setcompany(data.isCompany)
+//       // localStorage.setItem("iscompany",data?.isCompany)
+    
+   
+  
+
+//       // navigate("/home")
+      
+//       // const userid=localStorage.getItem("iscompany")
+      
+//   // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
+//   if (!data2) {
+//     navigate('/home')
+//   } 
+
+// // else {
+// //   navigate('/home')
+// // }
+      
+//   // console.log(userid)
+ 
+
+
+
+//     } catch (error) {
+//       console.log(error)
+//     }
+  
+//   }
 
   return (
     <div className="container">

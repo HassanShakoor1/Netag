@@ -54,7 +54,7 @@ function Create() {
          
          const id=Date.now()
 
-         const useref=ref(db,"users/"+id)
+         const useref=ref(db,"userdata/"+user?.uid)
 
          set(useref,{
           name:name,
