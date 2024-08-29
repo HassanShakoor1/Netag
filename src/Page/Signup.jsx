@@ -31,7 +31,7 @@ function Signup() {
 
       localStorage.setItem("userId",user?.uid)
 
-<<<<<<< HEAD
+
       navigate("/home")
     } catch (error) {
       console.log(error)
@@ -39,7 +39,6 @@ function Signup() {
     finally{
       setemail("")
       setpassword("")
-=======
 
 const signin = async () => {
   try {
@@ -64,14 +63,10 @@ const signin = async () => {
 
       // Redirect the user to the home page
       navigate("/home");
->>>>>>> 9091423 (cmt)
-    }
-  }
-<<<<<<< HEAD
-=======
+
 };
   
->>>>>>> 9091423 (cmt)
+
 
 
 
