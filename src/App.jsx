@@ -1,19 +1,18 @@
-<<<<<<< HEAD
+
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import EditProfile from "./Page/EditProfile";
-=======
-import React, { useState, useEffect } from 'react';
+
+
+
+
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { getDatabase, ref, onValue } from 'firebase/database';
+
 import EditProfile from './Page/EditProfile';
 import Profile from './Page/Profile';
 import Wellcome from './Page/Welcome';
 import Create from './Page/Create';
 import Signup from './Page/Signup';
 import Forgetpassword from './Page/Forgetpassowrd';
->>>>>>> 9091423 (cmt)
+
 import EditContact from './Components/EditContact';
 import ProductCatagory from './Page/ProductCatagory';
 import Addcatagory from './Page/Addcatagory';
@@ -33,103 +32,35 @@ import Managecatagories from './Page/Managecategories';
 import Setting from './Page/Setting38';
 import Myprofile from './Page/Myprofile';
 import Profile1 from './Page/Profile1';
-<<<<<<< HEAD
-import Profile from './Page/Profile';
-import Serviceaddcategory from "./Page/Serviceaddcategory"
+import Serviceaddcategory from "./Page/Serviceaddcategory";
 import Serviceeditcategory from "./Page/Editcategory"
 
-import {database as db} from "./firebase.jsx"
-import {get,ref} from "firebase/database"
 
 import ManagecategoriesAddnew from "./Page/ManagecategoriesAddnew"
 
-import { Navigate } from "react-router-dom";
+
+
+
+
+
+
+
+
+
 
 
 function App() {
-  // const[company,setcompany]=useState([])
+  function Protectedroute() {
 
-
-
-  // function getData(){
-  //   const dbref=ref(db,'categories')
-
-  //   const initialdata=async()=>{
-  //      const snap=await get(dbref)
-  //      const data= await snap.val()
-  //      console.log(data)
-  //      try {
-  //       const arr=Object.keys(data).map((x)=>({
-  //           id:x,
-  //           ...data[x]
-  //       }))
-  //       console.log(arr)
-  //       setcompany(arr)
-
-
-  //      } catch (error) {
-  //       console.log(error )
-  //      }
-  //   }
-  //   initialdata()
-    
-  //  }
-
-  //  useEffect(()=>{
-  //   getData()
-  //  },[])
-
-const Protectedroute=()=>{
-
-  const userid=localStorage.getItem("userId")
-  return userid? <Navigate to="/home"/> : <Navigate to="/create" />
-}
-
-const Protectedroute1=()=>{
-
-  const userid=localStorage.getItem("iscompany")
-  console.log(userid)
- 
-  return userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
-}
-
-
-=======
-import Serviceaddcategory from "./Page/Serviceaddcategory";
-
-function App() {
-  // const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // const [isCompany, setIsCompany] = useState(null);
-  // const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   const auth = getAuth();
-  //   const db = getDatabase();
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       setIsAuthenticated(true);
-  //       const userId = user.uid;
-  //       const userRef = ref(db, `users/${userId}`);
-  //       onValue(userRef, (snapshot) => {
-  //         const userData = snapshot.val();
-  //         setIsCompany(userData?.isCompany || false);
-  //         setLoading(false);
-  //       });
-  //     } else {
-  //       setIsAuthenticated(false);
-  //       setLoading(false);
-  //     }
-  //   });
-  // }, []);
->>>>>>> 9091423 (cmt)
-
-  // if (loading) return <div>Loading...</div>;
+    const userid = localStorage.getItem("userId");
+    return userid ? <Navigate to="/home" /> : <Navigate to="/create" />;
+  }
 
   return (
     <Router>
       <div className="app">
         <Routes>
-<<<<<<< HEAD
+
         <Route path="/" element={<Wellcome />} />
         <Route path="/create" element={<Create/>} />
         <Route path="/signup" element={<Signup/>} />
@@ -151,35 +82,12 @@ function App() {
           <Route path="/edit-profile" element={<>  <EditProfile />  </>} />
           <Route path="/edit-contact" element={<EditContact />} /> Add this route
           <Route path="/edit-product" element={<ProductCatagory />} /> Add this route
-=======
+
           <Route path="/" element={<Wellcome />} />
           <Route path="/create" element={<Create />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forget" element={<Forgetpassword />} />
-          
-          {/* Home route based on isCompany */}
-          {/* <Route 
-  path="/home" 
-  element={
-    isAuthenticated ? 
-      (isCompany ? <Navigate to="/edit-product" /> : <Profile />) : 
-      <Navigate to="/" />
-  } 
-/>
-
-  {/* EditRoute based on isCompany */}
-{/* <Route 
-            path="/edit-product" 
-            element={
-              isAuthenticated ? 
-                (!isCompany ?  <Navigate to="/home" />: <ProductCatagory/>) : 
-                <Navigate to="/" />
-            } 
-          /> */} 
->>>>>>> 9091423 (cmt)
          
-
-    
           <Route path="/edit-contact" element={<EditContact />} />
           <Route path="/home" element={<Profile />} />
           <Route path="/edit-profile" element={<EditProfile />} />
@@ -206,14 +114,14 @@ function App() {
           <Route path="/home/setting/lead" element={<Profile1 />} />
           <Route path="/home/setting/subscript" element={<Subscription />} />
           <Route path='/home/services/serviceaddcategory' element={<Serviceaddcategory/>}></Route>
-<<<<<<< HEAD
+
           <Route path='/home/services/serviceeditcategory/:id' element={<Serviceeditcategory/>}></Route>
           <Route  path='/home/services/catagory/:id/serviceaddcategory' element={<ManagecategoriesAddnew/>}></Route>        
-=======
+
 
           {/* Catch-all route */}
           <Route path="*" element={<Navigate to="/" />} />
->>>>>>> 9091423 (cmt)
+
         </Routes>
       </div>
     </Router>

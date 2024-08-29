@@ -7,31 +7,22 @@ import google from "../images/google.svg";
 import { useNavigate } from 'react-router-dom';
 import vector from "../images/Vector.svg";
 import eye from "../images/eye.svg";
-import { getDatabase, ref, get } from "firebase/database"; 
 import {getAuth,signInWithEmailAndPassword} from "firebase/auth"
 import {get,ref} from "firebase/database"
 import {database as db} from "../firebase.jsx"
-
 import {app} from "../firebase.jsx"
 import { useState,useEffect } from "react";
 import { Navigate } from "react-router-dom";
-
 function Signup() {
   const navigate = useNavigate(); // Use the hook here
-
   const auth=getAuth(app)
-
   const[email,setemail]=useState("")
   const[password,setpassword]=useState("")
   const signin=async()=>{
-         
     try {
       const credential=await signInWithEmailAndPassword(auth,email,password)
       const user=credential.user
-
       localStorage.setItem("userId",user?.uid)
-
-
       navigate("/home")
     } catch (error) {
       console.log(error)
@@ -39,46 +30,11 @@ function Signup() {
     finally{
       setemail("")
       setpassword("")
-
-const signin = async () => {
-  try {
-    const credential = await signInWithEmailAndPassword(auth, email, password);
-    const user = credential.user;
-
-    if (user) {
-      localStorage.setItem("userId", user.uid); // Store the UID in localStorage
-      
-      // You can still fetch other user data if needed
-      const userId = user.uid;
-      const db = getDatabase(app); // Get the database instance
-      const userRef = ref(db, `users/${userId}`); // Reference to the user's data
-      const snapshot = await get(userRef);
-
-      if (snapshot.exists()) {
-        const userData = snapshot.val();
-        console.log("User data:", userData);
-      } else {
-        console.log("No data available for this user.");
-      }
-
-      // Redirect the user to the home page
-      navigate("/home");
-
-};
-  
-
-
-
-
- 
-  
+    }
+  }
   const handlegoBack = () => {
       navigate('/create');
     };
-
-
-
-
   return (
     <div className="welcome-center">
       <div className="welcome-widt">
@@ -94,25 +50,21 @@ const signin = async () => {
         </div>
         {/* logo */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-         
           <div style={{ color: "red", fontSize: "15px" }}>Let's get Connected</div>
           <div style={{ color: "red", fontSize: "30px" }}>Welcome Back</div>
         </div>
-
         {/* para */}
         <div style={{ display: "flex", justifyContent: "center", padding: "0 15px",width:"90%" }}>
           <p style={{ textAlign: "center", color: "#C3C7BF" }}>
             Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
           </p>
         </div>
-
         {/* img */}
         <div style={{ display: "flex", justifyContent: "center" }}>
           <div style={{ marginBottom: "3rem", marginTop: "1rem", width: "100%", maxWidth: "280px" }}>
             <img src={pana} alt="" style={{ width: "100%" }} />
           </div>
         </div>
-
         {/* inputs */}
         <div style={{ width: '100%', maxWidth: "430px", margin: '0 auto', alignItems: 'center', flexDirection: 'column', gap: '10px', display: 'flex' }}>
           <input
@@ -127,7 +79,6 @@ const signin = async () => {
             type="text"
             placeholder="Password"
           /> */}
-
           <div style={{display:"flex",justifyContent:"center",alignItems:"center",
           width:"90%",borderRadius: "12px", boxShadow: "0px 0px 4.5px 0px #00000040"}}>
             <div style={{width:"82%"}}>
@@ -153,9 +104,6 @@ const signin = async () => {
               <img src={eye} alt="" />
             </div>
           </div>
-
-
-
           <div style={{ display: "flex", justifyContent: "flex-end", width: "90%" }}>
             <Link to="/forget" style={{ textDecoration: 'none' }}>
               <span style={forgetPasswordStyle}>
@@ -163,23 +111,17 @@ const signin = async () => {
               </span>
             </Link>
           </div>
-
-          
             <button onClick={() => {
   signin();
   // getData();
 }} style={buttonStyle}>Login</button>
-          
-
           <div style={{ textAlign: 'center', color: "#C3C1C1", marginTop: "10px" }}>
             Don't have an account?
             <Link to="/create" style={{ color: "#EE0000", fontWeight: "bold", marginLeft: "3px" }}>Sign up</Link>
           </div>
-
           <div style={{ textAlign: 'center', marginTop: "10px",color:"#BCBCBC" }}>
             Continue via Social Networks
           </div>
-
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10px",width:"100%" }}>
             <div style={{width:"10%"}}>
               <div style={{display:"flex",justifyContent:"center",}}>
@@ -192,9 +134,7 @@ const signin = async () => {
             <div style={socialIconStyle}>
               <img src={apple} alt="" />
             </div>
-
             </div>
-
             </div>
           </div>
         </div>
@@ -202,7 +142,6 @@ const signin = async () => {
     </div>
   );
 }
-
 const inputStyle = {
   width: "90%",
   padding: "15px",
@@ -212,7 +151,6 @@ const inputStyle = {
   marginBottom: "10px",
   boxShadow: "0px 0px 4.5px 0px #00000040"
 };
-
 const buttonStyle = {
   backgroundColor: "red",
   width: "90%",
@@ -225,13 +163,11 @@ const buttonStyle = {
   cursor: "pointer",
   boxSizing: "border-box",
 };
-
 const forgetPasswordStyle = {
   color: "#F24040",
   borderBottom: "1px solid red",
   fontWeight: "600",
 };
-
 const socialIconStyle = {
   // padding: "4px",
   display: "flex",
@@ -239,5 +175,4 @@ const socialIconStyle = {
   alignItems: "center",
   margin: "0 5px",
 };
-
 export default Signup;
