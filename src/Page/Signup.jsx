@@ -23,7 +23,6 @@ function Signup() {
 
   const[email,setemail]=useState("")
   const[password,setpassword]=useState("")
-  const[company,setcompany]=useState([])
   const signin=async()=>{
          
     try {
@@ -32,37 +31,7 @@ function Signup() {
 
       localStorage.setItem("userId",user?.uid)
 
-      const dbref=ref(db,`userdata`)
-     
-      
-    
-       const snap=await get(dbref)
-       const data= await snap.val()
-       console.log(data)
-      //  const data2=data.isCompany 
-      //  console.log(data2)
-   
-      // setcompany(data.isCompany)
-      // localStorage.setItem("iscompany",data?.isCompany)
-   
-      // navigate("/home")
-      
-      // const userid=localStorage.getItem("iscompany")
-      
-  // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
-//   if (data.isCompany  ) {
-//     navigate('/edit-profile');
-//   } 
-
-// else {
-  navigate('/home')
-// }
-      
-  // console.log(userid)
- 
-
-
-
+      navigate("/home")
     } catch (error) {
       console.log(error)
     }

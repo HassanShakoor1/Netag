@@ -1,73 +1,28 @@
 import React, { useState } from 'react';
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { set, ref as dbRef, push } from 'firebase/database';
-import { storage, database } from '../firebase'; // import Firebase Realtime Database
 import './Editproductdetail.css';
 import edit from '../images/edit.png';
 
 function Editproductdetail() {
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
-  const [formData, setFormData] = useState({
-    productName: '',
-    price: '',
-    size: '',
-    color: '',
-    description: ''
-  });
   const [showAll, setShowAll] = useState(false);
 
-  const handleFileChange = async (e) => {
+
+  
+  const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
 
-    // Upload images to Firebase Storage
-    const uploadPromises = imageFiles.map(async (file) => {
-      const storageRef = ref(storage, `images/${file.name}`);
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      return url;
-    });
-
-    const imageUrls = await Promise.all(uploadPromises);
-
-    // Update local state with Firebase Storage URLs
+    // Update local state with image URLs
+    const imageUrls = imageFiles.map(file => URL.createObjectURL(file));
     setImages(prevImages => [...prevImages, ...imageUrls]);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({ ...prevData, [name]: value }));
-  };
-
-  const saveData = async () => {
-    // Extract URLs without the 'images/' prefix
-    const sanitizedImageUrls = images.map(url => {
-      return url.split('/').pop(); // Keeps only the file name from the URL
-    });
-
-    const productData = {
-      ...formData,
-      images: sanitizedImageUrls, // Include sanitized image URLs in the product data
-      timestamp: new Date().toISOString()
-    };
-
-    // Save to Firebase Realtime Database
-    const newProductRef = push(dbRef(database, 'products'));
-    await set(newProductRef, productData);
-
-    alert("Data saved");
-    console.log("Data saved to Realtime Database with key:", newProductRef.key);
-    setFormData({
-      productName: '',
-      price: '',
-      size: '',
-      color: '',
-      description: ''
-    });
-    setImages([]);
   };
 
   const goToGallery = () => {
@@ -77,21 +32,19 @@ function Editproductdetail() {
   const displayedImages = showAll ? images : images.slice(0, 3);
   const remainingImagesCount = images.length - 3;
 
-
   return (
     <div className='newContainer'>
       <div className="new-details-design">
-      <div className="back-head" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', paddingLeft: '1rem' }}>
-  <IoChevronBack
-    onClick={() => navigate(-1)}
-    className="Gobck"
-    style={{ paddingTop: '1.6rem', color: 'red', fontSize: '25px', paddingLeft: '15px', cursor: 'pointer', position: 'absolute', left: '0' }}
-  />
-  <h4 style={{ color: 'red', fontSize: '20px', fontWeight: '100',marginTop:"3rem" }}>
-    Product category
-  </h4>
-</div>
-
+        <div className="back-head" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', paddingLeft: '1rem' }}>
+          <IoChevronBack
+            onClick={() => navigate(-1)}
+            className="Gobck"
+            style={{ paddingTop: '1.6rem', color: 'red', fontSize: '25px', paddingLeft: '15px', cursor: 'pointer', position: 'absolute', left: '0' }}
+          />
+          <h4 style={{ color: 'red', fontSize: '20px', fontWeight: '100', marginTop: "3rem" }}>
+            Product category
+          </h4>
+        </div>
 
         <div style={{ margin: '20px' }} className="headings">
           <h4 style={{ paddingLeft: "1rem", color: 'red', fontWeight: '100', fontSize: "20px" }}>
@@ -104,6 +57,8 @@ function Editproductdetail() {
             style={{ paddingTop: '0px', paddingBottom: '0px', width: '100%', height: "40px", border: 'none', borderRadius: "17px", backgroundColor: '#F7F7F7' }}
             type="text"
             placeholder='Enter business name'
+           // Adding value to avoid uncontrolled input warning
+            onChange={handleInputChange}
           />
         </div>
 
@@ -123,7 +78,7 @@ function Editproductdetail() {
                 className="formInput"
                 placeholder='Hair oil'
                 name="productName"
-                value={formData.productName}
+              
                 onChange={handleInputChange}
               />
             </div>
@@ -137,7 +92,7 @@ function Editproductdetail() {
                 className="formInput"
                 placeholder='$44'
                 name="price"
-                value={formData.price}
+           
                 onChange={handleInputChange}
               />
             </div>
@@ -153,7 +108,7 @@ function Editproductdetail() {
                 className="formInput"
                 placeholder='Small'
                 name="size"
-                value={formData.size}
+               
                 onChange={handleInputChange}
               />
             </div>
@@ -167,7 +122,7 @@ function Editproductdetail() {
                 className="formInput"
                 placeholder='Green'
                 name="color"
-                value={formData.color}
+               
                 onChange={handleInputChange}
               />
             </div>
@@ -183,7 +138,7 @@ function Editproductdetail() {
           className="formInput"
           placeholder='Please enter your product details.......'
           name="description"
-          value={formData.description}
+     
           onChange={handleInputChange}
         />
 
@@ -276,16 +231,14 @@ function Editproductdetail() {
                     overflow: 'hidden',
                   }}
                 >
-                  <img
-                    src={displayedImages[1]}
+                  <img                    src={displayedImages[1]}
                     alt="Uploaded"
                     style={{ maxWidth: '100%', maxHeight: '100%' }}
                   />
                 </div>
               )}
             </div>
-
-            {/* Third Uploaded Image + 'More' Button */}
+            {/* Third Uploaded Image */}
             <div style={{ flex: '1 1 50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               {displayedImages[2] && (
                 <div
@@ -297,7 +250,6 @@ function Editproductdetail() {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    position: 'relative',
                     overflow: 'hidden',
                   }}
                 >
@@ -307,44 +259,40 @@ function Editproductdetail() {
                     style={{ maxWidth: '100%', maxHeight: '100%' }}
                   />
                   {remainingImagesCount > 0 && (
-                    <button
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        right: 0,
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        color: 'white',
-                        border: 'none',
-                        padding: '5px 10px',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                      }}
-                      onClick={goToGallery}
-                    >
-                      +{remainingImagesCount} more
-                    </button>
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '10px',
+                      right: '10px',
+                      background: 'rgba(0, 0, 0, 0.5)',
+                      color: 'white',
+                      padding: '5px',
+                      borderRadius: '5px',
+                    }}>
+                      +{remainingImagesCount}
+                    </div>
                   )}
                 </div>
               )}
             </div>
           </div>
         </div>
-      </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px' }}>
         <button
+         
           style={{
             backgroundColor: 'red',
             color: 'white',
-            padding: '10px 20px',
             border: 'none',
-            borderRadius: '5px',
+            borderRadius: '10px',
+            padding: '10px 20px',
             cursor: 'pointer',
-            fontSize: '16px',
+            margin: '20px',
+            display: 'block',
+            marginLeft: 'auto',
+            marginRight: 'auto',
           }}
-          onClick={saveData}
         >
-          Save Details
+  Save Data
         </button>
       </div>
     </div>
@@ -352,3 +300,5 @@ function Editproductdetail() {
 }
 
 export default Editproductdetail;
+
+                   

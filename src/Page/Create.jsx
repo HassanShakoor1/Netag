@@ -57,6 +57,7 @@ function Create() {
          const useref=ref(db,"userdata/"+user?.uid)
 
          set(useref,{
+          id:user?.uid,
           name:name,
           username:username,
           email:email,

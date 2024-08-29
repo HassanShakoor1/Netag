@@ -111,8 +111,11 @@ const Protectedroute1=()=>{
           <Route path="/edit-profile" element={<>  <EditProfile />  </>} />
           <Route path="/edit-contact" element={<EditContact />} /> Add this route
           <Route path="/edit-product" element={<ProductCatagory />} /> Add this route
+         
           <Route path="/product-catagory" element={<Addcatagory />} /> Add this route
+          <Route path="/product-catagory/:id" element={<Addcatagory />} /> Add this route
           <Route path="/edit-product-catagory" element={<EditProduct />} /> Add this route
+        
           <Route path="/edit-product-detail" element={<Editproductdetail />} /> Add this route
           <Route path="/gallery" element={<Gallery />} /> Add this route
           <Route path="/active-card" element={<ActiveCard />} /> Add this route

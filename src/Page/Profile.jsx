@@ -21,6 +21,9 @@ import circle from '../images/circle.png';
 import main from '../images/main.jpeg';
 import nav from '../images/nav-img.png';
 import Card from '../Components/Card';
+import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly from 'firebase/database'
+import { database } from '../firebase.jsx'; // Import the initialized database
+import CircularProgress from '@mui/material/CircularProgress'; // Import the loader component
 
 function Profile() {
   const navigate = useNavigate();
@@ -41,21 +44,47 @@ function Profile() {
   const [linkdata, setLinkdata] = useState(null); // State to store currently selected link data
   const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
   const [profileData, setProfileData] = useState({
-    username: '@Hassan',
-    designation: 'Software Developer',
-    status: 'Married',
-    company: 'Avicenna Enterprises Solution',
-    nickname: '', // Added nickname field for profile data
-   
-  });
-
-  // Fetch profile data from localStorage on component mount
-  useEffect(() => {
-    const savedProfileData = localStorage.getItem('profileData');
-    if (savedProfileData) {
-      setProfileData(JSON.parse(savedProfileData));
+    username: '@username',
+    nickname: 'Burden',
+    status: 'Married...',
+    company: 'your company',
+    designation: 'copmany',
+    ladyImgUrl: '',
+    mainImgUrl: ''
+  })
+  // Fetch profile data from localStorage\
+  const [loading, setLoading] = useState(true); // State for loading
+useEffect(() => {
+  const fetchData = async () => {
+    const userId = localStorage.getItem('userId'); // Get the UID from localStorage
+    if (!userId) {
+      console.log('No UID found in localStorage');
+      return;
     }
-  }, []);
+
+    const dbRef = ref(database, `usersdata/${userId}`); // Fetch user-specific data
+    try {
+      const snapshot = await get(dbRef);
+      if (snapshot.exists()) {
+        setProfileData(snapshot.val()); // Set fetched data
+      } else {
+        console.log('No data available');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally{
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);
+  
+const [imageLoading, setImageLoading] = useState(true);
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
 
   // Toggle handler to switch between lead and direct modes
   const handleToggle = (toggleId) => {
@@ -92,8 +121,16 @@ function Profile() {
       default: return null;
     }
   }
+  if (loading) {
+    return (
+      <div className="loader-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
+    
     <div className="ProfileContainer">
       <div className="profile-design" style={{ paddingBottom: '0px' }}>
         {/* Navigation bar with logo and notification icon */}
@@ -107,13 +144,42 @@ function Profile() {
         </nav>
 
         <div className="rel-div">
+        
           {/* Profile images */}
-          <div>
-            <img className='lady' src={profileData.ladyImgUrl} alt="lady" />
+          <img
+  className='lady'
+ 
+  src={profileData.ladyImgUrl || circle}  // Default profile image
+  alt="lady"
+ 
+/>
+<div>
+  
+</div>
+<div style={{width:'100%',height:'200px',background:'transparent'}}>
+  <div style={{  width: '100%' }}>
+            <img
+              className='main-img'
+              src={profileData.mainImgUrl || main}  // Default cover image
+              alt="main-img"
+              onLoad={handleImageLoad}
+              style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
+            />
+            {imageLoading && (
+              <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 1
+              }}>
+                <CircularProgress />
+              </div>
+            )}
           </div>
-          <div>
-            <img className='main-img' src={profileData.mainImgUrl} alt="main-img" />
-          </div>
+</div>
+
+
           <div style={{ paddingLeft: "10px", position: 'relative' }}>
             {/* Edit profile icon */}
             <div style={{ position: "absolute", right: '0', paddingRight: "40px", top: '45px' }}>

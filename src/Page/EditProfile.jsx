@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBack } from "react-icons/io5";
 import edit from '../images/edit.png';
-import editcircle from '../images/editcircle.png';
+import editcontact from '../images/editcontact.png';
 import './Edit.css';
 import '../App.css';
 import nav from '../images/nav-img.png';
 import { TextField } from '@mui/material';
 import { styled } from '@mui/system';
-import { ref, set } from "firebase/database";
+import { ref, set,push } from "firebase/database";
 import { database } from '../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useEffect } from 'react';
@@ -49,6 +49,16 @@ function EditProfile() {
       [name]: value,
     }));
   };
+  const removeImage = (type) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [`${type}ImgUrl`]: ''
+    }));
+    setFiles((prevFiles) => ({
+      ...prevFiles,
+      [`${type}Img`]: null
+    }));
+  };
 
   const handleFileChange = async (e) => {
     const { id } = e.target;
@@ -73,28 +83,46 @@ function EditProfile() {
     return getDownloadURL(storageReference);
   };
 
+  // Saveing data to firebase 
   const handleSave = async () => {
     try {
-      const userId = Date.now().toString();
-      const userRef = ref(database, `User/${userId}`);
-
-      const updatedData = {
-        ...formData,
-        ladyImgUrl: files.ladyImg ? formData.ladyImgUrl : formData.ladyImgUrl,
-        mainImgUrl: files.mainImg ? formData.mainImgUrl : formData.mainImgUrl
-      };
-
-      await set(userRef, updatedData);
+      const userId = localStorage.getItem('userId');
+  
+      if (!userId) {
+        // If no userId is in localStorage, create a new record
+        const userRef = ref(database, 'usersdata');
+        const newUserRef = push(userRef);
+        
+        const updatedData = {
+          ...formData,
+          ladyImgUrl: files.ladyImg ? await uploadImage(files.ladyImg) : formData.ladyImgUrl,
+          mainImgUrl: files.mainImg ? await uploadImage(files.mainImg) : formData.mainImgUrl,
+        };
+  
+        await set(newUserRef, updatedData);
+        localStorage.setItem('userId', newUserRef.key); // Save new userId to localStorage
+  
+      } else {
+        // If userId exists, update the existing record
+        const userRef = ref(database, `usersdata/${userId}`);
+        
+        const updatedData = {
+          ...formData,
+          ladyImgUrl: files.ladyImg ? await uploadImage(files.ladyImg) : formData.ladyImgUrl,
+          mainImgUrl: files.mainImg ? await uploadImage(files.mainImg) : formData.mainImgUrl,
+        };
+  
+        await set(userRef, updatedData);
+      }
+  
       alert("Data saved successfully!");
-
-      localStorage.setItem('userId', userId);
-      localStorage.setItem('profileData', JSON.stringify(updatedData));
-
-      navigate('/home'); // Redirect to profile page after saving
+      navigate('/home');
+  
     } catch (error) {
       console.error("Error saving data:", error);
     }
   };
+  
 
   const handleBack = () => {
     navigate(-1);
@@ -211,9 +239,33 @@ function EditProfile() {
         <div className="rel-div" style={{ flexDirection: "column" }}>
           <div className='lady' style={ladyStyle}>
             {formData.ladyImgUrl ? (
-              <img className='main-img' style={{width:'100%'}}  src={formData.ladyImgUrl} alt="Uploaded Lady Image" />
+
+
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: "center", width: '100%', objectFit: 'cover' }} >
+
+                <img style={
+                  { width: '100px', height: '100px', borderRadius: "100%", objectFit: 'cover' }
+                }
+                  className="main-img"
+
+                  src={formData.ladyImgUrl}
+                  alt="Uploaded Lady Image"
+                />
+
+
+                <button
+                  style={crossButtonStyle}
+                  onClick={() => removeImage('lady')}
+                >
+                  &times;
+                </button>
+              </div>
+
+
+
             ) : (
-              <img style={imgStyle} src={editcircle} alt="Upload Icon" />
+              <img style={imgStyle} src={editcontact} alt="Upload Icon" />
+
             )}
             <input
               type="file"
@@ -230,9 +282,10 @@ function EditProfile() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   width: '60px',
-                  fontSize: '10px',
+                  fontSize: '8px',
                   marginTop: '8px',
                   color: '#4A5568',
+                
                   height: '27px',
                   borderRadius: '4px',
                   cursor: 'pointer',
@@ -244,26 +297,44 @@ function EditProfile() {
                 Upload Photos
               </label>
             )}
+
+
           </div>
-          <div>
+
+          <div >
+
             <div className='main-img' style={mainImgStyle}>
               {formData.mainImgUrl ? (
-                <img style={{
-                 
-                objectFit:'cover',
-                  width: '100%',
-               height:'-webkit-fill-available',
-           
-                }} src={formData.mainImgUrl} alt="Uploaded Main Image" />
+
+
+                <div style={{ width: '100%', height: '-webkit-fill-available', }}>
+                  <img style={{
+
+                    objectFit: 'cover',
+                    width: '100%',
+                    height: '-webkit-fill-available',
+
+                  }} src={formData.mainImgUrl} alt="Uploaded Main Image" />
+                  <button
+                    style={crossButtonStyle}
+                    onClick={() => removeImage('main')}
+                  >
+                    &times;
+                  </button>
+                </div>
+
+
               ) : (
+          
                 <img style={{
                   display: "flex",
                   justifyContent: 'center',
+                  flexDirection:'column',
                   alignItems: 'center',
-                  margin: "20px auto",
-                  width: "100px",
-                  marginTop: '30px'
-                }} src={edit} alt="Upload Icon" />
+                  margin: "0px auto",
+                  width: "70px",
+                
+                }} src={editcontact} alt="Upload Icon" />
               )}
               <input
                 type="file"
@@ -280,21 +351,25 @@ function EditProfile() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     border: '1px solid #e2e8f0',
-                    width: '110px',
+                    width: '90px',
                     fontSize: '10px',
-                    marginTop: '8px',
                     color: '#4A5568',
                     height: '27px',
                     borderRadius: '4px',
                     cursor: 'pointer',
                     textAlign: 'center',
-                    margin: '20px auto'
+                    margin: '0px auto'
+                  
                   }}
                 >
                   Upload Photos
                 </label>
               )}
             </div>
+
+
+
+
           </div>
         </div>
 
@@ -367,7 +442,8 @@ const imgStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   margin: "2px auto",
-  width: "60px"
+  width: "30px",
+  marginTop:'1rem'
 };
 
 const mainImgStyle = {
@@ -381,6 +457,18 @@ const saveButtonStyle = {
   color: 'white',
   fontSize: "20px",
   width: "92%"
+};
+const crossButtonStyle = {
+  position: 'absolute',
+  top: '10px',
+  right: '10px',
+  backgroundColor: 'red',
+  color: 'white',
+  border: 'none',
+  borderRadius: '50%',
+  width: '20px',
+  height: '20px',
+  cursor: 'pointer'
 };
 
 export default EditProfile;
