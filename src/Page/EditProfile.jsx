@@ -5,7 +5,8 @@ import edit from '../images/edit.png';
 import editcontact from '../images/editcontact.png';
 import './Edit.css';
 import '../App.css';
-import nav from '../images/nav-img.png';
+
+import nav from '../images/nav.png';
 import { TextField } from '@mui/material';
 import { styled } from '@mui/system';
 import { ref, set,push } from "firebase/database";
@@ -34,7 +35,8 @@ function EditProfile() {
     company: '',
     nickname: '',
     ladyImgUrl: '',
-    mainImgUrl: ''
+    mainImgUrl: '',
+    UserId:localStorage.getItem("userId")
   });
 
   const [files, setFiles] = useState({
@@ -86,34 +88,23 @@ function EditProfile() {
   // Saveing data to firebase 
   const handleSave = async () => {
     try {
-      const userId = localStorage.getItem('userId');
-  
+      const userId = localStorage.getItem('userId'); // Get userId from localStorage
       if (!userId) {
-        // If no userId is in localStorage, create a new record
-        const userRef = ref(database, 'usersdata');
-        const newUserRef = push(userRef);
-        
-        const updatedData = {
-          ...formData,
-          ladyImgUrl: files.ladyImg ? await uploadImage(files.ladyImg) : formData.ladyImgUrl,
-          mainImgUrl: files.mainImg ? await uploadImage(files.mainImg) : formData.mainImgUrl,
-        };
-  
-        await set(newUserRef, updatedData);
-        localStorage.setItem('userId', newUserRef.key); // Save new userId to localStorage
-  
-      } else {
-        // If userId exists, update the existing record
-        const userRef = ref(database, `usersdata/${userId}`);
-        
-        const updatedData = {
-          ...formData,
-          ladyImgUrl: files.ladyImg ? await uploadImage(files.ladyImg) : formData.ladyImgUrl,
-          mainImgUrl: files.mainImg ? await uploadImage(files.mainImg) : formData.mainImgUrl,
-        };
-  
-        await set(userRef, updatedData);
+        console.error("No userId found in localStorage");
+        return;
       }
+  
+      // Prepare updated data
+      const updatedData = {
+        ...formData,
+        ladyImgUrl: files.ladyImg ? await uploadImage(files.ladyImg) : formData.ladyImgUrl,
+        mainImgUrl: files.mainImg ? await uploadImage(files.mainImg) : formData.mainImgUrl,
+        userId: userId // Ensure userId is included
+      };
+  
+      // Save the updated data under the specific userId
+      const userRef = ref(database, `userProfile/${userId}`);
+      await set(userRef, updatedData);
   
       alert("Data saved successfully!");
       navigate('/home');
@@ -122,6 +113,9 @@ function EditProfile() {
       console.error("Error saving data:", error);
     }
   };
+  
+  
+  
   
 
   const handleBack = () => {

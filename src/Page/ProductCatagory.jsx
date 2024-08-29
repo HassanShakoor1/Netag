@@ -19,7 +19,7 @@ function ProductCatagory() {
 
   useEffect(() => {
     const userId = localStorage.getItem('userId'); // Get the UID from localStorage
-
+const bid =localStorage.getItem('bid')
     if (userId) {
       fetchBrands(userId);
     } else {
@@ -27,17 +27,26 @@ function ProductCatagory() {
     }
   }, []);
 
-
   const fetchBrands = async (userId) => {
     try {
-      const brandsRef = ref(database, `Users/${userId}/Brands`);
+      const brandsRef = ref(database, `users/${userId}/Brands`);
       const snapshot = await get(brandsRef);
   
       if (snapshot.exists()) {
         const data = snapshot.val();
-        const brandsArray = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key]
+        const brandsArray = await Promise.all(Object.keys(data).map(async (key) => {
+          const brand = data[key];
+
+          // Fetch product count for each brand
+          const productsRef = ref(database, `users/${userId}/Brands/${key}/product`);
+          const productsSnapshot = await get(productsRef);
+          const productCount = productsSnapshot.exists() ? Object.keys(productsSnapshot.val()).length : 0;
+
+          return {
+            id: key,
+            ...brand,
+            productCount // Add product count to each brand object
+          };
         }));
         setBrands(brandsArray);
       } else {
@@ -50,18 +59,19 @@ function ProductCatagory() {
     }
   };
   
-  
   const handleBackscreen = () => {
-    navigate(-1);
+    navigate('/home');
   };
 
   const handleAddClick = () => {
     navigate('/product-catagory');
   };
 
-  const handleEditProdu = () => {
-    navigate('/edit-product-catagory');
+
+  const handleEditProdu = (bid, brandName) => {
+    navigate(`/edit-product-catagory/${bid}`, { state: { brandName } });
   };
+
 
   const handleOpenMenu = (event, brandId) => {
     setMenuAnchor(event.currentTarget);
@@ -76,7 +86,7 @@ function ProductCatagory() {
   const handleDeleteProduct = async () => {
     if (activeBrandId) {
       try {
-        const brandRef = ref(database, `Users/${localStorage.getItem('userId')}/Brands/${activeBrandId}`);
+        const brandRef = ref(database, `users/${localStorage.getItem('userId')}/Brands/${activeBrandId}`);
         await remove(brandRef);
         setBrands((prevBrands) => prevBrands.filter((brand) => brand.id !== activeBrandId));
         handleCloseMenu();
@@ -89,7 +99,6 @@ function ProductCatagory() {
   const HandleUpdate = (id) => {
     navigate(`/product-catagory/${id}`);
   };
-
   const ITEM_HEIGHT = 48;
 
   return (
@@ -117,7 +126,7 @@ function ProductCatagory() {
             </div>
             <div className="hair-data" style={{ backgroundColor: "#F5F5F5" }}>
               <h3 style={{ marginTop: "2rem", paddingLeft: '1rem', color: "red", fontWeight: '100', fontSize: '26px' }}>
-                {brand.brandName} <span style={{ fontSize: '13px', color: "rgb(197, 197, 197)" }}>({brand.productsCount || 0} products)</span>
+                {brand.brandName}  <span style={{ fontSize: '13px', color: "rgb(197, 197, 197)" }}>({brand.productCount}Products)</span>
               </h3>
               <div className="p-dots">
                 <p 
@@ -177,7 +186,7 @@ function ProductCatagory() {
                 </Menu>
               </div>
 
-    <button style={{color:"red",background:'rgb(255, 222, 222)',width:'80%',display:'flow',justifyContent:"center",alignItems:'center',margin:'0px auto'}} onClick={handleEditProdu} className='save'>Explore more</button>
+    <button style={{color:"red",background:'rgb(255, 222, 222)',width:'80%',display:'flow',justifyContent:"center",alignItems:'center',margin:'0px auto'}}  onClick={() => handleEditProdu(brand.id, brand.brandName)}   className='save'>Explore more</button>
          <br />
             </div>
           

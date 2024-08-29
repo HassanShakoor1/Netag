@@ -31,7 +31,7 @@ function Addcatagory() {
     if (id) {
       const fetchData = async () => {
         try {
-          const brandRef = ref(database, `Users/${userId}/Brands/${id}`);
+          const brandRef = ref(database, `users/${userId}/Brands/${id}`);
           const snapshot = await get(brandRef);
   
           if (snapshot.exists()) {
@@ -96,14 +96,14 @@ function Addcatagory() {
       let brandImageUrl = null;
       if (formData.brandImage) {
         // Upload the new image
-        const imageRef = storageRef(storage, `Users/${userId}/Brands/${Date.now()}_${formData.brandImage.name}`); // Unique name
+        const imageRef = storageRef(storage, `users/${userId}/Brands/${Date.now()}_${formData.brandImage.name}`); // Unique name
         await uploadBytes(imageRef, formData.brandImage);
         brandImageUrl = await getDownloadURL(imageRef);
       }
   
       if (id) {
         // Update existing record
-        const brandRef = ref(database, `Users/${userId}/Brands/${id}`);
+        const brandRef = ref(database, `users/${userId}/Brands/${id}`);
   
         const updatedData = {
           brandName: formData.brandName,
@@ -115,7 +115,7 @@ function Addcatagory() {
         alert("Brand data updated successfully!");
       } else {
         // Create new record
-        const newBrandRef = ref(database, `Users/${userId}/Brands`);
+        const newBrandRef = ref(database, `users/${userId}/Brands`);
         const newBrandRefWithKey = push(newBrandRef); // Generate a new unique key
   
         const newRecord = {

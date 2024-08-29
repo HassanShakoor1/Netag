@@ -7,7 +7,7 @@ import google from "../images/google.svg";
 import { useNavigate } from 'react-router-dom';
 import vector from "../images/Vector.svg";
 import eye from "../images/eye.svg";
-
+import { getDatabase, ref, get } from "firebase/database"; 
 import {getAuth,signInWithEmailAndPassword} from "firebase/auth"
 import {get,ref} from "firebase/database"
 import {database as db} from "../firebase.jsx"
@@ -31,6 +31,7 @@ function Signup() {
 
       localStorage.setItem("userId",user?.uid)
 
+<<<<<<< HEAD
       navigate("/home")
     } catch (error) {
       console.log(error)
@@ -38,8 +39,39 @@ function Signup() {
     finally{
       setemail("")
       setpassword("")
+=======
+
+const signin = async () => {
+  try {
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const user = credential.user;
+
+    if (user) {
+      localStorage.setItem("userId", user.uid); // Store the UID in localStorage
+      
+      // You can still fetch other user data if needed
+      const userId = user.uid;
+      const db = getDatabase(app); // Get the database instance
+      const userRef = ref(db, `users/${userId}`); // Reference to the user's data
+      const snapshot = await get(userRef);
+
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+        console.log("User data:", userData);
+      } else {
+        console.log("No data available for this user.");
+      }
+
+      // Redirect the user to the home page
+      navigate("/home");
+>>>>>>> 9091423 (cmt)
     }
   }
+<<<<<<< HEAD
+=======
+};
+  
+>>>>>>> 9091423 (cmt)
 
 
 

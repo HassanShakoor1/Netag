@@ -19,7 +19,7 @@ import add from '../images/add.png';
 import instas from '../images/instas.png';
 import circle from '../images/circle.png';
 import main from '../images/main.jpeg';
-import nav from '../images/nav-img.png';
+import nav from '../images/nav.png';
 import Card from '../Components/Card';
 import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly from 'firebase/database'
 import { database } from '../firebase.jsx'; // Import the initialized database
@@ -39,7 +39,7 @@ function Profile() {
     { id: 7, imageUrl: snap, linkName: "Snapchat", place: "Enter Username", instruction: "Enter your Username" },
     { id: 8, imageUrl: add, linkName: "", place: "", instruction: "Add new Links" },
   ];
-
+  const [loading, setLoading] = useState(true); // State for loading
   const [setting, setSetting] = useState(false); // State to manage Slide component visibility
   const [linkdata, setLinkdata] = useState(null); // State to store currently selected link data
   const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
@@ -53,33 +53,47 @@ function Profile() {
     mainImgUrl: ''
   })
   // Fetch profile data from localStorage\
-  const [loading, setLoading] = useState(true); // State for loading
-useEffect(() => {
-  const fetchData = async () => {
-    const userId = localStorage.getItem('userId'); // Get the UID from localStorage
-    if (!userId) {
-      console.log('No UID found in localStorage');
-      return;
-    }
+  const userId = localStorage.getItem('userId'); // Get the UID from localStorage
 
-    const dbRef = ref(database, `usersdata/${userId}`); // Fetch user-specific data
-    try {
-      const snapshot = await get(dbRef);
-      if (snapshot.exists()) {
-        setProfileData(snapshot.val()); // Set fetched data
-      } else {
-        console.log('No data available');
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userId = localStorage.getItem('userId'); // Get userId from localStorage
+        if (!userId) {
+          console.error("No userId found in localStorage");
+          setLoading(false); // End loading state if no userId is found
+          return;
+        }
+
+        // Fetch data for the specific userId
+        const userRef = ref(database, `userProfile/${userId}`);
+        const snapshot = await get(userRef);
+
+        if (snapshot.exists()) {
+          setProfileData(snapshot.val()); // Set the profile data
+        } else {
+          console.log("No data available");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // End loading state after data fetch (success or failure)
       }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally{
-      setLoading(false);
-    }
-  };
+    };
 
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
+
+
+
+
   
+  
+  
+
+
+
+
 const [imageLoading, setImageLoading] = useState(true);
 
   const handleImageLoad = () => {

@@ -1,23 +1,49 @@
 import React, { useState } from 'react';
 import { IoChevronBack } from "react-icons/io5";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ref, set, push } from 'firebase/database';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage, database } from '../firebase'; // Import your firebase configuration
 import './Editproductdetail.css';
 import edit from '../images/edit.png';
 
 function Editproductdetail() {
   const navigate = useNavigate();
+  const { id } = useParams(); // Get the ID from the URL parameters
   const [images, setImages] = useState([]);
   const [showAll, setShowAll] = useState(false);
+  const [formData, setFormData] = useState({
+    BusinessName:'',
+    productName: '',
+    price: '',
+    size: '',
+    color: '',
+    description: '',
+  });
+  const [loading, setLoading] = useState(false);
 
+  const userId = localStorage.getItem('userId'); // Get the UID from localStorage
 
-  
   const handleFileChange = (e) => {
+    if (!userId) {
+      console.error("User ID not found.");
+      return;
+    }
+
     const files = Array.from(e.target.files);
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
 
-    // Update local state with image URLs
-    const imageUrls = imageFiles.map(file => URL.createObjectURL(file));
-    setImages(prevImages => [...prevImages, ...imageUrls]);
+    imageFiles.forEach((file) => {
+      const storageReference = storageRef(storage, `users/${userId}/Brands/${id}/product/${file.name}`);
+      uploadBytes(storageReference, file)
+        .then(snapshot => getDownloadURL(snapshot.ref))
+        .then(url => {
+          setImages(prevImages => [...prevImages, url]); // Store the URL
+        })
+        .catch(error => {
+          console.error("Error uploading file:", error);
+        });
+    });
   };
 
   const handleInputChange = (e) => {
@@ -25,8 +51,31 @@ function Editproductdetail() {
     setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
-  const goToGallery = () => {
-    navigate('/gallery', { state: { images: images } });
+  const handleSubmit = () => {
+    if (!userId) {
+      console.error("User ID not found.");
+      return;
+    }
+
+    setLoading(true);
+    const productRef = push(ref(database, `users/${userId}/Brands/${id}/product`)); // Save data under the Brand ID
+
+    console.log('Saving data to:', `users/${userId}/Brands/${id}/product`);
+    console.log('Data to save:', {
+      ...formData,
+      images: images,
+    });
+
+    set(productRef, {
+      ...formData,
+      images: images,
+    }).then(() => {
+      setLoading(false);
+      navigate(-1, { state: { images: images } });
+    }).catch(error => {
+      setLoading(false);
+      console.error("Error saving data:", error);
+    });
   };
 
   const displayedImages = showAll ? images : images.slice(0, 3);
@@ -57,7 +106,7 @@ function Editproductdetail() {
             style={{ paddingTop: '0px', paddingBottom: '0px', width: '100%', height: "40px", border: 'none', borderRadius: "17px", backgroundColor: '#F7F7F7' }}
             type="text"
             placeholder='Enter business name'
-           // Adding value to avoid uncontrolled input warning
+            name="businessName"
             onChange={handleInputChange}
           />
         </div>
@@ -78,7 +127,6 @@ function Editproductdetail() {
                 className="formInput"
                 placeholder='Hair oil'
                 name="productName"
-              
                 onChange={handleInputChange}
               />
             </div>
@@ -92,7 +140,6 @@ function Editproductdetail() {
                 className="formInput"
                 placeholder='$44'
                 name="price"
-           
                 onChange={handleInputChange}
               />
             </div>
@@ -108,7 +155,6 @@ function Editproductdetail() {
                 className="formInput"
                 placeholder='Small'
                 name="size"
-               
                 onChange={handleInputChange}
               />
             </div>
@@ -122,7 +168,6 @@ function Editproductdetail() {
                 className="formInput"
                 placeholder='Green'
                 name="color"
-               
                 onChange={handleInputChange}
               />
             </div>
@@ -138,7 +183,6 @@ function Editproductdetail() {
           className="formInput"
           placeholder='Please enter your product details.......'
           name="description"
-     
           onChange={handleInputChange}
         />
 
@@ -153,14 +197,13 @@ function Editproductdetail() {
                 justifyContent: 'center',
                 flexDirection: 'column',
                 border: '1px solid #e2e8f0',
-                alignItems: 'center',
                 width: '100%',
                 height: '150px',
                 borderRadius: '20px',
                 backgroundColor: '#F4F4F4',
               }}
             >
-              <img src={edit} style={{ width: "50px" }} />
+              <img src={edit} style={{ width: "50px",margin:'0px auto' }} alt="Upload" />
               <input
                 type="file"
                 accept="image/*"
@@ -169,130 +212,114 @@ function Editproductdetail() {
                 id="upload-photos"
                 onChange={handleFileChange}
               />
-              <label
-                htmlFor="upload-photos"
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  border: '1px solid #e2e8f0',
-                  width: '110px',
-                  fontSize: '10px',
-                  marginTop: '8px',
-                  color: '#4A5568',
-                  height: '27px',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  textAlign: 'center',
-                }}
-              >
-                Upload Photos
+              <label htmlFor="upload-photos" style={{ cursor: 'pointer', textAlign: 'center', fontSize: '14px', color: '#a0aec0' }}>
+                Upload photo
               </label>
             </div>
-            {/* First Uploaded Image */}
-            <div style={{ flex: '1 1 50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              {displayedImages[0] && (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '150px',
-                    borderRadius: '20px',
-                    backgroundColor: '#F4F4F4',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <img
-                    src={displayedImages[0]}
-                    alt="Uploaded"
-                    style={{ maxWidth: '100%', maxHeight: '100%' }}
-                  />
-                </div>
-              )}
-            </div>
+
+            {/* Display first uploaded image */}
+            {displayedImages[0] && (
+              <div
+                style={{
+                  flex: '1 1 50%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  border: '1px solid #e2e8f0',
+                  width: '100%',
+                  height: '150px',
+                  borderRadius: '20px',
+                  backgroundColor: '#F4F4F4',
+                }}
+              >
+                <img
+                  src={displayedImages[0]}
+                  alt="Uploaded"
+                  style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '10px' }}
+                />
+              </div>
+            )}
           </div>
 
           {/* Second Row */}
           <div style={{ display: 'flex', padding: '20px', gap: '10px' }}>
-            {/* Second Uploaded Image */}
-            <div style={{ flex: '1 1 50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              {displayedImages[1] && (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '150px',
-                    borderRadius: '20px',
-                    backgroundColor: '#F4F4F4',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <img                    src={displayedImages[1]}
-                    alt="Uploaded"
-                    style={{ maxWidth: '100%', maxHeight: '100%' }}
-                  />
-                </div>
-              )}
-            </div>
-            {/* Third Uploaded Image */}
-            <div style={{ flex: '1 1 50%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              {displayedImages[2] && (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '150px',
-                    borderRadius: '20px',
-                    backgroundColor: '#F4F4F4',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <img
-                    src={displayedImages[2]}
-                    alt="Uploaded"
-                    style={{ maxWidth: '100%', maxHeight: '100%' }}
-                  />
-                  {remainingImagesCount > 0 && (
-                    <div style={{
-                      position: 'absolute',
-                      bottom: '10px',
-                      right: '10px',
-                      background: 'rgba(0, 0, 0, 0.5)',
-                      color: 'white',
-                      padding: '5px',
-                      borderRadius: '5px',
-                    }}>
-                      +{remainingImagesCount}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+            {/* Display second uploaded image */}
+            {displayedImages[1] && (
+              <div
+                style={{
+                  flex: '1 1 50%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  border: '1px solid #e2e8f0',
+                  width: '100%',
+                  height: '150px',
+                  borderRadius: '20px',
+                  backgroundColor: '#F4F4F4',
+                }}
+              >
+                <img
+                  src={displayedImages[1]}
+                  alt="Uploaded"
+                  style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '10px' }}
+                />
+              </div>
+            )}
+
+            {/* Display third uploaded image and 'more' button */}
+            {displayedImages[2] && (
+              <div
+                style={{
+                  flex: '1 1 50%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  border: '1px solid #e2e8f0',
+                  width: '100%',
+                  height: '150px',
+                  borderRadius: '20px',
+                  backgroundColor: '#F4F4F4',
+                }}
+              >
+                <img
+                  src={displayedImages[2]}
+                  alt="Uploaded"
+                  style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '10px' }}
+                />
+                {remainingImagesCount > 0 && (
+                  <button
+                    onClick={() => setShowAll(!showAll)}
+                    style={{ marginTop: '10px', padding: '10px', borderRadius: '20px', border: 'none', backgroundColor: 'red', color: '#fff', cursor: 'pointer' }}
+                  >
+                    {showAll ? `Show Less (${remainingImagesCount})` : `Show More (${remainingImagesCount})`}
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
         <button
-         
+          onClick={handleSubmit}
           style={{
-            backgroundColor: 'red',
-            color: 'white',
-            border: 'none',
-            borderRadius: '10px',
+            display:'flex',
+            justifyContent:'center',
+            alignItems:"center",
+            width:'80%',
+            height:"50px",
+            marginTop: '20px',
             padding: '10px 20px',
+            borderRadius: '20px',
+            border: 'none',
+            backgroundColor: 'red',
+            color: '#fff',
             cursor: 'pointer',
-            margin: '20px',
-            display: 'block',
-            marginLeft: 'auto',
-            marginRight: 'auto',
+            fontSize: '16px',
+            margin:'0px auto'
           }}
+          disabled={loading}
         >
-  Save Data
+          {loading ? 'Saving...' : 'Save'}
         </button>
       </div>
     </div>
@@ -300,5 +327,3 @@ function Editproductdetail() {
 }
 
 export default Editproductdetail;
-
-                   
