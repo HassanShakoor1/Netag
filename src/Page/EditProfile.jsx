@@ -41,12 +41,13 @@ function EditProfile() {
   const [imgurl, setImgurl] = useState("");
   const [imageFile1, setImageFile1] = useState("");
   const [imgurl1, setImgurl1] = useState("");
-
+  const [isSaving, setIsSaving] = useState(false); 
 
 const userId=localStorage.getItem("userId")
 console.log(userId)
 
 const handleSave = async () => {
+  setIsSaving(true); 
   try {
     // Retrieve userId from localStorage
     const userId = localStorage.getItem('userId');
@@ -357,8 +358,10 @@ console.log(formData)
           </div>
 
           <br /><br /><br /><br />
+          
           <div className="btn-s">
-            <button onClick={handleSave} style={saveButtonStyle} className='save2'>Save</button>
+          <button onClick={handleSave} style={saveButtonStyle} className='save2'>
+      {isSaving ? 'Saving...' : 'Save'}</button>
           </div>
         </div>
       </div>
@@ -422,7 +425,10 @@ const uploadLabelStyle = {
 };
 
 const saveButtonStyle = {
-  marginTop: "20px"
+  marginTop: "20px",
+  width:'90%',
+  color:"white",
+  fontSize:'20px'
 };
 
 export default EditProfile;
