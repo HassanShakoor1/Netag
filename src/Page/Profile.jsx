@@ -52,8 +52,8 @@ function Profile() {
     status: 'Married...',
     company: 'your company',
     designation: 'copmany',
-    ladyImgUrl: '',
-    mainImgUrl: ''
+    profile: '',
+    cover: ''
   })
   // Fetch profile data from localStorage\
   const userId = localStorage.getItem('userId'); // Get the UID from localStorage
@@ -167,7 +167,7 @@ const [imageLoading, setImageLoading] = useState(true);
           <img
   className='lady'
  
-  src={profileData.ladyImgUrl || circle}  // Default profile image
+  src={profileData.profile || circle}  // Default profile image
   alt="lady"
  
 />
@@ -178,7 +178,7 @@ const [imageLoading, setImageLoading] = useState(true);
   <div style={{  width: '100%' }}>
             <img
               className='main-img'
-              src={profileData.mainImgUrl || main}  // Default cover image
+              src={profileData.cover || main}  // Default cover image
               alt="main-img"
               onLoad={handleImageLoad}
               style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
