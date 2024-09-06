@@ -71,7 +71,7 @@ function Photos() {
           display: images.length >= 9 ? 'none' : 'block', // Hide label if 9 images are uploaded
           width: '95%',
           height: '50px',
-          display: 'flex',
+          // display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           margin:'0px auto',

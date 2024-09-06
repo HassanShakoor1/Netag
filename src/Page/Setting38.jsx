@@ -1,6 +1,6 @@
 import pic from "../images/Ellipse.png"
 import "./setting.css"
-import { useState } from "react"
+import { useState,useContext } from "react"
 import person from "../images/personrounded.svg"
 import lead from "../images/lead.png"
 import member from "../images/membership.png"
@@ -13,10 +13,19 @@ import Delete from "../images/Delete.png"
 import Footer from "../Components/Footer"
 import Logout from "../images/Logout.png"
 import vectorrr from "../images/vectorrr.svg"
-import { useNavigate } from "react-router-dom"
+import { useNavigate,Link } from "react-router-dom"
 
+import {AppContext} from './LanguageContextProvider'
+
+import { useTranslation } from 'react-i18next';
 function Setting() {
+     
+    // for translation 
+    const { t } = useTranslation()
 
+    const{language}=useContext(AppContext)
+
+    console.log(language)
     const [activeTab, setActiveTab] = useState('newOrders'); // State to track the active tab
 
     // Define styles for active and inactive tabs
@@ -78,7 +87,7 @@ function Setting() {
                                         }}
                                         onClick={() => setActiveTab('newOrders')}
                                     >
-                                        Profile Off
+                                      {t("Profile Off")}  
                                     </div>
                                     <div
                                         style={{
@@ -206,7 +215,12 @@ function Setting() {
                                                 <div>
                                                 <img src={languages} alt="" />
                                                 </div>
-                                                <div style={{color:"#868686",marginLeft:"6px",fontSize:"16px"}}>Languages</div>
+                                                <Link to="/home/setting/language" style={{textDecoration:"none"}}>
+                                                <div style={{color:"#868686",marginLeft:"6px",fontSize:"16px"}}>
+                                                    Languages
+                                                    </div>
+                                                </Link>
+                                               
                                             </div>
                                             <div>
                                                 <img src={vectorrr} alt="" />

@@ -2,17 +2,16 @@ import "./serviceaddcategory.css";
 import vector from "../images/Vector.svg";
 import camera from "../images/camera.svg";
 import redcross from "../images/redcross.svg";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { ref as sRef, onValue, update } from "firebase/database";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { database as db, storage } from "../firebase.jsx";
-import {useTranslation} from "react-i18next"
+import { useTranslation } from 'react-i18next'
 
-function Serviceeditcategory() {
-    const{t}=useTranslation()
-
+function ManageCategoriesEdit() {
+    const { t } = useTranslation()
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -20,15 +19,20 @@ function Serviceeditcategory() {
     const [imageURL, setImageURL] = useState("");
     const [name1, setName1] = useState("");
     const [description, setDescription] = useState("");
+    const [category, setCategory] = useState("")
+    const [serviceId, setserviceId] = useState()
 
     // Fetch data from Firebase
     const gettingdata = async () => {
-        const starCountRef = sRef(db, `ServiceCategory/${id}`);
+        const starCountRef = sRef(db, `Services/${id}`);
         onValue(starCountRef, async (snapshot) => {
             let fetchData = await snapshot.val();
-            setName1(fetchData.name);
+            console.log(fetchData)
+            setName1(fetchData.servicename);
             setDescription(fetchData.description);
-            setImageURL(fetchData.imageurl); // Set the URL of the existing image
+            setImageURL(fetchData.imageUrl); // Set the URL of the existing image
+            setCategory(fetchData.categoryid)
+
         });
     };
 
@@ -55,11 +59,11 @@ function Serviceeditcategory() {
         setImageFile(null);
         setImageURL(""); // Clear image URL
     };
-
+    console.log(id)
     // Update data in Firebase
     const updatingdata = async () => {
         try {
-            const starCountRef = sRef(db, `ServiceCategory/${id}`);
+            const starCountRef = sRef(db, `Services/${id}`);
             let imageUrl = imageURL;
 
             if (imageFile) {
@@ -69,13 +73,21 @@ function Serviceeditcategory() {
             }
 
             await update(starCountRef, {
-                name: name1,
+                servicename: name1,
                 description: description,
-                imageurl: imageUrl,
+                imageUrl: imageUrl,
+
+                businesscontactno: "",
+                categoryid: category,
+               
+                // imageUrl: ,
+               
+                
+                // servicename: "user 1 category 1 product 1 ",
+               
             });
-            
-            alert('Data updated successfully');
-            
+
+
         } catch (error) {
             console.error("Error updating data:", error);
         }
@@ -83,7 +95,7 @@ function Serviceeditcategory() {
 
     // Go back to the previous page
     const handleGoBack = () => {
-        navigate('/home/services');
+        navigate(`/home/services/catagory/${id}`);
     };
 
     return (
@@ -93,7 +105,10 @@ function Serviceeditcategory() {
                     <div className="categories-width1">
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                             <div>
-                                <img style={{ cursor: "pointer" }} onClick={handleGoBack} src={vector} alt="" />
+                                <Link to={`/home/services/catagory/${category}`}>
+                                    <img style={{ cursor: "pointer" }} onClick={handleGoBack} src={vector} alt="" />
+                                </Link>
+                                {/* <img style={{ cursor: "pointer" }} onClick={handleGoBack} src={vector} alt="" /> */}
                             </div>
                             <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "500" }}>
                                 {t("Edit Category")}
@@ -101,13 +116,10 @@ function Serviceeditcategory() {
                             <div></div>
                         </div>
                         <div style={{ marginLeft: "18px", color: "#EE0000", fontSize: "16px", fontWeight: "500", marginTop: "3rem" }}>
-                           {t("Service")}
+                            {t("Service")}
                         </div>
                         <div style={{ marginTop: "2rem" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>
-                                {t("Name")}
-                                
-                                </div>
+                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>Name</div>
                             <div style={{ width: "100%" }}>
                                 <input
                                     type="text"
@@ -121,7 +133,7 @@ function Serviceeditcategory() {
                         <div style={{ marginTop: "5px" }}>
                             <div style={{ marginLeft: "18px", fontWeight: "500" }}>
                                 {t("Description")}
-                                </div>
+                            </div>
                             <div>
                                 <textarea
                                     placeholder="lorem ipsum"
@@ -187,4 +199,4 @@ function Serviceeditcategory() {
     );
 }
 
-export default Serviceeditcategory;
+export default ManageCategoriesEdit;

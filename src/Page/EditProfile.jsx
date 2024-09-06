@@ -5,16 +5,20 @@ import edit from '../images/edit.png';
 import editcontact from '../images/editcontact.png';
 import './Edit.css';
 import '../App.css';
-import nav from '../images/nav-img.png';
-import { TextField } from '@mui/material';
+// <<<<<<< HEAD
+// import nav from '../images/nav-img.png';
+import { TextField, useForkRef } from '@mui/material';
+// import { styled } from '@mui/system';
+// import { ref, set,push, onValue } from "firebase/database";
+// =======
+import nav from '../images/nav.png';
+// import { TextField } from '@mui/material';
 import { styled } from '@mui/system';
-import { ref, set,push } from "firebase/database";
+import {  ref, set,push, update } from "firebase/database";
+// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 import { database } from '../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useEffect } from 'react';
-import {database as db} from "../firebase.jsx"
-import {get,ref as uRef} from "firebase/database"
-
+import Cropper from './Cropper'; // Import your Cropper component
 
 const CustomTextField = styled(TextField)({
   '& .MuiOutlinedInput-root': {
@@ -26,71 +30,51 @@ const CustomTextField = styled(TextField)({
 
 function EditProfile() {
   const navigate = useNavigate();
-  const[navigatedata,setnavigatedata]=useState(navigate.onCompany)
-  const [formData, setFormData] = useState({
-    username: '',
-    designation: '',
-    status: '',
-    company: '',
-    nickname: '',
-    ladyImgUrl: '',
-    mainImgUrl: ''
-  });
+  const [username, setUsername] = useState("");
+  const [designation, setDesignation] = useState("");
+  const [status, setStatus] = useState("");
+  const [company, setCompany] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [profile, setProfile] = useState("");
+  const [cover, setCover] = useState("");
+  const [imageFile, setImageFile] = useState("");
+  const [imgurl, setImgurl] = useState("");
+  const [imageFile1, setImageFile1] = useState("");
+  const [imgurl1, setImgurl1] = useState("");
 
-  const [files, setFiles] = useState({
-    ladyImg: null,
-    mainImg: null
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-  const removeImage = (type) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [`${type}ImgUrl`]: ''
-    }));
-    setFiles((prevFiles) => ({
-      ...prevFiles,
-      [`${type}Img`]: null
-    }));
-  };
+const userId=localStorage.getItem("userId")
+console.log(userId)
 
-  const handleFileChange = async (e) => {
-    const { id } = e.target;
-    const file = e.target.files[0];
-    if (file) {
-      if (id === 'lady-img-upload') {
-        setFiles((prevFiles) => ({ ...prevFiles, ladyImg: file }));
-        const ladyImgUrl = await uploadImage(file);
-        setFormData((prevData) => ({ ...prevData, ladyImgUrl }));
-      } else if (id === 'main-img-upload') {
-        setFiles((prevFiles) => ({ ...prevFiles, mainImg: file }));
-        const mainImgUrl = await uploadImage(file);
-        setFormData((prevData) => ({ ...prevData, mainImgUrl }));
-      }
+const handleSave = async () => {
+  
+    // Retrieve userId from localStorage
+    // const userId = localStorage.getItem('userId');
+    if (!userId) {
+      console.error("No userId found in localStorage");
+      alert("User ID not found. Please log in again.");
+      return;
     }
-  };
 
+// <<<<<<< HEAD
   const uploadImage = async (file) => {
     const storage = getStorage();
-    const storageReference = storageRef(storage, `images/${Date.now()}_${file.name}`);
+    const storageReference = storageRef(storage, `${file.name}/${Date.now()}`);
     await uploadBytes(storageReference, file);
     return getDownloadURL(storageReference);
   };
 
+
+  // const userId = localStorage.getItem('userId');
+  console.log(userId)
   // Saveing data to firebase 
   const handleSave = async () => {
     try {
-      const userId = localStorage.getItem('userId');
+      
   
       if (!userId) {
         // If no userId is in localStorage, create a new record
-        const userRef = ref(database, 'usersdata');
+        const userRef = ref(database, `Users/${userId}`);
         const newUserRef = push(userRef);
         
         const updatedData = {
@@ -113,15 +97,78 @@ function EditProfile() {
         };
   
         await set(userRef, updatedData);
+// =======
+    const storage = getStorage(); // Initialize storage
+    // const userRef = ref(database, `User/${userId}`); // Reference path includes userId
+
+    let ImageUrl = [];
+    try {
+      // Handle profile image upload
+      if (imageFile) {
+        const imageRef = storageRef(storage, `images/${userId}/${imageFile.name}`); // Store images under user-specific folder
+        await uploadBytes(imageRef, imageFile);
+        console.log("Profile image uploaded successfully");
+
+        const url = await getDownloadURL(imageRef);
+        ImageUrl.push(url);
+// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
       }
-  
+
+      // Handle cover image upload
+      if (imageFile1) {
+        const imageRef1 = storageRef(storage, `images/${userId}/${imageFile1.name}`); // Store images under user-specific folder
+        await uploadBytes(imageRef1, imageFile1);
+        console.log("Cover image uploaded successfully");
+
+        const url1 = await getDownloadURL(imageRef1);
+        ImageUrl.push(url1);
+      }
+
+      // Save or update user data with the userId as a reference
+      await update(userRef, {
+        username: username,
+        designation: designation,
+        status: status,
+        company: company,
+        nickname: nickname,
+        profile: ImageUrl[0] || "", // Profile image URL
+        cover: ImageUrl[1] || "",   // Cover image URL
+        uid: userId                 // Save the userId for reference
+      });
+
       alert("Data saved successfully!");
+// <<<<<<< HEAD
       navigate('/home');
   
     } catch (error) {
       console.error("Error saving data:", error);
     }
   };
+}
+catch(error){
+  console.log(error)
+}
+}
+}  
+  // getting data from firebase 
+
+  // const getData=async()=>{
+  //   const data=uRef(db,`Users/${userId}`)
+  //   onValue(data,async (snapShot)=>{
+  //     let fetchedData= await snapShot.val()
+  //     console.log(fetchedData)
+    
+
+
+  //   })
+  // }
+    // }
+  // update data to firebase 
+
+  // const updateData=async()=>{
+     
+    
+  // }
   
 
   const handleBack = () => {
@@ -129,106 +176,109 @@ function EditProfile() {
   };
 
   useEffect(()=>{
-    const signin=async()=>{
+    getData()
+  },[])
+
+  // useEffect(()=>{
+  //   const signin=async()=>{
          
-      try {
-        // const credential=await signInWithEmailAndPassword(auth,email,password)
-        // const user=credential.user
+  //     try {
+  //       // const credential=await signInWithEmailAndPassword(auth,email,password)
+  //       // const user=credential.user
   
-        // localStorage.setItem("userId",user?.uid)
+  //       // localStorage.setItem("userId",user?.uid)
   
-        const dbref=ref(db,`users/${localStorage.getItem("userId")}`)
+  //       const dbref=ref(db,`users/${localStorage.getItem("userId")}`)
        
         
       
-         const snap=await get(dbref)
-         const data= await snap.val()
-         console.log(data)
-         const data2=data.isCompany 
-         setnavigatedata(data2)
+  //        const snap=await get(dbref)
+  //        const data= await snap.val()
+  //        console.log(data)
+  //        const data2=data.isCompany 
+  //        setnavigatedata(data2)
         
      
-        // setcompany(data.isCompany)
-        // localStorage.setItem("iscompany",data?.isCompany)
+  //       // setcompany(data.isCompany)
+  //       // localStorage.setItem("iscompany",data?.isCompany)
       
      
     
   
-        // navigate("/home")
+  //       // navigate("/home")
         
-        // const userid=localStorage.getItem("iscompany")
+  //       // const userid=localStorage.getItem("iscompany")
         
-    // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
-    if (navigatedata === false) {
-      navigate('/home')
-    } 
+  //   // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
+  //   if (navigatedata === false) {
+  //     navigate('/home')
+  //   } 
   
-  // else {
-  //   navigate('/home')
+  // // else {
+  // //   navigate('/home')
+  // // }
+        
+  //   // console.log(userid)
+ 
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+    
+  //   }
+  //   signin()
+  // },[navigatedata])
+
+console.log(formData)
+// =======
+  //     navigate('/home')
+
+  //   } catch (error) {
+  //     console.error("Error uploading images or saving data:", error);
+  //     alert("Error: " + error.message);
+  //   }
   // }
-        
-    // console.log(userid)
- 
-      } catch (error) {
-        console.log(error)
-      }
-    
+// };
+
+
+  const handleFileChange1 = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImgurl(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
-    signin()
-  },[navigatedata])
-//   const signin=async()=>{
-         
-//     try {
-//       // const credential=await signInWithEmailAndPassword(auth,email,password)
-//       // const user=credential.user
-
-//       // localStorage.setItem("userId",user?.uid)
-
-//       const dbref=ref(db,`users/${localStorage.getItem("userId")}`)
-     
-      
-    
-//        const snap=await get(dbref)
-//        const data= await snap.val()
-//        console.log(data)
-//        const data2=data.isCompany 
-      
-   
-//       // setcompany(data.isCompany)
-//       // localStorage.setItem("iscompany",data?.isCompany)
-    
-   
+  };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImageFile1(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImgurl1(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   
+  const handleRemoveImage = () => {
+    setImgurl("");  // Clear the image URL to remove the displayed image
+    setImageFile(null);  // Clear the file state if needed
+  };
+  const handleRemoveImagemain = () => {
+    setImgurl1("");  // Clear the image URL to remove the displayed image
+    setImageFile1(null);  // Clear the file state if needed
+  };
 
-//       // navigate("/home")
-      
-//       // const userid=localStorage.getItem("iscompany")
-      
-//   // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
-//   if (!data2) {
-//     navigate('/home')
-//   } 
-
-// // else {
-// //   navigate('/home')
-// // }
-      
-//   // console.log(userid)
- 
-
-
-
-//     } catch (error) {
-//       console.log(error)
-//     }
-  
-//   }
+// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
   return (
     <div className="container">
       <div className="edit-profile">
         <nav className='nav'>
-          <div className="bck" onClick={handleBack}>
+          <div className="bck" onClick={() => navigate(-1)}>
             <IoChevronBack />
           </div>
           <div className="nav-logo">
@@ -238,138 +288,57 @@ function EditProfile() {
 
         <div className="rel-div" style={{ flexDirection: "column" }}>
           <div className='lady' style={ladyStyle}>
-            {formData.ladyImgUrl ? (
-
-
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: "center", width: '100%', objectFit: 'cover' }} >
-
-                <img style={
-                  { width: '100px', height: '100px', borderRadius: "100%", objectFit: 'cover' }
-                }
-                  className="main-img"
-
-                  src={formData.ladyImgUrl}
+            {imgurl ? (
+              <div style={{ position: 'relative' }}>
+                <img
+                  style={{ width: '100px', height: '100px', borderRadius: "100%", objectFit: 'cover' }}
+                  src={imgurl}
                   alt="Uploaded Lady Image"
                 />
-
-
-                <button
-                  style={crossButtonStyle}
-                  onClick={() => removeImage('lady')}
-                >
-                  &times;
-                </button>
+                <button onClick={handleRemoveImage}  style={crossButtonStyle}>&times;</button>
               </div>
-
-
-
             ) : (
               <img style={imgStyle} src={editcontact} alt="Upload Icon" />
-
             )}
             <input
               type="file"
               accept="image/*"
-              style={{ display: 'none' }}
               id="lady-img-upload"
-              onChange={handleFileChange}
+              style={{ display: 'none' }}
+              onChange={handleFileChange1}
             />
-            {!formData.ladyImgUrl && (
-              <label
-                htmlFor="lady-img-upload"
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: '60px',
-                  fontSize: '8px',
-                  marginTop: '8px',
-                  color: '#4A5568',
-                
-                  height: '27px',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  textAlign: 'center',
-                  padding: '0px',
-                  margin: '2px auto'
-                }}
-              >
-                Upload Photos
-              </label>
+            {!imgurl && (
+              <label htmlFor="lady-img-upload" style={uploadLabelStyle}>Upload Photos</label>
             )}
-
-
           </div>
 
-          <div >
-
+          <div>
             <div className='main-img' style={mainImgStyle}>
-              {formData.mainImgUrl ? (
-
-
-                <div style={{ width: '100%', height: '-webkit-fill-available', }}>
-                  <img style={{
-
-                    objectFit: 'cover',
-                    width: '100%',
-                    height: '-webkit-fill-available',
-
-                  }} src={formData.mainImgUrl} alt="Uploaded Main Image" />
-                  <button
-                    style={crossButtonStyle}
-                    onClick={() => removeImage('main')}
-                  >
-                    &times;
-                  </button>
+              {imgurl1 ? (
+                <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                  <img
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    src={imgurl1}  // Fixed: use cover state here
+                    alt="Uploaded Main Image"
+                  />
+                  <button onClick={handleRemoveImagemain} style={crossButtonStyle}>&times;</button>
                 </div>
-
-
               ) : (
-          
-                <img style={{
-                  display: "flex",
-                  justifyContent: 'center',
-                  flexDirection:'column',
-                  alignItems: 'center',
-                  margin: "0px auto",
-                  width: "70px",
-                
-                }} src={editcontact} alt="Upload Icon" />
+                <img style={uploadIconStyle} src={editcontact} alt="Upload Icon" />
               )}
               <input
                 type="file"
                 accept="image/*"
-                style={{ display: 'none' }}
                 id="main-img-upload"
+                style={{ display: 'none' }}
                 onChange={handleFileChange}
+                 
+              
               />
-              {!formData.mainImgUrl && (
-                <label
-                  htmlFor="main-img-upload"
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    border: '1px solid #e2e8f0',
-                    width: '90px',
-                    fontSize: '10px',
-                    color: '#4A5568',
-                    height: '27px',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    textAlign: 'center',
-                    margin: '0px auto'
-                  
-                  }}
-                >
-                  Upload Photos
-                </label>
+              {!imgurl1 && (
+                <label htmlFor="main-img-upload" style={uploadLabelStyle}>Upload Photos</label>
               )}
             </div>
-
-
-
-
           </div>
         </div>
 
@@ -377,64 +346,35 @@ function EditProfile() {
 
         <div className="input-data">
           <div className="edit-field">
-            <CustomTextField
-              label="UserName"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              size="small"
-            />
-
-            <CustomTextField
-              label="Designation"
-              name="designation"
-              value={formData.designation}
-              onChange={handleChange}
-              size="small"
-            />
+            <CustomTextField label="UserName" name="username" size="small" onChange={(e) => setUsername(e.target.value)} />
+            <CustomTextField label="Designation" name="designation" size="small" onChange={(e) => setDesignation(e.target.value)} />
           </div>
 
           <div className="edit-field">
-            <CustomTextField
-              label="Material Status"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              size="small"
-            />
-
-            <CustomTextField
-              label="Company"
-              name="company"
-              value={formData.company}
-              onChange={handleChange}
-              size="small"
-            />
+            <CustomTextField label="Material Status" name="status" size="small" onChange={(e) => setStatus(e.target.value)} />
+            <CustomTextField label="Company" name="company" size="small" onChange={(e) => setCompany(e.target.value)} />
           </div>
+
           <div className="edit-field">
-            <CustomTextField
-              label="Nickname"
-              name="nickname"
-              value={formData.nickname}
-              onChange={handleChange}
-              size="small"
-            />
+            <CustomTextField label="Nickname" name="nickname" size="small" onChange={(e) => setNickname(e.target.value)} />
           </div>
 
           <br /><br /><br /><br />
           <div className="btn-s">
-            <button style={saveButtonStyle} className='save2' onClick={handleSave}>Save</button>
+            <button onClick={handleSave} style={saveButtonStyle} className='save2'>Save</button>
           </div>
         </div>
       </div>
     </div>
   );
 }
+  
 
 const ladyStyle = {
   top: "131px",
   backgroundColor: "#D9D9D9",
-  border: '1px solid grey'
+  border: '1px solid grey',
+  zIndex: "100"
 };
 
 const imgStyle = {
@@ -443,32 +383,50 @@ const imgStyle = {
   alignItems: 'center',
   margin: "2px auto",
   width: "30px",
-  marginTop:'1rem'
+  marginTop: '1rem'
 };
 
 const mainImgStyle = {
   width: "100%",
   height: '300px',
   backgroundColor: "#D9D9D9",
-  marginTop: '3rem'
+  marginTop: "1rem",
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: "center",
+  flexDirection: 'column',
 };
 
-const saveButtonStyle = {
-  color: 'white',
-  fontSize: "20px",
-  width: "92%"
+const uploadIconStyle = {
+  width: '55px',
+  height: '55px',
 };
+
 const crossButtonStyle = {
   position: 'absolute',
   top: '10px',
   right: '10px',
-  backgroundColor: 'red',
-  color: 'white',
+  background: 'rgba(255, 255, 255, 0.7)',
   border: 'none',
   borderRadius: '50%',
-  width: '20px',
-  height: '20px',
-  cursor: 'pointer'
+  cursor: 'pointer',
+  fontSize: '24px',
+  color: 'red',
+  width: '25px',
+  height: "25px",
+};
+
+const uploadLabelStyle = {
+  marginTop: "1rem",
+  cursor: 'pointer',
+  color: "grey",
+  display: 'flex',
+  justifyContent: "center",
+  alignItems: "center",
+};
+
+const saveButtonStyle = {
+  marginTop: "20px"
 };
 
 export default EditProfile;
