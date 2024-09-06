@@ -1,40 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../App.css';
-import { getDatabase, ref, set } from 'firebase/database';
-import { app } from '../firebase'; // Ensure app is correctly imported
+import { getDatabase, ref, set, update, get } from 'firebase/database';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { app } from '../firebase';
+import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 function Photos() {
-  const [mediaFiles, setMediaFiles] = useState([]); // State to hold the uploaded media files (images and videos)
+  const [mediaFiles, setMediaFiles] = useState([]);
+  const [recordid, setRecordid] = useState(null);
+  const userId = localStorage.getItem('userId');
+const navigate=useNavigate();
 
-  const handleImageUpload = (event) => {
-    const files = Array.from(event.target.files);
-    const mediaUrls = files.map((file) => ({
-      url: URL.createObjectURL(file),
-      type: file.type.includes('video') ? 'video' : 'image',
-    }));
-    setMediaFiles((prevMedia) => [...prevMedia, ...mediaUrls]); // Add new media without limiting
-  };
 
-  const handleSave = async () => {
+  useEffect(() => {
+    if (recordid) {
+      const database = getDatabase(app);
+      const userRef = ref(database, `PhotosVideos/${recordid}`);
+
+      get(userRef)
+        .then((snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            const images = data.selectedImages || [];
+            const videos = data.videosUri || [];
+            const mediaUrls = [
+              ...images.map((url) => ({ url, type: 'image' })),
+              ...videos.map((url) => ({ url, type: 'video' })),
+            ];
+            setMediaFiles(mediaUrls);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+        });
+    }
+  }, [recordid]);
+
+
+  const saveMediaFiles = async (newMediaFiles) => {
+    if (!recordid) {
+      console.error('Record ID is not available.');
+      return;
+    }
+
     const database = getDatabase(app);
-    const newDoc = ref(database, 'PhotosVideos');
-    
-    // Prepare the data to be saved
+    const userRef = ref(database, `PhotosVideos/${recordid}`);
+
     const mediaData = {
-      id: newDoc.key, // Use the key of the new document
-      selectedImages: mediaFiles.filter((media) => media.type === 'image').map((media) => media.url),
-      videosUri: mediaFiles.filter((media) => media.type === 'video').map((media) => media.url),
-      uid: localStorage.getItem('userId'), // Ensure userId is correctly set in localStorage
+      selectedImages: newMediaFiles.filter((media) => media.type === 'image').map((media) => media.url),
+      videosUri: newMediaFiles.filter((media) => media.type === 'video').map((media) => media.url),
+      uid: userId,
+      id: recordid,
     };
 
     try {
-      await set(newDoc, mediaData);
-      alert('Data saved successfully');
+      const snapshot = await get(userRef);
+      if (snapshot.exists()) {
+        await update(userRef, mediaData);
+        console.log('Data updated successfully');
+      } else {
+        await set(userRef, mediaData);
+        console.log('Data saved successfully');
+      }
     } catch (error) {
-      alert(`Error saving data: ${error.message}`);
+      console.error(`Error saving data: ${error.message}`);
     }
   };
 
+  const handleImageUpload = async (event) => {
+    const files = Array.from(event.target.files);
+    const storage = getStorage(app);
+    const newMediaFiles = [...mediaFiles];
+
+    for (const file of files) {
+      const fileRef = storageRef(storage, `PhotosVideos/${file.name}`);
+      try {
+        await uploadBytes(fileRef, file); // Upload the file to Firebase Storage
+        const url = await getDownloadURL(fileRef); // Get the download URL of the uploaded file
+        const mediaFile = { url, type: file.type.includes('video') ? 'video' : 'image' };
+        newMediaFiles.push(mediaFile);
+        setMediaFiles([...newMediaFiles]); // Update state with new media files
+        await saveMediaFiles(newMediaFiles); // Save to Firebase immediately after uploading
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    }
+  };
+  const handleImagemove=()=>{
+    navigate('/home/editimage')
+  }
+
+  
   return (
     <div className='profile-design'>
       <div className="p-vContainer">
@@ -42,7 +99,6 @@ function Photos() {
           <h2 className='head' style={{ fontSize: '22px', fontWeight: '100', color: 'rgb(238, 2, 0)', padding: '10px', margin: '0px' }}>
             Photos & Videos:
           </h2>
-          <button onClick={handleSave} style={{ margin: '10px', padding: '5px 10px' }}>Save</button>
         </div>
 
         <div className="rows" style={{ display: 'flex', flexWrap: 'wrap', padding: '10px' }}>
@@ -57,7 +113,7 @@ function Photos() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#f0f0f0',
-                marginRight: index < 2 ? '5px' : '0px', // Apply margin only to the first two columns
+                marginRight: index < 2 ? '5px' : '0px',
               }}
             >
               {media.type === 'image' ? (
@@ -80,7 +136,7 @@ function Photos() {
         {mediaFiles.slice(3).map((media, index) => (
           <div
             className="column"
-            key={index + 3} // Adjust key to avoid duplication
+            key={index + 3}
             style={{
               width: '95%',
               height: '100px',
@@ -108,7 +164,7 @@ function Photos() {
         ))}
 
         <label htmlFor="file-upload" style={{
-          display: mediaFiles.length >= 9 ? 'none' : 'block', // Hide label if 9 media files are uploaded
+          display: mediaFiles.length >= 9 ? 'none' : 'block',
           width: '95%',
           height: '50px',
           display: 'flex',
@@ -121,17 +177,19 @@ function Photos() {
           cursor: 'pointer',
           textAlign: 'center',
           borderRadius: '12px',
-        }}>
+        }}  onClick={handleImagemove}>
+
           +Add
         </label>
-        <input
+        {/* <input
           id="file-upload"
           type="file"
-          accept="image/*,video/*" // Allow both images and videos
+          accept="image/*,video/*"
           multiple
+         
           onChange={handleImageUpload}
-          style={{ display: 'none' }} // Hide the actual file input
-        />
+          style={{ display: 'none' }}
+        /> */}
       </div>
     </div>
   );
