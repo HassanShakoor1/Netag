@@ -58,9 +58,20 @@ function Create() {
 
       localStorage.setItem("userId", user?.uid)
 
+<<<<<<< HEAD
       const id = Date.now()
 
       const useref = ref(db, "User/" + user?.uid)
+=======
+         const useref=ref(db,"User/"+user?.uid)
+
+         set(useref,{
+          id:user?.uid,
+          name:name,
+          username:username,
+          email:email,
+         })
+>>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
       set(useref, {
         id: user?.uid,

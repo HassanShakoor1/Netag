@@ -19,19 +19,23 @@ import add from '../images/add.png';
 import instas from '../images/instas.png';
 import circle from '../images/circle.png';
 import main from '../images/main.jpeg';
-import nav from '../images/nav-img.png';
+import nav from '../images/nav.png';
 import Card from '../Components/Card';
 import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly from 'firebase/database'
 import { database } from '../firebase.jsx'; // Import the initialized database
 import CircularProgress from '@mui/material/CircularProgress'; // Import the loader component
 
+<<<<<<< HEAD
 import { useTranslation } from 'react-i18next';
+=======
+>>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
 function Profile() {
   const navigate = useNavigate();
   
   const{t}=useTranslation()
 
+  
   // Array of link objects to display
   const links = [
     { id: 1, imageUrl: whatsapp, linkName: "Call", place: "Enter phone number", instruction: "Enter your Phone Number" },
@@ -44,10 +48,12 @@ function Profile() {
     { id: 8, imageUrl: add, linkName: "", place: "", instruction: "Add new Links" },
   ];
 
+  const [loading, setLoading] = useState(true); // State for loading
   const [setting, setSetting] = useState(false); // State to manage Slide component visibility
   const [linkdata, setLinkdata] = useState(null); // State to store currently selected link data
   const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
   const [profileData, setProfileData] = useState({
+<<<<<<< HEAD
     username: '',
     nickname: '',
     status: '',
@@ -78,17 +84,65 @@ useEffect(() => {
         setProfileData(snapshot.val()); // Set fetched data
       } else {
         console.log('No data available');
-      }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally{
-      setLoading(false);
-    }
-  };
+=======
+    username: '@username',
+    nickname: 'Burden',
+    status: 'Married...',
+    company: 'your company',
+    designation: 'copmany',
+    profile: '',
+    cover: ''
+  })
+  // Fetch profile data from localStorage\
+  const userId = localStorage.getItem('userId'); // Get the UID from localStorage
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userId = localStorage.getItem('userId'); // Get userId from localStorage
+        
+        if (!userId) {
+          console.error("No userId found in localStorage");
+          setLoading(false); // End loading state if no userId is found
+          return;
+        }
+
+        // Fetch data for the specific userId
+        const userRef = ref(database, `User/${userId}`);
+        const snapshot = await get(userRef);
+
+        if (snapshot.exists()) {
+          setProfileData(snapshot.val()); // Set the profile data
+        } else {
+          console.log("No data available");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // End loading state after data fetch (success or failure)
+>>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+
+
+<<<<<<< HEAD
   fetchData();
 }, []);
   console.log(profileData)
+=======
+  
+  
+  
+
+
+
+
+>>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 const [imageLoading, setImageLoading] = useState(true);
 
   const handleImageLoad = () => {
@@ -158,7 +212,7 @@ const [imageLoading, setImageLoading] = useState(true);
           <img
   className='lady'
  
-  src={profileData.ladyImgUrl || circle}  // Default profile image
+  src={profileData.profile || circle}  // Default profile image
   alt="lady"
  
 />
@@ -169,7 +223,7 @@ const [imageLoading, setImageLoading] = useState(true);
   <div style={{  width: '100%' }}>
             <img
               className='main-img'
-              src={profileData.mainImgUrl || main}  // Default cover image
+              src={profileData.cover || main}  // Default cover image
               alt="main-img"
               onLoad={handleImageLoad}
               style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
