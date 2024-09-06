@@ -1,49 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate, useParams } from 'react-router-dom';
-import { ref, set, push } from 'firebase/database';
+import { ref, set, push,get,update } from 'firebase/database';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage, database } from '../firebase'; // Import your firebase configuration
 import './Editproductdetail.css';
 import edit from '../images/edit.png';
 
 function Editproductdetail() {
+
   const navigate = useNavigate();
-  const { id } = useParams(); // Get the ID from the URL parameters
+  const { id, productid } = useParams();
+  console.log("categoryid from params:", id);
+  console.log("productid from params:", productid);
+
+  
+
   const [images, setImages] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const [formData, setFormData] = useState({
-    BusinessName:'',
-    productName: '',
-    price: '',
-    size: '',
-    color: '',
+    categoryid: '',
+    categoryname: '',
+    color: [],
     description: '',
+    imgurl: [],
+    price: '',
+    productid:'',
+    productname: '',
+    size:'',
+  uid:localStorage.getItem('userId')
+  
+   
+ 
+   
+   
+   
   });
   const [loading, setLoading] = useState(false);
 
-  const userId = localStorage.getItem('userId'); // Get the UID from localStorage
-
-  const handleFileChange = (e) => {
-    if (!userId) {
-      console.error("User ID not found.");
-      return;
+  useEffect(() => {
+    if (productid) {
+      const fetchProductData = async () => {
+        try {
+          const productRef = ref(database, `/Products/${productid}`);
+          const snapshot = await get(productRef);
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            setFormData({
+              ...data,
+              productid,
+              categoryid: data.categoryid, // Ensure this matches your form structure
+            });
+            setImages(data.imgurl || []);
+          } else {
+            console.log('No data found for product:', productid);
+          }
+        } catch (error) {
+          console.error('Error fetching product data:', error);
+        }
+      };
+      fetchProductData();
     }
+  }, [productid]); // Add productid and id to the dependency array
+  
 
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
-
-    imageFiles.forEach((file) => {
-      const storageReference = storageRef(storage, `users/${userId}/Brands/${id}/product/${file.name}`);
-      uploadBytes(storageReference, file)
-        .then(snapshot => getDownloadURL(snapshot.ref))
-        .then(url => {
-          setImages(prevImages => [...prevImages, url]); // Store the URL
-        })
-        .catch(error => {
-          console.error("Error uploading file:", error);
-        });
-    });
+    
+    const imageUrls = [];
+    
+    for (const file of imageFiles) {
+      const storageReference = storageRef(storage, file.name);
+      try {
+        const snapshot = await uploadBytes(storageReference, file);
+        const url = await getDownloadURL(snapshot.ref);
+        imageUrls.push(url);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
+    }
+    
+    setImages(imageUrls);
+    setFormData(prevData => ({ ...prevData, imgurl: imageUrls }));
   };
 
   const handleInputChange = (e) => {
@@ -51,35 +90,78 @@ function Editproductdetail() {
     setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
-  const handleSubmit = () => {
-    if (!userId) {
-      console.error("User ID not found.");
-      return;
-    }
 
-    setLoading(true);
-    const productRef = push(ref(database, `users/${userId}/Brands/${id}/product`)); // Save data under the Brand ID
 
-    console.log('Saving data to:', `users/${userId}/Brands/${id}/product`);
-    console.log('Data to save:', {
-      ...formData,
-      images: images,
-    });
 
-    set(productRef, {
-      ...formData,
-      images: images,
-    }).then(() => {
-      setLoading(false);
-      navigate(-1, { state: { images: images } });
-    }).catch(error => {
-      setLoading(false);
-      console.error("Error saving data:", error);
-    });
+
+  const handleColorChange = (e) => {
+    // Split the input value by commas and trim whitespace
+    const color = e.target.value.split(',').map(color => color.trim()).filter(color => color.length > 0);
+    setFormData(prevData => ({ ...prevData, color }));
   };
+  const addColor = () => {
+    setFormData(prevData => ({
+      ...prevData,
+      color: [...prevData.color, ''] // Add an empty string for the new color
+    }));
+  };
+  // console.log( "this is",productid)
+
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      if (productid) {
+        console.log("Update called with product ID:", productid);
+        console.log("Form data for update:", formData);
+  
+        // Update the formData to include the productid explicitly
+        const updatedFormData = {
+          ...formData,
+          productid: productid,  // Ensure productid is included
+        };
+  
+        const productRef = ref(database, `/Products/${productid}`);
+        await update(productRef, {
+          ...updatedFormData,
+          imgurl: images,
+        });
+      } else {
+        console.log("Create called");
+        const newProductRef = push(ref(database, `/Products`));
+        const recordKey = newProductRef.key;
+  
+        const updatedFormData = {
+          ...formData,
+          productid: recordKey,   // Set the new product ID
+          categoryid: id,         // Ensure categoryid is included
+          imgurl: images,
+        };
+  
+        console.log("Form data for create:", updatedFormData);
+  
+        // Set the data to Firebase
+        await set(newProductRef, updatedFormData);
+        
+        // Update formData state after successfully setting data in Firebase
+        setFormData(updatedFormData);
+      }
+  
+      navigate(-1, { state: { images: formData.imgurl } });
+    } catch (error) {
+      console.error("Error saving data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
+  
+
+
 
   const displayedImages = showAll ? images : images.slice(0, 3);
-  const remainingImagesCount = images.length - 3;
+ 
 
   return (
     <div className='newContainer'>
@@ -106,7 +188,8 @@ function Editproductdetail() {
             style={{ paddingTop: '0px', paddingBottom: '0px', width: '100%', height: "40px", border: 'none', borderRadius: "17px", backgroundColor: '#F7F7F7' }}
             type="text"
             placeholder='Enter business name'
-            name="businessName"
+            name="categoryname"
+            value={formData?.categoryname}
             onChange={handleInputChange}
           />
         </div>
@@ -126,7 +209,8 @@ function Editproductdetail() {
                 type="text"
                 className="formInput"
                 placeholder='Hair oil'
-                name="productName"
+                name="productname"
+                value={formData?.productname}
                 onChange={handleInputChange}
               />
             </div>
@@ -140,6 +224,7 @@ function Editproductdetail() {
                 className="formInput"
                 placeholder='$44'
                 name="price"
+                value={formData?.price}
                 onChange={handleInputChange}
               />
             </div>
@@ -155,9 +240,11 @@ function Editproductdetail() {
                 className="formInput"
                 placeholder='Small'
                 name="size"
+                value={formData?.size}
                 onChange={handleInputChange}
               />
             </div>
+          
             <div className="formColumn">
               <label style={{ paddingLeft: "10px", fontWeight: '100' }} className="formHeading">
                 Color
@@ -166,11 +253,36 @@ function Editproductdetail() {
                 style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: '90%' }}
                 type="text"
                 className="formInput"
-                placeholder='Green'
                 name="color"
-                onChange={handleInputChange}
+                placeholder='Add colors, separated by commas'
+                value={formData.color}
+                onChange={handleColorChange}
               />
+              <div style={{position:'relative',width:'100%'}}>
+                 <button
+                onClick={addColor}
+                style={{ marginTop: '10px', borderRadius: '20px', border: 'none', backgroundColor: 'red', color: 'white',width:'50px',height:"20px",position:'absolute',right:30,}}
+              >
+              Add
+              
+              </button>
+              </div>
+             
+              {/* {formData.color.map((color, index) => (
+                <div key={index}>
+                  <input
+                    type="text"
+                    value={color}
+                    onChange={(e) => handleColorListChange(index, e.target.value)}
+                    style={{ marginTop: '5px', borderRadius: '20px', backgroundColor: "#F7F7F7", width: '90%' }}
+                  />
+                </div>
+              ))} */}
             </div>
+
+
+
+
           </div>
         </div>
         <br />
@@ -183,6 +295,7 @@ function Editproductdetail() {
           className="formInput"
           placeholder='Please enter your product details.......'
           name="description"
+          value={formData.description}
           onChange={handleInputChange}
         />
 

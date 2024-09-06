@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getDatabase, ref as dbRef, get, remove } from 'firebase/database';
-import { getStorage, ref as storageRef, getDownloadURL, deleteObject } from 'firebase/storage';
+import { getStorage, ref as storageRef, deleteObject } from 'firebase/storage';
 import { database, storage } from '../firebase'; // Adjust the import path as needed
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -25,28 +25,38 @@ const style = {
   boxShadow: 24,
   outline: 'none',
   marginRight: '30px',
-  p: 4,
+  p: 1,
   borderRadius: '20px',
-  height: "400px"
+  height: 'auto'
 };
+
+
 
 function EditProduct() {
   const [products, setProducts] = useState([]);
-  const { id } = useParams(); // Get the ID from the URL parameters
+  const { id } = useParams(); // Category ID
+  const { productid } = useParams();
+  console.log( "id at editproduct",productid); // Should log the value of productid if available
+
+
+
   const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [productCount, setProductCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const { brandName } = location.state || {}; // Safely extract brandName
+  const { brandName } = location.state || {};
 
-  const handleClick = (event) => {
+  const handleClick = (event, product) => {
     setAnchorEl(event.currentTarget);
+    setSelectedProduct(product);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    setSelectedProduct(null);
   };
 
   const handleOpen = (product) => {
@@ -60,112 +70,104 @@ function EditProduct() {
   };
 
   const goBack = () => {
-    navigate(-1);
-  };
-  const handleEditDetails = (productId) => {
-    navigate(`/edit-product-detail/${productId}`);
-    console.log(productId)
+    navigate(`/edit-product`, { state: { productCount } });
   };
 
+  const handleEditDetails = (productid) => {
+    let categoryid=id;
+    navigate(`/edit-product-detail/${categoryid}/${productid}`);
+    handleClose();
+  };
+
+  const ADD = () => {
+    navigate(`/edit-product-detail/${id}`);
+  };
+
+
+  const handleDeleteProduct = async (productid) => {
+    if (!selectedProduct) return;
   
-
-  const handleDeleteProduct = async (product) => {
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-      console.error('Invalid user ID');
+    if (!productid) {
+      console.error('Invalid product ID');
       return;
     }
-
+  
     try {
-      // Delete associated images from Firebase Storage
-      if (product.images && product.images.length > 0) {
-        const deletePromises = product.images.map(async (imagePath) => {
+      console.log('Deleting product:', selectedProduct);
+  
+      // Delete images from Firebase Storage if they exist
+      if (selectedProduct.imageUrls && selectedProduct.imageUrls.length > 0) {
+        const deletePromises = selectedProduct.imageUrls.map(async (imagePath) => {
           const storageReference = storageRef(storage, imagePath);
           await deleteObject(storageReference);
         });
-
+  
         await Promise.all(deletePromises);
       }
-
-      // Delete product data from Firebase Realtime Database
-      const dbPath = `users/${userId}/Brands/${id}/product/${product.id}`;
+  
+      // Remove the product from Firebase Database
+      const dbPath = `/Products/${selectedProduct.productid}`;
       await remove(dbRef(database, dbPath));
-
-      // Update local state to remove the deleted product
-      setProducts((prevProducts) => prevProducts.filter((p) => p.id !== product.id));
-      handleClose();
+  
+      // Update the state to remove the deleted product from the list
+      setProducts((prevProducts) => {
+        // Ensure we are comparing the correct field for the product ID
+        const updatedProducts = prevProducts.filter((p) => p.productid !== selectedProduct.productid);
+        setProductCount(updatedProducts.length);  // Update product count if necessary
+        return updatedProducts;  // Return the updated product list
+      });
+  
+      handleClose(); // Close any open dialogs or modals if needed
+  
     } catch (error) {
       console.error('Error deleting product:', error);
     }
   };
+  
+
+
 
   useEffect(() => {
-    const userId = localStorage.getItem('userId'); // Get the UID from localStorage
-    console.log('userId:', userId); // Debugging line
-
-    const fetchProducts = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        if (!userId) {
-          throw new Error('Invalid user ID');
-        }
-
-        const dbPath = `users/${userId}/Brands/${id}/product`;
-        console.log('Database path:', dbPath); // Debugging line
-
-        const dbReference = dbRef(database, dbPath);
-        const snapshot = await get(dbReference);
+        const brandsRef = dbRef(database, `/Products`);
+        const snapshot = await get(brandsRef);
 
         if (snapshot.exists()) {
-          const productsData = snapshot.val();
-          const productList = await Promise.all(
-            Object.keys(productsData).map(async (key) => {
-              const product = productsData[key];
+          const data = snapshot.val();
+          const dataArray = Object.values(data);
+          const brandsArray = dataArray
+            .filter(value => value?.categoryid === id)
+            .map(value => ({
+              id: value?.id,
+              ...value
+            }));
 
-              // Ensure images array is being used correctly
-              const imageUrls = await Promise.all(
-                (product.images || []).map(async (imagePath) => {
-                  try {
-                    const storageReference = storageRef(storage, imagePath);
-                    return await getDownloadURL(storageReference);
-                  } catch (imageError) {
-                    console.error('Error fetching image URL:', imageError);
-                    return ''; // Return an empty string if there's an error
-                  }
-                })
-              );
-
-              return {
-                ...product,
-                id: key,
-                imageUrls, // Store and use the correct URLs
-              };
-            })
-          );
-          setProducts(productList);
+          setProducts(brandsArray);
+          setProductCount(brandsArray.length);
+          brandsArray.reverse();
         } else {
-          setProducts([]); // Handle case where no products exist
+          console.log("No data found for category:", id);
         }
+        
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error("Error fetching product data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProducts();
+    fetchData();
   }, [id]);
-
-  if (loading) {
-    return <div>Loading...</div>; // Show a loading indicator
-  }
-
+console.log( "products are ",products)
   return (
     <div className="productContainer">
       <div className="Product-design">
         <div className="bck-head-btn">
           <IoChevronBack onClick={goBack} className="bck" style={{ paddingTop: '1.5rem', paddingRight: '2rem' }} />
           <h4 style={{ color: 'red', fontSize: '20px', fontWeight: '100' }}>{brandName}</h4>
-          <button onClick={() => handleEditDetails(id)} style={{ marginTop: '1.5rem' }} className='add-btn'>Add</button>
+          <button onClick={ADD} style={{ marginTop: '1.5rem' }} className='add-btn'>Add</button>
         </div>
 
         <div className="search-field">
@@ -174,19 +176,28 @@ function EditProduct() {
         <br /><br />
 
         <div style={{ width: '95%' }} className="Edit-product-Design">
-          {products.map((product) => (
-            <div style={{ marginTop: '20px' }} className="items" key={product.id}>
-              <img className='item-img' src={product.imageUrls[0]} alt={product.productName} onClick={() => handleOpen(product)} />
+          {products.map((product,index) => (
+            <div   key={product.productid || `product-${index}`}  style={{ marginTop: '20px' }} className="items">
+              <img className='item-img' style={{height:'auto'}} src={product?.imgurl} alt={product?.productname} onClick={() => handleOpen(product)} />
               <div className="item-data">
                 <h1 style={{ color: 'red', margin: 0, fontSize: 20 }}>
-                  {product.productName}
-                  <span style={{ color: 'grey', fontSize: '12px' }}> ( {product.size})</span>
+                  {product?.productname}
+                  <span style={{ color: 'grey', fontSize: '12px' }}> ( {product?.size})</span>
                 </h1>
                 <p style={{ lineHeight: 2, paddingTop: 0, paddingBottom: 0, margin: 0, color: "#545454", fontSize: "22px" }}>
-                  {product.price}
+                  {product?.price}
                 </p>
-                <p style={{ lineHeight: 1, paddingTop: 0, paddingBottom: 0, margin: 0 }}>{product.color}</p>
-                <p style={{ lineHeight: 1, paddingTop: 0, paddingBottom: 0, margin: 0, marginTop: 10 }}>{product.description}</p>
+                <p style={{ lineHeight: 1, paddingTop: 0, paddingBottom: 0, margin: 0 }}>{product?.color}</p>
+                <p style={{
+                  lineHeight: 1.5,
+                  padding: '0.5rem 0',
+                  margin: '0.5rem 0',
+                  fontSize: '1rem',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word'
+                }}>
+                  {product?.description}
+                </p>
               </div>
 
               <div>
@@ -196,7 +207,7 @@ function EditProduct() {
                   aria-controls={anchorEl ? 'long-menu' : undefined}
                   aria-expanded={anchorEl ? 'true' : undefined}
                   aria-haspopup="true"
-                  onClick={handleClick}
+                  onClick={(event) => handleClick(event, product)}
                 >
                   <MoreVertIcon />
                 </IconButton>
@@ -223,14 +234,11 @@ function EditProduct() {
                     },
                   }}
                 >
-                  <MenuItem style={{ fontSize: '15px' }} onClick={handleClose}>
-                    <div onClick={() => handleEditDetails(product.id)}>
-                      <DoneAllIcon style={{ marginRight: '8px' }} />
-                      Edit Product
-                    </div>
+                  <MenuItem style={{ fontSize: '15px' }} onClick={() => handleEditDetails(product.productid)}>
+                    <DoneAllIcon style={{ marginRight: '8px' }} />
+                    Edit Product
                   </MenuItem>
-                  <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div>
-                  <MenuItem style={{ fontSize: '15px' }} onClick={() => handleDeleteProduct(product)}>
+                  <MenuItem style={{ fontSize: '15px' }} onClick={()=>handleDeleteProduct(product.productid)}>
                     <DeleteIcon style={{ marginRight: '8px' }} />
                     Delete Product
                   </MenuItem>
@@ -239,27 +247,52 @@ function EditProduct() {
             </div>
           ))}
         </div>
+      </div>
 
+      {selectedProduct && (
         <Modal
           open={open}
           onClose={handleClosee}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
         >
           <Box sx={style}>
-            {/* Render modal content based on the selected product */}
             {selectedProduct && (
               <>
-                <h3>{selectedProduct.productName}</h3>
-                <p>Size: {selectedProduct.size}</p>
-                <p>Color: {selectedProduct.color}</p>
-                <p>Description: {selectedProduct.description}</p>
-                {/* Additional details as needed */}
+                <div style={{
+                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                }}>
+                  <img
+                    src={selectedProduct.imgurl}
+                    alt={selectedProduct.productname}
+                    style={{ width: '100%', height: '230px' }}
+                  />
+                </div>
+                <div style={{marginLeft:'10px'}}>
+                <h2 id="modal-title" style={{ fontSize: '1.5rem', marginTop: '1rem',color:"red" }}>
+                  {selectedProduct.productname} <span style={{color:'grey',fontSize:'10px'}}> ({selectedProduct.size})</span>
+                </h2>
+               
+                <p id="modal-description" style={{ fontSize: '1rem',  }}>
+              {selectedProduct.categoryname}
+                </p>
+                <p id="modal-description" style={{ fontSize: '2rem',fontWeight:600 , margin:"2px" }}>
+              {selectedProduct.price}
+                </p>
+                
+             
+                <p id="modal-description" style={{ fontSize: '1rem',  margin:"5px" }}>
+                {selectedProduct.description}
+                </p>
+                </div>
+              
               </>
             )}
           </Box>
         </Modal>
-      </div>
+      )}
     </div>
   );
 }

@@ -25,9 +25,11 @@ import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly
 import { database } from '../firebase.jsx'; // Import the initialized database
 import CircularProgress from '@mui/material/CircularProgress'; // Import the loader component
 
+
 function Profile() {
   const navigate = useNavigate();
 
+  
   // Array of link objects to display
   const links = [
     { id: 1, imageUrl: whatsapp, linkName: "Call", place: "Enter phone number", instruction: "Enter your Phone Number" },
@@ -39,6 +41,7 @@ function Profile() {
     { id: 7, imageUrl: snap, linkName: "Snapchat", place: "Enter Username", instruction: "Enter your Username" },
     { id: 8, imageUrl: add, linkName: "", place: "", instruction: "Add new Links" },
   ];
+
   const [loading, setLoading] = useState(true); // State for loading
   const [setting, setSetting] = useState(false); // State to manage Slide component visibility
   const [linkdata, setLinkdata] = useState(null); // State to store currently selected link data
@@ -59,6 +62,7 @@ function Profile() {
     const fetchData = async () => {
       try {
         const userId = localStorage.getItem('userId'); // Get userId from localStorage
+        
         if (!userId) {
           console.error("No userId found in localStorage");
           setLoading(false); // End loading state if no userId is found
@@ -66,7 +70,7 @@ function Profile() {
         }
 
         // Fetch data for the specific userId
-        const userRef = ref(database, `userProfile/${userId}`);
+        const userRef = ref(database, `User/${userId}`);
         const snapshot = await get(userRef);
 
         if (snapshot.exists()) {
