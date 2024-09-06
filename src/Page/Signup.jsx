@@ -14,10 +14,13 @@ import {database as db} from "../firebase.jsx"
 
 import {app} from "../firebase.jsx"
 import { useState,useEffect } from "react";
-import { Navigate } from "react-router-dom";
+
+import { useTranslation } from 'react-i18next';
 
 function Signup() {
   const navigate = useNavigate(); // Use the hook here
+
+  const{t}=useTranslation()
 
   const auth=getAuth(app)
 
@@ -30,6 +33,7 @@ function Signup() {
       const user=credential.user
 
       localStorage.setItem("userId",user?.uid)
+      localStorage.setItem("parentId",user?.uid)
 
       navigate("/home")
     } catch (error) {
@@ -68,14 +72,16 @@ function Signup() {
         {/* logo */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
          
-          <div style={{ color: "red", fontSize: "15px" }}>Let's get Connected</div>
-          <div style={{ color: "red", fontSize: "30px" }}>Welcome Back</div>
+          <div style={{ color: "red", fontSize: "15px" }}>
+            {t("Let's get Connected")}
+            </div>
+          <div style={{ color: "red", fontSize: "30px" }}>{t("Welcome Back")}</div>
         </div>
 
         {/* para */}
         <div style={{ display: "flex", justifyContent: "center", padding: "0 15px",width:"90%" }}>
           <p style={{ textAlign: "center", color: "#C3C7BF" }}>
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
+           {t ("Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet")}.
           </p>
         </div>
 
@@ -132,7 +138,7 @@ function Signup() {
           <div style={{ display: "flex", justifyContent: "flex-end", width: "90%" }}>
             <Link to="/forget" style={{ textDecoration: 'none' }}>
               <span style={forgetPasswordStyle}>
-                Forget Password
+                {t("Forget Password")}
               </span>
             </Link>
           </div>
@@ -145,12 +151,12 @@ function Signup() {
           
 
           <div style={{ textAlign: 'center', color: "#C3C1C1", marginTop: "10px" }}>
-            Don't have an account?
+           {t("Don't have an account?")}
             <Link to="/create" style={{ color: "#EE0000", fontWeight: "bold", marginLeft: "3px" }}>Sign up</Link>
           </div>
 
           <div style={{ textAlign: 'center', marginTop: "10px",color:"#BCBCBC" }}>
-            Continue via Social Networks
+           {t("Continue via Social Networks")}
           </div>
 
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "10px",width:"100%" }}>

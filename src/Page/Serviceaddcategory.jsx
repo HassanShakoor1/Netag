@@ -12,12 +12,13 @@ import { ref as sRef, push, set } from "firebase/database";
 import { ref , uploadBytes, getDownloadURL } from "firebase/storage";
 import redcross from "../images/redcross.svg"
 import { v4 as uuidv4 } from "uuid";
-
+import { useTranslation } from 'react-i18next';
 
 
 function Serviceaddcategory() {
     const navigate = useNavigate()
 
+    const{t}=useTranslation()
     const [image, setImage] = useState(null);
    
 
@@ -80,22 +81,25 @@ function Serviceaddcategory() {
             // get url of image 
             const url=await getDownloadURL(snapshot.ref)
 
-            const categorypath=sRef(db,`AddCategory`)
+            const categorypath=sRef(db,`ServiceCategory`)
 
+            
+
+            const newcategories=push(categorypath)
+            const newcategories_id=newcategories.key
             const categorydata={
-                name1:name1,
+                categoryid:newcategories_id,
+                name:name1,
                 description:description,
-                image:url,
-                userId:localStorage.getItem("userId")
+                imageurl:url,
+                uid:localStorage.getItem("userId"),
             }
-
-            const newcategories=push(categorypath,categorydata).key
-
             console.log(newcategories)
-            // await set(newcategories,categorydata)
+            
+            await set(newcategories,categorydata)
 
-            localStorage.setItem("imageurl",newcategories.key)
-
+            // localStorage.setItem("imageurl",newcategories.key)
+            alert('Data added successfully');
 
 
             
@@ -137,18 +141,18 @@ function Serviceaddcategory() {
                                 <img style={{ cursor: "pointer" }} onClick={handlegoBack} src={vector} alt="" />
                             </div>
                             <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "500" }}>
-                                Add Category
+                               {t("Add Category")}
                             </div>
                             <div></div>
                         </div>
                         {/* service  */}
                         <div style={{ marginLeft: "18px", color: "#EE0000", fontSize: "16px", fontWeight: "500", marginTop: "3rem" }}>
-                            Service
+                            {t("Service")}
                         </div>
 
                         {/* input  */}
                         <div style={{ marginTop: "2rem" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>Name</div>
+                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>{t("Name")}</div>
                             <div style={{ width: "100%" }}>
                                 <input type="text"
                                     placeholder="Mental Health Service"
@@ -160,7 +164,7 @@ function Serviceaddcategory() {
                         {/* description */}
                         <div style={{ marginTop: "5px" }}>
                             <div style={{ marginLeft: "18px", fontWeight: "500" }}>
-                                Description
+                                {t("Description")}
                             </div>
                             <div>
                                 <textarea
@@ -281,7 +285,7 @@ function Serviceaddcategory() {
                             </div>
                             {/* button  */}
                             <div style={{ marginTop: "30px" }}>
-                                <button onClick={createnew} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white" }}>Create</button>
+                                <button onClick={createnew} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white" }}>{t("Create")}</button>
                             </div>
                         </div>
 

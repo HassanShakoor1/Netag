@@ -8,6 +8,8 @@ import { ref, get, update ,push} from "firebase/database";
 import { database } from '../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 
+import { useTranslation } from 'react-i18next';
+
 function Addcatagory() {
   const navigate = useNavigate();
   const { id } = useParams(); // Get the ID from the URL parameters

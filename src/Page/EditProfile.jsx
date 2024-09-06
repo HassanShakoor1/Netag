@@ -6,9 +6,9 @@ import editcontact from '../images/editcontact.png';
 import './Edit.css';
 import '../App.css';
 import nav from '../images/nav-img.png';
-import { TextField } from '@mui/material';
+import { TextField, useForkRef } from '@mui/material';
 import { styled } from '@mui/system';
-import { ref, set,push } from "firebase/database";
+import { ref, set,push, onValue } from "firebase/database";
 import { database } from '../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useEffect } from 'react';
@@ -78,19 +78,22 @@ function EditProfile() {
 
   const uploadImage = async (file) => {
     const storage = getStorage();
-    const storageReference = storageRef(storage, `images/${Date.now()}_${file.name}`);
+    const storageReference = storageRef(storage, `${file.name}/${Date.now()}`);
     await uploadBytes(storageReference, file);
     return getDownloadURL(storageReference);
   };
 
+
+  const userId = localStorage.getItem('userId');
+  console.log(userId)
   // Saveing data to firebase 
   const handleSave = async () => {
     try {
-      const userId = localStorage.getItem('userId');
+      
   
       if (!userId) {
         // If no userId is in localStorage, create a new record
-        const userRef = ref(database, 'usersdata');
+        const userRef = ref(database, `Users/${userId}`);
         const newUserRef = push(userRef);
         
         const updatedData = {
@@ -122,6 +125,26 @@ function EditProfile() {
       console.error("Error saving data:", error);
     }
   };
+
+  // getting data from firebase 
+
+  const getData=async()=>{
+    const data=uRef(db,`Users/${userId}`)
+    onValue(data,async (snapShot)=>{
+      let fetchedData= await snapShot.val()
+      console.log(fetchedData)
+    
+
+
+    })
+  }
+
+  // update data to firebase 
+
+  const updateData=async()=>{
+     
+    
+  }
   
 
   const handleBack = () => {
@@ -129,100 +152,59 @@ function EditProfile() {
   };
 
   useEffect(()=>{
-    const signin=async()=>{
+    getData()
+  },[])
+
+  // useEffect(()=>{
+  //   const signin=async()=>{
          
-      try {
-        // const credential=await signInWithEmailAndPassword(auth,email,password)
-        // const user=credential.user
+  //     try {
+  //       // const credential=await signInWithEmailAndPassword(auth,email,password)
+  //       // const user=credential.user
   
-        // localStorage.setItem("userId",user?.uid)
+  //       // localStorage.setItem("userId",user?.uid)
   
-        const dbref=ref(db,`users/${localStorage.getItem("userId")}`)
+  //       const dbref=ref(db,`users/${localStorage.getItem("userId")}`)
        
         
       
-         const snap=await get(dbref)
-         const data= await snap.val()
-         console.log(data)
-         const data2=data.isCompany 
-         setnavigatedata(data2)
+  //        const snap=await get(dbref)
+  //        const data= await snap.val()
+  //        console.log(data)
+  //        const data2=data.isCompany 
+  //        setnavigatedata(data2)
         
      
-        // setcompany(data.isCompany)
-        // localStorage.setItem("iscompany",data?.isCompany)
+  //       // setcompany(data.isCompany)
+  //       // localStorage.setItem("iscompany",data?.isCompany)
       
      
     
   
-        // navigate("/home")
+  //       // navigate("/home")
         
-        // const userid=localStorage.getItem("iscompany")
+  //       // const userid=localStorage.getItem("iscompany")
         
-    // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
-    if (navigatedata === false) {
-      navigate('/home')
-    } 
+  //   // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
+  //   if (navigatedata === false) {
+  //     navigate('/home')
+  //   } 
   
-  // else {
-  //   navigate('/home')
-  // }
+  // // else {
+  // //   navigate('/home')
+  // // }
         
-    // console.log(userid)
+  //   // console.log(userid)
  
-      } catch (error) {
-        console.log(error)
-      }
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
     
-    }
-    signin()
-  },[navigatedata])
-//   const signin=async()=>{
-         
-//     try {
-//       // const credential=await signInWithEmailAndPassword(auth,email,password)
-//       // const user=credential.user
+  //   }
+  //   signin()
+  // },[navigatedata])
 
-//       // localStorage.setItem("userId",user?.uid)
-
-//       const dbref=ref(db,`users/${localStorage.getItem("userId")}`)
-     
-      
-    
-//        const snap=await get(dbref)
-//        const data= await snap.val()
-//        console.log(data)
-//        const data2=data.isCompany 
-      
-   
-//       // setcompany(data.isCompany)
-//       // localStorage.setItem("iscompany",data?.isCompany)
-    
-   
-  
-
-//       // navigate("/home")
-      
-//       // const userid=localStorage.getItem("iscompany")
-      
-//   // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
-//   if (!data2) {
-//     navigate('/home')
-//   } 
-
-// // else {
-// //   navigate('/home')
-// // }
-      
-//   // console.log(userid)
- 
-
-
-
-//     } catch (error) {
-//       console.log(error)
-//     }
-  
-//   }
+console.log(formData)
 
   return (
     <div className="container">

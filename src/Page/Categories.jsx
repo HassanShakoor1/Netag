@@ -14,6 +14,8 @@ import { useEffect, useState } from "react"
 import { database as db } from "../firebase.jsx"
 import { get, ref, remove } from "firebase/database"
 
+import { useTranslation } from 'react-i18next';
+
 // const options = [
 //     { text: 'Edit Category', color: '#7C7C7C', pathkey: useNavigate('/home/services/edit') }, // Change color as needed
 //     { text: 'Delete Category', color: '#EE0000' } // Change color as needed
@@ -28,13 +30,18 @@ function Categories() {
     const [currentItemId, setCurrentItemId] = useState(null);
     
     const userId = localStorage.getItem('userId');
+
+
+    const{t}=useTranslation()
+
+    // getting data from firebase 
     function getData() {
-        const dbref = ref(db, `AddCategory`)
+        const dbref = ref(db, `ServiceCategory`)
 
         const initialdata = async () => {
             const snap = await get(dbref)
             const data = await snap.val()
-            console.log(data)
+            console.log("data",data)
             try {
             //     const arr = Object.keys(data).map((x) => ({
             //         id: x,
@@ -46,13 +53,13 @@ function Categories() {
 
             
             const filteredData = Object.keys(data)
-                .filter(key => data[key].userId === userId) // Filter based on userId
+                .filter(key => data[key].uid=== userId) // Filter based on userId
                 .map(key => ({
                     id: key,
                     ...data[key]
                 }));
 
-            console.log(filteredData);
+            console.log("filtered data",filteredData);
 
             // Update the state or handle the filtered data
             setFirebasedata(filteredData);
@@ -104,7 +111,7 @@ function Categories() {
         navigate(`/home/services/catagory/${id}`);
     }
     const goback = () => {
-        navigate(-1);
+        navigate("/home");
     }
 
 
@@ -126,9 +133,35 @@ function Categories() {
 
     const handleDelete = async (id) => {
         // Reference to the item in Firebase
-        const itemRef = ref(db, `AddCategories/${id}`);
+        console.log(id)
+        try{
+        const itemRef = ref(db, `ServiceCategory/${id}`);
+        const categories=ref(db,`Services`)
+        
+        console.log(itemRef)
+         const categoriesSnapshot=await get(categories)
+        //  it will return objects of products 
+         const categoriesData=categoriesSnapshot.val()
+         console.log("categoriesData",categoriesData)
+        //   it will create array of products 
+         const categoriesData_arr=Object.values(categoriesData)
+         console.log("categoriesData_arr",categoriesData_arr)
+          
+      const categoriesToDelete=  categoriesData_arr.filter((x)=>x.categoryid===id)
+      console.log("categoriesToDelete",categoriesToDelete)
+      
+    //   it will delete very product which has Service_id init  
+      for(const category_index of categoriesToDelete)
+      {
+        const deleting=ref(db,`servicesProducts/${category_index.productId}`)
+       
+        console.log("category_index",category_index.productId)
+        await remove(deleting)
+      }
+      
 
-        try {
+
+       
             // Delete the item from Firebase
             await remove(itemRef);
 
@@ -139,6 +172,8 @@ function Categories() {
             console.error("Error deleting item:", error);
         }
     };
+
+    
 
 
 
@@ -175,11 +210,11 @@ function Categories() {
                                 <img onClick={goback} style={{ cursor: 'pointer' }} src={vector} alt="" />
                             </div>
                             <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "400", marginLeft: "2rem" }}>
-                                Services Categories
+                               {t( "Services Categories")}
                             </div>
                             <div style={{ backgroundColor: "none" }}>
                                 <Link to={"/home/services/serviceaddcategory"}>
-                                    <button style={{ border: "2px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", color: '#EE0000', backgroundColor: "white" }}>Add</button>
+                                    <button style={{ border: "2px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", color: '#EE0000', backgroundColor: "white" }}>{t("Add")}</button>
                                 </Link>
                             </div>
 
@@ -201,22 +236,22 @@ function Categories() {
 
 
                         {
-                            Firebasedata.map((x, id) => {
+                            Firebasedata.map((x, index) => {
                                 return (
-                                    <div key={id}>
+                                    <div key={index}>
                                         <div className="cardwidth">
                                             <div className="cardcenter">
                                                 <div className="cardcenter-width">
                                                     <div style={{ width: '100%' }}>
                                                         {/* image  */}
 
-                                                        <img style={{ maxHeight: "200px", width: "100%", marginTop: "7px", objectFit: "contain" }} src={x.image} alt="" />
+                                                        <img style={{ maxHeight: "200px", width: "100%", marginTop: "7px", objectFit: "contain" }} src={x.imageurl} alt="" />
                                                     </div>
                                                     {/* title  */}
                                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "97%" }}>
                                                         <div style={{ color: "#EE0000", fontWeight: "500", width: "100%", marginLeft: "5px", display: "flex", flexDirection: "column", justifyContent: "start", }}>
                                                             <div style={{ width: "100%", display: "flex", alignItems: "center", marginTop: "5px" }}>
-                                                                <div style={{ fontSize: "18px" }}>{x.name1}</div>
+                                                                <div style={{ fontSize: "18px" }}>{x.name}</div>
                                                                 <div style={{ color: "#959595", fontSize: "9px", marginLeft: "4px" }}></div>
                                                             </div>
                                                             {/* para  */}
@@ -264,7 +299,7 @@ function Categories() {
                                                                     }}
                                                                     onClick={() => handleMenuItemClick(`/home/services/serviceeditcategory/${x.id}`)}
                                                                 >
-                                                                    <p>Edit Profile</p>
+                                                                    <p>{t("Edit Profile")}</p>
                                                                 </MenuItem>
                                                                 <MenuItem
                                                                     style={{
@@ -272,9 +307,8 @@ function Categories() {
                                                                         borderBottom: '1px solid #ddd',
                                                                         fontSize: '12px'
                                                                     }}
-                                                                    onClick={() => handleDelete(`${x.id}`)}
-                                                                >
-                                                                    <p>Delete</p>
+                                                                    onClick={() => handleDelete(`${x.categoryid}`)} >
+                                                                    <p>{t("Delete")}</p>
                                                                 </MenuItem>
                                                                 {/* Additional MenuItems can be added here */}
                                                             </Menu>
@@ -285,7 +319,7 @@ function Categories() {
 
                                                     {/* button  */}
                                                     <div onClick={() => handlemanage(x.id)}>
-                                                        <button style={{ marginTop: "1rem", marginBottom: "10px", width: "100%", border: "2px solid #EE0000", borderRadius: "12px", backgroundColor: "#FFDEDE", height: "5vh", color: "#EE0000" }}>Explore </button>
+                                                        <button style={{ marginTop: "1rem", marginBottom: "10px", width: "100%", border: "2px solid #EE0000", borderRadius: "12px", backgroundColor: "#FFDEDE", height: "5vh", color: "#EE0000" }}>{t("Explore")} </button>
                                                     </div>
                                                 </div>
                                             </div>

@@ -3,110 +3,118 @@
 
 import "./serviceaddcategory.css"
 import vector from "../images/Vector.svg"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { database as db, storage } from "../firebase.jsx"
 import camera from "../images/camera.svg"
 
 import { useState } from "react"
 import { ref as sRef, push, set } from "firebase/database";
-import { ref , uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import redcross from "../images/redcross.svg"
 import { v4 as uuidv4 } from "uuid";
+import { useTranslation } from 'react-i18next'
 
 
+function ServiceaddcategoryAddnewProduct() {
 
-function ServiceaddcategoryAddnew() {
+    const { t } = useTranslation()
     const navigate = useNavigate()
 
+    const { id } = useParams()
+
     const [image, setImage] = useState(null);
-   
+
 
     // firebase states for fetching data 
     const [name1, setname1] = useState("")
     const [description, setdescription] = useState("")
 
-    const id = Date.now()
+    // const id = Date.now()
     // function to send data to firebase
-   
-    // const createnew = async () => {
-    //     if (!image || !name1 || !description) return; // Ensure all required fields are provided
-    
-    //     const imageRef = ref(storage, `categoryimages/${image.name}`);
-    
+
+    // const createnew=async()=>{
+
+    //     if(!name1 || !description || !image) return
+
+    //     const image_instorage=ref(storage,`${image.name}`)
+
     //     try {
-    //         // Upload the image to Firebase Storage
-    //         const snapshot = await uploadBytes(imageRef, image);
-    //         const imageUrl = await getDownloadURL(snapshot.ref);
-    
-    //         // Create a new reference for the category
-    //         const categoryRef = sRef(db, 'categories'); // Adjust this path based on your DB structure
-    
-    //         // Create a new category entry with a unique key
-    //         const newCategoryRef = push(categoryRef);
-    
-    //         // Define the data to be saved
-    //         const categoryData = {
-    //             name1: name1,
-    //             description: description,
-    //             imageUrl: imageUrl
-    //         };
-    
-    //         // Save the data to the new reference
-    //         await set(newCategoryRef, categoryData);
-    
-    //         // Optionally store the push key in localStorage for future reference
-    //         localStorage.setItem("work1", newCategoryRef.key);
-    
-    //         // Optionally reset the form fields
-    //         // setname1("");
-    //         // setdescription("");
-    //         // setImage(null); // If you want to clear the image
-    
+    //         // upload image to storage 
+    //         const snapshot=await uploadBytes(image_instorage,image)
+    //         // get url of image 
+    //         const url=await getDownloadURL(snapshot.ref)
+
+    //         const categorypath=sRef(db,`categories/${localStorage.getItem("userId")}/brands`)
+
+    //         const categorydata={
+    //             name1:name1,
+    //             description:description,
+    //             image:url
+    //         }
+
+    //         const newcategories=push(categorypath,categorydata).key
+
+    //         console.log(newcategories)
+    //         // await set(newcategories,categorydata)
+
+    //         localStorage.setItem("imageurl",newcategories.key)
+
+
+
+
     //     } catch (error) {
-    //         console.error("Error uploading image and saving data:", error.message);
+    //         console.log(error)
     //     }
     // }
 
+    const createnew = async () => {
 
-    const createnew=async()=>{
+        if (!image || !name1 || !description) return
 
-        if(!name1 || !description || !image) return
+        const image_instorage = ref(storage, `${image.name}`)
 
-        const image_instorage=ref(storage,`${image.name}`)
+        // upload image to storage 
+        const snapshot = await uploadBytes(image_instorage, image)
+        // get downloadurl of image
+        const url = await getDownloadURL(snapshot.ref)
 
-        try {
-            // upload image to storage 
-            const snapshot=await uploadBytes(image_instorage,image)
-            // get url of image 
-            const url=await getDownloadURL(snapshot.ref)
+        const productdata_base = sRef(db, "Services")
 
-            const categorypath=sRef(db,`categories/${localStorage.getItem("userId")}/brands`)
+        const newProductId = push(productdata_base)
+        const productId = newProductId.key
 
-            const categorydata={
-                name1:name1,
-                description:description,
-                image:url
-            }
-
-            const newcategories=push(categorypath,categorydata).key
-
-            console.log(newcategories)
-            // await set(newcategories,categorydata)
-
-            localStorage.setItem("imageurl",newcategories.key)
+        const productData = {
+            // productId: productId,
+            // name1: name1,
+            // description: description,
+            imageUrl: url,
+            // serviceId: id,
 
 
-
-            
-        } catch (error) {
-            console.log(error)
+            businesscontactno: "",
+            categoryid: id,
+            categoryname: "",
+            description: description,
+            email: "",
+            isavailable: "",
+            serviceid: productId,
+            servicename: name1,
+            serviceprice: "",
+            uid: "",
+            websiteurl: ""
         }
+        await set(newProductId, productData)
+        alert("Product created successfully")
+
     }
+
+
+
 
     const handleRemoveImage = () => {
         setImage(null);
-      };
+    };
 
     // Function to handle file selection
     const handleFileChange = (event) => {
@@ -119,7 +127,7 @@ function ServiceaddcategoryAddnew() {
     };
 
     const handlegoBack = () => {
-        navigate('/home/services');
+        navigate(`/home/services/catagory/${id}`);
     };
 
     return (
@@ -137,18 +145,18 @@ function ServiceaddcategoryAddnew() {
                                 <img style={{ cursor: "pointer" }} onClick={handlegoBack} src={vector} alt="" />
                             </div>
                             <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "500" }}>
-                                Add Category
+                                {t("Add Category Products")}
                             </div>
                             <div></div>
                         </div>
                         {/* service  */}
                         <div style={{ marginLeft: "18px", color: "#EE0000", fontSize: "16px", fontWeight: "500", marginTop: "3rem" }}>
-                            Service
+                            {t("Service")}
                         </div>
 
                         {/* input  */}
                         <div style={{ marginTop: "2rem" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>Name</div>
+                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>{t("Name")}</div>
                             <div style={{ width: "100%" }}>
                                 <input type="text"
                                     placeholder="Mental Health Service"
@@ -160,7 +168,7 @@ function ServiceaddcategoryAddnew() {
                         {/* description */}
                         <div style={{ marginTop: "5px" }}>
                             <div style={{ marginLeft: "18px", fontWeight: "500" }}>
-                                Description
+                                {t("Description")}
                             </div>
                             <div>
                                 <textarea
@@ -196,15 +204,15 @@ function ServiceaddcategoryAddnew() {
                             </div> */}
                             <div style={{ marginTop: '6px' }}>
                                 {image ? (
-                                    <div style={{ width: "100%", height: "25vh",position:"relative" }}>
-                                        <div onClick={handleRemoveImage} style={{position:"absolute",right:"1px"}}>
-                                            <img   src={redcross} alt="" />
+                                    <div style={{ width: "100%", height: "25vh", position: "relative" }}>
+                                        <div onClick={handleRemoveImage} style={{ position: "absolute", right: "1px" }}>
+                                            <img src={redcross} alt="" />
                                         </div>
                                         <div style={{ width: "100%", height: "25vh" }}>
-                                        <img src={URL.createObjectURL(image)} alt="Uploaded" style={{ width: "100%", height: "100%", objectFit: "fill", borderRadius: "12px" }} />
+                                            <img src={URL.createObjectURL(image)} alt="Uploaded" style={{ width: "100%", height: "100%", objectFit: "fill", borderRadius: "12px" }} />
+                                        </div>
                                     </div>
-                                    </div>
-                                    
+
                                 ) : (
                                     <div style={{ width: "100%", height: "25vh", position: "relative" }}>
                                         <div style={{ position: "absolute", right: "38%", top: "28%" }}>
@@ -281,7 +289,7 @@ function ServiceaddcategoryAddnew() {
                             </div>
                             {/* button  */}
                             <div style={{ marginTop: "30px" }}>
-                                <button onClick={createnew} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white" }}>Create</button>
+                                <button onClick={createnew} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white" }}>{t("Create")}</button>
                             </div>
                         </div>
 
@@ -294,4 +302,4 @@ function ServiceaddcategoryAddnew() {
         </div>
     )
 }
-export default ServiceaddcategoryAddnew
+export default ServiceaddcategoryAddnewProduct

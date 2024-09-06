@@ -27,13 +27,16 @@ import Profile1 from './Page/Profile1';
 import Profile from './Page/Profile';
 import Serviceaddcategory from "./Page/Serviceaddcategory"
 import Serviceeditcategory from "./Page/Editcategory"
+import Language from "../src/Page/Language"
 
 import {database as db} from "./firebase.jsx"
 import {get,ref} from "firebase/database"
 
-import ManagecategoriesAddnew from "./Page/ManagecategoriesAddnew"
+import ManagecategoriesAddnewProduct from "./Page/ManagecategoriesAddnew"
 
 import { Navigate } from "react-router-dom";
+import ManageCategoriesEdit from './Page/ManageCategoriesEdit';
+import CreateNewProfile from './Page/CreateNewProfile';
 
 
 function App() {
@@ -104,6 +107,9 @@ const Protectedroute1=()=>{
           <Route path="/home/services/catagory/:id" element={<Managecatagories/>} />
           
           <Route path="/home/setting" element={<Setting/>} />
+
+          <Route path='/home/setting/language' element={<Language/>}/>
+
           <Route path="/home/setting/myprofile" element={<Myprofile/>} />
           <Route path="/home/setting/lead" element={<Profile1/>} />
           <Route path="/home/setting/subscript" element={<Subscription/>} />
@@ -123,7 +129,12 @@ const Protectedroute1=()=>{
           <Route path="/setting-page" element={<Scanner />} /> Add this route
           <Route path='/home/services/serviceaddcategory' element={<Serviceaddcategory/>}></Route>
           <Route path='/home/services/serviceeditcategory/:id' element={<Serviceeditcategory/>}></Route>
-          <Route  path='/home/services/catagory/:id/serviceaddcategory' element={<ManagecategoriesAddnew/>}></Route>        
+          <Route  path='/home/services/catagory-products/:id/serviceaddcategory-product' element={<ManagecategoriesAddnewProduct/>}></Route>        
+          <Route path='/home/services/catagory/ManageCategories-products-Edit/:id' element={<ManageCategoriesEdit/>}></Route>
+          
+          {/* create new profile  */}
+          <Route path='/home/create-new-profile' element={<CreateNewProfile/>}></Route>
+
         </Routes>
    
       </div>
