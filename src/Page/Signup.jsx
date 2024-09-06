@@ -73,8 +73,8 @@ function Signup() {
             </div>
             <div style={{ color: "red", fontSize: "30px" }}>{t("Welcome Back")}</div>
             {/* ======= */}
-            <div style={{ color: "red", fontSize: "15px" }}>Let's get Connected</div>
-            <div style={{ color: "red", fontSize: "30px" }}>Welcome Back</div>
+            {/* <div style={{ color: "red", fontSize: "15px" }}>Let's get Connected</div>
+            <div style={{ color: "red", fontSize: "30px" }}>Welcome Back</div> */}
             {/* >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503 */}
           </div>
           {/* para */}
