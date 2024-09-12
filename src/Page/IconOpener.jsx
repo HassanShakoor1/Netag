@@ -265,7 +265,7 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
       maxWidth:"380px",
       height: 'auto',
       padding: '20px',
-      borderRadius: '10px',
+      borderRadius: '11px',
       border: '1px solid #ccc',
     },
   }}
