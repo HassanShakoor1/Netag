@@ -12,7 +12,6 @@ import {get,ref} from "firebase/database"
 import {database as db} from "../firebase.jsx"
 import {app} from "../firebase.jsx"
 import { useState,useEffect } from "react";
-<<<<<<< HEAD
 
 import { useTranslation } from 'react-i18next';
 
@@ -21,11 +20,8 @@ function Signup() {
 
   const{t}=useTranslation()
 
-=======
-import { Navigate } from "react-router-dom";
-function Signup() {
-  const navigate = useNavigate(); // Use the hook here
->>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
+
+
   const auth=getAuth(app)
   const[email,setemail]=useState("")
   const[password,setpassword]=useState("")
@@ -34,11 +30,10 @@ function Signup() {
       const credential=await signInWithEmailAndPassword(auth,email,password)
       const user=credential.user
       localStorage.setItem("userId",user?.uid)
-<<<<<<< HEAD
+
       localStorage.setItem("parentId",user?.uid)
 
-=======
->>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
+
       navigate("/home")
     } catch (error) {
       console.log(error)
@@ -66,16 +61,15 @@ function Signup() {
         </div>
         {/* logo */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-<<<<<<< HEAD
-         
+
           <div style={{ color: "red", fontSize: "15px" }}>
             {t("Let's get Connected")}
             </div>
           <div style={{ color: "red", fontSize: "30px" }}>{t("Welcome Back")}</div>
-=======
+
           <div style={{ color: "red", fontSize: "15px" }}>Let's get Connected</div>
           <div style={{ color: "red", fontSize: "30px" }}>Welcome Back</div>
->>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
+
         </div>
         {/* para */}
         <div style={{ display: "flex", justifyContent: "center", padding: "0 15px",width:"90%" }}>
@@ -199,4 +193,5 @@ const socialIconStyle = {
   alignItems: "center",
   margin: "0 5px",
 };
+
 export default Signup;

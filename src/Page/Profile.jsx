@@ -25,15 +25,9 @@ import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly
 import { database } from '../firebase.jsx'; // Import the initialized database
 import CircularProgress from '@mui/material/CircularProgress'; // Import the loader component
 
-<<<<<<< HEAD
-import { useTranslation } from 'react-i18next';
-=======
->>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
 function Profile() {
   const navigate = useNavigate();
-  
-  const{t}=useTranslation()
 
   
   // Array of link objects to display
@@ -53,45 +47,13 @@ function Profile() {
   const [linkdata, setLinkdata] = useState(null); // State to store currently selected link data
   const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
   const [profileData, setProfileData] = useState({
-<<<<<<< HEAD
-    username: '',
-    nickname: '',
-    status: '',
-    company: '',
-    designation: '',
-    ladyImgUrl: '',
-    mainImgUrl: ''
-  })
-  // Fetch profile data from localStorage\
-  const [loading, setLoading] = useState(true); // State for loading
-
-
-  // Get the UID from localStorage
-  const userId = localStorage.getItem('userId'); 
-useEffect(() => {
-  // getting user data from firebase to home page 
-  const fetchData = async () => {
-    
-    if (!userId) {
-      console.log('No UID found in localStorage');
-      return;
-    }
-
-    const dbRef = ref(database, `Users/${userId}`); // Fetch user-specific data
-    try {
-      const snapshot = await get(dbRef);
-      if (snapshot.exists()) {
-        setProfileData(snapshot.val()); // Set fetched data
-      } else {
-        console.log('No data available');
-=======
-    username: '@username',
-    nickname: 'Burden',
-    status: 'Married...',
-    company: 'your company',
-    designation: 'copmany',
-    profile: '',
-    cover: ''
+    // username: '@username',
+    // nickname: 'Burden',
+    // materialStatus: 'Married...',
+    // companyname: 'your company',
+    // designation: 'copmany',
+    // profilePicture: '',
+    // backgroundPicture: ''
   })
   // Fetch profile data from localStorage\
   const userId = localStorage.getItem('userId'); // Get the UID from localStorage
@@ -107,20 +69,23 @@ useEffect(() => {
           return;
         }
 
+        console.log("Fetching data for userId:", userId); // Log the userId
+
         // Fetch data for the specific userId
+   
         const userRef = ref(database, `User/${userId}`);
         const snapshot = await get(userRef);
 
         if (snapshot.exists()) {
+          console.log("Data fetched successfully:", snapshot.val()); // Log the fetched data
           setProfileData(snapshot.val()); // Set the profile data
         } else {
-          console.log("No data available");
+          console.log("No data available for this userId:", userId);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error); // Log any errors encountered
       } finally {
         setLoading(false); // End loading state after data fetch (success or failure)
->>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
       }
     };
 
@@ -130,11 +95,6 @@ useEffect(() => {
 
 
 
-<<<<<<< HEAD
-  fetchData();
-}, []);
-  console.log(profileData)
-=======
   
   
   
@@ -142,7 +102,6 @@ useEffect(() => {
 
 
 
->>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 const [imageLoading, setImageLoading] = useState(true);
 
   const handleImageLoad = () => {
@@ -212,7 +171,7 @@ const [imageLoading, setImageLoading] = useState(true);
           <img
   className='lady'
  
-  src={profileData.profile || circle}  // Default profile image
+  src={profileData.profilePicture || circle}  // Default profile image
   alt="lady"
  
 />
@@ -223,7 +182,7 @@ const [imageLoading, setImageLoading] = useState(true);
   <div style={{  width: '100%' }}>
             <img
               className='main-img'
-              src={profileData.cover || main}  // Default cover image
+              src={profileData.backgroundPicture || main}  // Default cover image
               alt="main-img"
               onLoad={handleImageLoad}
               style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
@@ -251,18 +210,18 @@ const [imageLoading, setImageLoading] = useState(true);
             </div>
             {/* Profile details */}
             <h2 style={{ color: 'red', margin: '5px' }}>
-              {profileData.name} <br />
+              {profileData.username} <br />
               <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> ({profileData.nickname})</span>
             </h2>
             <div className="data" style={{ lineHeight: '1' }}>
-              <h2 className='head' style={{ marginBottom: '0px' }}>{t("Username")}: <span style={{ fontWeight: '100', }} className='para'>{profileData.name}</span></h2>
+              <h2 className='head' style={{ marginBottom: '0px' }}>Username: <span style={{ fontWeight: '100', }} className='para'>{profileData.username}</span></h2>
             </div>
             <div className="data" style={{ lineHeight: '1' }}>
-              <h2 className='head'>{t("Designation")}:<span style={{ fontWeight: '100', margin: '53px' }} className='para'>{profileData.designation}</span></h2>
+              <h2 className='head'>Designation:<span style={{ fontWeight: '100', margin: '53px' }} className='para'>{profileData.designation}</span></h2>
             </div>
             <div className="data" style={{ lineHeight: '0' }}>
-              <h2 className='head'>{t("Marital Status")}:
-                <br /> <span style={{ marginLeft: '145px', fontWeight: '100' }} className='para'>{profileData.status}</span></h2>
+              <h2 className='head'>Marital Status:
+                <br /> <span style={{ marginLeft: '145px', fontWeight: '100' }} className='para'>{profileData.materialStatus}</span></h2>
             </div>
             <div className="data"
               style={{
@@ -285,7 +244,7 @@ const [imageLoading, setImageLoading] = useState(true);
                   textOverflow: 'ellipsis',
                 }}
               >
-               {t("Company")}:
+                Company:
                 <span
                   className="para"
                   style={{
@@ -293,7 +252,7 @@ const [imageLoading, setImageLoading] = useState(true);
                     paddingLeft: '8px',
                   }}
                 >
-                  {profileData.company}
+                  {profileData.companyname}
                 </span>
               </h2>
             </div>

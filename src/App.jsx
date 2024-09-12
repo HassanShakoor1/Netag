@@ -29,26 +29,10 @@ import ManageCategories from './Page/Managecategories';
 import Setting from './Page/Setting38';
 import MyProfile from './Page/Myprofile';
 import Profile1 from './Page/Profile1';
-<<<<<<< HEAD
-import Profile from './Page/Profile';
-import Serviceaddcategory from "./Page/Serviceaddcategory"
-import Serviceeditcategory from "./Page/Editcategory"
-import Language from "../src/Page/Language"
-
-import {database as db} from "./firebase.jsx"
-import {get,ref} from "firebase/database"
-
-import ManagecategoriesAddnewProduct from "./Page/ManagecategoriesAddnew"
-
-import { Navigate } from "react-router-dom";
-import ManageCategoriesEdit from './Page/ManageCategoriesEdit';
-import CreateNewProfile from './Page/CreateNewProfile';
-=======
 import ServiceAddCategory from "./Page/Serviceaddcategory";
 import ServiceEditCategory from "./Page/Editcategory";
 import ManageCategoriesAddNew from "./Page/ManagecategoriesAddnew";
 
->>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
 // Correctly handle Protected Routes
 function ProtectedRoute({ element }) {
@@ -74,6 +58,7 @@ function App() {
           <Route path="/forget" element={<ForgetPassword />} />
           <Route path="/home" element={<ProtectedRoute element={<Profile />} />} />
           <Route path="/home/notifi" element={<Notification />} />
+          <Route path="/home/editimage" element={<EditContact />} />
           <Route path="/home/order" element={<ManageOrder />} />
           <Route path="/home/order/singleorder" element={<ManageScreen2 />} />
           <Route path="/home/order/order3" element={<ManageOrder3 />} />
@@ -94,42 +79,6 @@ function App() {
           <Route path="/edit-product-detail" element={<EditProductDetail />} />
           <Route path="/edit-product-detail/:id/:productid?" element={<EditProductDetail />} />
 
-<<<<<<< HEAD
-          <Route path="/home/services/catagory/:id" element={<Managecatagories/>} />
-          
-          <Route path="/home/setting" element={<Setting/>} />
-
-          <Route path='/home/setting/language' element={<Language/>}/>
-
-          <Route path="/home/setting/myprofile" element={<Myprofile/>} />
-          <Route path="/home/setting/lead" element={<Profile1/>} />
-          <Route path="/home/setting/subscript" element={<Subscription/>} />
-          {/* <Protectedroute1/>  */}
-          <Route path="/edit-profile" element={<>  <EditProfile />  </>} />
-          <Route path="/edit-contact" element={<EditContact />} /> Add this route
-          <Route path="/edit-product" element={<ProductCatagory />} /> Add this route
-         
-          <Route path="/product-catagory" element={<Addcatagory />} /> Add this route
-          <Route path="/product-catagory/:id" element={<Addcatagory />} /> Add this route
-          <Route path="/edit-product-catagory" element={<EditProduct />} /> Add this route
-        
-          <Route path="/edit-product-detail" element={<Editproductdetail />} /> Add this route
-          <Route path="/gallery" element={<Gallery />} /> Add this route
-          <Route path="/active-card" element={<ActiveCard />} /> Add this route
-          <Route path="/Analytics-page" element={<Analytics />} /> Add this route
-          <Route path="/setting-page" element={<Scanner />} /> Add this route
-          <Route path='/home/services/serviceaddcategory' element={<Serviceaddcategory/>}></Route>
-          <Route path='/home/services/serviceeditcategory/:id' element={<Serviceeditcategory/>}></Route>
-          <Route  path='/home/services/catagory-products/:id/serviceaddcategory-product' element={<ManagecategoriesAddnewProduct/>}></Route>        
-          <Route path='/home/services/catagory/ManageCategories-products-Edit/:id' element={<ManageCategoriesEdit/>}></Route>
-          
-          {/* create new profile  */}
-          <Route path='/home/create-new-profile' element={<CreateNewProfile/>}></Route>
-
-=======
-         
-
-
          
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/active-card" element={<ActiveCard />} />
@@ -139,7 +88,6 @@ function App() {
           <Route path='/home/services/serviceeditcategory/:id' element={<ServiceEditCategory />} />
           <Route path='/home/services/catagory/:id/serviceaddcategory' element={<ManageCategoriesAddNew />} />
           <Route path="*" element={<Navigate to="/" />} />
->>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
         </Routes>
       </CSSTransition>
     </TransitionGroup>
