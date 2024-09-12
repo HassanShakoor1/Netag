@@ -5,10 +5,11 @@ import '../App.css';
 import './Slide.css';
 import { AiFillEdit } from "react-icons/ai";
 import Photos from '../Components/Photos';
-import Contact from '../Components/Contact';
-import Slide from '@mui/material/Slide';
-import IconOpener from './IconOpener';
 import Footer from '../Components/Footer';
+import circle from '../images/circle.png';
+import main from '../images/main.jpeg';
+import nav from '../images/circle.png';
+import Card from '../Components/Card';
 import whatsapp from '../images/whatsapp.png';
 import call from '../images/call.png';
 import fb from '../images/fb.png';
@@ -17,160 +18,77 @@ import website from '../images/website.png';
 import snap from '../images/snap.png';
 import add from '../images/add.png';
 import instas from '../images/instas.png';
-import circle from '../images/circle.png';
-import main from '../images/main.jpeg';
-import nav from '../images/nav.png';
-import Card from '../Components/Card';
 import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly from 'firebase/database'
 import { database } from '../firebase.jsx'; // Import the initialized database
 import CircularProgress from '@mui/material/CircularProgress'; // Import the loader component
 import { Link } from 'react-router-dom'
+import Slide from '@mui/material/Slide';
+import IconOpener from './IconOpener';
 
 // <<<<<<< HEAD
 import { useTranslation } from 'react-i18next';
 // =======
 // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
+
 function Profile() {
   const navigate = useNavigate();
 
-  const [socialLinks, setSocialLink] = useState([])
-  const { t } = useTranslation()
-
-
   // Array of link objects to display
-  // const links = [
-  //   { id: 1, imageUrl: whatsapp, linkName: "Call", place: "Enter phone number", instruction: "Enter your Phone Number" },
-  //   { id: 2, imageUrl: call, linkName: "Whatsapp", place: "Enter whatsapp number", instruction: "Enter your Whatsapp Number" },
-  //   { id: 3, imageUrl: fb, linkName: "Facebook", place: "Enter Facebook URL", instruction: "Enter your Facebook URL" },
-  //   { id: 4, imageUrl: mail, linkName: "Mail", place: "Enter your Email", instruction: "Enter your Email" },
-  //   { id: 5, imageUrl: instas, linkName: "Instagram", place: "Enter Username", instruction: "Enter your Username" },
-  //   { id: 6, imageUrl: website, linkName: "Website", place: "Enter Website URL", instruction: "Enter your Website URL" },
-  //   { id: 7, imageUrl: snap, linkName: "Snapchat", place: "Enter Username", instruction: "Enter your Username" },
-  //   { id: 8, imageUrl: add, linkName: "", place: "", instruction: "Add new Links" },
-  // ];
+  const links = [
+    { id: 1, imageUrl: whatsapp, linkName: "Call", place: "Enter phone number", instruction: "Enter your Phone Number" },
+    { id: 2, imageUrl: call, linkName: "Whatsapp", place: "Enter whatsapp number", instruction: "Enter your Whatsapp Number" },
+    { id: 3, imageUrl: fb, linkName: "Facebook", place: "Enter Facebook URL", instruction: "Enter your Facebook URL" },
+    { id: 4, imageUrl: mail, linkName: "Mail", place: "Enter your Email", instruction: "Enter your Email" },
+    { id: 5, imageUrl: instas, linkName: "Instagram", place: "Enter Username", instruction: "Enter your Username" },
+    { id: 6, imageUrl: website, linkName: "Website", place: "Enter Website URL", instruction: "Enter your Website URL" },
+    { id: 7, imageUrl: snap, linkName: "Snapchat", place: "Enter Username", instruction: "Enter your Username" },
+    { id: 8, imageUrl: add, linkName: "", place: "", instruction: "Add new Links" },
+  ];
 
-  const [loading, setLoading] = useState(true); // State for loading
   const [setting, setSetting] = useState(false); // State to manage Slide component visibility
   const [linkdata, setLinkdata] = useState(null); // State to store currently selected link data
   const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
   const [profileData, setProfileData] = useState({
-    // <<<<<<< HEAD
-    username: '',
-    nickname: '',
-    status: '',
-    company: '',
-    designation: '',
+    username: '@username',
+    nickname: 'Burden',
+    status: 'Married...',
+    company: 'your company',
+    designation: 'copmany',
     ladyImgUrl: '',
     mainImgUrl: ''
   })
+   //  for translation 
+   const { t } = useTranslation()
   // Fetch profile data from localStorage\
-  // const [loading, setLoading] = useState(true); // State for loading
-
-
-  // Get the UID from localStorage
-
-  const userId = localStorage.getItem('userId');
-
-  // useEffect(() => {
-  // getting user data from firebase to home page 
-  // const fetchData = async () => {
-
-  // if (!userId) {
-  //   console.log('No UID found in localStorage');
-  //   return;
-  // }
-
-  // const dbRef = ref(database, `Users/${userId}`); // Fetch user-specific data
-  // try {
-  //   const snapshot = await get(dbRef);
-  //   if (snapshot.exists()) {
-  //     setProfileData(snapshot.val()); // Set fetched data
-  //   } else {
-  //     console.log('No data available');
-  //   }
-  // }
-  // =======
-  //   username: '@username',
-  //   nickname: 'Burden',
-  //   status: 'Married...',
-  //   company: 'your company',
-  //   designation: 'copmany',
-  //   profile: '',
-  //   cover: ''
-  // })
-  // Fetch profile data from localStorage\
-  // const userId = localStorage.getItem('userId'); // Get the UID from localStorage
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userId = localStorage.getItem('userId'); // Get userId from localStorage
-
-        if (!userId) {
-          console.error("No userId found in localStorage");
-          setLoading(false); // End loading state if no userId is found
-          return;
-        }
-
-        // Fetch data for the specific userId
-        const userRef = ref(database, `User/${userId}`);
-        const snapshot = await get(userRef);
-
-        if (snapshot.exists()) {
-          setProfileData(snapshot.val()); // Set the profile data
-        } else {
-          console.log("No data available");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false); // End loading state after data fetch (success or failure)
-        // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
-      }
-    };
-
-    {/* ----------------------------reading/getting data from firebase---------------------------- */ }
-    const fetchedData = async () => {
-
-      const dataRef = ref(database, 'SocialLinks')
-      const snapshot = await get(dataRef)
-      const data = snapshot.val()
-      console.log(data)
-
-      const arr = Object.keys(data).filter(key => data[key].uid === userId)
-        .map(key => ({
-          id: key,
-          ...data[key]
-        }
-        )
-        )
-
-      console.log("social links data",arr)
-      setSocialLink(arr)
+  const [loading, setLoading] = useState(true); // State for loading
+useEffect(() => {
+  const fetchData = async () => {
+    const userId = localStorage.getItem('userId'); // Get the UID from localStorage
+    if (!userId) {
+      console.log('No UID found in localStorage');
+      return;
     }
 
-    fetchData();
-    fetchedData()
-  }, []);
+    const dbRef = ref(database, `usersdata/${userId}`); // Fetch user-specific data
+    try {
+      const snapshot = await get(dbRef);
+      if (snapshot.exists()) {
+        setProfileData(snapshot.val()); // Set fetched data
+      } else {
+        console.log('No data available');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally{
+      setLoading(false);
+    }
+  };
 
-
-
-
-  // // <<<<<<< HEAD
-  //   fetchData();
-  // }, []);
-  console.log(profileData)
-  // =======
-
-
-
-
-
-
-
-  // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
-  const [imageLoading, setImageLoading] = useState(true);
+  fetchData();
+}, []);
+  
+const [imageLoading, setImageLoading] = useState(true);
 
   const handleImageLoad = () => {
     setImageLoading(false);
@@ -182,10 +100,7 @@ function Profile() {
   };
 
   // Handler to toggle slide visibility and set link data
-  const handleSlide = (link) => {
-    setLinkdata(link);
-    setSetting(!setting);
-  };
+ 
 
   // Navigate to the Edit Profile page
   const handleEditProfile = () => {
@@ -197,7 +112,12 @@ function Profile() {
     navigate('/home/notifi');
   };
 
-  // Function to return the appropriate icon based on id
+
+  const handleSlide = (link) => {
+    setLinkdata(link);
+    setSetting(!setting);
+  };
+
   const ReturnIcon = (id) => {
     switch (id) {
       case 1: return whatsapp;
@@ -211,6 +131,8 @@ function Profile() {
       default: return null;
     }
   }
+  // Function to return the appropriate icon based on id
+
   if (loading) {
     return (
       <div className="loader-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -239,37 +161,37 @@ function Profile() {
 
           {/* Profile images */}
           <img
-            className='lady'
-
-            src={profileData.profile || circle}  // Default profile image
-            alt="lady"
-
-          />
-          <div>
-
+  className='lady'
+ 
+  src={profileData.ladyImgUrl || circle}  // Default profile image
+  alt="lady"
+ 
+/>
+<div>
+  
+</div>
+<div style={{width:'100%',height:'200px',background:'transparent'}}>
+  <div style={{  width: '100%' }}>
+            <img
+              className='main-img'
+              src={profileData.mainImgUrl || main}  // Default cover image
+              alt="main-img"
+              onLoad={handleImageLoad}
+              style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
+            />
+            {imageLoading && (
+              <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 1
+              }}>
+                <CircularProgress />
+              </div>
+            )}
           </div>
-          <div style={{ width: '100%', height: '200px', background: 'transparent' }}>
-            <div style={{ width: '100%' }}>
-              <img
-                className='main-img'
-                src={profileData.cover || main}  // Default cover image
-                alt="main-img"
-                onLoad={handleImageLoad}
-                style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
-              />
-              {imageLoading && (
-                <div style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  zIndex: 1
-                }}>
-                  <CircularProgress />
-                </div>
-              )}
-            </div>
-          </div>
+</div>
 
 
           <div style={{ paddingLeft: "10px", position: 'relative' }}>
@@ -290,7 +212,7 @@ function Profile() {
               <h2 className='head'>{t("Designation")}:<span style={{ fontWeight: '100', margin: '53px' }} className='para'>{profileData.designation}</span></h2>
             </div>
             <div className="data" style={{ lineHeight: '0' }}>
-              <h2 className='head'>{t("Marital Status")}:
+              <h2 className='head'>Marital Status:
                 <br /> <span style={{ marginLeft: '145px', fontWeight: '100' }} className='para'>{profileData.status}</span></h2>
             </div>
             <div className="data"
@@ -322,7 +244,7 @@ function Profile() {
                     paddingLeft: '8px',
                   }}
                 >
-                  {profileData.company}
+                  {profileData.companyname}
                 </span>
               </h2>
             </div>
@@ -380,48 +302,33 @@ function Profile() {
 
 
 
+{/* Fetching Links from Links FIle */}
+  
+
+
+ <div style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(4, 1fr)',  // 4 columns in the grid
+  gap: '10px',  // Space between grid items
+  padding: '10px',  // Space around the container
+}}>
 
           <br /><br /><br />
-          {/* <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "2rem" }}>
-                <div style={{ width: "90%", display: "flex", flexWrap: "wrap", gap: "1rem", }}>
-                  {
-                    socialLinks.map((x, index) => {
-                      return (
-                        <div style={{ width: "20%", marginBottom: "1rem" }} key={index}>
-                          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                            <div>
-                              <img src={x.image} alt=""  />
-                            </div>
-                            <div style={{ fontSize: "10px", marginTop: "5px" }}>
-                              {x.name}
-                            </div>
-                          </div>
-                        </div>
-                      )
-                    })
-                  }
-                </div>
-              </div> */}
+
           <div className="i-menu" >
             <div className="menus">
-              {/* <Slide style={{ width: "96%" }} in={setting} direction="up" timeout={{ appear: 500, enter: 500, exit: 500 }}>
+              <Slide style={{ width: "96%" }} in={setting} direction="up" timeout={{ appear: 500, enter: 500, exit: 500 }}>
                 <div className="slide_main_div relative">
                   <IconOpener handleSlide={handleSlide} ReturnIcon={ReturnIcon} linkdata={linkdata} />
                 </div>
-              </Slide> */}
+              </Slide>
 
-              {/* {links.map(link => (
+              {links.map(link => (
                 <div key={link.id} className="fon" style={{ margin: 0, padding: 0 }}>
                   <img src={link.imageUrl} alt={link.linkName} onClick={() => handleSlide(link)} />
                   <p style={{ fontSize: '12px' }}>{link.linkName}</p>
                 </div>
-              ))} */}
-
-              
-     <div>
-
-          
-              </div>
+              ))}
             </div>
           </div>
 
@@ -434,6 +341,7 @@ function Profile() {
 
         </div>
       </div>
+    </div>
     </div>
   );
 }

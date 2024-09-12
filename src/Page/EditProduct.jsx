@@ -178,7 +178,7 @@ console.log( "products are ",products)
         <div style={{ width: '95%' }} className="Edit-product-Design">
           {products.map((product,index) => (
             <div   key={product.productid || `product-${index}`}  style={{ marginTop: '20px' }} className="items">
-              <img className='item-img' style={{height:'auto'}} src={product?.imgurl} alt={product?.productname} onClick={() => handleOpen(product)} />
+              <img className='item-img' style={{height:'auto',objectFit:'cover'}} src={product?.imgurl} alt={product?.productname} onClick={() => handleOpen(product)} />
               <div className="item-data">
                 <h1 style={{ color: 'red', margin: 0, fontSize: 20 }}>
                   {product?.productname}
@@ -234,7 +234,7 @@ console.log( "products are ",products)
                     },
                   }}
                 >
-                  <MenuItem style={{ fontSize: '15px' }} onClick={() => handleEditDetails(product.productid)}>
+                  <MenuItem style={{ fontSize: '15px' }} onClick={() => handleEditDetails(product?.productid)}>
                     <DoneAllIcon style={{ marginRight: '8px' }} />
                     Edit Product
                   </MenuItem>

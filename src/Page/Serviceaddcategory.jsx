@@ -12,10 +12,12 @@ import { ref as sRef, push, set } from "firebase/database";
 import { ref , uploadBytes, getDownloadURL } from "firebase/storage";
 import redcross from "../images/redcross.svg"
 // <<<<<<< HEAD
-import { v4 as uuidv4 } from "uuid";
-import { useTranslation } from 'react-i18next';
+
+// import { useTranslation } from 'react-i18next';
 // =======
 
+import { v4 as uuidv4 } from "uuid";
+import { useTranslation } from 'react-i18next';
 
 // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 

@@ -1,3 +1,9 @@
+html {
+  scroll-behavior: smooth;
+}
+
+
+
 body{
 
   font-family: Arial, Helvetica, sans-serif;
@@ -330,33 +336,50 @@ align-items: center;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 15px;
+
   max-width: 430px;
   margin: 0 auto;
   margin-bottom: 3rem;
 }
-
 .fon {
-  flex: 1 1 calc(25% - 15px); /* 25% width minus the gap to account for spacing */
-  box-sizing: border-box;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60px; /* Set a fixed width */
+  height: 80px; /* Set a fixed height */
+  margin: 10px; /* Margin around each item */
+  padding: 5px;
+  cursor: pointer;
+  transition: transform 0.3s;
 }
 
 .fon img {
-  width: 60%;
-  cursor: pointer;
+  width: 50px; /* Consistent image size */
+  height: 50px; /* Consistent image size */
+  object-fit: cover;
+  margin-bottom: 5px;
 }
 
 .fon p {
   font-size: 12px;
-
-  line-height: 1.2; /* Consistent line height */
-
-  white-space: nowrap; /* Prevent text wrapping */
-  overflow: hidden; /* Hide overflowing text */
-  text-overflow: ellipsis; /* Add ellipsis to overflowing text */
+  text-align: center;
+  margin: 0;
 }
 
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.flex-item {
+  flex: 0 0 calc(20% - 10px); /* 25% width minus margin */
+  margin-bottom: 10px;
+  text-align: center;
+  box-sizing: border-box; /* Include padding and border in the width */
+}
 
 
 
@@ -449,5 +472,4 @@ align-items: center;
   transform: scale(0.95);
   transition: opacity 300ms, transform 300ms;
 }
-
 

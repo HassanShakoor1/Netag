@@ -53,15 +53,25 @@ import CreateNewProfile from './Page/CreateNewProfile';
 // import ServiceAddCategory from "./Page/Serviceaddcategory";
 // import ServiceEditCategory from "./Page/Editcategory";
 import ManageCategoriesAddNew from "./Page/ManagecategoriesAddnew";
+import ServiceAddCategory from "./Page/Serviceaddcategory";
+import ServiceEditCategory from "./Page/Editcategory";
+// import ManageCategoriesAddNew from "./Page/ManagecategoriesAddnew";
+import Links from './Page/Links';
 
-
-// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
 // Correctly handle Protected Routes
 function ProtectedRoute({ element }) {
   const userId = localStorage.getItem("userId");
   return userId ? element : <Navigate to="/create" />;
 }
+
+// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
+
+// Correctly handle Protected Routes
+// function ProtectedRoute({ element }) {
+//   const userId = localStorage.getItem("userId");
+//   return userId ? element : <Navigate to="/create" />;
+// }
 
 function App() {
   const location = useLocation();
@@ -81,6 +91,9 @@ function App() {
           <Route path="/forget" element={<ForgetPassword />} />
           <Route path="/home" element={<ProtectedRoute element={<Profile />} />} />
           <Route path="/home/notifi" element={<Notification />} />
+          <Route path="/home/editimage" element={<EditContact />} />
+          <Route path="/home/Link" element={<Links/>} />
+
           <Route path="/home/order" element={<ManageOrder />} />
           <Route path="/home/order/singleorder" element={<ManageScreen2 />} />
           <Route path="/home/order/order3" element={<ManageOrder3 />} />
@@ -133,6 +146,15 @@ function App() {
           <Route path='/home/create-new-profile/:id?' element={<CreateNewProfile/>}></Route>
 
           
+         
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/active-card" element={<ActiveCard />} />
+          <Route path="/Analytics-page" element={<Analytics />} />
+          <Route path="/setting-page" element={<Scanner />} />
+          <Route path='/home/services/serviceaddcategory' element={<ServiceAddCategory />} />
+          <Route path='/home/services/serviceeditcategory/:id' element={<ServiceEditCategory />} />
+          <Route path='/home/services/catagory/:id/serviceaddcategory' element={<ManageCategoriesAddNew />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </CSSTransition>
     </TransitionGroup>

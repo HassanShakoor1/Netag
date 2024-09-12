@@ -99,7 +99,25 @@ function Analytics() {
   <p style={{  fontWeight: 'bold' ,margin:'0px',fontSize:'12px'}}>Sales Graph</p>
                  <p style={{fontSize:'8px',color:'grey'}}>Lorem ipsum dolor consectetur</p>
   </div>
-  <button className='save'style={{backgroundColor:'#FFE5E5',color:'#E93428',marginTop:'20px',width:'25%',height:'30px',fontSize:'10px'}}> March, 2023 </button>
+
+  <input 
+  type="date" 
+  className='save' 
+  style={{
+    backgroundColor: '#FFE5E5',
+    color: '#E93428',
+    marginTop: '20px',
+    width: '25%',
+    height: '30px',
+    fontSize: '10px',
+    border: 'none',
+    borderRadius: '4px',
+    padding: '0 10px',
+    appearance: 'none' // To remove default styling in most browsers
+  }}
+/>
+
+
 </div>
 
  <img style={{width:'90%', height:"100px",display:'flex',justifyContent:'center',margin:'auto'}} src={chrtt} alt=" xhart" />

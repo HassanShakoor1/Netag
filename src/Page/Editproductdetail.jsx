@@ -31,9 +31,6 @@ function Editproductdetail() {
   uid:localStorage.getItem('userId')
   
    
- 
-   
-   
    
   });
   const [loading, setLoading] = useState(false);
