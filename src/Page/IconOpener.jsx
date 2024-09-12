@@ -5,9 +5,8 @@ import crox from '../images/crox.png';
 import { getDatabase, ref, set, update, get, child, push, remove } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 import { database } from '../firebase'; // Ensure this path is correct
-import { IoChevronBack } from "react-icons/io5";
-import Modal from 'react-modal';
 
+import Modal from 'react-modal';
 Modal.setAppElement('#root'); // This is required for accessibility
 
 function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
