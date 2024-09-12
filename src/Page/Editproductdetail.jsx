@@ -6,7 +6,7 @@ import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage
 import { storage, database } from '../firebase'; // Import your firebase configuration
 import './Editproductdetail.css';
 import edit from '../images/edit.png';
-
+import { FaTimes } from 'react-icons/fa';
 function Editproductdetail() {
 
   const navigate = useNavigate();
@@ -60,13 +60,22 @@ function Editproductdetail() {
     }
   }, [productid]); // Add productid and id to the dependency array
   
-
+  const handleImageRemove = (index) => {
+    // Remove the image from the local state
+    setImages(prevImages => prevImages.filter((_, i) => i !== index));
+  
+    // Update the form data to remove the image URL
+    setFormData(prevData => ({
+      ...prevData,
+      imgurl: prevData.imgurl.filter((_, i) => i !== index)
+    }));
+  };
+  
   const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
-    
+
     const imageUrls = [];
-    
     for (const file of imageFiles) {
       const storageReference = storageRef(storage, file.name);
       try {
@@ -77,10 +86,11 @@ function Editproductdetail() {
         console.error("Error uploading file:", error);
       }
     }
-    
-    setImages(imageUrls);
-    setFormData(prevData => ({ ...prevData, imgurl: imageUrls }));
+
+    setImages(prevImages => [...prevImages, ...imageUrls]);
+    setFormData(prevData => ({ ...prevData, imgurl: [...prevData.imgurl, ...imageUrls] }));
   };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -156,10 +166,8 @@ function Editproductdetail() {
   
 
 
-
   const displayedImages = showAll ? images : images.slice(0, 3);
- 
-
+  const remainingImagesCount = images.length - 3;
   return (
     <div className='newContainer'>
       <div className="new-details-design">
@@ -296,118 +304,86 @@ function Editproductdetail() {
           onChange={handleInputChange}
         />
 
-        <div>
-          {/* First Row */}
-          <div style={{ display: 'flex', padding: '20px', gap: '10px' }}>
-            {/* File Input */}
-            <div
-              style={{
-                flex: '1 1 50%',
-                display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                border: '1px solid #e2e8f0',
-                width: '100%',
-                height: '150px',
-                borderRadius: '20px',
-                backgroundColor: '#F4F4F4',
-              }}
-            >
-              <img src={edit} style={{ width: "50px",margin:'0px auto' }} alt="Upload" />
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                style={{ display: 'none' }}
-                id="upload-photos"
-                onChange={handleFileChange}
-              />
-              <label htmlFor="upload-photos" style={{ cursor: 'pointer', textAlign: 'center', fontSize: '14px', color: '#a0aec0' }}>
-                Upload photo
-              </label>
-            </div>
-
-            {/* Display first uploaded image */}
-            {displayedImages[0] && (
-              <div
-                style={{
-                  flex: '1 1 50%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  border: '1px solid #e2e8f0',
-                  width: '100%',
-                  height: '150px',
-                  borderRadius: '20px',
-                  backgroundColor: '#F4F4F4',
-                }}
-              >
-                <img
-                  src={displayedImages[0]}
-                  alt="Uploaded"
-                  style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '10px' }}
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Second Row */}
-          <div style={{ display: 'flex', padding: '20px', gap: '10px' }}>
-            {/* Display second uploaded image */}
-            {displayedImages[1] && (
-              <div
-                style={{
-                  flex: '1 1 50%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  border: '1px solid #e2e8f0',
-                  width: '100%',
-                  height: '150px',
-                  borderRadius: '20px',
-                  backgroundColor: '#F4F4F4',
-                }}
-              >
-                <img
-                  src={displayedImages[1]}
-                  alt="Uploaded"
-                  style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '10px' }}
-                />
-              </div>
-            )}
-
-            {/* Display third uploaded image and 'more' button */}
-            {displayedImages[2] && (
-              <div
-                style={{
-                  flex: '1 1 50%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  border: '1px solid #e2e8f0',
-                  width: '100%',
-                  height: '150px',
-                  borderRadius: '20px',
-                  backgroundColor: '#F4F4F4',
-                }}
-              >
-                <img
-                  src={displayedImages[2]}
-                  alt="Uploaded"
-                  style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '10px' }}
-                />
-                {remainingImagesCount > 0 && (
-                  <button
-                    onClick={() => setShowAll(!showAll)}
-                    style={{ marginTop: '10px', padding: '10px', borderRadius: '20px', border: 'none', backgroundColor: 'red', color: '#fff', cursor: 'pointer' }}
-                  >
-                    {showAll ? `Show Less (${remainingImagesCount})` : `Show More (${remainingImagesCount})`}
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
+<div>
+  {displayedImages.slice(0, 3).map((url, index) => (
+    <div
+      key={index}
+      style={{
+        display: 'flex',
+        padding: '20px',
+        gap: '10px',
+        flexDirection: index === 0 ? 'row' : 'row', // Keeps the same row layout for all
+      }}
+    >
+      {/* File Input for the first index */}
+      {index === 0 && (
+        <div
+          style={{
+            flex: '1 1 50%',
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            border: '1px solid #e2e8f0',
+            width: '100%',
+            height: '150px',
+            borderRadius: '20px',
+            backgroundColor: '#F4F4F4',
+          }}
+        >
+          <img src={edit} style={{ width: "50px", margin: '0px auto' }} alt="Upload" />
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            style={{ display: 'none' }}
+            id="upload-photos"
+            onChange={handleFileChange}
+          />
+          <label htmlFor="upload-photos" style={{ cursor: 'pointer', textAlign: 'center', fontSize: '14px', color: '#a0aec0' }}>
+            Upload photo
+          </label>
         </div>
+      )}
+
+      {/* Display the image for each index */}
+      <div style={{ position: 'relative', width: '100px', height: '100px' }}>
+        <img
+          src={url}
+          alt={`Uploaded ${index + 1}`}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        <FaTimes
+          className="removeImageIcon"
+          style={{ position: 'absolute', top: '5px', right: '5px', cursor: 'pointer', color: 'red' }}
+          onClick={() => handleImageRemove(index)}
+        />
+        {/* Show "More" Button on the third image */}
+        {index === 2 && remainingImagesCount > 0 && !showAll && (
+          <div
+            className="moreImagesButton"
+            style={{
+              position: 'absolute',
+              bottom: '0',
+              left: '0',
+              width: '100%',
+              height: '100%',
+              background: 'rgba(0, 0, 0, 0.5)',
+              color: 'white',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+            onClick={() => setShowAll(true)}
+          >
+            +{remainingImagesCount} more
+          </div>
+        )}
+      </div>
+    </div>
+  ))}
+</div>
+
 
         <button
           onClick={handleSubmit}

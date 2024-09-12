@@ -47,6 +47,26 @@ function Gallery() {
                   borderRadius: '10px' 
                 }} 
               />
+                <button
+      style={{
+        width: '20px',
+        height: '20px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        border: 'none',
+        background: 'transparent',
+        position: 'absolute',
+        top: '5px', // Adjust positioning if needed
+        right: '5px',
+        cursor: 'pointer',
+        zIndex: 1,
+      }}
+      className="removeButton"
+      onClick={() => handleImageRemove()}
+    >
+      <FaTimes />
+    </button>
             </div>
           ))}
         </div>
