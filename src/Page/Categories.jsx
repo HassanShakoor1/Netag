@@ -1,5 +1,5 @@
 import "./categories.css"
-import search from "../images/search.png"
+import search from "../images/search.svg"
 import vector from "../images/Vector.svg"
 import doctor from "../images/doctor.png"
 import lung from "../images/lungs.png"
@@ -115,10 +115,7 @@ function Categories() {
     }
 
 
-    const options = [
-        { text: 'Edit Category', color: '#7C7C7C', path: 'home/services/serviceeditcategory' },
-        { text: 'Delete Category', color: '#EE0000', }
-    ]
+  
 
 
 
@@ -209,12 +206,12 @@ function Categories() {
                             <div>
                                 <img onClick={goback} style={{ cursor: 'pointer' }} src={vector} alt="" />
                             </div>
-                            <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "400", marginLeft: "2rem" }}>
+                            <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "600", marginLeft: "2rem" }}>
                                {t( "Services Categories")}
                             </div>
                             <div style={{ backgroundColor: "none" }}>
                                 <Link to={"/home/services/serviceaddcategory"}>
-                                    <button style={{ border: "2px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", color: '#EE0000', backgroundColor: "white" }}>{t("Add")}</button>
+                                    <button style={{ border: "1.5px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px",paddingTop:"5px", paddingBottom:"5px",color: '#EE0000', backgroundColor: "white",fontSize:"12px" }}>{t("Add")}</button>
                                 </Link>
                             </div>
 
@@ -225,8 +222,8 @@ function Categories() {
                                 <div>
                                     <img src={search} alt="" />
                                 </div>
-                                <div style={{ color: "#929292" }}>
-                                    search
+                                <div style={{ color: "#929292",width:"70%" }}>
+                                    Search
                                 </div>
                             </div>
 
@@ -248,7 +245,7 @@ function Categories() {
                                                         <img style={{ maxHeight: "200px", width: "100%", marginTop: "7px", objectFit: "contain" }} src={x.imageurl} alt="" />
                                                     </div>
                                                     {/* title  */}
-                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "97%" }}>
+                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                                                         <div style={{ color: "#EE0000", fontWeight: "500", width: "100%", marginLeft: "5px", display: "flex", flexDirection: "column", justifyContent: "start", }}>
                                                             <div style={{ width: "100%", display: "flex", alignItems: "center", marginTop: "5px" }}>
                                                                 <div style={{ fontSize: "18px" }}>{x.name}</div>
@@ -262,7 +259,7 @@ function Categories() {
                                                             </div>
                                                         </div>
 
-                                                        <div>
+                                                        <div >
                                                             <IconButton
                                                                 aria-label="more"
                                                                 id="long-button"
@@ -271,7 +268,9 @@ function Categories() {
                                                                 aria-haspopup="true"
                                                                 onClick={(event) => handleClick(event, x.id)} // Pass the item id
                                                                 style={{
-                                                                    color: '#EE0000'
+                                                                    color: '#EE0000',
+                                                                    padding:"0",
+                                                                    margin:"0"
                                                                 }}
                                                             >
                                                                 <MoreVertIcon />
@@ -319,7 +318,7 @@ function Categories() {
 
                                                     {/* button  */}
                                                     <div onClick={() => handlemanage(x.id)}>
-                                                        <button style={{ marginTop: "1rem", marginBottom: "10px", width: "100%", border: "2px solid #EE0000", borderRadius: "12px", backgroundColor: "#FFDEDE", height: "5vh", color: "#EE0000" }}>{t("Explore")} </button>
+                                                        <button style={{ marginTop: "1rem", marginBottom: "10px", width: "100%", border: "2px solid #EE0000", borderRadius: "10px", backgroundColor: "#FFDEDE", height: "6vh", color: "#EE0000" }}>{t("Explore")} </button>
                                                     </div>
                                                 </div>
                                             </div>

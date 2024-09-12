@@ -1,5 +1,5 @@
 import vector from "../images/Vector.svg"
-import search from "../images/search.png"
+import search from "../images/search.svg"
 import doctor1 from "../images/doctor1.svg"
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
@@ -179,12 +179,12 @@ const handleClose = () => {
                 <img style={{ cursor: "pointer" }} onClick={goback} src={vector} alt="" />
                
               </div>
-              <div style={{ color: "#EE0000", }}>
+              <div style={{ color: "#EE0000",fontWeight:"600" }}>
                 {t("Manage Health Products")}
               </div>
               <div style={{ backgroundColor: "none" }}>
                 <Link to={`/home/services/catagory-products/${id}/serviceaddcategory-product`}>
-                  <button style={{ border: "2px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", color: '#EE0000', backgroundColor: "white" }}>{t("Add")}</button>
+                  <button style={{ border: "1.5px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", paddingTop:"5px",paddingBottom:"5px",color: '#EE0000', backgroundColor: "white" }}>{t("Add")}</button>
                 </Link>
               </div>
             </div>
@@ -194,8 +194,8 @@ const handleClose = () => {
                 <div>
                   <img src={search} alt="" />
                 </div>
-                <div style={{ color: "#929292" }}>
-                 {t(" search")}
+                <div style={{ color: "#929292",width:"70%" }}>
+                 {t(" Search")}
                 </div>
               </div>
 

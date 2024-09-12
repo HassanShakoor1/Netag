@@ -54,6 +54,7 @@ import CreateNewProfile from './Page/CreateNewProfile';
 // import ServiceEditCategory from "./Page/Editcategory";
 import ManageCategoriesAddNew from "./Page/ManagecategoriesAddnew";
 
+
 // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
 // Correctly handle Protected Routes
@@ -129,8 +130,9 @@ function App() {
           <Route path='/home/services/catagory/ManageCategories-products-Edit/:id' element={<ManageCategoriesEdit/>}></Route>
           
           {/* create new profile  */}
-          <Route path='/home/create-new-profile' element={<CreateNewProfile/>}></Route>
+          <Route path='/home/create-new-profile/:id?' element={<CreateNewProfile/>}></Route>
 
+          
         </Routes>
       </CSSTransition>
     </TransitionGroup>

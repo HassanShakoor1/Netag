@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBack } from "react-icons/io5";
 import edit from '../images/edit.png';
@@ -176,7 +176,7 @@ catch(error){
   };
 
   useEffect(()=>{
-    getData()
+    // getData()
   },[])
 
   // useEffect(()=>{
@@ -228,7 +228,7 @@ catch(error){
   //   signin()
   // },[navigatedata])
 
-console.log(formData)
+// console.log(formData)
 // =======
   //     navigate('/home')
 
