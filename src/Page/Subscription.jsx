@@ -11,14 +11,14 @@ import one from '../images/one.png';
 import { useNavigate } from 'react-router-dom';
 
 const carouselSettings = {
-    dots: true,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: true,
-    autoplay: true,
-    autoplaySpeed: 2000, 
+  dots: true,
+  infinite: true,
+  speed: 1000,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: true,
+  autoplay: true,
+  autoplaySpeed: 2000,
 };
 
 function Subscription() {
@@ -139,17 +139,17 @@ function Subscription() {
   };
 
   return (
-    <div className='Subs-Container' style={{display:'flex',justifyContent:'center',marginBottom:'5rem'}}>
+    <div className='Subs-Container' style={{ display: 'flex', justifyContent: 'center', marginBottom: '5rem' }}>
       <div className="subs-design">
-      <div className="bak-hed" style={{ display: 'flex', alignItems: 'center', position: 'relative', marginTop:"20px"}}>
-  <IoChevronBack 
-    onClick={handleHome} 
-    style={{ fontSize: '25px', color: 'red', cursor: 'pointer', position: 'absolute',  }} 
-  />
-  <p style={{ color: 'red', fontSize: '22px', margin: '0 auto' }}>
-    Subscription Plans
-  </p>
-</div>
+        <div className="bak-hed" style={{ display: 'flex', alignItems: 'center', position: 'relative', marginTop: "20px" }}>
+          <IoChevronBack
+            onClick={handleHome}
+            style={{ fontSize: '25px', color: 'red', cursor: 'pointer', position: 'absolute', }}
+          />
+          <p style={{ color: 'red', fontSize: '22px', margin: '0 auto' }}>
+            Subscription Plans
+          </p>
+        </div>
 
         <br /><br /><br />
 
@@ -159,7 +159,7 @@ function Subscription() {
         <br /><br />
 
         <div className="many" style={{ margin: '2px auto', display: 'flex', flexDirection: "column", alignItems: 'center' }}>
-          <p style={{ textAlign: 'center',color:'#727272' }}>Select Plan</p>
+          <p style={{ textAlign: 'center', color: '#727272' }}>Select Plan</p>
           <div style={containerStyle}>
             <div style={monthlyStyle} onClick={handleMonthlyClick}>Monthly</div>
             <div style={yearlyStyle} onClick={handleYearlyClick}>Yearly</div>
@@ -172,11 +172,24 @@ function Subscription() {
           <Slider {...carouselSettings}>
             <div>
               <div style={slideStyle}>
+
                 <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: 'red', fontSize: '20px' }}>Professional</h3>
                 <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>For small Business</p>
                 <div className="rate" style={rateStyle}>
-                  <h1 style={{ margin: 0, color: 'red', fontSize: '3rem' }}>$4.99</h1>
-                  <p style={{ margin: 0 }}>per month</p>
+                  {
+                    selectedPlan === 'monthly' ? (
+                      <>
+                        <h1 style={{ margin: 0, color: 'red', fontSize: '3rem' }}>$4.99</h1>
+                        <p style={{ margin: 0 }}>per month</p>
+                      </>
+                    ) : (
+                      <>
+                        <h1 style={{ margin: 0, color: 'red', fontSize: '3rem' }}>$20.99</h1>
+                        <p style={{ margin: 0 }}>per year</p>
+                      </>
+                    )
+                  }
+
                 </div>
                 <br /><br />
                 <div className="pic-p">
@@ -206,8 +219,20 @@ function Subscription() {
                 <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: 'rgb(117, 244, 96)', fontSize: '20px' }}>Premium</h3>
                 <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>For Medium Business</p>
                 <div className="rate" style={rateStyle2}>
+                {selectedPlan==='monthly'?(
+
+                  <>
                   <h1 style={{ margin: 0, color: 'rgb(117, 244, 96)', fontSize: '3rem' }}>$18.99</h1>
                   <p style={{ margin: 0 }}>per month</p>
+                  </>
+                ):(
+                  <>
+                  <h1 style={{ margin: 0, color: 'rgb(117, 244, 96)', fontSize: '3rem' }}>$30.99</h1>
+                  <p style={{ margin: 0 }}>per Year</p>
+                  </>
+
+
+                )}
                 </div>
                 <br /><br />
                 <div className="pic-p">
@@ -237,8 +262,18 @@ function Subscription() {
                 <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: '#4F00CF', fontSize: '20px' }}>Business</h3>
                 <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>For Large Business</p>
                 <div className="rate" style={rateStyle3}>
+                {selectedPlan==='monthly'?(
+                  <>
                   <h1 style={{ margin: 0, color: '#4F00CF', fontSize: '3rem' }}>$49.99</h1>
                   <p style={{ margin: 0 }}>per month</p>
+</>
+                ):(
+                  <>
+                  <h1 style={{ margin: 0, color: '#4F00CF', fontSize: '3rem' }}>$109.99</h1>
+                  <p style={{ margin: 0 }}>per year</p>
+</>
+                )}
+                 
                 </div>
                 <br /><br />
                 <div className="pic-p">
@@ -268,8 +303,18 @@ function Subscription() {
                 <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: '#00D1EE', fontSize: '20px' }}>Enterprise</h3>
                 <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>For Enterprises</p>
                 <div className="rate" style={rateStyle4}>
-                  <h1 style={{ margin: 0, color: '#00D1EE', fontSize: '3rem' }}>$99.99</h1>
+                {selectedPlan==='monthly'?(
+                  <>
+                       <h1 style={{ margin: 0, color: '#00D1EE', fontSize: '3rem' }}>$99.99</h1>
                   <p style={{ margin: 0 }}>per month</p>
+                  </>
+                ):(
+                  <>
+                       <h1 style={{ margin: 0, color: '#00D1EE', fontSize: '3rem' }}>$150.99</h1>
+                  <p style={{ margin: 0 }}>per year</p>
+                  </>
+                )}
+               
                 </div>
                 <br /><br />
                 <div className="pic-p">
@@ -293,18 +338,20 @@ function Subscription() {
                 <br /><br />
               </div>
             </div>
+
+
           </Slider>
         </div>
         <br /><br /><br />
-        <div style={{display:'flex',justifyContent:'center',alignItems:'center',width:'40%',margin:'2px auto',backgroundColor:'rgb(255, 222, 222)',border:'1px solid red',boxShadow:'none',color:'red'}} className="save">
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '40%', margin: '2px auto', backgroundColor: 'rgb(255, 222, 222)', border: '1px solid red', boxShadow: 'none', color: 'red' }} className="save">
           Contact with us
         </div>
 
-<div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-<p style={{textAlign:'center',width:'82px',fontSize:'10px',borderBottom:'1px solid black',}}>Terms of Services</p>
-</div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <p style={{ textAlign: 'center', width: '82px', fontSize: '10px', borderBottom: '1px solid black', }}>Terms of Services</p>
+        </div>
 
-    
+
 
       </div>
       <Footer />

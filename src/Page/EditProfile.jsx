@@ -234,7 +234,8 @@ const ladyStyle = {
   top: "131px",
   backgroundColor: "#D9D9D9",
   border: '1px solid grey',
-  zIndex: "100"
+  zIndex: "100",
+  objectFit:'cover'
 };
 
 const imgStyle = {
@@ -253,6 +254,7 @@ const mainImgStyle = {
   marginTop: "1rem",
   display: 'flex',
   justifyContent: 'center',
+  objectFit:"cover",
   alignItems: "center",
   flexDirection: 'column',
 };
@@ -264,25 +266,33 @@ const uploadIconStyle = {
 
 const crossButtonStyle = {
   position: 'absolute',
-  top: '10px',
-  right: '10px',
-  background: 'rgba(255, 255, 255, 0.7)',
+  top: '5px',
+  right: '5px',
+  background: '#FFEEEE',
+  color: 'red',
   border: 'none',
   borderRadius: '50%',
+  width: '20px',
+  height: '20px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   cursor: 'pointer',
-  fontSize: '24px',
-  color: 'red',
-  width: '25px',
-  height: "25px",
+  fontSize:'17px'
 };
 
 const uploadLabelStyle = {
-  marginTop: "1rem",
+  marginTop: "1.1rem",
   cursor: 'pointer',
   color: "grey",
   display: 'flex',
-  justifyContent: "center",
-  alignItems: "center",
+  fontSize:"11px",
+  justifyContent:"center",
+  alignItems:'center',
+  margin:' 1px auto'
+
+
+
 };
 
 const saveButtonStyle = {

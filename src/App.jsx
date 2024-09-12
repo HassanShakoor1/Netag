@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import './App.css'; // Include your CSS for transitions
-
+import './App.css'; // Include your CSS for transition
 // Import your pages
 import EditProfile from './Page/EditProfile';
 import Profile from './Page/Profile';
@@ -32,6 +31,7 @@ import Profile1 from './Page/Profile1';
 import ServiceAddCategory from "./Page/Serviceaddcategory";
 import ServiceEditCategory from "./Page/Editcategory";
 import ManageCategoriesAddNew from "./Page/ManagecategoriesAddnew";
+import Links from './Page/Links';
 
 
 // Correctly handle Protected Routes
@@ -59,6 +59,8 @@ function App() {
           <Route path="/home" element={<ProtectedRoute element={<Profile />} />} />
           <Route path="/home/notifi" element={<Notification />} />
           <Route path="/home/editimage" element={<EditContact />} />
+          <Route path="/home/Link" element={<Links/>} />
+
           <Route path="/home/order" element={<ManageOrder />} />
           <Route path="/home/order/singleorder" element={<ManageScreen2 />} />
           <Route path="/home/order/order3" element={<ManageOrder3 />} />

@@ -24,7 +24,7 @@ function Array({prp,text,path}) {
        <img style={{cursor:'pointer'}} src={prp} alt="set-icon"  />
      </div>
    </div>
-   <p style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"10px" }}>{text}</p>
+   <p style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"13px" }}>{text}</p>
  </div>
  </div>
 

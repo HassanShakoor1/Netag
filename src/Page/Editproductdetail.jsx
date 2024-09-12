@@ -31,9 +31,6 @@ function Editproductdetail() {
   uid:localStorage.getItem('userId')
   
    
- 
-   
-   
    
   });
   const [loading, setLoading] = useState(false);
@@ -43,6 +40,7 @@ function Editproductdetail() {
       const fetchProductData = async () => {
         try {
           const productRef = ref(database, `/Products/${productid}`);
+
           const snapshot = await get(productRef);
           if (snapshot.exists()) {
             const data = snapshot.val();

@@ -10,83 +10,59 @@ function Photos() {
   const [mediaFiles, setMediaFiles] = useState([]);
   const [recordid, setRecordid] = useState(null);
   const userId = localStorage.getItem('userId');
+  const recordId = localStorage.getItem('recordid');
 const navigate=useNavigate();
 
+useEffect(() => {
+  if (userId) {
+    const database = getDatabase(app);
+    const userRef = ref(database, `/PhotosVideos`);
 
-  useEffect(() => {
-    if (recordid) {
-      const database = getDatabase(app);
-      const userRef = ref(database, `PhotosVideos/${recordid}`);
-
-      get(userRef)
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            const data = snapshot.val();
-            const images = data.selectedImages || [];
-            const videos = data.videosUri || [];
+    get(userRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          console.log("photos data", data);
+          // Find the specific record associated with the current userId
+          const userRecord = Object.keys(data).map(key => {
+            const record = data[key];
+            if (record.uid === userId) {
+              return {
+                id: recordid,
+                ...record
+              };
+            }
+            return null; // or handle records that don't match
+          }).filter(record => record !== null); 
+          console.log(userRecord);
+          if (userRecord.length > 0) {
+            const record = userRecord[0]; // Use the first record or filter based on your needs
+            setRecordid(record.id); // Set the record ID for further use
+            const images = record.selectedImages || [];
+            const videos = record.videosUri || [];
             const mediaUrls = [
               ...images.map((url) => ({ url, type: 'image' })),
               ...videos.map((url) => ({ url, type: 'video' })),
             ];
             setMediaFiles(mediaUrls);
+          } else {
+            console.log('No record found for this user.');
           }
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-        });
-    }
-  }, [recordid]);
+        } else {
+          console.log('No data found.');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }
+}, [userId]);
 
 
-  const saveMediaFiles = async (newMediaFiles) => {
-    if (!recordid) {
-      console.error('Record ID is not available.');
-      return;
-    }
 
-    const database = getDatabase(app);
-    const userRef = ref(database, `PhotosVideos/${recordid}`);
+ 
 
-    const mediaData = {
-      selectedImages: newMediaFiles.filter((media) => media.type === 'image').map((media) => media.url),
-      videosUri: newMediaFiles.filter((media) => media.type === 'video').map((media) => media.url),
-      uid: userId,
-      id: recordid,
-    };
-
-    try {
-      const snapshot = await get(userRef);
-      if (snapshot.exists()) {
-        await update(userRef, mediaData);
-        console.log('Data updated successfully');
-      } else {
-        await set(userRef, mediaData);
-        console.log('Data saved successfully');
-      }
-    } catch (error) {
-      console.error(`Error saving data: ${error.message}`);
-    }
-  };
-
-  const handleImageUpload = async (event) => {
-    const files = Array.from(event.target.files);
-    const storage = getStorage(app);
-    const newMediaFiles = [...mediaFiles];
-
-    for (const file of files) {
-      const fileRef = storageRef(storage, `PhotosVideos/${file.name}`);
-      try {
-        await uploadBytes(fileRef, file); // Upload the file to Firebase Storage
-        const url = await getDownloadURL(fileRef); // Get the download URL of the uploaded file
-        const mediaFile = { url, type: file.type.includes('video') ? 'video' : 'image' };
-        newMediaFiles.push(mediaFile);
-        setMediaFiles([...newMediaFiles]); // Update state with new media files
-        await saveMediaFiles(newMediaFiles); // Save to Firebase immediately after uploading
-      } catch (error) {
-        console.error('Error uploading file:', error);
-      }
-    }
-  };
+ 
   const handleImagemove=()=>{
     navigate('/home/editimage')
   }

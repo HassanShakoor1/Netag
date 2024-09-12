@@ -8,7 +8,7 @@ function Card() {
   const arr = [
     {
       imageUrl: bag,
-      text: 'product/services',
+      text: 'Products',
       navigate: '/edit-product',
     },
     {
