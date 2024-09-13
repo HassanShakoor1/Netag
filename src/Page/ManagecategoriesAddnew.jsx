@@ -25,6 +25,9 @@ function ServiceaddcategoryAddnewProduct() {
 
     const { id } = useParams()
 
+
+
+    
     const [image, setImage] = useState(null);
 
 
@@ -146,7 +149,7 @@ function ServiceaddcategoryAddnewProduct() {
                             <div>
                                 <img style={{ cursor: "pointer" }} onClick={handlegoBack} src={vector} alt="" />
                             </div>
-                            <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "500" }}>
+                            <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "600" }}>
                                 {t("Add Category Products")}
                             </div>
                             <div></div>
@@ -158,24 +161,24 @@ function ServiceaddcategoryAddnewProduct() {
 
                         {/* input  */}
                         <div style={{ marginTop: "2rem" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>{t("Name")}</div>
+                            <div style={{ marginLeft: "18px", fontWeight: "500" ,marginBottom:"10px"}}>{t("Name")}</div>
                             <div style={{ width: "100%" }}>
                                 <input type="text"
                                     placeholder="Mental Health Service"
-                                    style={{ width: "100%", padding: "8px", paddingLeft: "16px", height: "", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" }}
+                                    style={{ width: "100%", padding: "10px", height: "6vh", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" }}
                                     onChange={(e) => setname1(e.target.value)}
                                 />
                             </div>
                         </div>
                         {/* description */}
-                        <div style={{ marginTop: "5px" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>
+                        <div style={{ marginTop: "8px",marginBottom:"8px" }}>
+                            <div style={{ marginLeft: "18px", fontWeight: "500",marginBottom:"8px" }}>
                                 {t("Description")}
                             </div>
                             <div>
                                 <textarea
                                     placeholder="lorem ipsum"
-                                    style={{ resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "8px", boxSizing: "border-box" }}
+                                    style={{ outline:"none",resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "13px", paddingLeft:"18px", border:"none",boxSizing: "border-box" }}
                                     onChange={(e) => setdescription(e.target.value)}
                                 />
                             </div>

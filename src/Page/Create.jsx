@@ -58,6 +58,8 @@ function Create() {
 
       localStorage.setItem("userId", user?.uid)
 
+      localStorage.setItem("parentId", user?.uid)
+
 // <<<<<<< HEAD
       const id = Date.now()
 

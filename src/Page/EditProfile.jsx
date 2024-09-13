@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBack } from "react-icons/io5";
 import edit from '../images/edit.png';
@@ -94,10 +94,108 @@ const handleSave = async () => {
       console.error("Error uploading images or saving data:", error);
       alert("Error: " + error.message);
     }
+<<<<<<< HEAD
   } catch (error) {
     console.log("An unexpected error occurred:", error);
   }
 };
+=======
+  };
+}
+catch(error){
+  console.log(error)
+}
+}
+}  
+  // getting data from firebase 
+
+  // const getData=async()=>{
+  //   const data=uRef(db,`Users/${userId}`)
+  //   onValue(data,async (snapShot)=>{
+  //     let fetchedData= await snapShot.val()
+  //     console.log(fetchedData)
+    
+
+
+  //   })
+  // }
+    // }
+  // update data to firebase 
+
+  // const updateData=async()=>{
+     
+    
+  // }
+  
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  useEffect(()=>{
+    // getData()
+  },[])
+
+  // useEffect(()=>{
+  //   const signin=async()=>{
+         
+  //     try {
+  //       // const credential=await signInWithEmailAndPassword(auth,email,password)
+  //       // const user=credential.user
+  
+  //       // localStorage.setItem("userId",user?.uid)
+  
+  //       const dbref=ref(db,`users/${localStorage.getItem("userId")}`)
+       
+        
+      
+  //        const snap=await get(dbref)
+  //        const data= await snap.val()
+  //        console.log(data)
+  //        const data2=data.isCompany 
+  //        setnavigatedata(data2)
+        
+     
+  //       // setcompany(data.isCompany)
+  //       // localStorage.setItem("iscompany",data?.isCompany)
+      
+     
+    
+  
+  //       // navigate("/home")
+        
+  //       // const userid=localStorage.getItem("iscompany")
+        
+  //   // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
+  //   if (navigatedata === false) {
+  //     navigate('/home')
+  //   } 
+  
+  // // else {
+  // //   navigate('/home')
+  // // }
+        
+  //   // console.log(userid)
+ 
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+    
+  //   }
+  //   signin()
+  // },[navigatedata])
+
+// console.log(formData)
+// =======
+  //     navigate('/home')
+
+  //   } catch (error) {
+  //     console.error("Error uploading images or saving data:", error);
+  //     alert("Error: " + error.message);
+  //   }
+  // }
+// };
+>>>>>>> d3ff043 (new commit)
 
 
   const handleFileChange1 = (event) => {

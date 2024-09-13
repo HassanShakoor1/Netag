@@ -147,36 +147,36 @@ function Serviceaddcategory() {
                             <div>
                                 <img style={{ cursor: "pointer" }} onClick={handlegoBack} src={vector} alt="" />
                             </div>
-                            <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "500" }}>
+                            <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "600" }}>
                                {t("Add Category")}
                             </div>
                             <div></div>
                         </div>
                         {/* service  */}
-                        <div style={{ marginLeft: "18px", color: "#EE0000", fontSize: "16px", fontWeight: "500", marginTop: "3rem" }}>
+                        <div style={{ marginLeft: "18px", color: "#EE0000", fontSize: "16px", fontWeight: "600", marginTop: "3rem" }}>
                             {t("Service")}
                         </div>
 
                         {/* input  */}
                         <div style={{ marginTop: "2rem" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>{t("Name")}</div>
+                            <div style={{ marginLeft: "18px", fontWeight: "500",marginBottom:"8px" }}>{t("Name")}</div>
                             <div style={{ width: "100%" }}>
                                 <input type="text"
                                     placeholder="Mental Health Service"
-                                    style={{ width: "100%", padding: "8px", paddingLeft: "16px", height: "", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" }}
+                                    style={{ width: "100%", padding: "8px", paddingLeft: "8px", height: "6vh", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" }}
                                     onChange={(e) => setname1(e.target.value)}
                                 />
                             </div>
                         </div>
                         {/* description */}
-                        <div style={{ marginTop: "5px" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>
+                        <div style={{ marginTop: "8px",marginBottom:"8px" }}>
+                            <div style={{ marginLeft: "18px", fontWeight: "500" ,marginBottom:"8px"}}>
                                 {t("Description")}
                             </div>
                             <div>
                                 <textarea
                                     placeholder="lorem ipsum"
-                                    style={{ resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "8px", boxSizing: "border-box" }}
+                                    style={{ outline:"none",resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "18px", boxSizing: "border-box",border:"none" }}
                                     onChange={(e) => setdescription(e.target.value)}
                                 />
                             </div>
@@ -240,7 +240,7 @@ function Serviceaddcategory() {
                                                         fontSize: '10px',
                                                         marginTop: '8px',
                                                         height: '27px',
-                                                        borderRadius: '4px',
+                                                        borderRadius: '6px',
                                                         cursor: 'pointer',
                                                         textAlign: 'center',
                                                         color: "#726F6F",
@@ -292,7 +292,7 @@ function Serviceaddcategory() {
                             </div>
                             {/* button  */}
                             <div style={{ marginTop: "30px" }}>
-                                <button onClick={createnew} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white" }}>{t("Create")}</button>
+                                <button onClick={createnew} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white",fontSize:"16px",fontWeight:"500" }}>{t("Create")}</button>
                             </div>
                         </div>
 

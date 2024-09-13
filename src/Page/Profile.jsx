@@ -13,28 +13,105 @@ import Card from '../Components/Card';
 import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly from 'firebase/database'
 import { database } from '../firebase.jsx'; // Import the initialized database
 import CircularProgress from '@mui/material/CircularProgress'; // Import the loader component
+<<<<<<< HEAD
+=======
+import { Link } from 'react-router-dom'
+
+// <<<<<<< HEAD
+>>>>>>> d3ff043 (new commit)
 import { useTranslation } from 'react-i18next';
 
 function Profile() {
   const navigate = useNavigate();
-  
-  const{t}=useTranslation()
 
+<<<<<<< HEAD
   
  
+=======
+  const [socialLinks, setSocialLink] = useState([])
+  const { t } = useTranslation()
+
+
+  // Array of link objects to display
+  // const links = [
+  //   { id: 1, imageUrl: whatsapp, linkName: "Call", place: "Enter phone number", instruction: "Enter your Phone Number" },
+  //   { id: 2, imageUrl: call, linkName: "Whatsapp", place: "Enter whatsapp number", instruction: "Enter your Whatsapp Number" },
+  //   { id: 3, imageUrl: fb, linkName: "Facebook", place: "Enter Facebook URL", instruction: "Enter your Facebook URL" },
+  //   { id: 4, imageUrl: mail, linkName: "Mail", place: "Enter your Email", instruction: "Enter your Email" },
+  //   { id: 5, imageUrl: instas, linkName: "Instagram", place: "Enter Username", instruction: "Enter your Username" },
+  //   { id: 6, imageUrl: website, linkName: "Website", place: "Enter Website URL", instruction: "Enter your Website URL" },
+  //   { id: 7, imageUrl: snap, linkName: "Snapchat", place: "Enter Username", instruction: "Enter your Username" },
+  //   { id: 8, imageUrl: add, linkName: "", place: "", instruction: "Add new Links" },
+  // ];
+
+>>>>>>> d3ff043 (new commit)
   const [loading, setLoading] = useState(true); // State for loading
   const [links, setLinks] = useState([]); // State to store fetched links
 
   const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
   const [profileData, setProfileData] = useState({
+<<<<<<< HEAD
   
   })
   // Fetch profile data from localStorage\
   const userId = localStorage.getItem('userId'); // Get the UID from localStorage
+=======
+    // <<<<<<< HEAD
+    username: '',
+    nickname: '',
+    status: '',
+    company: '',
+    designation: '',
+    ladyImgUrl: '',
+    mainImgUrl: ''
+  })
+  // Fetch profile data from localStorage\
+  // const [loading, setLoading] = useState(true); // State for loading
+
+
+  // Get the UID from localStorage
+
+  const userId = localStorage.getItem('userId');
+
+  // useEffect(() => {
+  // getting user data from firebase to home page 
+  // const fetchData = async () => {
+
+  // if (!userId) {
+  //   console.log('No UID found in localStorage');
+  //   return;
+  // }
+
+  // const dbRef = ref(database, `Users/${userId}`); // Fetch user-specific data
+  // try {
+  //   const snapshot = await get(dbRef);
+  //   if (snapshot.exists()) {
+  //     setProfileData(snapshot.val()); // Set fetched data
+  //   } else {
+  //     console.log('No data available');
+  //   }
+  // }
+  // =======
+  //   username: '@username',
+  //   nickname: 'Burden',
+  //   status: 'Married...',
+  //   company: 'your company',
+  //   designation: 'copmany',
+  //   profile: '',
+  //   cover: ''
+  // })
+  // Fetch profile data from localStorage\
+  // const userId = localStorage.getItem('userId'); // Get the UID from localStorage
+>>>>>>> d3ff043 (new commit)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+<<<<<<< HEAD
+=======
+        const userId = localStorage.getItem('userId'); // Get userId from localStorage
+
+>>>>>>> d3ff043 (new commit)
         if (!userId) {
           console.error("No userId found in localStorage");
           setLoading(false);
@@ -65,11 +142,37 @@ function Profile() {
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
+<<<<<<< HEAD
         setLoading(false);
+=======
+        setLoading(false); // End loading state after data fetch (success or failure)
+        // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
+>>>>>>> d3ff043 (new commit)
       }
     };
 
+    {/* ----------------------------reading/getting data from firebase---------------------------- */ }
+    const fetchedData = async () => {
+
+      const dataRef = ref(database, 'SocialLinks')
+      const snapshot = await get(dataRef)
+      const data = snapshot.val()
+      console.log(data)
+
+      const arr = Object.keys(data).filter(key => data[key].uid === userId)
+        .map(key => ({
+          id: key,
+          ...data[key]
+        }
+        )
+        )
+
+      console.log("social links data",arr)
+      setSocialLink(arr)
+    }
+
     fetchData();
+<<<<<<< HEAD
   }, [userId]);
 
 
@@ -101,6 +204,19 @@ function Profile() {
   
   
   
+=======
+    fetchedData()
+  }, []);
+
+
+
+
+  // // <<<<<<< HEAD
+  //   fetchData();
+  // }, []);
+  console.log(profileData)
+  // =======
+>>>>>>> d3ff043 (new commit)
 
 
   
@@ -112,7 +228,15 @@ navigate(`/home/Link`)
 }
 
 
+<<<<<<< HEAD
 const [imageLoading, setImageLoading] = useState(true);
+=======
+
+
+
+  // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
+  const [imageLoading, setImageLoading] = useState(true);
+>>>>>>> d3ff043 (new commit)
 
   const handleImageLoad = () => {
     setImageLoading(false);
@@ -146,8 +270,10 @@ const [imageLoading, setImageLoading] = useState(true);
     );
   }
 
+
+
   return (
-    
+
     <div className="ProfileContainer">
       <div className="profile-design" style={{ paddingBottom: '0px' }}>
         {/* Navigation bar with logo and notification icon */}
@@ -161,9 +287,10 @@ const [imageLoading, setImageLoading] = useState(true);
         </nav>
 
         <div className="rel-div">
-        
+
           {/* Profile images */}
           <img
+<<<<<<< HEAD
   className='lady'
  style={{display: imageLoading ? 'none' : 'block',objectFit:"cover"}}
   src={profileData.profilePicture || circle}  // Default profile image
@@ -193,8 +320,39 @@ const [imageLoading, setImageLoading] = useState(true);
                 <CircularProgress />
               </div>
             )}
+=======
+            className='lady'
+
+            src={profileData.profile || circle}  // Default profile image
+            alt="lady"
+
+          />
+          <div>
+
           </div>
-</div>
+          <div style={{ width: '100%', height: '200px', background: 'transparent' }}>
+            <div style={{ width: '100%' }}>
+              <img
+                className='main-img'
+                src={profileData.cover || main}  // Default cover image
+                alt="main-img"
+                onLoad={handleImageLoad}
+                style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
+              />
+              {imageLoading && (
+                <div style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 1
+                }}>
+                  <CircularProgress />
+                </div>
+              )}
+            </div>
+>>>>>>> d3ff043 (new commit)
+          </div>
 
 
           <div style={{ paddingLeft: "10px", position: 'relative' }}>
@@ -239,7 +397,7 @@ const [imageLoading, setImageLoading] = useState(true);
                   textOverflow: 'ellipsis',
                 }}
               >
-               {t("Company")}:
+                {t("Company")}:
                 <span
                   className="para"
                   style={{
@@ -264,49 +422,96 @@ const [imageLoading, setImageLoading] = useState(true);
 
 
 
-          <div className="ip-btn" style={{width:'100%'}}>
-            <div className="n-head" style={{  fontSize: "18px" }}>
+          <div className="ip-btn" style={{ width: '100%' }}>
+            <div className="n-head" style={{ fontSize: "18px" }}>
               <h3 style={{ cursor: "pointer" }} className="link-heading">Links</h3>
             </div>
             <div className="ii-btn">
-            <div style={{display:"flex",justifyContent:'space-between',alignItems:'center',padding:'10px'}}>
+              <div style={{ display: "flex", justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
 
 
 
-            <h2 className="mode-heading" style={{ marginLeft: 'rem', marginRight: '2px', fontSize: '15px' }}>Lead Mode</h2>
-              <div className="toggle-container">
-                <input
-                  type="checkbox"
-                  id="toggle-lead"
-                  className="toggle-input"
-                  checked={activeToggle === 'lead'}
-                  onChange={() => handleToggle('lead')}
-                />
-                <label htmlFor="toggle-lead" className="toggle-label"></label>
+                <h2 className="mode-heading" style={{ marginLeft: 'rem', marginRight: '2px', fontSize: '15px' }}>Lead Mode</h2>
+                <div className="toggle-container">
+                  <input
+                    type="checkbox"
+                    id="toggle-lead"
+                    className="toggle-input"
+                    checked={activeToggle === 'lead'}
+                    onChange={() => handleToggle('lead')}
+                  />
+                  <label htmlFor="toggle-lead" className="toggle-label"></label>
+                </div>
               </div>
-            </div>
-            <div className="ii-btn">
-              <h2 className="mode-heading" style={{ marginRight: '2px', fontSize: '15px' }}>Direct Mode</h2>
-              <div className="toggle-container">
-                <input
-                  type="checkbox"
-                  id="toggle-direct"
-                  className="toggle-input"
-                  checked={activeToggle === 'direct'}
-                  onChange={() => handleToggle('direct')}
-                />
-                <label htmlFor="toggle-direct" className="toggle-label"></label>
+              <div className="ii-btn">
+                <h2 className="mode-heading" style={{ marginRight: '2px', fontSize: '15px' }}>Direct Mode</h2>
+                <div className="toggle-container">
+                  <input
+                    type="checkbox"
+                    id="toggle-direct"
+                    className="toggle-input"
+                    checked={activeToggle === 'direct'}
+                    onChange={() => handleToggle('direct')}
+                  />
+                  <label htmlFor="toggle-direct" className="toggle-label"></label>
+                </div>
+
               </div>
 
-            </div>
-              
             </div>
           </div>
 
 
 
+<<<<<<< HEAD
 {/* Fetching Links from Links FIle */}
   
+=======
+
+          <br /><br /><br />
+          {/* <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "2rem" }}>
+                <div style={{ width: "90%", display: "flex", flexWrap: "wrap", gap: "1rem", }}>
+                  {
+                    socialLinks.map((x, index) => {
+                      return (
+                        <div style={{ width: "20%", marginBottom: "1rem" }} key={index}>
+                          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                            <div>
+                              <img src={x.image} alt=""  />
+                            </div>
+                            <div style={{ fontSize: "10px", marginTop: "5px" }}>
+                              {x.name}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })
+                  }
+                </div>
+              </div> */}
+          <div className="i-menu" >
+            <div className="menus">
+              {/* <Slide style={{ width: "96%" }} in={setting} direction="up" timeout={{ appear: 500, enter: 500, exit: 500 }}>
+                <div className="slide_main_div relative">
+                  <IconOpener handleSlide={handleSlide} ReturnIcon={ReturnIcon} linkdata={linkdata} />
+                </div>
+              </Slide> */}
+
+              {/* {links.map(link => (
+                <div key={link.id} className="fon" style={{ margin: 0, padding: 0 }}>
+                  <img src={link.imageUrl} alt={link.linkName} onClick={() => handleSlide(link)} />
+                  <p style={{ fontSize: '12px' }}>{link.linkName}</p>
+                </div>
+              ))} */}
+
+              
+     <div>
+
+          
+              </div>
+            </div>
+          </div>
+>>>>>>> d3ff043 (new commit)
 
 
  <div style={{
@@ -362,6 +567,7 @@ const [imageLoading, setImageLoading] = useState(true);
   
 </div>
 <br /><br /><br />
+
 
 
           <Footer />

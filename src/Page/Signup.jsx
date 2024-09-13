@@ -33,7 +33,24 @@ function Signup() {
       try {
         const credential = await signInWithEmailAndPassword(auth, email, password)
         const user = credential.user
-        localStorage.setItem("userId", user?.uid)
+       
+        // getting data from user table to check if activeProfile is is present or empty 
+        const userDb=ref(db,`User/${user?.uid}`)
+
+        const snap=await get(userDb)
+        const data=await snap.val()
+        console.log("activeProfile key is ",data.activeProfile)
+         
+        let activeProfileKey=data.activeProfile
+        if(activeProfileKey)
+        {
+          localStorage.setItem("userId", activeProfileKey)
+        }
+        else{
+          localStorage.setItem("userId", user?.uid)
+        }
+
+        
         // <<<<<<< HEAD
         localStorage.setItem("parentId", user?.uid)
 

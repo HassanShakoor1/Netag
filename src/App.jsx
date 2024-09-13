@@ -31,7 +31,14 @@ import Profile1 from './Page/Profile1';
 import ServiceAddCategory from "./Page/Serviceaddcategory";
 import ServiceEditCategory from "./Page/Editcategory";
 import ManageCategoriesAddNew from "./Page/ManagecategoriesAddnew";
+<<<<<<< HEAD
 import Links from './Page/Links';
+=======
+
+
+// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
+
+>>>>>>> d3ff043 (new commit)
 // Correctly handle Protected Routes
 function ProtectedRoute({ element }) {
   const userId = localStorage.getItem("userId");
@@ -80,6 +87,7 @@ function App() {
           <Route path="/edit-product-detail/:id/:productid?" element={<EditProductDetail />} />
 
          
+<<<<<<< HEAD
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/active-card" element={<ActiveCard />} />
           <Route path="/Analytics-page" element={<Analytics />} />
@@ -88,6 +96,26 @@ function App() {
           <Route path='/home/services/serviceeditcategory/:id' element={<ServiceEditCategory />} />
           <Route path='/home/services/catagory/:id/serviceaddcategory' element={<ManageCategoriesAddNew />} />
           <Route path="*" element={<Navigate to="/" />} />
+=======
+          <Route path="/product-catagory" element={<Addcatagory />} /> Add this route
+          <Route path="/product-catagory/:id" element={<Addcatagory />} /> Add this route
+          <Route path="/edit-product-catagory" element={<EditProduct />} /> Add this route
+        
+          <Route path="/edit-product-detail" element={<Editproductdetail />} /> Add this route
+          <Route path="/gallery" element={<Gallery />} /> Add this route
+          <Route path="/active-card" element={<ActiveCard />} /> Add this route
+          <Route path="/Analytics-page" element={<Analytics />} /> Add this route
+          <Route path="/setting-page" element={<Scanner />} /> Add this route
+          <Route path='/home/services/serviceaddcategory' element={<Serviceaddcategory/>}></Route>
+          <Route path='/home/services/serviceeditcategory/:id' element={<Serviceeditcategory/>}></Route>
+          <Route  path='/home/services/catagory-products/:id/serviceaddcategory-product' element={<ManagecategoriesAddnewProduct/>}></Route>        
+          <Route path='/home/services/catagory/ManageCategories-products-Edit/:id' element={<ManageCategoriesEdit/>}></Route>
+          
+          {/* create new profile  */}
+          <Route path='/home/create-new-profile/:id?' element={<CreateNewProfile/>}></Route>
+
+          
+>>>>>>> d3ff043 (new commit)
         </Routes>
       </CSSTransition>
     </TransitionGroup>
