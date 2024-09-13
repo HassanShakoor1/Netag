@@ -12,7 +12,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate, Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { database as db } from "../firebase.jsx"
-import { get, ref, remove } from "firebase/database"
+import { equalTo, get, orderByChild, query, ref, remove } from "firebase/database"
 
 import { useTranslation } from 'react-i18next';
 
@@ -35,41 +35,85 @@ function Categories() {
     const{t}=useTranslation()
 
     // getting data from firebase 
-    function getData() {
-        const dbref = ref(db, `ServiceCategory`)
+    // function getData() {
+    //     const dbref = ref(db, `ServiceCategory`)
 
-        const initialdata = async () => {
-            const snap = await get(dbref)
-            const data = await snap.val()
-            console.log("data",data)
-            try {
+    //     const initialdata = async () => {
             
-            const filteredData = Object.keys(data)
-                .filter(key => data[key].uid=== userId) // Filter based on userId
-                .map(key => ({
-                    id: key,
-                    ...data[key]
-                }));
+    //         // const data=query(
+    //         //     dbref,
+    //         //     orderByChild("id"),
+    //         //     equalTo(userId) 
+    //         // )
 
-            console.log("filtered data",filteredData);
+    //          // Fetch the data using the query
+    //     // const snapshot = await get(data);
 
-            // Update the state or handle the filtered data
-            setFirebasedata(filteredData);
-            } 
+    //     // if (!snapshot.exists()) {
+    //     //     console.log('No data available');
+    //     //     return;
+    //     // } 
+    //     // const data1 = await snapshot.val()
+                
+    //         const snap = await get(dbref)
+    //         const data = await snap.val()
+    //         console.log("data",data)
+    //         try {
+              
+    //             // const filteredData=Object.keys(data1).map(key=>({
+    //             //     id:key,
+    //             //     ...data1[key]
+    //             // }))
             
-            
-            
-            
-            
-            catch (error) {
-                console.log(error)
-            }
-        }
-        initialdata()
 
-    }
+    //         const filteredData = Object.keys(data)
+    //             .filter(key => data[key].uid=== userId) // Filter based on userId
+    //             .map(key => ({
+    //                 id: key,
+    //                 ...data[key]
+    //             }));
+
+    //         console.log("filtered data",filteredData);
+
+    //         // Update the state or handle the filtered data
+    //         setFirebasedata(filteredData);
+    //         } 
+            
+            
+            
+            
+            
+    //         catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     initialdata()
+
+    // }
+          {/*getDataUingQuery*/}
+   const getData=async()=>
+   {
+
+       const querydata=query(
+        ref(db,`ServiceCategory`),
+        orderByChild('uid'),
+        equalTo(userId)
+
+       )
+       const snap=await get(querydata)
+       const data=await snap.val()
+       console.log(data)
+      
+       const filteredData=Object.keys(data).map(key=>({
+        id:key,
+        ...data[key]
+       }))
+         console.log(filteredData)
+
+         setFirebasedata(filteredData)
 
 
+   }
 
     useEffect(() => {
 
@@ -120,72 +164,7 @@ function Categories() {
     };
 
 
-    // const handleDelete = async (id) => {
-    //     // Reference to the item in Firebase
-    //     console.log(id)
-    //     try{
-    //     const itemRef = ref(db, `ServiceCategory/${id}`);
-    //     const categories=ref(db,`Services`)
-        
-    //     console.log(itemRef)
-    //      const categoriesSnapshot=await get(categories)
-    //     //  it will return objects of products 
-    //      const categoriesData=categoriesSnapshot.val()
-    //      console.log("categoriesData",categoriesData)
-    //     //   it will create array of products 
-    //      const categoriesData_arr=Object.values(categoriesData)
-    //      console.log("categoriesData_arr",categoriesData_arr)
-          
-    //   const categoriesToDelete=  categoriesData_arr.filter((x)=>x.categoryid===id)
-    //   console.log("categoriesToDelete",categoriesToDelete)
-      
-    // //   it will delete very product which has Service_id init  
-    //   for(const category_index of categoriesToDelete)
-    //   {
-    //     const deleting=ref(db,`Services/${category_index.categoryid}`)
-       
-    //     console.log("category_index",category_index.categoryid)
-    //     await remove(deleting)
-    //   }
-      
-
-
-       
-    //         // Delete the item from Firebase
-    //         await remove(itemRef);
-
-    //         // Update local state
-    //         setFirebasedata((previous) => previous.filter((item) => item.id !== id));
-
-    //     } catch (error) {
-    //         console.error("Error deleting item:", error);
-    //     }
-    // };
-
-    
-
-
-
-
-    // array 
-
-    // const arr = [
-    //     {
-    //         pic: doctor,
-    //         title: "Mental Health Services",
-    //         service: "(9 Services)",
-    //         explain: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sint ab libero, necessitatibus molestiae non ducimus enim veritatis sunt neque! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sint ab libero, necessitatibus molestiae non ducimus enim veritatis sunt neque!",
-    //         btn: "Explore Service"
-    //     },
-    //     {
-    //         pic: lung,
-    //         title: "Lungs Releted Services",
-    //         service: "(12 Services)",
-    //         explain: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sint ab libero, necessitatibus molestiae non ducimus enim veritatis sunt neque! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sint ab libero, necessitatibus molestiae non ducimus enim veritatis sunt neque!",
-    //         btn: "Explore Service"
-    //     }
-
-    // ]
+   
     const handleDelete = async (id) => {
         console.log(id);
         try {

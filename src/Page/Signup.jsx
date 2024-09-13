@@ -12,59 +12,132 @@ import { get, ref } from "firebase/database"
 import { database as db } from "../firebase.jsx"
 import { app } from "../firebase.jsx"
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 // <<<<<<< HEAD
 
 import { useTranslation } from 'react-i18next';
+import { CollectionsOutlined } from "@mui/icons-material";
 
 function Signup() {
   const navigate = useNavigate(); // Use the hook here
 
   const { t } = useTranslation()
 
-  // =======
-  // import { Navigate } from "react-router-dom";
-  // function Signup() {
-    // const navigate = useNavigate(); // Use the hook here
-    // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
+
     const auth = getAuth(app)
     const [email, setemail] = useState("")
     const [password, setpassword] = useState("")
-    const signin = async () => {
-      try {
-        const credential = await signInWithEmailAndPassword(auth, email, password)
-        const user = credential.user
-       
-        // getting data from user table to check if activeProfile is is present or empty 
-        const userDb=ref(db,`User/${user?.uid}`)
+    // const signin = async () => {
+    //   toast.dismiss()
 
-        const snap=await get(userDb)
-        const data=await snap.val()
-        console.log("activeProfile key is ",data.activeProfile)
+    //   if (!email) {
+    //     toast.error("Email is required");
+    //     return;
+    //   }
+    //   if (!password) {
+    //     toast.error("Password is required");
+    //     return;
+    //   }
+    //   try {
+    //     const credential = await signInWithEmailAndPassword(auth, email, password)
+    //     const user = credential.user
+       
+    //     // getting data from user table to check if activeProfile is is present or empty 
+    //     const userDb=ref(db,`User/${user?.uid}`)
+
+    //     const snap=await get(userDb)
+    //     const data=await snap.val()
+    //     console.log("activeProfile key is ",data.activeProfile)
          
-        let activeProfileKey=data.activeProfile
-        if(activeProfileKey)
-        {
-          localStorage.setItem("userId", activeProfileKey)
-        }
-        else{
-          localStorage.setItem("userId", user?.uid)
-        }
+    //     let activeProfileKey=data.activeProfile
+
+     
+
+
+
+    //     if(activeProfileKey)
+    //     {
+    //       localStorage.setItem("userId", activeProfileKey)
+    //     }
+    //     else{
+    //       localStorage.setItem("userId", user?.uid)
+    //     }
 
         
-        // <<<<<<< HEAD
-        localStorage.setItem("parentId", user?.uid)
+    //     // <<<<<<< HEAD
+    //     localStorage.setItem("parentId", user?.uid)
 
-        // =======
-        // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
-        navigate("/home")
+      
+    //     navigate("/home")
+    //   } catch (error) {
+    //     console.log(error)
+    //     if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+    //       toast.error("Invalid Email/Password");
+    //     } else if (error.code === 'auth/invalid-email') {
+    //       toast.error("Invalid email format");
+    //     } else {
+    //       toast.error("An error occurred. Please try again.");
+    //     }
+    //   }
+    //   // finally {
+    //   //   setemail("")
+    //   //   setpassword("")
+    //   // }
+    // }
+
+    const signin = async () => {
+      // Dismiss all previous toasts before starting the process
+      toast.dismiss();
+  
+      // Validation for email and password fields
+      if (!email) {
+        toast.error("Email is required");
+        return;
+      }
+      if (!password) {
+        toast.error("Password is required");
+        return;
+      }
+  
+      try {
+        // Attempting to sign in
+        const credential = await signInWithEmailAndPassword(auth, email, password);
+        const user = credential.user;
+  
+        // Get data from the user table to check for activeProfile
+        const userDb = ref(db, `User/${user?.uid}`);
+        const snap = await get(userDb);
+        const data = await snap.val();
+        const activeProfileKey = data?.activeProfile;
+  
+        // Setting user data to localStorage
+        if (activeProfileKey) {
+          localStorage.setItem("userId", activeProfileKey);
+        } else {
+          localStorage.setItem("userId", user?.uid);
+        }
+        localStorage.setItem("parentId", user?.uid);
+  
+        // Navigate to home after successful login
+        navigate("/home");
       } catch (error) {
-        console.log(error)
+        // Handling errors based on Firebase error codes
+        console.log(error);
+        if (error.code === "auth/wrong-password" || error.code === "auth/user-not-found") {
+          toast.error("Invalid Email/Password");
+        } else if (error.code === "auth/invalid-email") {
+          toast.error("Invalid email format");
+        } else {
+          toast.error("An error occurred. Please try again.");
+        }
+      } finally {
+        // Optionally clear fields after login
+        setemail("");
+        setpassword("");
       }
-      finally {
-        setemail("")
-        setpassword("")
-      }
-    }
+    };
+  
     const handlegoBack = () => {
       navigate('/create');
     };
@@ -112,6 +185,7 @@ function Signup() {
               style={inputStyle}
               type="text"
               placeholder="Email"
+              value={email}
               required
               onChange={(e) => setemail(e.target.value)}
             />
@@ -140,6 +214,7 @@ function Signup() {
                   }}
                   type="text"
                   placeholder="Password"
+                  value={password}
                   onChange={(e) => setpassword(e.target.value)}
                 />
               </div>
@@ -182,6 +257,7 @@ function Signup() {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </div>
     );
   }
