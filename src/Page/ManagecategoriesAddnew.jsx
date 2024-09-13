@@ -108,7 +108,7 @@ function ServiceaddcategoryAddnewProduct() {
             serviceid: productId,
             servicename: name1,
             serviceprice: "",
-            uid: "",
+            uid: localStorage.getItem('userId'),
             websiteurl: ""
         }
         await set(newProductId, productData)

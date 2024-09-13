@@ -43,14 +43,6 @@ function Categories() {
             const data = await snap.val()
             console.log("data",data)
             try {
-            //     const arr = Object.keys(data).map((x) => ({
-            //         id: x,
-            //         ...data[x]
-            //     }))
-            //     console.log(arr)
-            //     setFirebasedata(arr)
-
-
             
             const filteredData = Object.keys(data)
                 .filter(key => data[key].uid=== userId) // Filter based on userId
@@ -128,47 +120,47 @@ function Categories() {
     };
 
 
-    const handleDelete = async (id) => {
-        // Reference to the item in Firebase
-        console.log(id)
-        try{
-        const itemRef = ref(db, `ServiceCategory/${id}`);
-        const categories=ref(db,`Services`)
+    // const handleDelete = async (id) => {
+    //     // Reference to the item in Firebase
+    //     console.log(id)
+    //     try{
+    //     const itemRef = ref(db, `ServiceCategory/${id}`);
+    //     const categories=ref(db,`Services`)
         
-        console.log(itemRef)
-         const categoriesSnapshot=await get(categories)
-        //  it will return objects of products 
-         const categoriesData=categoriesSnapshot.val()
-         console.log("categoriesData",categoriesData)
-        //   it will create array of products 
-         const categoriesData_arr=Object.values(categoriesData)
-         console.log("categoriesData_arr",categoriesData_arr)
+    //     console.log(itemRef)
+    //      const categoriesSnapshot=await get(categories)
+    //     //  it will return objects of products 
+    //      const categoriesData=categoriesSnapshot.val()
+    //      console.log("categoriesData",categoriesData)
+    //     //   it will create array of products 
+    //      const categoriesData_arr=Object.values(categoriesData)
+    //      console.log("categoriesData_arr",categoriesData_arr)
           
-      const categoriesToDelete=  categoriesData_arr.filter((x)=>x.categoryid===id)
-      console.log("categoriesToDelete",categoriesToDelete)
+    //   const categoriesToDelete=  categoriesData_arr.filter((x)=>x.categoryid===id)
+    //   console.log("categoriesToDelete",categoriesToDelete)
       
-    //   it will delete very product which has Service_id init  
-      for(const category_index of categoriesToDelete)
-      {
-        const deleting=ref(db,`servicesProducts/${category_index.productId}`)
+    // //   it will delete very product which has Service_id init  
+    //   for(const category_index of categoriesToDelete)
+    //   {
+    //     const deleting=ref(db,`Services/${category_index.categoryid}`)
        
-        console.log("category_index",category_index.productId)
-        await remove(deleting)
-      }
+    //     console.log("category_index",category_index.categoryid)
+    //     await remove(deleting)
+    //   }
       
 
 
        
-            // Delete the item from Firebase
-            await remove(itemRef);
+    //         // Delete the item from Firebase
+    //         await remove(itemRef);
 
-            // Update local state
-            setFirebasedata((previous) => previous.filter((item) => item.id !== id));
+    //         // Update local state
+    //         setFirebasedata((previous) => previous.filter((item) => item.id !== id));
 
-        } catch (error) {
-            console.error("Error deleting item:", error);
-        }
-    };
+    //     } catch (error) {
+    //         console.error("Error deleting item:", error);
+    //     }
+    // };
 
     
 
@@ -194,6 +186,46 @@ function Categories() {
     //     }
 
     // ]
+    const handleDelete = async (id) => {
+        console.log(id);
+        try {
+            // Reference to the ServiceCategory in Firebase
+            const itemRef = ref(db, `ServiceCategory/${id}`);
+            const servicesRef = ref(db, 'Services');
+    
+            console.log(itemRef);
+    
+            // Fetch the services data
+            const servicesSnapshot = await get(servicesRef);
+            const servicesData = servicesSnapshot.val();
+            console.log("servicesData", servicesData);
+    
+            // Check if services data exists
+            if (servicesData) {
+                // Loop through services data to find matching category IDs
+                for (const [key, value] of Object.entries(servicesData)) {
+                    if (value.categoryid === id) {
+                        // Reference to the service that needs to be deleted
+                        const serviceRef = ref(db, `Services/${key}`);
+                        console.log("Deleting service with key:", key);
+                        await remove(serviceRef);
+                    }
+                }
+            } else {
+                console.log("No services found for this category.");
+            }
+    
+            // Delete the ServiceCategory after services have been removed
+            await remove(itemRef);
+            console.log("Category deleted successfully");
+    
+            // Update local state
+            setFirebasedata((previous) => previous.filter((item) => item.id !== id));
+        } catch (error) {
+            console.error("Error deleting item:", error);
+        }
+    };
+    
 
     return (
         <div className="categories-maindiv">

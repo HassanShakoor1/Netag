@@ -33,7 +33,7 @@ function Serviceaddcategory() {
     const [name1, setname1] = useState("")
     const [description, setdescription] = useState("")
 
-    const id = Date.now()
+    console.log ( localStorage.getItem("userId"))
     // function to send data to firebase
    
     // const createnew = async () => {
@@ -90,7 +90,7 @@ function Serviceaddcategory() {
 
             const categorypath=sRef(db,`ServiceCategory`)
 
-            
+         
 
             const newcategories=push(categorypath)
             const newcategories_id=newcategories.key
