@@ -6,7 +6,7 @@ import edit from '../images/edit.png';
 import editcontact from '../images/editcontact.png';
 import './Edit.css';
 import '../App.css';
-import nav from '../images/nav-img.png';
+import nav from '../images/nav.png';
 import { TextField, useForkRef } from '@mui/material';
 import { styled } from '@mui/system';
 

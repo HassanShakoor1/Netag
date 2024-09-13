@@ -32,8 +32,6 @@ import ServiceAddCategory from "./Page/Serviceaddcategory";
 import ServiceEditCategory from "./Page/Editcategory";
 import ManageCategoriesAddNew from "./Page/ManagecategoriesAddnew";
 import Links from './Page/Links';
-
-
 // Correctly handle Protected Routes
 function ProtectedRoute({ element }) {
   const userId = localStorage.getItem("userId");

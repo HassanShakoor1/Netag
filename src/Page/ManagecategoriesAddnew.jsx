@@ -18,8 +18,6 @@ import { useTranslation } from 'react-i18next'
 
 
 
-
-
 function ServiceaddcategoryAddnewProduct() {
 
     const { t } = useTranslation()

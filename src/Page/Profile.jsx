@@ -13,10 +13,12 @@ import Card from '../Components/Card';
 import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly from 'firebase/database'
 import { database } from '../firebase.jsx'; // Import the initialized database
 import CircularProgress from '@mui/material/CircularProgress'; // Import the loader component
-
+import { useTranslation } from 'react-i18next';
 
 function Profile() {
   const navigate = useNavigate();
+  
+  const{t}=useTranslation()
 
   
  
@@ -203,14 +205,14 @@ const [imageLoading, setImageLoading] = useState(true);
             </div>
             {/* Profile details */}
             <h2 style={{ color: 'red', margin: '5px' }}>
-              {profileData.username} <br />
+              {profileData?.username} <br />
               <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> ({profileData.nickname})</span>
             </h2>
             <div className="data" style={{ lineHeight: '1' }}>
-              <h2 className='head' style={{ marginBottom: '0px' }}>Username: <span style={{ fontWeight: '100', }} className='para'>{profileData.username}</span></h2>
+              <h2 className='head' style={{ marginBottom: '0px' }}>{t("Username")}: <span style={{ fontWeight: '100', }} className='para'>{profileData.name}</span></h2>
             </div>
             <div className="data" style={{ lineHeight: '1' }}>
-              <h2 className='head'>Designation:<span style={{ fontWeight: '100', margin: '53px' }} className='para'>{profileData.designation}</span></h2>
+              <h2 className='head'>{t("Designation")}:<span style={{ fontWeight: '100', margin: '53px' }} className='para'>{profileData.designation}</span></h2>
             </div>
             <div className="data" style={{ lineHeight: '0' }}>
               <h2 className='head'>Marital Status:
@@ -237,7 +239,7 @@ const [imageLoading, setImageLoading] = useState(true);
                   textOverflow: 'ellipsis',
                 }}
               >
-                Company:
+               {t("Company")}:
                 <span
                   className="para"
                   style={{
@@ -349,21 +351,15 @@ const [imageLoading, setImageLoading] = useState(true);
   </div>
 
   {/* Render links */}
-  {links.map((link, index) => (
-    <div key={index} style={{
-      display: 'flex',
-      alignItems: 'center',
-      flexDirection: 'column',
-      gap: '10px',  // Space between image and name
-    }}>
+{links.map((link, index) => (
+  <div key={index} style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '10px' }}>
+    <img onClick={() => handleImageClick(link?.baseUrl)} src={link?.image} alt={link?.name || 'Link'} style={{ width: '50px', height: '50px' }} />
+    <span style={{ color: '#898787', fontSize: '12px' }}>{link?.name}</span>
+  </div>
+))}
+
  
-  <img onClick={()=>{handleImageClick(link?.baseUrl)}} src={link?.image} alt={link.name} style={{ width: '50px', height: '50px' }} />
-
-
-      <span style={{color:'#898787',fontSize:'12px'}}>{link.name}</span>
-    </div>
-  ))}
-
+  
 </div>
 <br /><br /><br />
 
