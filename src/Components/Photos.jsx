@@ -140,7 +140,7 @@ useEffect(() => {
         ))}
 
         <label htmlFor="file-upload" style={{
-          display: mediaFiles.length >= 9 ? 'none' : 'block',
+          Display: mediaFiles.length >= 9 ? 'none' : 'block',
           width: '95%',
           height: '50px',
            display: 'flex',

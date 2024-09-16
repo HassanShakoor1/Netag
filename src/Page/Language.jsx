@@ -5,7 +5,7 @@ import England from "../images/England.png";
 import Spain from "../images/Spain.png";
 import united from "../images/united.png";
 import France from "../images/France.png";
-import checkIcon from '../images/check.svg';
+import chek from '../images/chek.svg';
 
 
 import { Link } from "react-router-dom";
@@ -120,7 +120,7 @@ function Language() {
                                                         }}
                                                         onClick={() => handleSelectLanguage(language.id)}
                                                     >
-                                                        {selectedLanguage === language.id ? <><img src={checkIcon} alt="Selected" /> Selected</> : "Tap to Select"}
+                                                        {selectedLanguage === language.id ? <><img src={chek} alt="Selected" /> Selected</> : "Tap to Select"}
                                                     </button>
                                                 </div>
                                             </div>
