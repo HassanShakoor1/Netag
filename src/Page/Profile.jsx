@@ -355,19 +355,7 @@ style={{objectFit:'cover'}}
 
             </div>
           </div>
-         <div className="i-menu" >
-            <div className="menus">
-            
-
-              
-     <div>
-
-          
-              </div>
-            </div>
-          </div>
-
-
+       
  <div style={{
   display: 'grid',
   gridTemplateColumns: 'repeat(4, 1fr)',  // 4 columns in the grid

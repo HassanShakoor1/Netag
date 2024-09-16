@@ -154,7 +154,7 @@ function EditProfile() {
             {imgurl ? (
               <div style={{ position: 'relative' }}>
                 <img
-                  style={{ width: '100px', height: '100px', borderRadius: "100%", objectFit: 'cover' }}
+                  style={{ width: '120px', height: '120px', borderRadius: "100%", objectFit: 'cover' }}
                   src={imgurl}
                   alt="Uploaded Lady Image"
                 />
@@ -249,7 +249,8 @@ const imgStyle = {
   alignItems: 'center',
   margin: "2px auto",
   width: "30px",
-  marginTop: '1rem'
+  marginTop: '1.5rem'
+
 };
 
 const mainImgStyle = {

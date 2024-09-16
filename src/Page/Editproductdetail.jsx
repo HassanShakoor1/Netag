@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate, useParams } from 'react-router-dom';
@@ -6,6 +7,7 @@ import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage
 import { storage, database } from '../firebase'; // Import your firebase configuration
 import './Editproductdetail.css';
 import edit from '../images/edit.png';
+import { FaTimes } from 'react-icons/fa';
 
 function Editproductdetail() {
   const navigate = useNavigate();
@@ -54,14 +56,18 @@ function Editproductdetail() {
     }
   }, [productid]);
 
+  useEffect(() => {
+    const savedImages = JSON.parse(localStorage.getItem('images'));
+    if (savedImages) {
+      setImages(savedImages);
+      localStorage.removeItem('images');
+    }
+  }, []);
+
   const show = () => {
-    setShowAll(prev => !prev); // Toggle visibility state
-  
-    // Pass `images` state to the Gallery component
-    navigate('/gallery', { state: { imgUrl: images } });
+    setShowAll(prev => !prev);
+    navigate('/gallery', { state: { images: images } });
   };
-  
-  
 
   const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
@@ -90,7 +96,6 @@ function Editproductdetail() {
   };
 
   const handleColorChange = (e) => {
-    // Split the input value by commas and trim whitespace
     const color = e.target.value.split(',').map(color => color.trim()).filter(color => color.length > 0);
     setFormData(prevData => ({ ...prevData, color }));
   };
@@ -109,7 +114,6 @@ function Editproductdetail() {
         console.log("Update called with product ID:", productid);
         console.log("Form data for update:", formData);
 
-        // Update the formData to include the productid explicitly
         const updatedFormData = {
           ...formData,
           productid: productid,  // Ensure productid is included
@@ -134,10 +138,8 @@ function Editproductdetail() {
 
         console.log("Form data for create:", updatedFormData);
 
-        // Set the data to Firebase
         await set(newProductRef, updatedFormData);
         
-        // Update formData state after successfully setting data in Firebase
         setFormData(updatedFormData);
       }
 
@@ -148,6 +150,16 @@ function Editproductdetail() {
       setLoading(false);
     }
   };
+
+  const handleImageRemove = (index) => {
+    setImages(prevImages => {
+      // Create a new array with the image at the specified index removed
+      const updatedImages = [...prevImages];
+      updatedImages.splice(index, 1);
+      return updatedImages;
+    });
+  };
+
 
   const remainingImagesCount = images.length - 3;
   const displayedImages = showAll ? images : images.slice(0, 3);
@@ -256,20 +268,7 @@ function Editproductdetail() {
               
               </button>
               </div>
-             
-              {/* {formData.color.map((color, index) => (
-                <div key={index}>
-                  <input
-                    type="text"
-                    value={color}
-                    onChange={(e) => handleColorListChange(index, e.target.value)}
-                    style={{ marginTop: '5px', borderRadius: '20px', backgroundColor: "#F7F7F7", width: '90%' }}
-                  />
-                </div>
-              ))} */}
             </div>
-
-
 
 
           </div>
@@ -321,25 +320,58 @@ function Editproductdetail() {
 
             {/* Display first uploaded image */}
             {displayedImages[0] && (
+              
               <div
-                style={{
-                  flex: '1 1 50%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  border: '1px solid #e2e8f0',
-                  width: '100%',
-                  height: '150px',
-                  borderRadius: '20px',
-                  backgroundColor: '#F4F4F4',
-                }}
-              >
-                <img
-                  src={displayedImages[0]}
-                  alt="Uploaded"
-                  style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '10px' }}
-                />
-              </div>
+  style={{
+    flex: '1 1 50%',
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    border: '1px solid #e2e8f0',
+    width: '100%',
+    height: '150px',
+    borderRadius: '20px',
+    backgroundColor: '#F4F4F4',
+    position: 'relative', // Added for button positioning
+  }}
+>
+  <img
+    src={displayedImages[0]}
+    alt="Uploaded"
+    style={{
+      maxWidth: '100%',
+      maxHeight: '100%',
+      borderRadius: '10px',
+    }}
+  />
+  
+  {/* Remove button */}
+  <button
+    style={{
+      width: '20px',
+      height: '20px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      border: 'none',
+      background: 'transparent',
+      position: 'absolute',
+      top: '5px', // Adjust positioning if needed
+      right: '5px',
+      cursor: 'pointer',
+      zIndex: 1,
+    }}
+    className="removeButton"
+    onClick={() => handleImageRemove(displayedImages)}
+  >
+    <FaTimes />
+  </button>
+</div>
+
+
+
+
+
             )}
           </div>
 
@@ -347,71 +379,143 @@ function Editproductdetail() {
           <div style={{ display: 'flex', padding: '20px', gap: '10px' }}>
             {/* Display second uploaded image */}
             {displayedImages[1] && (
+            
+
               <div
-                style={{
-                  flex: '1 1 50%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  border: '1px solid #e2e8f0',
-                  width: '100%',
-                  height: '150px',
-                  borderRadius: '20px',
-                  backgroundColor: '#F4F4F4',
-                }}
-              >
-                <img
-                  src={displayedImages[1]}
-                  alt="Uploaded"
-                  style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '10px' }}
-                />
-              </div>
+  style={{
+    flex: '1 1 50%',
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    border: '1px solid #e2e8f0',
+    width: '100%',
+    height: '150px',
+    borderRadius: '20px',
+    backgroundColor: '#F4F4F4',
+    position: 'relative', // Added for button positioning
+  }}
+>
+  <img
+    src={displayedImages[1]}
+    alt="Uploaded"
+    style={{
+      maxWidth: '100%',
+      maxHeight: '100%',
+      borderRadius: '10px',
+    }}
+  />
+
+  {/* Remove button */}
+  <button
+    style={{
+      width: '20px',
+      height: '20px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      border: 'none',
+      background: 'transparent',
+      position: 'absolute',
+      top: '5px', // Adjust positioning if needed
+      right: '5px',
+      cursor: 'pointer',
+      zIndex: 1,
+    }}
+    className="removeButton"
+    onClick={() => handleImageRemove(displayedImages)} // Add your image remove function here
+  >
+    <FaTimes />
+  </button>
+</div>
+
+
             )}
 
             {/* Display third uploaded image and 'more' button */}
             {displayedImages[2] && (
               <div
-                style={{
-      flex: '1 1 50%',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center', // Center the image vertically
-      flexDirection: 'column',
-      border: '1px solid #e2e8f0',
+  style={{
+    flex: '1 1 50%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    border: '1px solid #e2e8f0',
+    width: '100%',
+    height: '150px',
+    borderRadius: '20px',
+    backgroundColor: '#F4F4F4',
+    position: 'relative', // For positioning the remove button
+  }}
+>
+  <div
+    style={{
       width: '100%',
-      height: '150px',
-      borderRadius: '20px',
-      backgroundColor: '#F4F4F4',
-      position: 'relative' // Added for absolute positioning of button
+      height: '100%',
+      background: remainingImagesCount >= 0 ? 'black' : 'black',
+      opacity: remainingImagesCount >= 1 ? '0.4' : '1',
+      borderRadius: '15px',
+      position: 'relative',
     }}
-              >
-                
-                <div style={{
-        width: '100%',
-        height: '100%',
-        backGround: remainingImagesCount >= 0 ? 'black' : 'black', 
-        opacity: remainingImagesCount >= 1 ? '0.4' : '1', 
-        borderRadius: '15px',
-        position: 'relative'
-              
-                
-                }}>
-                
-                <img
-                  src={displayedImages[2]}
-                  alt="Uploaded"
-                  style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: '10px', position:'relative',right:'-20px' }}
-                />
-                </div>
-                {remainingImagesCount > 0 && (
-                  <button
-                    onClick={show}
-                    style={{ marginTop: '10px', padding: '10px', borderRadius: '20px', border: 'none',outline:'none', cursor: 'pointer',position:'absolute',marginLeft:'40px',background:'transparent',color:'red',fontWeight:"700" }}
-                  >
-                    {showAll ? `Show Less (${remainingImagesCount})` : `Show More (${remainingImagesCount})`}
-                  </button>
-                )}
-              </div>
+  >
+    <img
+      src={displayedImages}
+      alt="Uploaded"
+      style={{
+        maxWidth: '100%',
+        maxHeight: '100%',
+        borderRadius: '10px',
+        position: 'relative',
+        right: '-20px',
+      }}
+    />
+    {/* Remove Button */}
+    <button
+      style={{
+        width: '20px',
+        height: '20px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        border: 'none',
+        background: 'transparent',
+        position: 'absolute',
+        top: '5px',
+        right: '5px',
+        cursor: 'pointer',
+        zIndex: 1,
+      }}
+      className="removeButton"
+      onClick={() => handleImageRemove(displayedImages[2])} // Remove the image
+    >
+      <FaTimes />
+    </button>
+  </div>
+
+  {remainingImagesCount > 0 && (
+    <button
+      onClick={show}
+      style={{
+        marginTop: '10px',
+        padding: '10px',
+        borderRadius: '20px',
+        border: 'none',
+        outline: 'none',
+        cursor: 'pointer',
+        position: 'absolute',
+        marginLeft: '40px',
+        background: 'transparent',
+        color: 'red',
+        fontWeight: '700',
+      }}
+    >
+      {showAll
+        ? `Show Less (${remainingImagesCount})`
+        : `Show More (${remainingImagesCount})`}
+    </button>
+  )}
+</div>
+
             )}
           </div>
         </div>
