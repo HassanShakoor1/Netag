@@ -6,6 +6,7 @@ import Spain from "../images/Spain.png";
 import united from "../images/united.png";
 import France from "../images/France.png";
 import check from "../images/check.svg";
+
 import { Link } from "react-router-dom";
 import { ref as sRef, onValue, update } from "firebase/database";
 import { useContext } from 'react';
