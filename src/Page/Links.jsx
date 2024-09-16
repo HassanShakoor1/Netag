@@ -137,12 +137,12 @@ const links = {
   
 
   return (
-    <div className='LinksArray'>
-      <div className="i-menu">
-        <nav className='nav2 menus' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', position: 'relative' }}>
+    <div className='LinksArray' >
+      <div className="i-menu" style={{margin:'0'}}>
+        <nav className='nav2 menus' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' ,marginTop:'20px'}}>
           <IoChevronBack
             onClick={handlegoBack}
-            style={{ color: "red", fontSize: "25px", cursor: 'pointer', position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }}
+            style={{ color: "red", fontSize: "25px", cursor: 'pointer', position: 'absolute', left: '0rem', top: '50%', transform: 'translateY(-40%)' }}
           />
           <p style={{ fontSize: '20px', color: 'red', margin: '0' }}>
             Links
@@ -150,7 +150,10 @@ const links = {
         </nav>
 
         <div style={{ background: "rgb(245, 245, 245)", width: '100%', maxWidth: "430px", display: 'flex', flexDirection: "column", justifyContent: 'center', alignItems: 'center', margin: '0px auto', borderRadius: "25px" }}>
-          <h2 style={{ width: '100%', maxWidth: '430px', display: 'flex', margin: '0px auto', marginTop: "20px", marginBottom: '20px', paddingLeft: '20px', fontSize: '20px', color: "rgb(66, 66, 66)", fontWeight: "100" }}>Social Links</h2>
+         <div style={{width:"90%"}}>
+         <h2 style={{ width: '100%', maxWidth: '430px', display: 'flex', margin: '0px auto', marginTop: "20px", marginBottom: '20px', fontSize: '20px', color: "rgb(66, 66, 66)", fontWeight: "100" }}>Social Links</h2>
+         </div>
+        
           <div className="menus flex-container">
             <Slide style={{ width: "96%" }} in={setting} direction="up" timeout={{ appear: 500, enter: 500, exit: 500 }}>
               <div className="slide_main_div relative">

@@ -20,7 +20,8 @@ import { useTranslation } from 'react-i18next';
 function Language() {
     const{setLanguage}=useContext(AppContext)
  
-     // for translation 
+     // for translation git add path/to/images/check.svg
+
      const { t } = useTranslation()
 
     const [selectedLanguage, setSelectedLanguage] = useState(null); // Track the selected language ID or name

@@ -213,7 +213,7 @@ function EditContact() {
     return (
         <div className="Editcontainer">
             <div className="edit-Contact">
-                <nav className='nav2' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', position: 'relative' }}>
+                <nav className='nav2' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                     <IoChevronBack
                         onClick={handlegoBack}
                         style={{ color: "red", fontSize: "25px", cursor: 'pointer', position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }}
