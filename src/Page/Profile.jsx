@@ -138,46 +138,24 @@ function Profile() {
   
     fetchData();
   }, []);
-  
-
-
-
-
-  // // <<<<<<< HEAD
-  //   fetchData();
-  // }, []);
+ 
   console.log(profileData)
-  // =======
-
-
-  
-  
 
 
 const handlMoveLink=()=>{
 navigate(`/home/Link`)
 }
 
-
-
-
-
-  // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
   const [imageLoading, setImageLoading] = useState(true);
 
   const handleImageLoad = () => {
     setImageLoading(false);
   };
 
-  // Toggle handler to switch between lead and direct modes
   const handleToggle = (toggleId) => {
     setActiveToggle(prevId => (prevId === toggleId ? null : toggleId));
   };
 
-  // Handler to toggle slide visibility and set link data
- 
-
-  // Navigate to the Edit Profile page
   const handleEditProfile = () => {
     navigate('/edit-profile');
   };
@@ -196,10 +174,6 @@ navigate(`/home/Link`)
       </div>
     );
   }
-
-
-
-
   return (
 
     <div className="ProfileContainer">

@@ -17,7 +17,7 @@ useEffect(() => {
   if (userId) {
     const database = getDatabase(app);
     const userRef = ref(database, `/PhotosVideos`);
-
+console.log(userId)
     get(userRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
