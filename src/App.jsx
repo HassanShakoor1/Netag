@@ -100,6 +100,7 @@ function App() {
           <Route path="/home/setting/subscript" element={<Subscription />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/edit-contact" element={<EditContact />} />
+          {/* <Route path="/edit-contact:/id" element={<EditContact />} /> */}
           <Route path="/edit-product" element={<ProductCategory />} />
           <Route path="/edit-product/:id" element={<ProductCategory />} />
           <Route path="/product-catagory" element={<AddCategory />} />

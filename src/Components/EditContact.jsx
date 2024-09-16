@@ -4,7 +4,7 @@ import { IoChevronBack } from "react-icons/io5";
 import video from '../images/video.png';
 import { useNavigate } from 'react-router-dom';
 import editcontact from '../images/editcontact.png';
-import { getDatabase, ref, set, update, get,remove } from 'firebase/database';
+import { getDatabase, ref, set, update, get, remove, onValue } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase'; // Adjust this import according to your Firebase setup
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Import Firebase Auth
@@ -12,33 +12,126 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Import Firebase 
 function EditContact() {
     const [mediaFiles, setMediaFiles] = useState([]);
     const [recordid, setRecordid] = useState(null);
-    const [uid, setUid] = useState(null); // State to store current user's UID
     const navigate = useNavigate();
-
 
     useEffect(() => {
         const auth = getAuth(app);
     
-        // Async function inside useEffect
+        const checkAuthAndFetchData = async () => {
+            const auth = getAuth(app);
+            const unsubscribe = onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    const userId = user.uid;
+        
+                    // Check if recordid exists in local storage
+                    let storedRecordId = localStorage.getItem(`recordid_${userId}`);
+                    let recordId;
+        
+                    if (storedRecordId) {
+                        // If recordid is already in local storage, use it
+                        recordId = storedRecordId;
+                    } else {
+                        // Fetch the recordid from Firebase
+                        const database = getDatabase(app);
+                        const userRecordRef = ref(database, `UserRecords/${userId}`);
+                        const snapshot = await get(userRecordRef);
+        
+                        if (snapshot.exists()) {
+                            // If recordid exists in Firebase, use it
+                            recordId = snapshot.val().recordid;
+                        } else {
+                            // Generate a new recordid
+                            recordId = Date.now().toString();
+                            // Save new recordid to Firebase
+                            await set(userRecordRef, { recordid: recordId });
+                        }
+        
+                        // Store recordid in local storage
+                        localStorage.setItem(`recordid_${userId}`, recordId);
+                    }
+        
+                    setRecordid(recordId);
+        
+
+                    // Fetch existing media files for the specific recordid
+                    if (recordId) {
+                        await fetchExistingMediaFiles(recordId);
+                    }
+                } else {
+                    console.error('User is not authenticated.');
+                    navigate('/login'); // Redirect to login page if not authenticated
+                }
+            });
+        
+            return () => unsubscribe();
+        };
+        
+    
+        checkAuthAndFetchData();
+    }, [navigate]);
+
+    const fetchExistingMediaFiles = async (recordid) => {
+        const auth = getAuth();
+        const currentUser = auth.currentUser;
+        const currentUid = currentUser ? currentUser.uid : null;
+    
+        if (!currentUid) {
+            console.log("User is not authenticated.");
+            return;
+        }
+    
+        const database = getDatabase(app);
+        const recordRef = ref(database, `PhotosVideos/${recordid}`);
+    
+        onValue(recordRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+    
+                // Check if the data belongs to the current user
+                if (data.uid === currentUid) {
+                    const combinedMediaFiles = [
+                        ...(data.selectedImages || []).map(url => ({ url, type: 'image' })),
+                        ...(data.videosUri || []).map(url => ({ url, type: 'video' })),
+                    ];
+                    setMediaFiles(combinedMediaFiles);
+                } else {
+                    console.log("This record does not belong to the current user.");
+                    setMediaFiles([]);
+                }
+            } else {
+                console.log('No data found.');
+                setMediaFiles([]);
+            }
+        }, {
+            onlyOnce: true
+        });
+    };
+    
+    
+    useEffect(() => {
+        const auth = getAuth(app);
+    
         const checkAuthAndFetchData = async () => {
             const unsubscribe = onAuthStateChanged(auth, async (user) => {
                 if (user) {
-                    setUid(user.uid); // Set the current user's UID
+                    const userId = user.uid;
     
-                    // Fetch or create record ID specific to the user's UID
-                    const storedRecordId = localStorage.getItem(`recordid_${user.uid}`);
-                    let id;
-                    if (!storedRecordId) {
-                        id = Date.now().toString(); // Use current timestamp as ID
-                        localStorage.setItem(`recordid_${user.uid}`, id);
+                    // Fetch the record ID from the user's records
+                    const database = getDatabase(app);
+                    const userRecordRef = ref(database, `UserRecords/${userId}`);
+                    const snapshot = await get(userRecordRef);
+    
+                    if (snapshot.exists()) {
+                        const { recordid } = snapshot.val();
+                        localStorage.setItem(`recordid_${userId}`, recordid);
+                        setRecordid(recordid);
+    
+                        // Fetch existing media files for the specific recordid
+                        if (recordid) {
+                            await fetchExistingMediaFiles(recordid);
+                        }
                     } else {
-                        id = storedRecordId;
-                    }
-                    setRecordid(id);
-    
-                    // Fetch existing media files for the specific user
-                    if (id) {
-                        await fetchExistingMediaFiles(id, user.uid);
+                        console.error('Record ID not found.');
                     }
                 } else {
                     console.error('User is not authenticated.');
@@ -46,147 +139,108 @@ function EditContact() {
                 }
             });
     
-            // Clean up the subscription when the component unmounts
             return () => unsubscribe();
         };
     
-        // Call the async function
         checkAuthAndFetchData();
-    }, [navigate]); // Ensure `navigate` is included in the dependency array
+    }, [navigate]);
     
-    const fetchExistingMediaFiles = async (recordid, uid) => {
-        const database = getDatabase(app);
-        const userRef = ref(database, 'PhotosVideos'); // Reference to the PhotosVideos node
-    
-        try {
-            const snapshot = await get(userRef);
-    
-            if (snapshot.exists()) {
-                // Find the record with the matching UID
-                const records = snapshot.val();
-                const record = Object.values(records).find(record => record.uid === uid);
-    
-                if (record) {
-                    const combinedMediaFiles = [
-                        ...(record.selectedImages || []).map(url => ({ url, type: 'image' })),
-                        ...(record.videosUri || []).map(url => ({ url, type: 'video' })),
-                    ];
-                    setMediaFiles(combinedMediaFiles);
-                } else {
-                    console.log('No matching UID found for the record.');
-                    setMediaFiles([]);
-                }
-            } else {
-                console.log('No existing data found.');
-            }
-        } catch (error) {
-            console.error('Error fetching existing data:', error);
-        }
-    };
-    
-    
-
-
-
-
-
     const handlegoBack = () => {
         navigate('/home');
     };
 
     const handleImageUpload = async (event) => {
-        if (!uid) {
-            console.error('User UID is not available.');
+        if (!recordid) {
+            console.error('Record ID is not available.');
             return;
         }
-    
+
         const files = Array.from(event.target.files);
         const imageFiles = files.filter(file => file.type.startsWith('image/'));
-    
+
         if (mediaFiles.filter(file => file.type === 'image').length + imageFiles.length > 4) {
             console.warn('You can only upload up to 4 images.');
             return;
         }
-    
+
         const storage = getStorage(app);
         const newMediaFiles = [...mediaFiles];
-    
+
         for (const file of imageFiles) {
-            const fileRef = storageRef(storage, `PhotosVideos/${uid}/${file.name}`);
+            const fileRef = storageRef(storage, `PhotosVideos/${recordid}/${file.name}`);
             try {
                 await uploadBytes(fileRef, file);
                 const url = await getDownloadURL(fileRef);
                 newMediaFiles.push({ url, type: 'image' });
                 setMediaFiles([...newMediaFiles]);
-                await saveMediaFiles(newMediaFiles);
+                await saveMediaFiles(recordid, newMediaFiles);
             } catch (error) {
                 console.error('Error uploading file:', error);
             }
         }
     };
-    
+
     const handleVideoUpload = async (event) => {
-        if (!uid) {
-            console.error('User UID is not available.');
+        if (!recordid) {
+            console.error('Record ID is not available.');
             return;
         }
-    
+
         const files = Array.from(event.target.files);
         const videoFile = files.find(file => file.type.startsWith('video/'));
-    
+
         if (!videoFile) {
             console.warn('No valid video selected.');
             return;
         }
-    
+
         if (mediaFiles.filter(file => file.type === 'video').length >= 1) {
             console.warn('You can only upload one video.');
             return;
         }
-    
+
         const storage = getStorage(app);
         const newMediaFiles = [...mediaFiles];
-    
-        const fileRef = storageRef(storage, `PhotosVideos/${uid}/${videoFile.name}`);
+
+        const fileRef = storageRef(storage, `PhotosVideos/${recordid}/${videoFile.name}`);
         try {
             await uploadBytes(fileRef, videoFile);
             const url = await getDownloadURL(fileRef);
             newMediaFiles.push({ url, type: 'video' });
             setMediaFiles([...newMediaFiles]);
-            await saveMediaFiles(newMediaFiles);
+            await saveMediaFiles(recordid, newMediaFiles);
         } catch (error) {
             console.error('Error uploading file:', error);
         }
     };
-    
 
-    const saveMediaFiles = async (newMediaFiles) => {
+    const saveMediaFiles = async (recordid, newMediaFiles) => {
         const database = getDatabase(app);
-        const userRef = ref(database, `PhotosVideos/${recordid}`);
-        
+        const recordRef = ref(database, `PhotosVideos/${recordid}`);
+    
         const mediaData = {
+            id: recordid,
+            uid: localStorage.getItem('userId'), // or user.uid if available directly
             selectedImages: newMediaFiles.filter((media) => media.type === 'image').map((media) => media.url),
             videosUri: newMediaFiles.filter((media) => media.type === 'video').map((media) => media.url),
-            uid: uid,
-            id: recordid,
         };
     
         try {
             if (mediaData.selectedImages.length === 0 && mediaData.videosUri.length === 0) {
                 // Delete the main record if no media files are left
-                await remove(userRef);
+                await remove(recordRef);
                 console.log('Main record deleted as no media files are left.');
                 return;
             }
     
-            const snapshot = await get(userRef);
+            const snapshot = await get(recordRef);
             if (snapshot.exists()) {
                 // Update existing record
-                await update(userRef, mediaData);
+                await update(recordRef, mediaData);
                 console.log('Data updated successfully');
             } else {
                 // Create new record
-                await set(userRef, mediaData);
+                await set(recordRef, mediaData);
                 console.log('Data saved successfully');
             }
         } catch (error) {
@@ -195,19 +249,16 @@ function EditContact() {
     };
     
 
-
-
-
     const handleRemoveImage = (index) => {
         const updatedMediaFiles = mediaFiles.filter((_, i) => i !== index);
         setMediaFiles(updatedMediaFiles);
-        saveMediaFiles(updatedMediaFiles);
+        saveMediaFiles(recordid, updatedMediaFiles);
     };
 
     const handleRemoveVideo = () => {
         const updatedMediaFiles = mediaFiles.filter(file => file.type !== 'video');
         setMediaFiles(updatedMediaFiles);
-        saveMediaFiles(updatedMediaFiles);
+        saveMediaFiles(recordid, updatedMediaFiles);
     };
 
     return (
