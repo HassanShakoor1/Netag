@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBack } from "react-icons/io5";
 import edit from '../images/edit.png';
@@ -8,10 +8,9 @@ import '../App.css';
 import nav from '../images/nav.png';
 import { TextField } from '@mui/material';
 import { styled } from '@mui/system';
-import { getDatabase, ref, set,push, update } from "firebase/database";
+import { getDatabase, ref, update,get } from "firebase/database";
 import { database } from '../firebase';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import Cropper from './Cropper'; // Import your Cropper component
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL ,} from "firebase/storage";
 
 const CustomTextField = styled(TextField)({
   '& .MuiOutlinedInput-root': {
@@ -28,175 +27,81 @@ function EditProfile() {
   const [status, setStatus] = useState("");
   const [company, setCompany] = useState("");
   const [nickname, setNickname] = useState("");
-  // const [profile, setProfile] = useState("");
-  // const [cover, setCover] = useState("");
   const [imageFile, setImageFile] = useState("");
   const [imgurl, setImgurl] = useState("");
   const [imageFile1, setImageFile1] = useState("");
   const [imgurl1, setImgurl1] = useState("");
   const [isSaving, setIsSaving] = useState(false); 
 
-const userId=localStorage.getItem("userId")
-console.log(userId)
+  const userId = localStorage.getItem("userId");
+  const parentId = localStorage.getItem("parentId"); // Retrieve parentId
 
-const handleSave = async () => {
-  setIsSaving(true); 
-  try {
-    // Retrieve userId from localStorage
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-      console.error("No userId found in localStorage");
-      alert("User ID not found. Please log in again.");
-      return;
-    }
-
-    const storage = getStorage(); // Initialize storage
-    const userRef = ref(database, `User/${userId}`); // Reference path includes userId
-
-    let ImageUrl = [];
+  const handleSave = async () => {
+    setIsSaving(true); 
     try {
-      // Handle profile image upload
-      if (imageFile) {
-        const imageRef = storageRef(storage, `images/${userId}/${imageFile.name}`); // Store images under user-specific folder
-        await uploadBytes(imageRef, imageFile);
-        console.log("Profile image uploaded successfully");
-
-        const url = await getDownloadURL(imageRef);
-        ImageUrl.push(url);
+      if (!userId || !parentId) {
+        console.error("No userId or parentId found in localStorage");
+        alert("User ID or Parent ID not found. Please log in again.");
+        return;
       }
-
-      // Handle cover image upload
-      if (imageFile1) {
-        const imageRef1 = storageRef(storage, `images/${userId}/${imageFile1.name}`); // Store images under user-specific folder
-        await uploadBytes(imageRef1, imageFile1);
-        console.log("Cover image uploaded successfully");
-
-        const url1 = await getDownloadURL(imageRef1);
-        ImageUrl.push(url1);
+  
+      const storage = getStorage(); // Initialize storage
+      const userRef = ref(database, `User/${parentId}`); // Reference path includes parentId and userId
+  
+      // Retrieve existing user data
+      const userSnapshot = await get(userRef);
+      const existingData = userSnapshot.val() || {};
+  
+      let ImageUrl = [...(existingData.profilePicture ? [existingData.profilePicture] : [])];
+      let BackgroundImageUrl = [...(existingData.backgroundPicture ? [existingData.backgroundPicture] : [])];
+  
+      try {
+        // Handle profile image upload
+        if (imageFile) {
+          const imageRef = storageRef(storage, `images/${userId}/${imageFile.name}`); // Store images under user-specific folder
+          await uploadBytes(imageRef, imageFile);
+          console.log("Profile image uploaded successfully");
+  
+          const url = await getDownloadURL(imageRef);
+          ImageUrl[0] = url; // Update profile image URL
+        }
+  
+        // Handle cover image upload
+        if (imageFile1) {
+          const imageRef1 = storageRef(storage, `images/${userId}/${imageFile1.name}`); // Store images under user-specific folder
+          await uploadBytes(imageRef1, imageFile1);
+          console.log("Cover image uploaded successfully");
+  
+          const url1 = await getDownloadURL(imageRef1);
+          BackgroundImageUrl[0] = url1; // Update cover image URL
+        }
+  
+        // Save or update user data with the parentId and userId as references
+        await update(userRef, {
+          username: username || existingData.username,
+          designation: designation || existingData.designation,
+          materialStatus: status || existingData.materialStatus,
+          companyname: company || existingData.companyname,
+          nickname: nickname || existingData.nickname,
+          profilePicture: ImageUrl[0] || existingData.profilePicture, // Profile image URL
+          backgroundPicture: BackgroundImageUrl[0] || existingData.backgroundPicture, // Cover image URL
+          id: userId // Save the userId for reference
+        });
+  
+        alert("Data saved successfully!");
+        navigate('/home');
+  
+      } catch (error) {
+        console.error("Error uploading images or saving data:", error);
+        alert("Error: " + error.message);
       }
-
-      // Save or update user data with the userId as a reference
-      await update(userRef, {
-        username: username,
-        designation: designation,
-        materialStatus: status,
-        companyname: company,
-        nickname: nickname,
-        profilePicture: ImageUrl[0] || "", // Profile image URL
-        backgroundPicture: ImageUrl[1] || "",   // Cover image URL
-        id: userId                 // Save the userId for reference
-      });
-
-      alert("Data saved successfully!");
-      navigate('/home')
-
     } catch (error) {
-      console.error("Error uploading images or saving data:", error);
-      alert("Error: " + error.message);
+      console.log("An unexpected error occurred:", error);
+    } finally {
+      setIsSaving(false);
     }
-<<<<<<< HEAD
-  } catch (error) {
-    console.log("An unexpected error occurred:", error);
-  }
-};
-=======
   };
-}
-catch(error){
-  console.log(error)
-}
-}
-}  
-  // getting data from firebase 
-
-  // const getData=async()=>{
-  //   const data=uRef(db,`Users/${userId}`)
-  //   onValue(data,async (snapShot)=>{
-  //     let fetchedData= await snapShot.val()
-  //     console.log(fetchedData)
-    
-
-
-  //   })
-  // }
-    // }
-  // update data to firebase 
-
-  // const updateData=async()=>{
-     
-    
-  // }
   
-
-  const handleBack = () => {
-    navigate(-1);
-  };
-
-  useEffect(()=>{
-    // getData()
-  },[])
-
-  // useEffect(()=>{
-  //   const signin=async()=>{
-         
-  //     try {
-  //       // const credential=await signInWithEmailAndPassword(auth,email,password)
-  //       // const user=credential.user
-  
-  //       // localStorage.setItem("userId",user?.uid)
-  
-  //       const dbref=ref(db,`users/${localStorage.getItem("userId")}`)
-       
-        
-      
-  //        const snap=await get(dbref)
-  //        const data= await snap.val()
-  //        console.log(data)
-  //        const data2=data.isCompany 
-  //        setnavigatedata(data2)
-        
-     
-  //       // setcompany(data.isCompany)
-  //       // localStorage.setItem("iscompany",data?.isCompany)
-      
-     
-    
-  
-  //       // navigate("/home")
-        
-  //       // const userid=localStorage.getItem("iscompany")
-        
-  //   // userid? <Navigate to="/edit-profile"/> : <Navigate to="/create" />
-  //   if (navigatedata === false) {
-  //     navigate('/home')
-  //   } 
-  
-  // // else {
-  // //   navigate('/home')
-  // // }
-        
-  //   // console.log(userid)
- 
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-    
-  //   }
-  //   signin()
-  // },[navigatedata])
-
-// console.log(formData)
-// =======
-  //     navigate('/home')
-
-  //   } catch (error) {
-  //     console.error("Error uploading images or saving data:", error);
-  //     alert("Error: " + error.message);
-  //   }
-  // }
-// };
->>>>>>> d3ff043 (new commit)
-
 
   const handleFileChange1 = (event) => {
     const file = event.target.files[0];
@@ -209,6 +114,7 @@ catch(error){
       reader.readAsDataURL(file);
     }
   };
+  
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -225,11 +131,11 @@ catch(error){
     setImgurl("");  // Clear the image URL to remove the displayed image
     setImageFile(null);  // Clear the file state if needed
   };
+  
   const handleRemoveImagemain = () => {
     setImgurl1("");  // Clear the image URL to remove the displayed image
     setImageFile1(null);  // Clear the file state if needed
   };
-
 
   return (
     <div className="container">

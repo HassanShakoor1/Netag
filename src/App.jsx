@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import './App.css'; // Include your CSS for transition
+import './App.css'; // Include your CSS for transitions
+
 // Import your pages
 import EditProfile from './Page/EditProfile';
 import Profile from './Page/Profile';
@@ -28,22 +29,44 @@ import ManageCategories from './Page/Managecategories';
 import Setting from './Page/Setting38';
 import MyProfile from './Page/Myprofile';
 import Profile1 from './Page/Profile1';
+import Managecatagories from './Page/Managecategories'
+import Myprofile from './Page/Myprofile'
+import ProductCatagory  from './Page/ProductCatagory'
+import Addcatagory  from './Page/Addcatagory'
+import Editproductdetail  from './Page/Editproductdetail'
+ 
+
+import Serviceaddcategory from "./Page/Serviceaddcategory"
+import Serviceeditcategory from "./Page/Editcategory"
+import Language from "../src/Page/Language"
+
+import {database as db} from "./firebase.jsx"
+import {get,ref} from "firebase/database"
+
+import ManagecategoriesAddnewProduct from "./Page/ManagecategoriesAddnew"
+
+
+import ManageCategoriesEdit from './Page/ManageCategoriesEdit';
+import CreateNewProfile from './Page/CreateNewProfile';
+
+import ManageCategoriesAddNew from "./Page/ManagecategoriesAddnew";
 import ServiceAddCategory from "./Page/Serviceaddcategory";
 import ServiceEditCategory from "./Page/Editcategory";
-import ManageCategoriesAddNew from "./Page/ManagecategoriesAddnew";
-<<<<<<< HEAD
+
+
+
 import Links from './Page/Links';
-=======
 
 
-// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
->>>>>>> d3ff043 (new commit)
+
 // Correctly handle Protected Routes
 function ProtectedRoute({ element }) {
   const userId = localStorage.getItem("userId");
   return userId ? element : <Navigate to="/create" />;
 }
+
+
 
 function App() {
   const location = useLocation();
@@ -86,17 +109,20 @@ function App() {
           <Route path="/edit-product-detail" element={<EditProductDetail />} />
           <Route path="/edit-product-detail/:id/:productid?" element={<EditProductDetail />} />
 
+          <Route path="/home/services/catagory/:id" element={<Managecatagories/>} />
+          
+          <Route path="/home/setting" element={<Setting/>} />
+
+          <Route path='/home/setting/language' element={<Language/>}/>
+
+          <Route path="/home/setting/myprofile" element={<Myprofile/>} />
+          <Route path="/home/setting/lead" element={<Profile1/>} />
+          <Route path="/home/setting/subscript" element={<Subscription/>} />
+          {/* <Protectedroute1/>  */}
+          <Route path="/edit-profile" element={<>  <EditProfile />  </>} />
+          <Route path="/edit-contact" element={<EditContact />} /> Add this route
+          <Route path="/edit-product" element={<ProductCatagory />} /> Add this route
          
-<<<<<<< HEAD
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/active-card" element={<ActiveCard />} />
-          <Route path="/Analytics-page" element={<Analytics />} />
-          <Route path="/setting-page" element={<Scanner />} />
-          <Route path='/home/services/serviceaddcategory' element={<ServiceAddCategory />} />
-          <Route path='/home/services/serviceeditcategory/:id' element={<ServiceEditCategory />} />
-          <Route path='/home/services/catagory/:id/serviceaddcategory' element={<ManageCategoriesAddNew />} />
-          <Route path="*" element={<Navigate to="/" />} />
-=======
           <Route path="/product-catagory" element={<Addcatagory />} /> Add this route
           <Route path="/product-catagory/:id" element={<Addcatagory />} /> Add this route
           <Route path="/edit-product-catagory" element={<EditProduct />} /> Add this route
@@ -115,7 +141,15 @@ function App() {
           <Route path='/home/create-new-profile/:id?' element={<CreateNewProfile/>}></Route>
 
           
->>>>>>> d3ff043 (new commit)
+         
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/active-card" element={<ActiveCard />} />
+          <Route path="/Analytics-page" element={<Analytics />} />
+          <Route path="/setting-page" element={<Scanner />} />
+          <Route path='/home/services/serviceaddcategory' element={<ServiceAddCategory />} />
+          <Route path='/home/services/serviceeditcategory/:id' element={<ServiceEditCategory />} />
+          <Route path='/home/services/catagory/:id/serviceaddcategory' element={<ManageCategoriesAddNew />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </CSSTransition>
     </TransitionGroup>

@@ -18,70 +18,73 @@ function EditContact() {
 
     useEffect(() => {
         const auth = getAuth(app);
-        const unsubscribe = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                setUid(user.uid); // Set the current user's UID
-
-                // Fetch or create record ID specific to the user's UID
-                const storedRecordId = localStorage.getItem(`recordid_${user.uid}`);
-                let id;
-                if (!storedRecordId) {
-                    id = Date.now().toString(); // Use current timestamp as ID
-                    localStorage.setItem(`recordid_${user.uid}`, id);
+    
+        // Async function inside useEffect
+        const checkAuthAndFetchData = async () => {
+            const unsubscribe = onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    setUid(user.uid); // Set the current user's UID
+    
+                    // Fetch or create record ID specific to the user's UID
+                    const storedRecordId = localStorage.getItem(`recordid_${user.uid}`);
+                    let id;
+                    if (!storedRecordId) {
+                        id = Date.now().toString(); // Use current timestamp as ID
+                        localStorage.setItem(`recordid_${user.uid}`, id);
+                    } else {
+                        id = storedRecordId;
+                    }
+                    setRecordid(id);
+    
+                    // Fetch existing media files for the specific user
+                    if (id) {
+                        await fetchExistingMediaFiles(id, user.uid);
+                    }
                 } else {
-                    id = storedRecordId;
+                    console.error('User is not authenticated.');
+                    navigate('/login'); // Redirect to login page if not authenticated
                 }
-                setRecordid(id);
-
-                // Fetch existing media files for the specific user
-                if (id) {
-                    await fetchExistingMediaFiles(id, user.uid);
-                }
-            } else {
-                console.error('User is not authenticated.');
-                navigate('/login'); // Redirect to login page if not authenticated
-            }
-        });
-
-        // Clean up the subscription on component unmount
-        return () => unsubscribe();
-    }, [navigate]);
-
-
-
+            });
+    
+            // Clean up the subscription when the component unmounts
+            return () => unsubscribe();
+        };
+    
+        // Call the async function
+        checkAuthAndFetchData();
+    }, [navigate]); // Ensure `navigate` is included in the dependency array
+    
     const fetchExistingMediaFiles = async (recordid, uid) => {
         const database = getDatabase(app);
-        const userRef = ref(database, `PhotosVideos/${recordid}`); // Access the specific record
-
+        const userRef = ref(database, 'PhotosVideos'); // Reference to the PhotosVideos node
+    
         try {
             const snapshot = await get(userRef);
+    
             if (snapshot.exists()) {
-                const userData = snapshot.val();
-
-                // Fetch the userId directly as a string from localStorage
-                const storedUserId = localStorage.getItem('userId'); // Assumes userId is stored as a plain string
-
-                // Check if the fetched user data's uid matches the stored userId
-                if (userData.uid === storedUserId) {
-                    // Proceed to extract data if UID matches
+                // Find the record with the matching UID
+                const records = snapshot.val();
+                const record = Object.values(records).find(record => record.uid === uid);
+    
+                if (record) {
                     const combinedMediaFiles = [
-                        ...(userData.selectedImages || []).map(url => ({ url, type: 'image' })),
-                        ...(userData.videosUri || []).map(url => ({ url, type: 'video' })),
+                        ...(record.selectedImages || []).map(url => ({ url, type: 'image' })),
+                        ...(record.videosUri || []).map(url => ({ url, type: 'video' })),
                     ];
                     setMediaFiles(combinedMediaFiles);
                 } else {
                     console.log('No matching UID found for the record.');
-                    // Optionally, you might want to clear media files or handle this case differently
                     setMediaFiles([]);
                 }
             } else {
-                // Handle case where no existing data is found
-                console.log('No existing data found for the record.');
+                console.log('No existing data found.');
             }
         } catch (error) {
             console.error('Error fetching existing data:', error);
         }
     };
+    
+    
 
 
 
@@ -96,20 +99,20 @@ function EditContact() {
             console.error('User UID is not available.');
             return;
         }
-
+    
         const files = Array.from(event.target.files);
-        const imageFiles = files.filter(file => file.type.startsWith('image/')); // Only allow images
-
+        const imageFiles = files.filter(file => file.type.startsWith('image/'));
+    
         if (mediaFiles.filter(file => file.type === 'image').length + imageFiles.length > 4) {
             console.warn('You can only upload up to 4 images.');
             return;
         }
-
+    
         const storage = getStorage(app);
         const newMediaFiles = [...mediaFiles];
-
+    
         for (const file of imageFiles) {
-            const fileRef = storageRef(storage, `PhotosVideos/${file.name}`); // Include UID in the storage path
+            const fileRef = storageRef(storage, `PhotosVideos/${uid}/${file.name}`);
             try {
                 await uploadBytes(fileRef, file);
                 const url = await getDownloadURL(fileRef);
@@ -121,30 +124,30 @@ function EditContact() {
             }
         }
     };
-
+    
     const handleVideoUpload = async (event) => {
         if (!uid) {
             console.error('User UID is not available.');
             return;
         }
-
+    
         const files = Array.from(event.target.files);
-        const videoFile = files.find(file => file.type.startsWith('video/')); // Only allow one video
-
+        const videoFile = files.find(file => file.type.startsWith('video/'));
+    
         if (!videoFile) {
             console.warn('No valid video selected.');
             return;
         }
-
+    
         if (mediaFiles.filter(file => file.type === 'video').length >= 1) {
             console.warn('You can only upload one video.');
             return;
         }
-
+    
         const storage = getStorage(app);
         const newMediaFiles = [...mediaFiles];
-
-        const fileRef = storageRef(storage, `PhotosVideos/${uid}/${videoFile.name}`); // Include UID in the storage path
+    
+        const fileRef = storageRef(storage, `PhotosVideos/${uid}/${videoFile.name}`);
         try {
             await uploadBytes(fileRef, videoFile);
             const url = await getDownloadURL(fileRef);
@@ -155,6 +158,7 @@ function EditContact() {
             console.error('Error uploading file:', error);
         }
     };
+    
 
     const saveMediaFiles = async (newMediaFiles) => {
         const database = getDatabase(app);
@@ -172,9 +176,9 @@ function EditContact() {
                 // Delete the main record if no media files are left
                 await remove(userRef);
                 console.log('Main record deleted as no media files are left.');
-                return; // Exit the function after deleting the main record
+                return;
             }
-
+    
             const snapshot = await get(userRef);
             if (snapshot.exists()) {
                 // Update existing record
@@ -189,6 +193,7 @@ function EditContact() {
             console.error(`Error saving data: ${error.message}`);
         }
     };
+    
 
 
 
@@ -254,19 +259,46 @@ function EditContact() {
                             )}
                         </div>
                     </div>
-                    <div className="grid-container">
-                        {mediaFiles.filter((file) => file.type === 'image').slice(0, 3).map((file, index) => (
-                            <div key={index} className="grid-item" style={{ position: 'relative' }}>
-                                <img src={file.url} alt={`Uploaded ${index}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                <button
-                                    onClick={() => handleRemoveImage(index)}
-                                    style={crossButtonStyle}
-                                >
-                                    &times;
-                                </button>
-                            </div>
-                        ))}
-                    </div>
+                    <div className="grid-container" style={{ maxWidth: '430px', display: 'flex', gap: '10px' }}>
+  {mediaFiles
+    .filter((file) => file.type === 'image')
+    .slice(0, 3)
+    .map((file, index) => (
+      <div
+        key={index}
+        className="grid-item"
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          width: 'calc(33% - 30px)', // Ensures equal width with the gap considered
+          maxHeight: '122px',
+        
+      
+        }}
+      >
+        <img
+          src={file.url}
+          alt={`Uploaded ${index}`}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+          }}
+        />
+        <button
+          onClick={() => handleRemoveImage(index)}
+          style={crossButtonStyle}
+        >
+          &times;
+        </button>
+      </div>
+    ))}
+</div>
+
+
                 </div>
 <br /><br />
                 <div className="Upload-p">

@@ -47,13 +47,8 @@ function Myprofile() {
         navigate(-1)
     }
 
-<<<<<<< HEAD
 const parentId=localStorage.getItem('parentId')
 console.log(parentId)
-=======
-    const parentId = localStorage.getItem('parentId')
-    console.log("parentId", parentId)
->>>>>>> d3ff043 (new commit)
     // fetching data of login user from firebase 
     const getAllUser = async () => {
         const userData = ref(db, "User")

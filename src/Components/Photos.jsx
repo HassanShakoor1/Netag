@@ -143,7 +143,7 @@ useEffect(() => {
           display: mediaFiles.length >= 9 ? 'none' : 'block',
           width: '95%',
           height: '50px',
-          // display: 'flex',
+           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           margin: '0px auto',
