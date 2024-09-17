@@ -35,7 +35,6 @@ import ProductCatagory  from './Page/ProductCatagory'
 import Addcatagory  from './Page/Addcatagory'
 import Editproductdetail  from './Page/Editproductdetail'
  
-
 import Serviceaddcategory from "./Page/Serviceaddcategory"
 import Serviceeditcategory from "./Page/Editcategory"
 import Language from "../src/Page/Language"
@@ -65,7 +64,6 @@ function ProtectedRoute({ element }) {
   const userId = localStorage.getItem("userId");
   return userId ? element : <Navigate to="/create" />;
 }
-
 
 
 function App() {

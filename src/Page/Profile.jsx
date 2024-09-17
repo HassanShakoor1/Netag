@@ -152,6 +152,7 @@ navigate(`/home/Link`)
     setImageLoading(false);
   };
 
+  // Toggle handler to switch between lead and direct modes
   const handleToggle = (toggleId) => {
     setActiveToggle(prevId => (prevId === toggleId ? null : toggleId));
   };
@@ -174,6 +175,10 @@ navigate(`/home/Link`)
       </div>
     );
   }
+
+
+
+
   return (
 
     <div className="ProfileContainer">
