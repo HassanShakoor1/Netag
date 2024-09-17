@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getDatabase, ref as dbRef, get, remove } from 'firebase/database';
 import { getStorage, ref as storageRef, deleteObject } from 'firebase/storage';
@@ -17,8 +17,6 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { MdNavigateNext } from "react-icons/md";
-
-
 const ITEM_HEIGHT = 48;
 const style = {
   position: 'absolute',
@@ -35,38 +33,32 @@ const style = {
   height: 'auto'
 };
 
+
+
 function EditProduct() {
   const [products, setProducts] = useState([]);
   const { id } = useParams(); // Category ID
   const { productid } = useParams();
-  console.log("id at editproduct", productid); // Should log the value of productid if available
+  console.log( "id at editproduct",products); // Should log the value of productid if available
+
+  const sliderRef = useRef(null);
+
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [productCount, setProductCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [proid, setProid] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
-  const { name } = location.state || {};
-
-  const sliderRef = useRef(null);
-
-  const handlePrevClick = () => {
-    if (sliderRef.current) {
-      sliderRef.current.slickPrev();
-    }
-  };
-
-  const handleNextClick = () => {
-    if (sliderRef.current) {
-      sliderRef.current.slickNext();
-    }
-  };
+  const { brandName } = location.state || {};
 
   const handleClick = (event, product) => {
     setAnchorEl(event.currentTarget);
     setSelectedProduct(product);
+    setProid(product?.productid)
   };
 
   const handleClose = () => {
@@ -89,53 +81,60 @@ function EditProduct() {
   };
 
   const handleEditDetails = (productid) => {
-    let categoryid = id;
-    navigate(`/edit-product-detail/${categoryid}/${productid}`);
+    console.log(productid,"fgsdfgsd")
+    let categoryid=id;
+    
+    navigate(`/edit-product-detail/${categoryid}/${proid}`);
     handleClose();
   };
+
+
 
   const ADD = () => {
     navigate(`/edit-product-detail/${id}`);
   };
 
+
   const handleDeleteProduct = async (productid) => {
     if (!selectedProduct) return;
-
+  
     if (!productid) {
       console.error('Invalid product ID');
       return;
     }
-
+  
     try {
       console.log('Deleting product:', selectedProduct);
-
+  
       // Delete images from Firebase Storage if they exist
       if (selectedProduct.imageUrls && selectedProduct.imageUrls.length > 0) {
         const deletePromises = selectedProduct.imageUrls.map(async (imagePath) => {
           const storageReference = storageRef(storage, imagePath);
           await deleteObject(storageReference);
         });
-
+  
         await Promise.all(deletePromises);
       }
-
+  
       // Remove the product from Firebase Database
       const dbPath = `/Products/${selectedProduct.productid}`;
       await remove(dbRef(database, dbPath));
-
+  
       // Update the state to remove the deleted product from the list
       setProducts((prevProducts) => {
+        // Ensure we are comparing the correct field for the product ID
         const updatedProducts = prevProducts.filter((p) => p.productid !== selectedProduct.productid);
         setProductCount(updatedProducts.length);  // Update product count if necessary
         return updatedProducts;  // Return the updated product list
       });
-
+  
       handleClose(); // Close any open dialogs or modals if needed
-
+  
     } catch (error) {
       console.error('Error deleting product:', error);
     }
   };
+  
 
   const carouselSettings = {
     infinite: true,
@@ -143,6 +142,17 @@ function EditProduct() {
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: true,
+  };
+  const handlePrevClick = () => {
+    if (sliderRef.current) {
+      sliderRef.current.slickPrev();
+    }
+  };
+
+  const handleNextClick = () => {
+    if (sliderRef.current) {
+      sliderRef.current.slickNext();
+    }
   };
 
   useEffect(() => {
@@ -168,7 +178,7 @@ function EditProduct() {
         } else {
           console.log("No data found for category:", id);
         }
-
+        
       } catch (error) {
         console.error("Error fetching product data:", error);
       } finally {
@@ -178,9 +188,7 @@ function EditProduct() {
 
     fetchData();
   }, [id]);
-
-  console.log("products are ")
-
+console.log( "products are ",products)
   return (
     <div className="productContainer">
       <div className="Product-design">
