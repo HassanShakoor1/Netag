@@ -95,8 +95,8 @@ const fetchBrands = async (userId) => {
     navigate('/product-catagory');
   };
 
-  const handleEditProdu = (id, brandName) => {
-    navigate(`/edit-product-catagory/${id}`, { state: { brandName } });
+  const handleEditProdu = (id, name) => {
+    navigate(`/edit-product-catagory/${id}`, { state: { name } });
   };
 
   const handleOpenMenu = (event, brandId) => {
@@ -256,7 +256,7 @@ const fetchBrands = async (userId) => {
                 </Menu>
               </div>
 
-              <button style={{ color: "red", background: 'rgb(255, 222, 222)', width: '80%', display: 'flex', justifyContent: "center", alignItems: 'center', margin: '0px auto', border: '1px solid red' }} onClick={() => handleEditProdu(brand.id, brand.brandName)} className='save'>Explore more</button>
+              <button style={{ color: "red", background: 'rgb(255, 222, 222)', width: '80%', display: 'flex', justifyContent: "center", alignItems: 'center', margin: '0px auto', border: '1px solid red' }} onClick={() => handleEditProdu(brand.id, brand.name)} className='save'>Explore more</button>
               <br />
             </div>
           </div>

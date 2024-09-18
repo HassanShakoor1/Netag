@@ -76,13 +76,13 @@ body{
 
 .lady{
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 100%;
   bottom:0;
 margin-right: 34px;
   right: 0;
-  border: 2px solid red;
+  border: 1px solid red;
   
 
  

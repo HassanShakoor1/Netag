@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getDatabase, ref as dbRef, get, remove } from 'firebase/database';
 import { getStorage, ref as storageRef, deleteObject } from 'firebase/storage';
@@ -13,7 +13,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import './product.css'; // Assuming you have a CSS file for custom styles
-
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { MdNavigateNext } from "react-icons/md";
 const ITEM_HEIGHT = 48;
 const style = {
   position: 'absolute',
@@ -36,8 +39,9 @@ function EditProduct() {
   const [products, setProducts] = useState([]);
   const { id } = useParams(); // Category ID
   const { productid } = useParams();
-  console.log( "id at editproduct",productid); // Should log the value of productid if available
+  console.log( "id at editproduct",products); // Should log the value of productid if available
 
+  const sliderRef = useRef(null);
 
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -45,6 +49,8 @@ function EditProduct() {
   const [productCount, setProductCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [proid, setProid] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
   const { brandName } = location.state || {};
@@ -52,6 +58,7 @@ function EditProduct() {
   const handleClick = (event, product) => {
     setAnchorEl(event.currentTarget);
     setSelectedProduct(product);
+    setProid(product?.productid)
   };
 
   const handleClose = () => {
@@ -74,10 +81,14 @@ function EditProduct() {
   };
 
   const handleEditDetails = (productid) => {
+    console.log(productid,"fgsdfgsd")
     let categoryid=id;
-    navigate(`/edit-product-detail/${categoryid}/${productid}`);
+    
+    navigate(`/edit-product-detail/${categoryid}/${proid}`);
     handleClose();
   };
+
+
 
   const ADD = () => {
     navigate(`/edit-product-detail/${id}`);
@@ -125,7 +136,24 @@ function EditProduct() {
   };
   
 
+  const carouselSettings = {
+    infinite: true,
+    speed: 1000,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+  };
+  const handlePrevClick = () => {
+    if (sliderRef.current) {
+      sliderRef.current.slickPrev();
+    }
+  };
 
+  const handleNextClick = () => {
+    if (sliderRef.current) {
+      sliderRef.current.slickNext();
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -165,8 +193,8 @@ console.log( "products are ",products)
     <div className="productContainer">
       <div className="Product-design">
         <div className="bck-head-btn">
-          <IoChevronBack onClick={goBack} className="bck" style={{ paddingTop: '1.5rem', paddingRight: '2rem' }} />
-          <h4 style={{ color: 'red', fontSize: '20px', fontWeight: '100' }}>{brandName}</h4>
+          <IoChevronBack onClick={goBack} className="bck" style={{ paddingTop: '1.5rem'}} />
+          <h4 style={{ color: 'red', fontSize: '20px', fontWeight: '100' }}>{name}</h4>
           <button onClick={ADD} style={{ marginTop: '1.5rem' }} className='add-btn'>Add</button>
         </div>
 
@@ -176,20 +204,20 @@ console.log( "products are ",products)
         <br /><br />
 
         <div style={{ width: '95%' }} className="Edit-product-Design">
-          {products.map((product,index) => (
-            <div   key={product.productid || `product-${index}`}  style={{ marginTop: '20px' }} className="items">
-              <img className='item-img' style={{height:'auto',objectFit:'cover'}} src={product?.imgurl} alt={product?.productname} onClick={() => handleOpen(product)} />
+          {products.map((product, index) => (
+            <div key={product.productid || `product-${index}`} style={{ marginTop: '20px' }} className="items">
+              <img className='item-img' style={{ objectFit: 'cover' }} src={product?.imgurl} alt={product?.productname} onClick={() => handleOpen(product)} />
               <div className="item-data">
                 <h1 style={{ color: 'red', margin: 0, fontSize: 20 }}>
                   {product?.productname}
                   <span style={{ color: 'grey', fontSize: '12px' }}> ( {product?.size})</span>
                 </h1>
-                <p style={{ lineHeight: 2, paddingTop: 0, paddingBottom: 0, margin: 0, color: "#545454", fontSize: "22px" }}>
+                <p style={{  paddingTop: 0, paddingBottom: 0, margin: 0, color: "#545454", fontSize: "22px" }}>
                   {product?.price}
                 </p>
-                <p style={{ lineHeight: 1, paddingTop: 0, paddingBottom: 0, margin: 0 }}>{product?.color}</p>
+                <p style={{  paddingTop: 0, paddingBottom: 0, margin: 0 }}>{product?.color}</p>
                 <p style={{
-                  lineHeight: 1.5,
+                 
                   padding: '0.5rem 0',
                   margin: '0.5rem 0',
                   fontSize: '1rem',
@@ -200,8 +228,8 @@ console.log( "products are ",products)
                 </p>
               </div>
 
-              <div>
-                <IconButton
+              <div style={{top:'50px',position:'relative' }}>
+                <IconButton style={{color:'red'}}
                   aria-label="more"
                   id="long-button"
                   aria-controls={anchorEl ? 'long-menu' : undefined}
@@ -209,7 +237,7 @@ console.log( "products are ",products)
                   aria-haspopup="true"
                   onClick={(event) => handleClick(event, product)}
                 >
-                  <MoreVertIcon />
+                  <MoreVertIcon style={{top:'100px'}} />
                 </IconButton>
                 <Menu
                   id="long-menu"
@@ -234,11 +262,13 @@ console.log( "products are ",products)
                     },
                   }}
                 >
-                  <MenuItem style={{ fontSize: '15px' }} onClick={() => handleEditDetails(product?.productid)}>
+              
+                <MenuItem style={{ fontSize: "15px" }} onClick={() => { handleEditDetails(product.productid); }}>
                     <DoneAllIcon style={{ marginRight: '8px' }} />
                     Edit Product
                   </MenuItem>
-                  <MenuItem style={{ fontSize: '15px' }} onClick={()=>handleDeleteProduct(product.productid)}>
+                  <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div> {/* Separator Line */}
+                  <MenuItem style={{ fontSize: "15px", color: 'red' }} onClick={handleDeleteProduct}>
                     <DeleteIcon style={{ marginRight: '8px' }} />
                     Delete Product
                   </MenuItem>
@@ -247,52 +277,82 @@ console.log( "products are ",products)
             </div>
           ))}
         </div>
-      </div>
 
-      {selectedProduct && (
-        <Modal
-          open={open}
-          onClose={handleClosee}
-          aria-labelledby="modal-title"
-          aria-describedby="modal-description"
-        >
-          <Box sx={style}>
-            {selectedProduct && (
-              <>
-                <div style={{
-                  boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                }}>
-                  <img
-                    src={selectedProduct.imgurl}
-                    alt={selectedProduct.productname}
-                    style={{ width: '100%', height: '230px' }}
-                  />
-                </div>
-                <div style={{marginLeft:'10px'}}>
-                <h2 id="modal-title" style={{ fontSize: '1.5rem', marginTop: '1rem',color:"red" }}>
-                  {selectedProduct.productname} <span style={{color:'grey',fontSize:'10px'}}> ({selectedProduct.size})</span>
-                </h2>
-               
-                <p id="modal-description" style={{ fontSize: '1rem',  }}>
-              {selectedProduct.categoryname}
+        {selectedProduct && (
+          <Modal
+            open={open}
+            onClose={handleClosee}
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
+          >
+            <Box sx={style}>
+
+              <div style={{
+                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                height: '200px',
+                position: 'relative'
+              }}>
+                {Array.isArray(selectedProduct.imgurl) && selectedProduct.imgurl.length > 0 ? (
+                  selectedProduct.imgurl.length > 1 ? (
+                    <>
+                      <Slider ref={sliderRef} {...carouselSettings}>
+                        {selectedProduct.imgurl.map((url, index) => (
+                          <img
+                            key={index}
+                            src={url}
+                            alt={`${selectedProduct.productname} ${index + 1}`}
+                            style={{ objectFit: 'cover',height:'auto' }}
+                          />
+                        ))}
+                      </Slider>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 1, position: 'absolute', top: '150px', right: '0' }}>
+                        <button
+                          style={{ outline: 'none', border: 'none', background: 'transparent',color:'red' }}
+                          onClick={handlePrevClick}
+                        >
+                          <IoChevronBack style={{ width: '25px', height: '25px' }} />
+                        </button>
+                        <button
+                          style={{ outline: 'none', border: 'none', background: 'transparent',color:'red' }}
+                          onClick={handleNextClick}
+                        >
+                          <MdNavigateNext style={{ width: '32px', height: '32px' }} />
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <img
+                      src={selectedProduct.imgurl[0]} // Access the first item if it's a single image
+                      alt={`${selectedProduct.productname} 1`}
+                      style={{ width: '100%', height: '230px', objectFit: 'cover' }}
+                    />
+                  )
+                ) : (
+                  <div style={{ width: '100%', height: '230px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <p>No images available</p>
+                  </div>
+                )}
+              </div>
+
+
+              <h2 id="modal-title" style={{color:'red',margin:"3px" }}>{selectedProduct.productname} <span style={{fontSize:"10px",color:'grey'}}>  ({selectedProduct.size})</span></h2>
+               <p style={{margin:0}}>{selectedProduct.categoryname}</p>
+
+              <p style={{ lineHeight: 2, paddingTop: 0, paddingBottom: 0, margin: 0, color: "#545454", fontSize: "22px" }}>
+                  {selectedProduct?.price}
                 </p>
-                <p id="modal-description" style={{ fontSize: '2rem',fontWeight:600 , margin:"2px" }}>
-              {selectedProduct.price}
-                </p>
-                
-             
-                <p id="modal-description" style={{ fontSize: '1rem',  margin:"5px" }}>
+              <p id="modal-description" style={{ textAlign: 'center',margin:'0px' }}>
                 {selectedProduct.description}
-                </p>
-                </div>
-              
-              </>
-            )}
-          </Box>
-        </Modal>
-      )}
+              </p>
+              <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                
+              </div>
+            </Box>
+          </Modal>
+        )}
+      </div>
     </div>
   );
 }

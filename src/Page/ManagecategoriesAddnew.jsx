@@ -17,7 +17,6 @@ import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from 'react-i18next'
 // =======
 
-// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
 
 function ServiceaddcategoryAddnewProduct() {

@@ -17,7 +17,7 @@ useEffect(() => {
   if (userId) {
     const database = getDatabase(app);
     const userRef = ref(database, `/PhotosVideos`);
-
+console.log(userId)
     get(userRef)
       .then((snapshot) => {
         if (snapshot.exists()) {
@@ -140,10 +140,10 @@ useEffect(() => {
         ))}
 
         <label htmlFor="file-upload" style={{
-          display: mediaFiles.length >= 9 ? 'none' : 'block',
+          Display: mediaFiles.length >= 9 ? 'none' : 'block',
           width: '95%',
           height: '50px',
-          // display: 'flex',
+           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           margin: '0px auto',

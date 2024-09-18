@@ -5,7 +5,9 @@ import England from "../images/England.png";
 import Spain from "../images/Spain.png";
 import united from "../images/united.png";
 import France from "../images/France.png";
-import check from "../images/check.svg";
+import chek from '../images/chek.svg';
+
+
 import { Link } from "react-router-dom";
 import { ref as sRef, onValue, update } from "firebase/database";
 import { useContext } from 'react';
@@ -19,7 +21,8 @@ import { useTranslation } from 'react-i18next';
 function Language() {
     const{setLanguage}=useContext(AppContext)
  
-     // for translation 
+     // for translation git add path/to/images/check.svg
+
      const { t } = useTranslation()
 
     const [selectedLanguage, setSelectedLanguage] = useState(null); // Track the selected language ID or name
@@ -117,7 +120,7 @@ function Language() {
                                                         }}
                                                         onClick={() => handleSelectLanguage(language.id)}
                                                     >
-                                                        {selectedLanguage === language.id ? <><img src={check} alt="Selected" /> Selected</> : "Tap to Select"}
+                                                        {selectedLanguage === language.id ? <><img src={chek} alt="Selected" /> Selected</> : "Tap to Select"}
                                                     </button>
                                                 </div>
                                             </div>

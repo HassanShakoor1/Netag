@@ -35,8 +35,6 @@ import ProductCatagory  from './Page/ProductCatagory'
 import Addcatagory  from './Page/Addcatagory'
 import Editproductdetail  from './Page/Editproductdetail'
  
-// <<<<<<< HEAD
-// import Profile from './Page/Profile';
 import Serviceaddcategory from "./Page/Serviceaddcategory"
 import Serviceeditcategory from "./Page/Editcategory"
 import Language from "../src/Page/Language"
@@ -46,17 +44,19 @@ import {get,ref} from "firebase/database"
 
 import ManagecategoriesAddnewProduct from "./Page/ManagecategoriesAddnew"
 
-// import { Navigate } from "react-router-dom";
+
 import ManageCategoriesEdit from './Page/ManageCategoriesEdit';
 import CreateNewProfile from './Page/CreateNewProfile';
-// =======
-// import ServiceAddCategory from "./Page/Serviceaddcategory";
-// import ServiceEditCategory from "./Page/Editcategory";
+
 import ManageCategoriesAddNew from "./Page/ManagecategoriesAddnew";
 import ServiceAddCategory from "./Page/Serviceaddcategory";
 import ServiceEditCategory from "./Page/Editcategory";
-// import ManageCategoriesAddNew from "./Page/ManagecategoriesAddnew";
+
+
+
 import Links from './Page/Links';
+
+
 
 
 // Correctly handle Protected Routes
@@ -65,13 +65,6 @@ function ProtectedRoute({ element }) {
   return userId ? element : <Navigate to="/create" />;
 }
 
-// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
-
-// Correctly handle Protected Routes
-// function ProtectedRoute({ element }) {
-//   const userId = localStorage.getItem("userId");
-//   return userId ? element : <Navigate to="/create" />;
-// }
 
 function App() {
   const location = useLocation();
@@ -105,6 +98,7 @@ function App() {
           <Route path="/home/setting/subscript" element={<Subscription />} />
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/edit-contact" element={<EditContact />} />
+          {/* <Route path="/edit-contact:/id" element={<EditContact />} /> */}
           <Route path="/edit-product" element={<ProductCategory />} />
           <Route path="/edit-product/:id" element={<ProductCategory />} />
           <Route path="/product-catagory" element={<AddCategory />} />
