@@ -58,37 +58,112 @@ function Profile() {
     ladyImgUrl: '',
     mainImgUrl: ''
   })
-   //  for translation 
-   const { t } = useTranslation()
-  // Fetch profile data from localStorage\
-  const [loading, setLoading] = useState(true); // State for loading
-useEffect(() => {
-  const fetchData = async () => {
-    const userId = localStorage.getItem('userId'); // Get the UID from localStorage
-    if (!userId) {
-      console.log('No UID found in localStorage');
+  
+  const userId = localStorage.getItem('userId');
+
+  const handleImageClick = (baseUrl, linkName) => {
+    if (!baseUrl || !linkName) {
+      console.error('Invalid input:', baseUrl, linkName);
       return;
     }
-
-    const dbRef = ref(database, `usersdata/${userId}`); // Fetch user-specific data
-    try {
-      const snapshot = await get(dbRef);
-      if (snapshot.exists()) {
-        setProfileData(snapshot.val()); // Set fetched data
+  
+    // Trim whitespace
+    const cleanedBaseUrl = baseUrl.trim();
+    
+    // Check if the baseUrl is a phone number
+    const isPhoneNumber = /^\+?\d+$/.test(cleanedBaseUrl);
+  
+    // Convert linkName to lowercase for comparison
+    const lowerLinkName = linkName.toLowerCase();
+  
+    if (lowerLinkName === 'whatsapp') {
+      // Handle WhatsApp number
+      if (isPhoneNumber) {
+        const formattedWhatsAppUrl = `https://wa.me/${cleanedBaseUrl}`;
+        window.open(formattedWhatsAppUrl, '_blank');
       } else {
-        console.log('No data available');
+        console.error('Invalid phone number for WhatsApp:', cleanedBaseUrl);
       }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally{
-      setLoading(false);
+    } else if (lowerLinkName === 'call') {
+      // Handle phone number
+      if (isPhoneNumber) {
+        window.location.href = `tel:${cleanedBaseUrl}`;
+      } else {
+        console.error('Invalid phone number for call:', cleanedBaseUrl);
+      }
+    } else if (cleanedBaseUrl.includes('@')) {
+      // Handle email address
+      const mailtoLink = cleanedBaseUrl.startsWith('mailto:') ? cleanedBaseUrl : `mailto:${cleanedBaseUrl}`;
+      window.location.href = mailtoLink; // Opens the default mail client
+    } else if (/^https?:\/\//i.test(cleanedBaseUrl)) {
+      // Handle web URLs
+      window.open(cleanedBaseUrl, '_blank');
+    } else {
+      console.error('Invalid input:', cleanedBaseUrl);
     }
   };
-
-  fetchData();
-}, []);
   
-const [imageLoading, setImageLoading] = useState(true);
+  
+  
+  
+  
+  
+
+  
+  
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userId = localStorage.getItem('userId'); // Get userId from localStorage
+  
+        if (!userId) {
+          console.error("No userId found in localStorage");
+          setLoading(false);
+          return;
+        }
+  
+        const userRef = ref(database, `User/${userId}`);
+        const snapshot = await get(userRef);
+  
+        if (snapshot.exists()) {
+          setProfileData(snapshot.val());
+          console.log("Fetched profileData:", snapshot.val()); // Log the fetched data
+        } else {
+          console.log("No data available for this userId:", userId);
+        }
+  
+        // Fetch links data
+        const linksRef = ref(database, 'SocialLinks');
+        const linksSnapshot = await get(linksRef);
+  
+        if (linksSnapshot.exists()) {
+          const allLinks = linksSnapshot.val();
+          const userLinks = Object.values(allLinks).filter(link => link.uid === userId);
+          setLinks(userLinks);
+        } else {
+          console.log("No links data available");
+        }
+  
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // End loading state after data fetch (success or failure)
+      }
+    };
+  
+    fetchData();
+  }, []);
+ 
+  console.log(profileData)
+
+
+const handlMoveLink=()=>{
+navigate(`/home/Link`)
+}
+
+  const [imageLoading, setImageLoading] = useState(true);
 
   const handleImageLoad = () => {
     setImageLoading(false);
@@ -104,7 +179,8 @@ const [imageLoading, setImageLoading] = useState(true);
 
   // Navigate to the Edit Profile page
   const handleEditProfile = () => {
-    navigate('/edit-profile');
+    // navigate('/edit-profile');
+    navigate(`/home/create-new-profile/${userId}`)
   };
 
   // Navigate to notifications page
@@ -161,37 +237,36 @@ const [imageLoading, setImageLoading] = useState(true);
 
           {/* Profile images */}
           <img
-  className='lady'
- 
-  src={profileData.ladyImgUrl || circle}  // Default profile image
-  alt="lady"
- 
-/>
-<div>
-  
-</div>
-<div style={{width:'100%',height:'200px',background:'transparent'}}>
-  <div style={{  width: '100%' }}>
-            <img
-              className='main-img'
-              src={profileData.mainImgUrl || main}  // Default cover image
-              alt="main-img"
-              onLoad={handleImageLoad}
-              style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
-            />
-            {imageLoading && (
-              <div style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                zIndex: 1
-              }}>
-                <CircularProgress />
-              </div>
-            )}
+            className='lady'
+            style={{ objectFit: 'cover' }}
+            src={profileData.profileImageUrl || bitcc}  // Default profile image
+
+          />
+          <div>
+
           </div>
-</div>
+          <div style={{ width: '100%', height: '200px' }}>
+            <div style={{ width: '100%' }}>
+              <img
+                className='main-img'
+                src={profileData.logoUrl || bitc}  // Default cover image
+
+                onLoad={handleImageLoad}
+                style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
+              />
+              {imageLoading && (
+                <div style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 1
+                }}>
+                  <CircularProgress />
+                </div>
+              )}
+            </div>
+          </div>
 
 
           <div style={{ paddingLeft: "10px", position: 'relative' }}>
@@ -202,8 +277,8 @@ const [imageLoading, setImageLoading] = useState(true);
             </div>
             {/* Profile details */}
             <h2 style={{ color: 'red', margin: '5px' }}>
-              {profileData.name} <br />
-              <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> ({profileData.nickname})</span>
+              {profileData?.username} <br />
+              {/* <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> ({profileData.nickname})</span> */}
             </h2>
             <div className="data" style={{ lineHeight: '1' }}>
               <h2 className='head' style={{ marginBottom: '0px' }}>{t("Username")}: <span style={{ fontWeight: '100', }} className='para'>{profileData.name}</span></h2>
@@ -213,7 +288,7 @@ const [imageLoading, setImageLoading] = useState(true);
             </div>
             <div className="data" style={{ lineHeight: '0' }}>
               <h2 className='head'>Marital Status:
-                <br /> <span style={{ marginLeft: '145px', fontWeight: '100' }} className='para'>{profileData.status}</span></h2>
+                <br /> <span style={{ marginLeft: '145px', fontWeight: '100' }} className='para'>{profileData.martialStatus}</span></h2>
             </div>
             <div className="data"
               style={{
@@ -300,39 +375,59 @@ const [imageLoading, setImageLoading] = useState(true);
             </div>
           </div>
 
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',  // 4 columns in the grid
+            gap: '10px',  // Space between grid items
+            padding: '10px',  // Space around the container
+          }}>
 
+            {/* Add Button Section */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: "column",  // Center the button and text
+              marginBottom: '10px',  // Space between button section and links
+              gridColumn: 'span 1',  // Takes up the first column
+            }}>
+              <div style={{
+                width: '50px',
+                height: '50px',
+                borderRadius: '50%',
+                backgroundColor: '#E2E2E2',
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                // Space between button and text
+              }}>
+                <p style={{
+                  margin: '0',
+                  fontSize: '20px',
+                  cursor: 'pointer',
+                }} onClick={handlMoveLink}>+</p>
+              </div>
+              <p style={{
+                color: '#898787',
+                fontSize: '12px'
 
-{/* Fetching Links from Links FIle */}
-  
-
-
- <div style={{
-  display: 'grid',
-  gridTemplateColumns: 'repeat(4, 1fr)',  // 4 columns in the grid
-  gap: '10px',  // Space between grid items
-  padding: '10px',  // Space around the container
-}}>
-
-          <br /><br /><br />
-
-          <div className="i-menu" >
-            <div className="menus">
-              <Slide style={{ width: "96%" }} in={setting} direction="up" timeout={{ appear: 500, enter: 500, exit: 500 }}>
-                <div className="slide_main_div relative">
-                  <IconOpener handleSlide={handleSlide} ReturnIcon={ReturnIcon} linkdata={linkdata} />
-                </div>
-              </Slide>
-
-              {links.map(link => (
-                <div key={link.id} className="fon" style={{ margin: 0, padding: 0 }}>
-                  <img src={link.imageUrl} alt={link.linkName} onClick={() => handleSlide(link)} />
-                  <p style={{ fontSize: '12px' }}>{link.linkName}</p>
-                </div>
-              ))}
+              }}>
+                Add
+              </p>
             </div>
+
+            {/* Render links */}
+            {links.map((link, index) => (
+              <div key={index} style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '10px', cursor: "pointer" }}>
+                <img onClick={() => handleImageClick(link?.baseUrl, link?.name)} src={link?.image} alt={link?.name || 'Link'} style={{ width: '50px', height: '50px' }} />
+                <span style={{ color: '#898787', fontSize: '12px' }}>{link?.name}</span>
+              </div>
+            ))}
+
+
+
           </div>
-
-
+          <br /><br /><br />
 
 
 

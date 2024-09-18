@@ -16,6 +16,9 @@ import { database as db } from "../firebase.jsx"
 import { get, ref, remove } from "firebase/database"
 import { useTranslation } from "react-i18next";
 
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 // Style for the modal
 const style = {
   position: 'absolute',
@@ -166,7 +169,7 @@ function Managecategories() {
                       </div>
                       {/* Menu Button */}
                       <div>
-                        <IconButton
+                        {/* <IconButton
                           aria-label="more"
                           id="long-button"
                           aria-controls={open ? 'long-menu' : undefined}
@@ -225,8 +228,82 @@ function Managecategories() {
                           >
                             <p>{t("Delete")}</p>
                           </MenuItem>
-                          {/* Additional MenuItems can be added here */}
-                        </Menu>
+                          
+                        </Menu> */}
+
+<div>
+  <IconButton
+    aria-label="more"
+    id="long-button"
+    aria-controls={open ? 'long-menu' : undefined}
+    aria-expanded={open ? 'true' : undefined}
+    aria-haspopup="true"
+    onClick={(event) => handleClick(event, x.id)} // Pass the item id
+    style={{
+      color: '#EE0000',
+      padding: "0",
+      margin: "0",
+      zIndex: "1",
+    }}
+  >
+    <MoreVertIcon />
+  </IconButton>
+
+  <Menu
+    id="long-menu"
+    MenuListProps={{
+      'aria-labelledby': 'long-button',
+    }}
+    anchorEl={anchorEl}
+    open={Boolean(anchorEl && currentItemId === x.id)} // Check if the menu should be open for the current item
+    onClose={handleClose}
+    PaperProps={{
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5, // Set a max height to control overflow
+        width: '20ch',                // Updated width to match first block
+      },
+    }}
+    anchorOrigin={{
+      vertical: 'bottom',             // Menu will open below the button
+      horizontal: 'right',            // Menu will align to the right of the button
+    }}
+    transformOrigin={{
+      vertical: 'top',                // Menu starts from the top
+      horizontal: 'right',            // Menu aligns its right side to the right of the button
+    }}
+  >
+    {/* "Edit Profile" Menu Item with custom styles and icon */}
+    <MenuItem
+      style={{
+        fontSize: "15px",            // Matching font size for consistency
+        color: '#7C7C7C',
+        borderBottom: '1px solid #ddd',
+      }}
+      onClick={() => handleMenuItemClick(`/home/services/catagory/ManageCategories-products-Edit/${x.id}`)}
+    >
+      <DoneAllIcon style={{ marginRight: '8px' }} />  {/* Added Icon */}
+      {t("Edit Profile")}
+    </MenuItem>
+
+    {/* Separator Line */}
+    <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div>
+
+    {/* "Delete" Menu Item with red color and custom icon */}
+    <MenuItem
+      style={{
+        fontSize: "15px",             // Larger font size for consistency
+        color: 'red',                 // Red color for "Delete"
+      }}
+      onClick={() => handleDelete(`${x.id}`)}
+    >
+      <DeleteIcon style={{ marginRight: '8px' }} />   {/* Added Delete Icon */}
+      {t("Delete")}
+    </MenuItem>
+
+    {/* Additional MenuItems can be added here */}
+  </Menu>
+</div>
+
                       </div>
                     </div>
                   </div>

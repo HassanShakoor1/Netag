@@ -14,6 +14,9 @@ import { useEffect, useState } from "react"
 import { database as db } from "../firebase.jsx"
 import { equalTo, get, orderByChild, query, ref, remove } from "firebase/database"
 
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import { useTranslation } from 'react-i18next';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -257,7 +260,7 @@ function Categories() {
                                         <div className="cardwidth">
                                             <div className="cardcenter">
                                                 <div className="cardcenter-width">
-                                                    <div style={{ width: '100%',height:"200px" }}>
+                                                    <div style={{ width: '100%', height: "200px" }}>
                                                         {/* image  */}
 
                                                         <img style={{ maxHeight: "200px", width: "100%", marginTop: "7px", objectFit: "contain" }} src={x.imageurl} alt="" />
@@ -277,8 +280,8 @@ function Categories() {
                                                             </div>
                                                         </div>
 
-                                                        <div >
-                                                           
+                                                        {/* <div >
+
 
                                                             <IconButton
                                                                 aria-label="more"
@@ -291,7 +294,7 @@ function Categories() {
                                                                     color: '#EE0000',
                                                                     padding: "0",
                                                                     margin: "0",
-                                                                    zIndex:"1"
+                                                                    zIndex: "1"
                                                                 }}
                                                             >
                                                                 <MoreVertIcon />
@@ -341,7 +344,79 @@ function Categories() {
                                                                 </MenuItem>
                                                             </Menu>
 
-                                                        </div>
+                                                        </div> */}
+
+<div>
+  <IconButton
+    aria-label="more"
+    id="long-button"
+    aria-controls={open ? 'long-menu' : undefined}
+    aria-expanded={open ? 'true' : undefined}
+    aria-haspopup="true"
+    onClick={(event) => handleClick(event, x.id)} // Pass the item id
+    style={{
+      color: '#EE0000',
+      padding: "0",
+      margin: "0",
+      zIndex: "1",
+    }}
+  >
+    <MoreVertIcon />
+  </IconButton>
+
+  <Menu
+    id="long-menu"
+    MenuListProps={{
+      'aria-labelledby': 'long-button',
+    }}
+    anchorEl={anchorEl}
+    open={Boolean(anchorEl && currentItemId === x.id)} // Check if the menu should be open for the current item
+    onClose={handleClose}
+    PaperProps={{
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5, // Set a max height to control overflow
+        width: '20ch',                // Updated width to match first block
+      },
+    }}
+    anchorOrigin={{
+      vertical: 'bottom',             // Menu will open below the button
+      horizontal: 'right',            // Menu will align to the right of the button
+    }}
+    transformOrigin={{
+      vertical: 'top',                // Menu starts from the top
+      horizontal: 'right',            // Menu aligns its right side to the right of the button
+    }}
+  >
+    {/* "Edit Profile" Menu Item with custom styles */}
+    <MenuItem
+      style={{
+        fontSize: "15px",            // Matching font size for consistency
+        color: '#7C7C7C',
+        borderBottom: '1px solid #ddd',
+      }}
+      onClick={() => handleMenuItemClick(`/home/services/serviceeditcategory/${x.id}`)}
+    >
+      <DoneAllIcon style={{ marginRight: '8px' }} />  {/* Added Icon for consistency */}
+      Edit Profile
+    </MenuItem>
+
+    {/* Separator Line */}
+    <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div>
+
+    {/* "Delete" Menu Item with red color and custom icon */}
+    <MenuItem
+      style={{
+        fontSize: "15px",             // Larger font size for "Delete"
+        color: 'red',                 // Red color for "Delete"
+      }}
+      onClick={() => handleDelete(`${x.categoryid}`)} // Call handleDelete with category ID
+    >
+      <DeleteIcon style={{ marginRight: '8px' }} />   {/* Added Delete Icon */}
+      Delete
+    </MenuItem>
+  </Menu>
+</div>
+
 
 
                                                     </div>
