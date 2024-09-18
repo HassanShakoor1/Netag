@@ -1,41 +1,84 @@
-// src/utils/cropImage.js
+import React, { useRef } from 'react';
+import Cropper from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
 
-export default async function getCroppedImg(imageSrc, croppedAreaPixels) {
-  const createImage = (url) =>
-    new Promise((resolve, reject) => {
-      const image = new Image();
-      image.setAttribute('crossOrigin', 'anonymous'); // for cross-origin issues
-      image.src = url;
-      image.onload = () => resolve(image);
-      image.onerror = (error) => reject(error);
-    });
+function ImageCropper({ image, onClose, onCrop }) {
+  const cropperRef = useRef(null);
 
-  const image = await createImage(imageSrc);
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d');
+  const handleCrop = () => {
+    const cropper = cropperRef.current?.cropper;
+    if (cropper) {
+      cropper.getCroppedCanvas().toBlob((blob) => {
+        onCrop(blob);
+      }, 'image/jpeg');
+    }
+  };
 
-  canvas.width = croppedAreaPixels.width;
-  canvas.height = croppedAreaPixels.height;
-
-  ctx.drawImage(
-    image,
-    croppedAreaPixels.x,
-    croppedAreaPixels.y,
-    croppedAreaPixels.width,
-    croppedAreaPixels.height,
-    0,
-    0,
-    croppedAreaPixels.width,
-    croppedAreaPixels.height
+  return (
+    <div style={styles.modal}>
+      <div style={styles.cropperContainer}>
+        <Cropper
+          src={image}
+          style={styles.cropper}
+          guides={false}
+          ref={cropperRef}
+          background={false} // Ensure no background behind the image
+        />
+      </div>
+      <div style={styles.buttonContainer}>
+        <button style={styles.button} onClick={handleCrop}>Crop</button>
+        <button style={{ ...styles.button, ...styles.closeButton }} onClick={onClose}>Close</button>
+      </div>
+    </div>
   );
-
-  return new Promise((resolve, reject) => {
-    canvas.toBlob((file) => {
-      if (file) {
-        resolve(file); // return the cropped image as a Blob
-      } else {
-        reject(new Error('Canvas is empty'));
-      }
-    }, 'image/jpeg');
-  });
 }
+
+const styles = {
+  modal: {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '100%',
+    maxWidth: '390px',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)', // Slight opacity for the background
+    padding: '20px',
+    borderRadius: '10px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+    zIndex: 1000,
+    textAlign: 'center',
+  },
+  cropperContainer: {
+    marginBottom: '20px',
+    position: 'relative',
+    height: '300px', // Adjust height as needed
+    overflow: 'hidden', // Ensure no overflow issues
+    backgroundColor: '#fff', // Ensure a solid background color
+    borderRadius: '10px', // Match the border radius of the cropper
+  },
+  cropper: {
+    height: '100%',
+    width: '100%',
+    objectFit: 'contain', // Ensure the image is contained within the cropper
+    display: 'block', // Ensure no inline-block spacing issues
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  button: {
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '5px',
+    backgroundColor: '#007bff',
+    color: '#fff',
+    cursor: 'pointer',
+    fontSize: '16px',
+    outline: 'none',
+  },
+  closeButton: {
+    backgroundColor: '#dc3545',
+  },
+};
+
+export default ImageCropper;

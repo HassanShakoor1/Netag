@@ -14,62 +14,36 @@ function EditContact() {
     const [recordid, setRecordid] = useState(null);
     const navigate = useNavigate();
 
+   
     useEffect(() => {
         const auth = getAuth(app);
-    
+
         const checkAuthAndFetchData = async () => {
-            const auth = getAuth(app);
             const unsubscribe = onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     const userId = user.uid;
-        
-                    // Check if recordid exists in local storage
-                    let storedRecordId = localStorage.getItem(`recordid_${userId}`);
-                    let recordId;
-        
-                    if (storedRecordId) {
-                        // If recordid is already in local storage, use it
-                        recordId = storedRecordId;
-                    } else {
-                        // Fetch the recordid from Firebase
-                        const database = getDatabase(app);
-                        const userRecordRef = ref(database, `UserRecords/${userId}`);
-                        const snapshot = await get(userRecordRef);
-        
-                        if (snapshot.exists()) {
-                            // If recordid exists in Firebase, use it
-                            recordId = snapshot.val().recordid;
-                        } else {
-                            // Generate a new recordid
-                            recordId = Date.now().toString();
-                            // Save new recordid to Firebase
-                            await set(userRecordRef, { recordid: recordId });
-                        }
-        
-                        // Store recordid in local storage
+
+                    // Retrieve or generate record ID
+                    let recordId = localStorage.getItem(`recordid_${userId}`);
+
+                    if (!recordId) {
+                        recordId = Date.now().toString(); // Generate a new record ID
                         localStorage.setItem(`recordid_${userId}`, recordId);
                     }
-        
-                    setRecordid(recordId);
-        
 
-                    // Fetch existing media files for the specific recordid
-                    if (recordId) {
-                        await fetchExistingMediaFiles(recordId);
-                    }
+                    setRecordid(recordId);
+                    await fetchExistingMediaFiles(recordId);
                 } else {
                     console.error('User is not authenticated.');
                     navigate('/login'); // Redirect to login page if not authenticated
                 }
             });
-        
+
             return () => unsubscribe();
         };
-        
-    
+
         checkAuthAndFetchData();
     }, [navigate]);
-
     const fetchExistingMediaFiles = async (recordid) => {
         const auth = getAuth();
         const currentUser = auth.currentUser;
@@ -108,42 +82,42 @@ function EditContact() {
     };
     
     
-    useEffect(() => {
-        const auth = getAuth(app);
+    // useEffect(() => {
+    //     const auth = getAuth(app);
     
-        const checkAuthAndFetchData = async () => {
-            const unsubscribe = onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    const userId = user.uid;
+    //     const checkAuthAndFetchData = async () => {
+    //         const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    //             if (user) {
+    //                 const userId = user.uid;
     
-                    // Fetch the record ID from the user's records
-                    const database = getDatabase(app);
-                    const userRecordRef = ref(database, `UserRecords/${userId}`);
-                    const snapshot = await get(userRecordRef);
+    //                 // Fetch the record ID from the user's records
+    //                 const database = getDatabase(app);
+    //                 const userRecordRef = ref(database, `UserRecords/${userId}`);
+    //                 const snapshot = await get(userRecordRef);
     
-                    if (snapshot.exists()) {
-                        const { recordid } = snapshot.val();
-                        localStorage.setItem(`recordid_${userId}`, recordid);
-                        setRecordid(recordid);
+    //                 if (snapshot.exists()) {
+    //                     const { recordid } = snapshot.val();
+    //                     localStorage.setItem(`recordid_${userId}`, recordid);
+    //                     setRecordid(recordid);
     
-                        // Fetch existing media files for the specific recordid
-                        if (recordid) {
-                            await fetchExistingMediaFiles(recordid);
-                        }
-                    } else {
-                        console.error('Record ID not found.');
-                    }
-                } else {
-                    console.error('User is not authenticated.');
-                    navigate('/login'); // Redirect to login page if not authenticated
-                }
-            });
+    //                     // Fetch existing media files for the specific recordid
+    //                     if (recordid) {
+    //                         await fetchExistingMediaFiles(recordid);
+    //                     }
+    //                 } else {
+    //                     console.error('Record ID not found.');
+    //                 }
+    //             } else {
+    //                 console.error('User is not authenticated.');
+    //                 navigate('/login'); // Redirect to login page if not authenticated
+    //             }
+    //         });
     
-            return () => unsubscribe();
-        };
+    //         return () => unsubscribe();
+    //     };
     
-        checkAuthAndFetchData();
-    }, [navigate]);
+    //     checkAuthAndFetchData();
+    // }, [navigate]);
     
     const handlegoBack = () => {
         navigate('/home');
