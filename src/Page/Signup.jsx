@@ -257,7 +257,9 @@ function Signup() {
             </div>
           </div>
         </div>
-        <ToastContainer />
+        <ToastContainer 
+          position="top-center"
+        />
       </div>
     );
   }

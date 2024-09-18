@@ -4,7 +4,7 @@ import addcontact from "../images/addcontact.svg"
 import dotgray from "../images/dotgray.png"
 import { useNavigate, Link } from "react-router-dom"
 import { useEffect, useState } from 'react'
-import { ref, get, update,remove } from 'firebase/database'
+import { ref, get, update,remove, query, orderByChild, equalTo } from 'firebase/database'
 import { database as db } from '../firebase.jsx'
 import { useTranslation } from 'react-i18next';
 
@@ -51,6 +51,7 @@ function Myprofile() {
 
     const parentId = localStorage.getItem('parentId')
     console.log("parentId", parentId)
+    
     // fetching data of login user from firebase 
     const getAllUser = async () => {
         const userData = ref(db, "User")
@@ -80,7 +81,7 @@ function Myprofile() {
     const handleProfile_Id = async (id) => {
 
         localStorage.setItem("userId", id);
-        localStorage.setItem("userId", id)
+       
 
         const starCountRef = ref(db, `User/${parentId}`);
 
@@ -90,88 +91,64 @@ function Myprofile() {
         setActiveProfiles(id);
     }
       {/* ----------------delete child profile-----------------*/}
-//   async  function handleDelete(id) {
 
-//         console.log("id to delete",id)
-//            {/* ----------------user table-----------------*/}
-//         const userDB=ref(db,`User/${id}`)
-        
-//          {/* -----------------ServiceCategory----------------*/}
-//         const ServiceCategory=ref(db,`ServiceCategory`)
-
-//         {/* -----------------Service----------------*/}
-         
-//         const Service=ref(db,`Services`)
-
-//         const snap=await get(Service)
-//         const ServiceData=await snap.val()
-//         {/* -----------------it will create array of products ----------------*/}
-//         const ServiceData_Arr=Object.values(ServiceData)
-//         {/* -----------------it will filter array of products ----------------*/}
-        
-//         const ServiceData_FilteredArr=ServiceData_Arr.filter((x)=>x)
-
-
-//     }
 async function handleDelete(id) {
     try {
         console.log("id to delete", id);
 
         // ----------------User table-----------------
-        const userDB = ref(db, `User/${id}`);
-
-        // ----------------ServiceCategory----------------
-        const ServiceCategory = ref(db, `ServiceCategory`);
+        const ChildUserDB = ref(db, `User/${id}`);
 
         // ----------------Service----------------
-        const Service = ref(db, `Services`);
+        const Service =query
+        ( ref(db, `/Services`),
+        orderByChild('uid'),
+        equalTo(id)
+        );
 
-        // Fetch the Services data
+        
         const serviceSnap = await get(Service);
         const serviceData = serviceSnap.val();
+        console.log(serviceData)
 
-        if (serviceData) {
-            // Convert the services data to an array
-            const serviceDataArr = Object.entries(serviceData); // entries gives [key, value] pairs
-
-            // Filter services by the user's id or category id (modify based on your data structure)
-            const servicesToDelete = serviceDataArr.filter(([key, value]) => value.uid === id);
-
-            // Delete all related services
-            for (const [serviceKey, service] of servicesToDelete) {
-                const serviceRef = ref(db, `Services/${serviceKey}`);
-                await remove(serviceRef);
-                console.log(`Deleted service with key: ${serviceKey}`);
+        // ----------------ServiceCategory----------------
+        const ServiceCategory =query( 
+        ref(db, `/ServiceCategory`),
+        orderByChild('uid'),
+        equalTo(id)
+        )
+        ;
+      
+        const ServiceCategorySnap = await get(ServiceCategory);
+        const ServiceCategoryData = ServiceCategorySnap.val();
+        console.log(ServiceCategoryData)
+            {/*---------------deleting ServiceCategory of child user-------------------*/}
+         if(ServiceCategoryData)
+         {
+            for(const key in ServiceCategoryData)
+            {
+                const ServiceCategoryDataRef=ref(db,`ServiceCategory/${key}`)
+                await remove(ServiceCategoryDataRef)
+                console.log('ServiceCategoryDataRef',ServiceCategoryDataRef)
+                console.log(" key of ServiceCategoryDataRef ",key)
             }
-        } else {
-            console.log("No services found for this user.");
-        }
+         }
 
-        // Fetch the ServiceCategory data
-        const categorySnap = await get(ServiceCategory);
-        const categoryData = categorySnap.val();
+                 {/*---------------deleting Services of child user -------------------*/}
+                 if(serviceData)
+                 {
+                    for(const key in serviceData){
+                        const serviceDataRef=ref(db,`Services/${key}`)
 
-        if (categoryData) {
-            // Convert the ServiceCategory data to an array
-            const categoryDataArr = Object.entries(categoryData);
+                        await remove(serviceDataRef)
 
-            // Filter service categories by the user's id (or other relevant criteria)
-            const categoriesToDelete = categoryDataArr.filter(([key, value]) => value.uid === id);
+                    }
+                 }
+                 {/*---------------child user Profile -------------------*/}
+                 await remove(ChildUserDB)
+                 setMultiProfile((previous)=>previous.filter((item)=>item.id!=id))
 
-            // Delete all related categories
-            for (const [categoryKey, category] of categoriesToDelete) {
-                const categoryRef = ref(db, `ServiceCategory/${categoryKey}`);
-                await remove(categoryRef);
-                console.log(`Deleted category with key: ${categoryKey}`);
-            }
-        } else {
-            console.log("No service categories found for this user.");
-        }
-
-        // Finally, delete the user
-        await remove(userDB);
-        console.log(`Deleted user with id: ${id}`);
-        setMultiProfile((previous)=> previous.filter((item) => item.id !== id))
+        
 
     } catch (error) {
         console.error("Error deleting user and related data:", error);

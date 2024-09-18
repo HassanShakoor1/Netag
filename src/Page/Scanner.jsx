@@ -3,15 +3,20 @@ import Footer from '../Components/Footer';
 import { IoChevronBack } from "react-icons/io5";
 import { IoCopy } from "react-icons/io5"; // Import the copy icon
 import './setting.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation  } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { useState } from "react";
 function Scanner() {
 
+  const location = useLocation();
+  const currentURL = `${window.location.origin}${location.pathname}`;
+
+  console.log(currentURL)
+     
   const [value, setValue] = useState("");
   const userid = localStorage.getItem("userId")
   const valueQrcode = () => {
-    setValue(`http://localhost:5173/home${userid}`)
+    setValue(`${currentURL}/${userid}`)
   }
   useEffect(() => {
     valueQrcode()

@@ -31,6 +31,7 @@ function Create() {
   // localStorage.getItem("lng")
 
   const clicktosign = async () => {
+    toast.dismiss();
     if (!name || !username || !email || !password || !confirmpassword) {
       
       console.log("Please fill out all fields");
@@ -58,7 +59,7 @@ function Create() {
       equalTo(username)
       )
 
-      if(checkUserName){
+      if(checkUserName==username){
         toast.error("UserName is Taken")
         return;
       }
@@ -313,7 +314,9 @@ function Create() {
           </div>
         </div>
       </div>
-      <ToastContainer />
+      <ToastContainer 
+       position="top-center"
+      />
 
     </div>
   );
