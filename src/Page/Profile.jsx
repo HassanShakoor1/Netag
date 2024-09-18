@@ -6,55 +6,38 @@ import './Slide.css';
 import { AiFillEdit } from "react-icons/ai";
 import Photos from '../Components/Photos';
 import Footer from '../Components/Footer';
-import circle from '../images/circle.png';
+// import bitc from '../images/bitc.png'
+// import bitcc from '../images/bitcc.png'
 import main from '../images/main.jpeg';
-import nav from '../images/circle.png';
+import nav from '../images/nav.png';
 import Card from '../Components/Card';
-import whatsapp from '../images/whatsapp.png';
-import call from '../images/call.png';
-import fb from '../images/fb.png';
-import mail from '../images/mail.png';
-import website from '../images/website.png';
-import snap from '../images/snap.png';
-import add from '../images/add.png';
-import instas from '../images/instas.png';
 import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly from 'firebase/database'
 import { database } from '../firebase.jsx'; // Import the initialized database
 import CircularProgress from '@mui/material/CircularProgress'; // Import the loader component
 import { Link } from 'react-router-dom'
-import Slide from '@mui/material/Slide';
-import IconOpener from './IconOpener';
 
-// <<<<<<< HEAD
+
 import { useTranslation } from 'react-i18next';
-// =======
-// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
-
 
 function Profile() {
   const navigate = useNavigate();
 
-  // Array of link objects to display
-  const links = [
-    { id: 1, imageUrl: whatsapp, linkName: "Call", place: "Enter phone number", instruction: "Enter your Phone Number" },
-    { id: 2, imageUrl: call, linkName: "Whatsapp", place: "Enter whatsapp number", instruction: "Enter your Whatsapp Number" },
-    { id: 3, imageUrl: fb, linkName: "Facebook", place: "Enter Facebook URL", instruction: "Enter your Facebook URL" },
-    { id: 4, imageUrl: mail, linkName: "Mail", place: "Enter your Email", instruction: "Enter your Email" },
-    { id: 5, imageUrl: instas, linkName: "Instagram", place: "Enter Username", instruction: "Enter your Username" },
-    { id: 6, imageUrl: website, linkName: "Website", place: "Enter Website URL", instruction: "Enter your Website URL" },
-    { id: 7, imageUrl: snap, linkName: "Snapchat", place: "Enter Username", instruction: "Enter your Username" },
-    { id: 8, imageUrl: add, linkName: "", place: "", instruction: "Add new Links" },
-  ];
+  const [socialLinks, setSocialLink] = useState([])
+  const { t } = useTranslation()
 
-  const [setting, setSetting] = useState(false); // State to manage Slide component visibility
-  const [linkdata, setLinkdata] = useState(null); // State to store currently selected link data
+
+
+  const [loading, setLoading] = useState(true); // State for loading
+  const [links, setLinks] = useState([]); // State to store fetched links
+
   const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
   const [profileData, setProfileData] = useState({
-    username: '@username',
-    nickname: 'Burden',
-    status: 'Married...',
-    company: 'your company',
-    designation: 'copmany',
+
+    username: '',
+    nickname: '',
+    status: '',
+    company: '',
+    designation: '',
     ladyImgUrl: '',
     mainImgUrl: ''
   })
@@ -174,10 +157,6 @@ navigate(`/home/Link`)
     setActiveToggle(prevId => (prevId === toggleId ? null : toggleId));
   };
 
-  // Handler to toggle slide visibility and set link data
- 
-
-  // Navigate to the Edit Profile page
   const handleEditProfile = () => {
     // navigate('/edit-profile');
     navigate(`/home/create-new-profile/${userId}`)
@@ -186,27 +165,9 @@ navigate(`/home/Link`)
   // Navigate to notifications page
   const handlenotifi = () => {
     navigate('/home/notifi');
+   
   };
 
-
-  const handleSlide = (link) => {
-    setLinkdata(link);
-    setSetting(!setting);
-  };
-
-  const ReturnIcon = (id) => {
-    switch (id) {
-      case 1: return whatsapp;
-      case 2: return call;
-      case 3: return fb;
-      case 4: return mail;
-      case 5: return instas;
-      case 6: return website;
-      case 7: return snap;
-      case 8: return add;
-      default: return null;
-    }
-  }
   // Function to return the appropriate icon based on id
 
   if (loading) {
@@ -216,6 +177,7 @@ navigate(`/home/Link`)
       </div>
     );
   }
+
 
 
 
@@ -238,8 +200,8 @@ navigate(`/home/Link`)
           {/* Profile images */}
           <img
             className='lady'
-            style={{ objectFit: 'cover' }}
-            src={profileData.profileImageUrl || bitcc}  // Default profile image
+style={{objectFit:'cover'}}
+            src={profileData.logoUrl }  // Default profile image
 
           />
           <div>
@@ -247,12 +209,12 @@ navigate(`/home/Link`)
           </div>
           <div style={{ width: '100%', height: '200px' }}>
             <div style={{ width: '100%' }}>
-              <img
+              <img 
                 className='main-img'
-                src={profileData.logoUrl || bitc}  // Default cover image
-
+                src={profileData.profileImageUrl }  // Default cover image
+            
                 onLoad={handleImageLoad}
-                style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
+                style={{ objectFit:"cover",display: imageLoading ? 'none' : 'block', width: '100%' }}
               />
               {imageLoading && (
                 <div style={{
@@ -278,10 +240,10 @@ navigate(`/home/Link`)
             {/* Profile details */}
             <h2 style={{ color: 'red', margin: '5px' }}>
               {profileData?.username} <br />
-              {/* <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> ({profileData.nickname})</span> */}
+              <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> ({profileData.username})</span>
             </h2>
             <div className="data" style={{ lineHeight: '1' }}>
-              <h2 className='head' style={{ marginBottom: '0px' }}>{t("Username")}: <span style={{ fontWeight: '100', }} className='para'>{profileData.name}</span></h2>
+              <h2 className='head' style={{ marginBottom: '0px' }}>{t("Username")}: <span style={{ fontWeight: '100', }} className='para'>{profileData.username}</span></h2>
             </div>
             <div className="data" style={{ lineHeight: '1' }}>
               <h2 className='head'>{t("Designation")}:<span style={{ fontWeight: '100', margin: '53px' }} className='para'>{profileData.designation}</span></h2>
@@ -311,7 +273,7 @@ navigate(`/home/Link`)
                   textOverflow: 'ellipsis',
                 }}
               >
-                {t("Company")}:
+                {("Company")}:
                 <span
                   className="para"
                   style={{
@@ -374,60 +336,60 @@ navigate(`/home/Link`)
 
             </div>
           </div>
+       
+ <div style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(4, 1fr)',  // 4 columns in the grid
+  gap: '10px',  // Space between grid items
+  padding: '10px',  // Space around the container
+}}>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',  // 4 columns in the grid
-            gap: '10px',  // Space between grid items
-            padding: '10px',  // Space around the container
-          }}>
+  {/* Add Button Section */}
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection:"column",  // Center the button and text
+    marginBottom: '10px',  // Space between button section and links
+    gridColumn: 'span 1',  // Takes up the first column
+  }}>
+    <div style={{
+      width: '50px',
+      height: '50px',
+      borderRadius: '50%',
+      backgroundColor: '#E2E2E2',
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection:'column',
+      justifyContent: 'center',
+      // Space between button and text
+    }}>
+      <p style={{
+        margin: '0',
+        fontSize: '20px',
+        cursor: 'pointer',
+      }} onClick={handlMoveLink}>+</p>
+    </div>
+    <p style={{
+   color:'#898787',
+   fontSize:'12px'
+      
+    }}>
+      Add
+    </p>
+  </div>
 
-            {/* Add Button Section */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: "column",  // Center the button and text
-              marginBottom: '10px',  // Space between button section and links
-              gridColumn: 'span 1',  // Takes up the first column
-            }}>
-              <div style={{
-                width: '50px',
-                height: '50px',
-                borderRadius: '50%',
-                backgroundColor: '#E2E2E2',
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                // Space between button and text
-              }}>
-                <p style={{
-                  margin: '0',
-                  fontSize: '20px',
-                  cursor: 'pointer',
-                }} onClick={handlMoveLink}>+</p>
-              </div>
-              <p style={{
-                color: '#898787',
-                fontSize: '12px'
+  {/* Render links */}
+{links.map((link, index) => (
+  <div key={index} style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '10px',cursor:"pointer" }}>
+    <img    onClick={() => handleImageClick(link?.baseUrl, link?.name)}    src={link?.image} alt={link?.name || 'Link'} style={{ width: '50px', height: '50px' }} />
+    <span style={{ color: '#898787', fontSize: '12px' }}>{link?.name}</span>
+  </div>
+))}
 
-              }}>
-                Add
-              </p>
-            </div>
-
-            {/* Render links */}
-            {links.map((link, index) => (
-              <div key={index} style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '10px', cursor: "pointer" }}>
-                <img onClick={() => handleImageClick(link?.baseUrl, link?.name)} src={link?.image} alt={link?.name || 'Link'} style={{ width: '50px', height: '50px' }} />
-                <span style={{ color: '#898787', fontSize: '12px' }}>{link?.name}</span>
-              </div>
-            ))}
-
-
-
-          </div>
-          <br /><br /><br />
+ 
+  
+</div>
+<br /><br /><br />
 
 
 
@@ -436,7 +398,6 @@ navigate(`/home/Link`)
 
         </div>
       </div>
-    </div>
     </div>
   );
 }

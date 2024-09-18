@@ -25,7 +25,8 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: "300px",
+  width: "270px",
+  // maxWidth:"50%",
   bgcolor: '#F5F5F5',
   borderRadius: "12px",
   boxShadow: 24,
@@ -317,19 +318,30 @@ function Managecategories() {
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <Box sx={{
-                ...style,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center', // Center items horizontally
-                justifyContent: 'center' // Center items vertically
-              }}>
-                <img src={modalContent.pic} alt="" style={{ display: "flex", justifyContent: "center", alignItems: "center", width: '70%', height: 'auto' }} />
+              <Box sx={
+                style
+
+              }>
+                <  div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center', // Center items horizontally
+                  justifyContent: 'center' // Center items vertically
+                }}>
+                  <img src={modalContent.pic} alt="" style={{ width: '100%', height: 'auto',borderRadius:"12px" }} />
+                </div>
                 <Typography id="modal-modal-title" variant="h6" component="h2" style={{ marginTop: '1rem', fontSize: '18px', color: '#EE0000', fontWeight: "600" }}>
                   {modalContent.title}
                 </Typography>
-                <Typography id="modal-modal-description" variant="h6" component="p" style={{ marginTop: '10px', fontSize: '8px', color: '#777777' }}>
+                <Typography >
+                  <span style={{fontSize:"8px"}}>Mental Health Clininc</span>
+                </Typography>
+                <Typography >
+                  <span style={{fontSize:"18px",fontWeight:"bold"}}>$120</span>
+                </Typography>
+                <Typography id="modal-modal-description" variant="h6" component="p" style={{ marginTop: '1px', fontSize: '8px', color: '#777777' }}>
                   {modalContent.explain}
+                  
                 </Typography>
               </Box>
             </Modal>
