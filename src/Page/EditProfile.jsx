@@ -11,7 +11,7 @@ import { styled } from '@mui/system';
 import { getDatabase, ref, update,get } from "firebase/database";
 import { database } from '../firebase';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL ,} from "firebase/storage";
-
+import Cropper from './Cropper';
 const CustomTextField = styled(TextField)({
   '& .MuiOutlinedInput-root': {
     borderRadius: '1rem',

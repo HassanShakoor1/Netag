@@ -72,7 +72,7 @@ function Editproductdetail() {
   const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
-    
+  
     const imageUrls = [];
     
     for (const file of imageFiles) {
@@ -87,8 +87,12 @@ function Editproductdetail() {
     }
     
     setImages(prevImages => [...prevImages, ...imageUrls]);
-    setFormData(prevData => ({ ...prevData, imgurl: [...prevData.imgurl, ...imageUrls] }));
+    setFormData(prevData => ({
+      ...prevData,
+      imgurl: Array.isArray(prevData.imgurl) ? [...prevData.imgurl, ...imageUrls] : [...imageUrls]
+    }));
   };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -287,7 +291,7 @@ function Editproductdetail() {
           onChange={handleInputChange}
         />
 
-        <div>
+        <div style={{marginLeft:'8px'}}>
           {/* First Row */}
           <div style={{ display: 'flex', padding: '20px', gap: '10px' }}>
             {/* File Input */}
@@ -302,6 +306,8 @@ function Editproductdetail() {
                 height: '150px',
                 borderRadius: '20px',
                 backgroundColor: '#F4F4F4',
+
+
               }}
             >
               <img src={edit} style={{ width: "50px",margin:'0px auto' }} alt="Upload" />
