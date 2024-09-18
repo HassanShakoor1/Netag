@@ -35,7 +35,6 @@ import ProductCatagory  from './Page/ProductCatagory'
 import Addcatagory  from './Page/Addcatagory'
 import Editproductdetail  from './Page/Editproductdetail'
  
-
 import Serviceaddcategory from "./Page/Serviceaddcategory"
 import Serviceeditcategory from "./Page/Editcategory"
 import Language from "../src/Page/Language"
@@ -67,7 +66,6 @@ function ProtectedRoute({ element }) {
 }
 
 
-
 function App() {
   const location = useLocation();
 
@@ -85,13 +83,13 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/forget" element={<ForgetPassword />} />
           <Route path="/home" element={<ProtectedRoute element={<Profile />} />} />
-          <Route path="/home/notifi" element={<Notification />} />
+          <Route path="/home/notifi"  element={<ProtectedRoute element={<Notification />} />} />
           <Route path="/home/editimage" element={<EditContact />} />
           <Route path="/home/Link" element={<Links/>} />
 
-          <Route path="/home/order" element={<ManageOrder />} />
-          <Route path="/home/order/singleorder" element={<ManageScreen2 />} />
-          <Route path="/home/order/order3" element={<ManageOrder3 />} />
+          <Route path="/home/order" element={<ProtectedRoute element={<ManageOrder />}  />} />
+          <Route path="/home/order/singleorder" element={<ProtectedRoute element={<ManageScreen2 />} />} />
+          <Route path="/home/order/order3"   element={<ProtectedRoute element={<ManageOrder3 />} />} />
           <Route path="/home/services" element={<Categories />} />
           <Route path="/home/services/catagory/:id" element={<ManageCategories />} />
           <Route path="/home/setting" element={<Setting />} />

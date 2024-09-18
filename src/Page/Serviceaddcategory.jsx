@@ -21,6 +21,8 @@ import { useTranslation } from 'react-i18next';
 
 // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
+// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
+
 
 function Serviceaddcategory() {
     const navigate = useNavigate()
@@ -33,7 +35,7 @@ function Serviceaddcategory() {
     const [name1, setname1] = useState("")
     const [description, setdescription] = useState("")
 
-    const id = Date.now()
+    console.log ( localStorage.getItem("userId"))
     // function to send data to firebase
    
     // const createnew = async () => {
@@ -90,7 +92,7 @@ function Serviceaddcategory() {
 
             const categorypath=sRef(db,`ServiceCategory`)
 
-            
+         
 
             const newcategories=push(categorypath)
             const newcategories_id=newcategories.key

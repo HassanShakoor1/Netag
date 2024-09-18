@@ -6,14 +6,15 @@ import "./imges.css";
 import { useNavigate } from 'react-router-dom';
 import eye from "../images/eye.svg";
 import { useState } from "react";
-import { ref, set } from "firebase/database"
+import { equalTo, orderByChild, query, ref, set } from "firebase/database"
 import { database as db } from "../firebase.jsx"
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 
 import { app } from "../firebase.jsx"
 import { useTranslation } from 'react-i18next';
-
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 function Create() {
 
   const navigate = useNavigate(); // Use the hook here
@@ -30,24 +31,38 @@ function Create() {
   // localStorage.getItem("lng")
 
   const clicktosign = async () => {
+    toast.dismiss();
     if (!name || !username || !email || !password || !confirmpassword) {
+      
       console.log("Please fill out all fields");
+      toast.error("Please fill out all fields")
       return;
     }
 
     // Validate email format
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error("Invalid email address")
       console.log("Invalid email address");
       return;
     }
 
     // Validate password match
     if (password !== confirmpassword) {
+      toast.error("Passwords do not match")
       console.log("Passwords do not match");
       return;
     }
 
+    const checkUserName=query(
+      ref(db,'/User'),
+      orderByChild("username"),
+      equalTo(username)
+      )
 
+      if(checkUserName==username){
+        toast.error("UserName is Taken")
+        return;
+      }
 
 
 
@@ -101,7 +116,7 @@ function Create() {
         
         directMode: "",
         dob: "",
-        email: "",
+        email: email,
         enterpriseMonthlyAllowed: "",
         enterpriseMonthlyRequested: "",
         enterpriseYearlyAllowed: "",
@@ -141,6 +156,8 @@ function Create() {
 
     } catch (error) {
       console.log(error)
+
+      toast.error("")
     }
   }
 
@@ -297,6 +314,10 @@ function Create() {
           </div>
         </div>
       </div>
+      <ToastContainer 
+       position="top-center"
+      />
+
     </div>
   );
 }

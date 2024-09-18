@@ -12,9 +12,11 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate, Link } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { database as db } from "../firebase.jsx"
-import { get, ref, remove } from "firebase/database"
+import { equalTo, get, orderByChild, query, ref, remove } from "firebase/database"
 
 import { useTranslation } from 'react-i18next';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // const options = [
 //     { text: 'Edit Category', color: '#7C7C7C', pathkey: useNavigate('/home/services/edit') }, // Change color as needed
@@ -28,56 +30,97 @@ function Categories() {
     //  get data from firebase 
     const [Firebasedata, setFirebasedata] = useState([])
     const [currentItemId, setCurrentItemId] = useState(null);
-    
+
     const userId = localStorage.getItem('userId');
 
 
-    const{t}=useTranslation()
+    const { t } = useTranslation()
 
     // getting data from firebase 
-    function getData() {
-        const dbref = ref(db, `ServiceCategory`)
+    // function getData() {
+    //     const dbref = ref(db, `ServiceCategory`)
 
-        const initialdata = async () => {
-            const snap = await get(dbref)
+    //     const initialdata = async () => {
+
+    //         // const data=query(
+    //         //     dbref,
+    //         //     orderByChild("id"),
+    //         //     equalTo(userId) 
+    //         // )
+
+    //          // Fetch the data using the query
+    //     // const snapshot = await get(data);
+
+    //     // if (!snapshot.exists()) {
+    //     //     console.log('No data available');
+    //     //     return;
+    //     // } 
+    //     // const data1 = await snapshot.val()
+
+    //         const snap = await get(dbref)
+    //         const data = await snap.val()
+    //         console.log("data",data)
+    //         try {
+
+    //             // const filteredData=Object.keys(data1).map(key=>({
+    //             //     id:key,
+    //             //     ...data1[key]
+    //             // }))
+
+
+    //         const filteredData = Object.keys(data)
+    //             .filter(key => data[key].uid=== userId) // Filter based on userId
+    //             .map(key => ({
+    //                 id: key,
+    //                 ...data[key]
+    //             }));
+
+    //         console.log("filtered data",filteredData);
+
+    //         // Update the state or handle the filtered data
+    //         setFirebasedata(filteredData);
+    //         } 
+
+
+
+
+
+    //         catch (error) {
+    //             console.log(error)
+    //         }
+    //     }
+    //     initialdata()
+
+    // }
+    {/*------------getDataUingQuery------------*/ }
+    const getData = async () => {
+
+        toast.dismiss();
+        try {
+            const querydata = query(
+                ref(db, `ServiceCategory`),
+                orderByChild('uid'),
+                equalTo(userId)
+
+            )
+            const snap = await get(querydata)
             const data = await snap.val()
-            console.log("data",data)
-            try {
-            //     const arr = Object.keys(data).map((x) => ({
-            //         id: x,
-            //         ...data[x]
-            //     }))
-            //     console.log(arr)
-            //     setFirebasedata(arr)
+            console.log(data)
 
+            const filteredData = Object.keys(data).map(key => ({
+                id: key,
+                ...data[key]
+            }))
+            console.log(filteredData)
 
-            
-            const filteredData = Object.keys(data)
-                .filter(key => data[key].uid=== userId) // Filter based on userId
-                .map(key => ({
-                    id: key,
-                    ...data[key]
-                }));
-
-            console.log("filtered data",filteredData);
-
-            // Update the state or handle the filtered data
-            setFirebasedata(filteredData);
-            } 
-            
-            
-            
-            
-            
-            catch (error) {
-                console.log(error)
-            }
+            setFirebasedata(filteredData)
         }
-        initialdata()
+        catch (error) {
+            console.log(error)
+            toast.error("No Data Found")
+        }
 
     }
-
-
 
     useEffect(() => {
 
@@ -115,7 +158,7 @@ function Categories() {
     }
 
 
-  
+
 
 
 
@@ -128,72 +171,47 @@ function Categories() {
     };
 
 
+
     const handleDelete = async (id) => {
-        // Reference to the item in Firebase
-        console.log(id)
-        try{
-        const itemRef = ref(db, `ServiceCategory/${id}`);
-        const categories=ref(db,`Services`)
-        
-        console.log(itemRef)
-         const categoriesSnapshot=await get(categories)
-        //  it will return objects of products 
-         const categoriesData=categoriesSnapshot.val()
-         console.log("categoriesData",categoriesData)
-        //   it will create array of products 
-         const categoriesData_arr=Object.values(categoriesData)
-         console.log("categoriesData_arr",categoriesData_arr)
-          
-      const categoriesToDelete=  categoriesData_arr.filter((x)=>x.categoryid===id)
-      console.log("categoriesToDelete",categoriesToDelete)
-      
-    //   it will delete very product which has Service_id init  
-      for(const category_index of categoriesToDelete)
-      {
-        const deleting=ref(db,`servicesProducts/${category_index.productId}`)
-       
-        console.log("category_index",category_index.productId)
-        await remove(deleting)
-      }
-      
+        console.log(id);
+        try {
+            // Reference to the ServiceCategory in Firebase
+            const itemRef = ref(db, `ServiceCategory/${id}`);
+            const servicesRef = ref(db, 'Services');
 
+            console.log(itemRef);
 
-       
-            // Delete the item from Firebase
+            // Fetch the services data
+            const servicesSnapshot = await get(servicesRef);
+            const servicesData = servicesSnapshot.val();
+            console.log("servicesData", servicesData);
+
+            // Check if services data exists
+            if (servicesData) {
+                // Loop through services data to find matching category IDs
+                for (const [key, value] of Object.entries(servicesData)) {
+                    if (value.categoryid === id) {
+                        // Reference to the service that needs to be deleted
+                        const serviceRef = ref(db, `Services/${key}`);
+                        console.log("Deleting service with key:", key);
+                        await remove(serviceRef);
+                    }
+                }
+            } else {
+                console.log("No services found for this category.");
+            }
+
+            // Delete the ServiceCategory after services have been removed
             await remove(itemRef);
+            console.log("Category deleted successfully");
 
             // Update local state
             setFirebasedata((previous) => previous.filter((item) => item.id !== id));
-
         } catch (error) {
             console.error("Error deleting item:", error);
         }
     };
 
-    
-
-
-
-
-    // array 
-
-    // const arr = [
-    //     {
-    //         pic: doctor,
-    //         title: "Mental Health Services",
-    //         service: "(9 Services)",
-    //         explain: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sint ab libero, necessitatibus molestiae non ducimus enim veritatis sunt neque! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sint ab libero, necessitatibus molestiae non ducimus enim veritatis sunt neque!",
-    //         btn: "Explore Service"
-    //     },
-    //     {
-    //         pic: lung,
-    //         title: "Lungs Releted Services",
-    //         service: "(12 Services)",
-    //         explain: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sint ab libero, necessitatibus molestiae non ducimus enim veritatis sunt neque! Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis sint ab libero, necessitatibus molestiae non ducimus enim veritatis sunt neque!",
-    //         btn: "Explore Service"
-    //     }
-
-    // ]
 
     return (
         <div className="categories-maindiv">
@@ -207,11 +225,11 @@ function Categories() {
                                 <img onClick={goback} style={{ cursor: 'pointer' }} src={vector} alt="" />
                             </div>
                             <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "600", marginLeft: "2rem" }}>
-                               {t( "Services Categories")}
+                                {t("Services Categories")}
                             </div>
                             <div style={{ backgroundColor: "none" }}>
                                 <Link to={"/home/services/serviceaddcategory"}>
-                                    <button style={{ border: "1.5px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px",paddingTop:"5px", paddingBottom:"5px",color: '#EE0000', backgroundColor: "white",fontSize:"12px" }}>{t("Add")}</button>
+                                    <button style={{ border: "1.5px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", paddingTop: "5px", paddingBottom: "5px", color: '#EE0000', backgroundColor: "white", fontSize: "12px" }}>{t("Add")}</button>
                                 </Link>
                             </div>
 
@@ -222,7 +240,7 @@ function Categories() {
                                 <div>
                                     <img src={search} alt="" />
                                 </div>
-                                <div style={{ color: "#929292",width:"70%" }}>
+                                <div style={{ color: "#929292", width: "70%" }}>
                                     Search
                                 </div>
                             </div>
@@ -239,7 +257,7 @@ function Categories() {
                                         <div className="cardwidth">
                                             <div className="cardcenter">
                                                 <div className="cardcenter-width">
-                                                    <div style={{ width: '100%' }}>
+                                                    <div style={{ width: '100%',height:"200px" }}>
                                                         {/* image  */}
 
                                                         <img style={{ maxHeight: "200px", width: "100%", marginTop: "7px", objectFit: "contain" }} src={x.imageurl} alt="" />
@@ -260,6 +278,8 @@ function Categories() {
                                                         </div>
 
                                                         <div >
+                                                           
+
                                                             <IconButton
                                                                 aria-label="more"
                                                                 id="long-button"
@@ -269,8 +289,9 @@ function Categories() {
                                                                 onClick={(event) => handleClick(event, x.id)} // Pass the item id
                                                                 style={{
                                                                     color: '#EE0000',
-                                                                    padding:"0",
-                                                                    margin:"0"
+                                                                    padding: "0",
+                                                                    margin: "0",
+                                                                    zIndex:"1"
                                                                 }}
                                                             >
                                                                 <MoreVertIcon />
@@ -285,16 +306,24 @@ function Categories() {
                                                                 onClose={handleClose}
                                                                 PaperProps={{
                                                                     style: {
-                                                                        maxHeight: ITEM_HEIGHT * 4.5,
+                                                                        maxHeight: ITEM_HEIGHT * 4.5, // Set a max height to control overflow
                                                                         width: '15ch',
                                                                     },
+                                                                }}
+                                                                anchorOrigin={{
+                                                                    vertical: 'bottom', // Menu will open below the button
+                                                                    horizontal: 'right', // Menu will align to the right of the button
+                                                                }}
+                                                                transformOrigin={{
+                                                                    vertical: 'top', // Menu starts from the top
+                                                                    horizontal: 'right', // Menu aligns its right side to the right of the button
                                                                 }}
                                                             >
                                                                 <MenuItem
                                                                     style={{
                                                                         color: '#7C7C7C',
                                                                         borderBottom: '1px solid #ddd',
-                                                                        fontSize: '12px'
+                                                                        fontSize: '12px',
                                                                     }}
                                                                     onClick={() => handleMenuItemClick(`/home/services/serviceeditcategory/${x.id}`)}
                                                                 >
@@ -302,15 +331,16 @@ function Categories() {
                                                                 </MenuItem>
                                                                 <MenuItem
                                                                     style={{
-                                                                        color: '#7C7C7C',
+                                                                        color: '#EE0000',
                                                                         borderBottom: '1px solid #ddd',
-                                                                        fontSize: '12px'
+                                                                        fontSize: '12px',
                                                                     }}
-                                                                    onClick={() => handleDelete(`${x.categoryid}`)} >
+                                                                    onClick={() => handleDelete(`${x.categoryid}`)} // Call handleDelete with category ID
+                                                                >
                                                                     <p>{t("Delete")}</p>
                                                                 </MenuItem>
-                                                                {/* Additional MenuItems can be added here */}
                                                             </Menu>
+
                                                         </div>
 
 
@@ -337,7 +367,12 @@ function Categories() {
 
                 </div>
 
+                <ToastContainer
+                    position="top-center"
+                />
+
             </div>
+
 
         </div>
     )
