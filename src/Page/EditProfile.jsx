@@ -27,7 +27,10 @@ function EditProfile() {
   const [status, setStatus] = useState("");
   const [company, setCompany] = useState("");
   const [nickname, setNickname] = useState("");
-
+  const [imageFile, setImageFile] = useState(null);
+  const [imageFile1, setImageFile1] = useState(null);
+  const [imgurl, setImgurl] = useState("");
+  const [imgurl1, setImgurl1] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [profileImage, setProfileImage] = useState(null); // State for cropped profile image
   const [coverImage, setCoverImage] = useState(null); // State for cropped cover image
@@ -38,9 +41,17 @@ function EditProfile() {
   const userId = localStorage.getItem("userId");
   const parentId = localStorage.getItem("parentId");
 
+  const [crop, setCrop] = useState({
+    unit: "%",
+    x: 50,
+    y: 50,
+    width: 25,
+    height: 25,
+  });
+
   const handleclosecropper = () => {
     setCropModal(false);
-  };
+  }
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -68,9 +79,6 @@ function EditProfile() {
           await uploadBytes(imageRef, profileImage);
           const url = await getDownloadURL(imageRef);
           ImageUrl[0] = url;
-        } else if (profileImage === null && profileImage === undefined && existingData.profilePicture) {
-          // If no new profile image is set, retain the existing one
-          ImageUrl[0] = existingData.profilePicture;
         }
 
         // Handle cover image upload
@@ -79,9 +87,6 @@ function EditProfile() {
           await uploadBytes(imageRef1, coverImage);
           const url1 = await getDownloadURL(imageRef1);
           BackgroundImageUrl[0] = url1;
-        } else if (coverImage === null && coverImage === undefined && existingData.backgroundPicture) {
-          // If no new cover image is set, retain the existing one
-          BackgroundImageUrl[0] = existingData.backgroundPicture;
         }
 
         // Save or update user data
@@ -109,6 +114,7 @@ function EditProfile() {
       setIsSaving(false);
     }
   };
+
   const handleFileChange = (event, type) => {
     const file = event.target.files[0];
     if (file) {
@@ -121,11 +127,10 @@ function EditProfile() {
       reader.readAsDataURL(file);
     }
   };
-  
 
   const handleCropImage = (croppedImageBlob) => {
     const file = new File([croppedImageBlob], imageType === "profile" ? "cropped-profile-image.jpg" : "cropped-cover-image.jpg", { type: croppedImageBlob.type });
-  
+
     if (imageType === "profile") {
       setProfileImage(file);
     } else if (imageType === "cover") {
@@ -133,7 +138,8 @@ function EditProfile() {
     }
     setCropModal(false);
   };
-  
+
+
   
   return (
     <div className="container">

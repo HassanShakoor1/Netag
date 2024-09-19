@@ -11,9 +11,9 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Import Firebase 
 
 function EditContact() {
     const [mediaFiles, setMediaFiles] = useState([]);
-    const [recordid, setRecordid] = useState(null);
-    const navigate = useNavigate();
 
+    const navigate = useNavigate();
+    const [recordId, setRecordId] = useState(null);
    
     useEffect(() => {
         const auth = getAuth(app);
@@ -23,16 +23,18 @@ function EditContact() {
                 if (user) {
                     const userId = user.uid;
 
-                    // Retrieve or generate record ID
-                    let recordId = localStorage.getItem(`recordid_${userId}`);
+                    // Fetch the recordId from Firebase based on uid
+                    const fetchedRecordId = await getRecordIdFromFirebase(userId);
 
-                    if (!recordId) {
-                        recordId = Date.now().toString(); // Generate a new record ID
-                        localStorage.setItem(`recordid_${userId}`, recordId);
+                    if (fetchedRecordId) {
+                        setRecordId(fetchedRecordId);
+                        await fetchExistingMediaFiles(fetchedRecordId);
+                    } else {
+                        // If no recordId exists, generate and save a new one in Firebase
+                        const newRecordId = Date.now().toString();
+                        await saveRecordIdToFirebase(userId, newRecordId);
+                        setRecordId(newRecordId);
                     }
-
-                    setRecordid(recordId);
-                    await fetchExistingMediaFiles(recordId);
                 } else {
                     console.error('User is not authenticated.');
                     navigate('/login'); // Redirect to login page if not authenticated
@@ -44,6 +46,25 @@ function EditContact() {
 
         checkAuthAndFetchData();
     }, [navigate]);
+
+    const getRecordIdFromFirebase = async (uid) => {
+        const database = getDatabase(app);
+        const userRecordRef = ref(database, `PhotosVideos`);
+
+        const snapshot = await get(userRecordRef);
+        let userRecordId = null;
+
+        snapshot.forEach((childSnapshot) => {
+            const data = childSnapshot.val();
+            if (data.uid === uid) {
+                userRecordId = childSnapshot.key; // Get the existing recordId
+            }
+        });
+
+        return userRecordId;
+    };
+
+
     const fetchExistingMediaFiles = async (recordid) => {
         const auth = getAuth();
         const currentUser = auth.currentUser;
@@ -80,51 +101,16 @@ function EditContact() {
             onlyOnce: true
         });
     };
+
     
     
-    // useEffect(() => {
-    //     const auth = getAuth(app);
-    
-    //     const checkAuthAndFetchData = async () => {
-    //         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    //             if (user) {
-    //                 const userId = user.uid;
-    
-    //                 // Fetch the record ID from the user's records
-    //                 const database = getDatabase(app);
-    //                 const userRecordRef = ref(database, `UserRecords/${userId}`);
-    //                 const snapshot = await get(userRecordRef);
-    
-    //                 if (snapshot.exists()) {
-    //                     const { recordid } = snapshot.val();
-    //                     localStorage.setItem(`recordid_${userId}`, recordid);
-    //                     setRecordid(recordid);
-    
-    //                     // Fetch existing media files for the specific recordid
-    //                     if (recordid) {
-    //                         await fetchExistingMediaFiles(recordid);
-    //                     }
-    //                 } else {
-    //                     console.error('Record ID not found.');
-    //                 }
-    //             } else {
-    //                 console.error('User is not authenticated.');
-    //                 navigate('/login'); // Redirect to login page if not authenticated
-    //             }
-    //         });
-    
-    //         return () => unsubscribe();
-    //     };
-    
-    //     checkAuthAndFetchData();
-    // }, [navigate]);
-    
+  
     const handlegoBack = () => {
         navigate('/home');
     };
 
     const handleImageUpload = async (event) => {
-        if (!recordid) {
+        if (!recordId) {
             console.error('Record ID is not available.');
             return;
         }
@@ -155,7 +141,7 @@ function EditContact() {
     };
 
     const handleVideoUpload = async (event) => {
-        if (!recordid) {
+        if (!recordId) {
             console.error('Record ID is not available.');
             return;
         }
@@ -182,7 +168,7 @@ function EditContact() {
             const url = await getDownloadURL(fileRef);
             newMediaFiles.push({ url, type: 'video' });
             setMediaFiles([...newMediaFiles]);
-            await saveMediaFiles(recordid, newMediaFiles);
+            await saveMediaFiles(recordId, newMediaFiles);
         } catch (error) {
             console.error('Error uploading file:', error);
         }
@@ -226,22 +212,22 @@ function EditContact() {
     const handleRemoveImage = (index) => {
         const updatedMediaFiles = mediaFiles.filter((_, i) => i !== index);
         setMediaFiles(updatedMediaFiles);
-        saveMediaFiles(recordid, updatedMediaFiles);
+        saveMediaFiles(recordId, updatedMediaFiles);
     };
 
     const handleRemoveVideo = () => {
         const updatedMediaFiles = mediaFiles.filter(file => file.type !== 'video');
         setMediaFiles(updatedMediaFiles);
-        saveMediaFiles(recordid, updatedMediaFiles);
+        saveMediaFiles(recordId, updatedMediaFiles);
     };
 
     return (
         <div className="Editcontainer">
-            <div className="edit-Contact">
+            <div className="edit-Contact" style={{marginTop:"20px"}}>
                 <nav className='nav2' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                     <IoChevronBack
                         onClick={handlegoBack}
-                        style={{ color: "red", fontSize: "25px", cursor: 'pointer', position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }}
+                        style={{ color: "red", fontSize: "25px", cursor: 'pointer', position: 'absolute', left: '0.3rem', top: '50%', transform: 'translateY(-50%)' }}
                     />
                     <p style={{ fontSize: '20px', color: 'red', margin: '0' }}>
                         Photos and Videos
@@ -296,7 +282,8 @@ function EditContact() {
           position: 'relative',
           overflow: 'hidden',
           width: 'calc(33% - 30px)', // Ensures equal width with the gap considered
-          maxHeight: '122px',
+        height: '90px',
+          
         
       
         }}

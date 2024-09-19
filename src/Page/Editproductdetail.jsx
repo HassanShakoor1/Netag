@@ -104,12 +104,7 @@ function Editproductdetail() {
     setFormData(prevData => ({ ...prevData, color }));
   };
 
-  const addColor = () => {
-    setFormData(prevData => ({
-      ...prevData,
-      color: [...prevData.color, ''] // Add an empty string for the new color
-    }));
-  };
+  
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -155,6 +150,7 @@ function Editproductdetail() {
     }
   };
 
+
   const handleImageRemove = (index) => {
     setImages(prevImages => {
       // Create a new array with the image at the specified index removed
@@ -190,7 +186,7 @@ function Editproductdetail() {
             Business Name
           </h5>
           <input
-            style={{ paddingTop: '0px', paddingBottom: '0px', width: '100%', height: "40px", border: 'none', borderRadius: "17px", backgroundColor: '#F7F7F7' }}
+            style={{ width: '100%', height: "40px", border: 'none', borderRadius: "17px", backgroundColor: '#F7F7F7', paddingLeft:"10px" }}
             type="text"
             placeholder='Enter business name'
             name="categoryname"
@@ -235,44 +231,48 @@ function Editproductdetail() {
             </div>
           </div>
           <div style={{ marginTop: '20px' }} className="formRow">
-            <div className="formColumn">
-              <label style={{ paddingLeft: "10px", fontWeight: '100' }} className="formHeading">
-                Size
-              </label>
-              <input
-                style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: "90%" }}
-                type="text"
-                className="formInput"
-                placeholder='Small'
-                name="size"
-                value={formData?.size}
-                onChange={handleInputChange}
-              />
-            </div>
-          
-            <div className="formColumn">
-              <label style={{ paddingLeft: "10px", fontWeight: '100' }} className="formHeading">
-                Color
-              </label>
-              <input
-                style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: '90%' }}
-                type="text"
-                className="formInput"
-                name="color"
-                placeholder='Add colors, separated by commas'
-                value={formData.color}
-                onChange={handleColorChange}
-              />
-              <div style={{position:'relative',width:'100%'}}>
-                 <button
-                onClick={addColor}
-                style={{ marginTop: '10px', borderRadius: '20px', border: 'none', backgroundColor: 'red', color: 'white',width:'50px',height:"20px",position:'absolute',right:30,}}
-              >
-              Add
-              
-              </button>
-              </div>
-            </div>
+          <div className="formColumn">
+  <label style={{ paddingLeft: "10px", fontWeight: '100' }} className="formHeading">
+    Size
+  </label>
+  <select
+    style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: "90%", padding: '10px', }}
+    className="formInput"
+    name="size"
+    value={formData.size}
+    onChange={handleInputChange}
+  >
+    <option value="" disabled>Select Size</option>
+    <option value="small">Small</option>
+    <option value="medium">Medium</option>
+    <option value="large">Large</option>
+  </select>
+</div>
+
+<div className="formColumn">
+  <label style={{ paddingLeft: "10px", fontWeight: '100' }} className="formHeading">
+    Color
+  </label>
+  <select
+    style={{ borderRadius: '20px', backgroundColor: "#F7F7F7", width: '90%', padding: '10px' }}
+    className="formInput"
+    name="color"
+    value={formData.color}
+    onChange={handleColorChange}
+  >
+    <option value="" disabled>Select Color</option>
+    <option value="red">Red</option>
+    <option value="green">Green</option>
+    <option value="blue">Blue</option>
+    <option value="yellow">Yellow</option>
+    {/* Add more colors as needed */}
+  </select>
+
+  <div style={{ position: 'relative', width: '100%' }}>
+ 
+  </div>
+</div>
+
 
 
           </div>
@@ -290,241 +290,218 @@ function Editproductdetail() {
           value={formData.description}
           onChange={handleInputChange}
         />
+<div style={{ marginLeft: '8px' }}>
+      {/* First Row */}
+      <div style={{ display: 'flex', padding: '15px', gap: '10px' ,marginLeft:"8px"}}>
+        {/* File Input */}
+        <div
+          style={{
+            flex: '1 1 50%',
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            border: '1px solid #e2e8f0',
+            width: '100%',
+            height: '150px',
+            borderRadius: '20px',
+            backgroundColor: '#F4F4F4',
+          }}
+        >
+          <img src={edit} style={{ width: "50px", margin: '0px auto' }} alt="Upload" />
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            style={{ display: 'none' }}
+            id="upload-photos"
+            onChange={handleFileChange}
+          />
+          <label htmlFor="upload-photos" style={{ cursor: 'pointer', textAlign: 'center', fontSize: '14px', color: '#a0aec0' }}>
+            Upload photo
+          </label>
+        </div>
 
-        <div style={{marginLeft:'8px'}}>
-          {/* First Row */}
-          <div style={{ display: 'flex', padding: '20px', gap: '10px' }}>
-            {/* File Input */}
-            <div
+        {/* Display first uploaded image */}
+        {displayedImages[0] && (
+          <div
+            style={{
+              flex: '1 1 50%',
+              display: 'flex',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              border: '1px solid #e2e8f0',
+              width: '100%',
+              height: '150px',
+              borderRadius: '20px',
+              backgroundColor: '#F4F4F4',
+              position: 'relative',
+            }}
+          >
+            <img
+              src={displayedImages[0]}
+              alt="Uploaded"
               style={{
-                flex: '1 1 50%',
-                display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                border: '1px solid #e2e8f0',
-                width: '100%',
-                height: '150px',
-                borderRadius: '20px',
-                backgroundColor: '#F4F4F4',
-
-
+                maxWidth: '100%',
+                maxHeight: '100%',
+                borderRadius: '10px',
               }}
-            >
-              <img src={edit} style={{ width: "50px",margin:'0px auto' }} alt="Upload" />
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                style={{ display: 'none' }}
-                id="upload-photos"
-                onChange={handleFileChange}
-              />
-              <label htmlFor="upload-photos" style={{ cursor: 'pointer', textAlign: 'center', fontSize: '14px', color: '#a0aec0' }}>
-                Upload photo
-              </label>
-            </div>
-
-            {/* Display first uploaded image */}
-            {displayedImages[0] && (
-              
-              <div
-  style={{
-    flex: '1 1 50%',
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    border: '1px solid #e2e8f0',
-    width: '100%',
-    height: '150px',
-    borderRadius: '20px',
-    backgroundColor: '#F4F4F4',
-    position: 'relative', // Added for button positioning
-  }}
->
-  <img
-    src={displayedImages[0]}
-    alt="Uploaded"
-    style={{
-      maxWidth: '100%',
-      maxHeight: '100%',
-      borderRadius: '10px',
-    }}
-  />
-  
-  {/* Remove button */}
-  <button
-    style={{
-      width: '20px',
-      height: '20px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      border: 'none',
-      background: 'transparent',
-      position: 'absolute',
-      top: '5px', // Adjust positioning if needed
-      right: '5px',
-      cursor: 'pointer',
-      zIndex: 1,
-    }}
-    className="removeButton"
-    onClick={() => handleImageRemove(displayedImages)}
-  >
-    <FaTimes />
-  </button>
-</div>
-
-
-
-
-
-            )}
+            />
+             <button
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: 'none',
+                  background: "#FFB9B9",
+                  position: 'absolute',
+                  top: '5px',
+                  right: '5px',
+                  cursor: 'pointer',
+                  zIndex: 1,
+                }}
+                onClick={() => handleImageRemove(0)}
+              >
+                <FaTimes style={{ color: "red" }} />
+              </button>
           </div>
+        )}
+      </div>
 
-          {/* Second Row */}
-          <div style={{ display: 'flex', padding: '20px', gap: '10px' }}>
-            {/* Display second uploaded image */}
-            {displayedImages[1] && (
-            
+      {/* Second Row */}
+      <div style={{ display: 'flex', padding: '20px', gap: '10px' }}>
+        {/* Display second uploaded image */}
+        {displayedImages[1] && (
+          <div
+            style={{
+              flex: '1 1 50%',
+              display: 'flex',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              border: '1px solid #e2e8f0',
+              width: '100%',
+              height: '150px',
+              borderRadius: '20px',
+              backgroundColor: '#F4F4F4',
+              position: 'relative',
+            }}
+          >
+            <img
+              src={displayedImages[1]}
+              alt="Uploaded"
+              style={{
+                maxWidth: '100%',
+                maxHeight: '100%',
+                borderRadius: '10px',
+              }}
+            />
+           <button
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '100%',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: 'none',
+                  background: "#FFB9B9",
+                  position: 'absolute',
+                  top: '5px',
+                  right: '5px',
+                  cursor: 'pointer',
+                  zIndex: 1,
+                }}
+                onClick={() => handleImageRemove(1)}
+              >
+                <FaTimes style={{ color: "red" }} />
+              </button>
+          </div>
+        )}
 
-              <div
-  style={{
-    flex: '1 1 50%',
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    border: '1px solid #e2e8f0',
-    width: '100%',
-    height: '150px',
-    borderRadius: '20px',
-    backgroundColor: '#F4F4F4',
-    position: 'relative', // Added for button positioning
-  }}
->
-  <img
-    src={displayedImages[1]}
-    alt="Uploaded"
-    style={{
-      maxWidth: '100%',
-      maxHeight: '100%',
-      borderRadius: '10px',
-    }}
-  />
-
-  {/* Remove button */}
-  <button
-    style={{
-      width: '20px',
-      height: '20px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      border: 'none',
-      background: 'transparent',
-      position: 'absolute',
-      top: '5px', // Adjust positioning if needed
-      right: '5px',
-      cursor: 'pointer',
-      zIndex: 1,
-    }}
-    className="removeButton"
-    onClick={() => handleImageRemove(displayedImages)} // Add your image remove function here
-  >
-    <FaTimes />
-  </button>
-</div>
-
-
-            )}
-
-            {/* Display third uploaded image and 'more' button */}
-            {displayedImages[2] && (
-              <div
-  style={{
-    flex: '1 1 50%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    border: '1px solid #e2e8f0',
-    width: '100%',
-    height: '150px',
-    borderRadius: '20px',
-    backgroundColor: '#F4F4F4',
-    position: 'relative', // For positioning the remove button
-  }}
->
+        {/* Display third uploaded image and 'more' button */}
+        {displayedImages[2] && (
   <div
     style={{
+      flex: '1 1 50%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column',
+      border: '1px solid #e2e8f0',
       width: '100%',
-      height: '100%',
-      background: remainingImagesCount >= 0 ? 'black' : 'black',
-      opacity: remainingImagesCount >= 1 ? '0.4' : '1',
-      borderRadius: '15px',
+      height: '150px',
+      borderRadius: '20px',
+      backgroundColor: '#F4F4F4',
       position: 'relative',
+      overflow: 'hidden', // Ensures the image doesn't overflow the container
     }}
   >
-    <img
-      src={displayedImages}
-      alt="Uploaded"
+    <div
       style={{
-        maxWidth: '100%',
-        maxHeight: '100%',
-        borderRadius: '10px',
+        width: '100%',
+        height: '100%',
+        // background: remainingImagesCount > 0 ? 'black' : 'black',
+        // opacity: remainingImagesCount > 0 ? '0.4' : '1',
+        borderRadius: '15px',
         position: 'relative',
-        right: '-20px',
       }}
-    />
-    {/* Remove Button */}
-    <button
-      style={{
-        width: '20px',
-        height: '20px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        border: 'none',
-        background: 'transparent',
-        position: 'absolute',
-        top: '5px',
-        right: '5px',
-        cursor: 'pointer',
-        zIndex: 1,
-      }}
-      className="removeButton"
-      onClick={() => handleImageRemove(displayedImages[2])} // Remove the image
     >
-      <FaTimes />
-    </button>
+      <img
+        src={displayedImages[2]}
+        alt="Uploaded"
+        style={{
+          width: '100%',  // Ensures the image takes the full width of the container
+          height: '100%', // Ensures the image takes the full height of the container
+          objectFit: 'cover', // Ensures the image covers the container while maintaining aspect ratio
+          borderRadius: '10px',
+        }}
+      />
+      <button
+        style={{
+          width: '20px',
+          height: '20px',
+          borderRadius: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          border: 'none',
+          background: "#FFB9B9",
+          position: 'absolute',
+          top: '5px',
+          right: '5px',
+          cursor: 'pointer',
+          zIndex: 1,
+        }}
+        onClick={() => handleImageRemove(2)}
+      >
+        <FaTimes style={{ color: "red" }} />
+      </button>
+    </div>
+
+    {remainingImagesCount > 0 && (
+      <div
+        onClick={show}
+        style={{
+          marginTop: '10px',
+          cursor: 'pointer',
+          position: 'absolute',
+          borderBottom:'1px solid white',
+          color: 'white',
+          fontWeight: '700',
+        }}
+      >
+        {showAll
+          ? `Show Less (${remainingImagesCount})`
+          : `+${remainingImagesCount}More`}
+      </div>
+    )}
   </div>
+)}
 
-  {remainingImagesCount > 0 && (
-    <button
-      onClick={show}
-      style={{
-        marginTop: '10px',
-        padding: '10px',
-        borderRadius: '20px',
-        border: 'none',
-        outline: 'none',
-        cursor: 'pointer',
-        position: 'absolute',
-        marginLeft: '40px',
-        background: 'transparent',
-        color: 'red',
-        fontWeight: '700',
-      }}
-    >
-      {showAll
-        ? `Show Less (${remainingImagesCount})`
-        : `Show More (${remainingImagesCount})`}
-    </button>
-  )}
+      </div>
 </div>
-
-            )}
-          </div>
-        </div>
 
         <button
           onClick={handleSubmit}

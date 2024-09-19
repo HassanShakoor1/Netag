@@ -44,13 +44,23 @@ input::placeholder {
 }
 
 .formInput {
-    padding: 0.5rem;
+    padding: 9px 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 100%; /* Ensure input takes full width of column */
     box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
+.formInput::placeholder {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+input::placeholder{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
 
 
 
