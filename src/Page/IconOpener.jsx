@@ -78,7 +78,7 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
   const handleSave = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
-    const userId = user?.uid;
+    const userId = localStorage.getItem("userId");
 
     if (!userId) {
       alert('User is not authenticated');

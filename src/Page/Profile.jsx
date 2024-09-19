@@ -26,7 +26,6 @@ function Profile() {
   const { t } = useTranslation()
 
 
-
   const [loading, setLoading] = useState(true); // State for loading
   const [links, setLinks] = useState([]); // State to store fetched links
 
@@ -43,6 +42,7 @@ function Profile() {
   })
   
   const userId = localStorage.getItem('userId');
+  console.log ("now user ",userId)
 
   const handleImageClick = (baseUrl, linkName) => {
     if (!baseUrl || !linkName) {

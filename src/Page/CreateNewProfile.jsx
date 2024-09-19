@@ -108,8 +108,8 @@ function CreateNewProfile() {
         setstatus(data.martialStatus)
         setcompany(data.companyname)
         setprofileName(data.profileUrl)
-        setDisplayProfileImageUrl(data.profileImage)
-        setDisplayDpImageUrl(data.backgroundPicture)
+        setDisplayProfileImageUrl(data.profileImageUrl)
+        setDisplayDpImageUrl(data.logoUrl)
 
         }
         checkForUpdate()
@@ -147,8 +147,8 @@ function CreateNewProfile() {
                 }
 
                 await update(dataRef,{
-                    profileImageUrl:newDisplayDpImageUrl,
-                    logoUrl:newProfileImageUrl,
+                    backgroundPicture:newDisplayDpImageUrl,
+                    profilePicture:newProfileImageUrl,
                     profileUrl:profileName,
                     profileOn:selected,
     
@@ -156,10 +156,8 @@ function CreateNewProfile() {
                         
                         username: username,
                         userName1: "",
-                        backgroundPicture: backgroundPicture,
-                        profilePicuture: profilePicture,
                         designation: designation,
-                        martialStatus: status,
+                        materialStatus: status,
                         companyname: company,
                         language: "",
                 
@@ -228,8 +226,8 @@ function CreateNewProfile() {
                 // Designation:designation,
                 // martialStatus:status,
                 // Company:company,
-                profileImageUrl:profile_image_url,
-                logoUrl:dp_image_url,
+                backgroundPicture :profile_image_url,
+                profilePicture:dp_image_url,
                 profileUrl:profileName,
                 profileOn:selected,
 
@@ -237,10 +235,9 @@ function CreateNewProfile() {
                     
                     username: username,
                     userName1: "",
-                    backgroundPicture: "",
-                    profilePicuture: "",
+                   
                     designation: designation,
-                    martialStatus: status,
+                    materialStatus: status,
                     companyname: company,
                     language: "",
             
