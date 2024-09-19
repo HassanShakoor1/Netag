@@ -15,6 +15,13 @@
     justify-content: space-between;
 }
 
+input{
+  padding: 9px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%; /* Ensure input takes full width of column */
+  box-sizing: border-box; 
+}
 input::placeholder {
     color:#727272;
     font-size: 16px;
@@ -35,4 +42,5 @@ padding-bottom: 0px;
     height: 200px;
     background-color:#F1F1F1;
     border-radius: 30px;
+    max-width: 98%;
   }

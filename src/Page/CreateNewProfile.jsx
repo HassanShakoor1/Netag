@@ -108,8 +108,8 @@ function CreateNewProfile() {
         setstatus(data.martialStatus)
         setcompany(data.companyname)
         setprofileName(data.profileUrl)
-        setDisplayProfileImageUrl(data.profileImageUrl)
-        setDisplayDpImageUrl(data.logoUrl)
+        setDisplayProfileImageUrl(data.profileImage)
+        setDisplayDpImageUrl(data.backgroundPicture)
 
         }
         checkForUpdate()
@@ -156,8 +156,8 @@ function CreateNewProfile() {
                         
                         username: username,
                         userName1: "",
-                        backgroundPicture: "",
-                        profilePicuture: "",
+                        backgroundPicture: backgroundPicture,
+                        profilePicuture: profilePicture,
                         designation: designation,
                         martialStatus: status,
                         companyname: company,
