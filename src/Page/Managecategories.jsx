@@ -19,6 +19,10 @@ import { useTranslation } from "react-i18next";
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // Style for the modal
 const style = {
   position: 'absolute',
@@ -96,6 +100,8 @@ function Managecategories() {
     try {
       await remove(dataToDelete);
       setProductOfCategory((previous) => previous.filter(x => x.id !== id));
+
+      toast.success("Item Deleted Successfully")
     } catch (error) {
       console.log("error while deleting", error);
     }
@@ -232,78 +238,78 @@ function Managecategories() {
                           
                         </Menu> */}
 
-<div>
-  <IconButton
-    aria-label="more"
-    id="long-button"
-    aria-controls={open ? 'long-menu' : undefined}
-    aria-expanded={open ? 'true' : undefined}
-    aria-haspopup="true"
-    onClick={(event) => handleClick(event, x.id)} // Pass the item id
-    style={{
-      color: '#EE0000',
-      padding: "0",
-      margin: "0",
-      zIndex: "1",
-    }}
-  >
-    <MoreVertIcon />
-  </IconButton>
+                        <div>
+                          <IconButton
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={open ? 'long-menu' : undefined}
+                            aria-expanded={open ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={(event) => handleClick(event, x.id)} // Pass the item id
+                            style={{
+                              color: '#EE0000',
+                              padding: "0",
+                              margin: "0",
+                              zIndex: "1",
+                            }}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
 
-  <Menu
-    id="long-menu"
-    MenuListProps={{
-      'aria-labelledby': 'long-button',
-    }}
-    anchorEl={anchorEl}
-    open={Boolean(anchorEl && currentItemId === x.id)} // Check if the menu should be open for the current item
-    onClose={handleClose}
-    PaperProps={{
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5, // Set a max height to control overflow
-        width: '20ch',                // Updated width to match first block
-      },
-    }}
-    anchorOrigin={{
-      vertical: 'bottom',             // Menu will open below the button
-      horizontal: 'right',            // Menu will align to the right of the button
-    }}
-    transformOrigin={{
-      vertical: 'top',                // Menu starts from the top
-      horizontal: 'right',            // Menu aligns its right side to the right of the button
-    }}
-  >
-    {/* "Edit Profile" Menu Item with custom styles and icon */}
-    <MenuItem
-      style={{
-        fontSize: "15px",            // Matching font size for consistency
-        color: '#7C7C7C',
-        borderBottom: '1px solid #ddd',
-      }}
-      onClick={() => handleMenuItemClick(`/home/services/catagory/ManageCategories-products-Edit/${x.id}`)}
-    >
-      <DoneAllIcon style={{ marginRight: '8px' }} />  {/* Added Icon */}
-      {t("Edit Profile")}
-    </MenuItem>
+                          <Menu
+                            id="long-menu"
+                            MenuListProps={{
+                              'aria-labelledby': 'long-button',
+                            }}
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl && currentItemId === x.id)} // Check if the menu should be open for the current item
+                            onClose={handleClose}
+                            PaperProps={{
+                              style: {
+                                maxHeight: ITEM_HEIGHT * 4.5, // Set a max height to control overflow
+                                width: '20ch',                // Updated width to match first block
+                              },
+                            }}
+                            anchorOrigin={{
+                              vertical: 'bottom',             // Menu will open below the button
+                              horizontal: 'right',            // Menu will align to the right of the button
+                            }}
+                            transformOrigin={{
+                              vertical: 'top',                // Menu starts from the top
+                              horizontal: 'right',            // Menu aligns its right side to the right of the button
+                            }}
+                          >
+                            {/* "Edit Profile" Menu Item with custom styles and icon */}
+                            <MenuItem
+                              style={{
+                                fontSize: "15px",            // Matching font size for consistency
+                                color: '#7C7C7C',
+                                borderBottom: '1px solid #ddd',
+                              }}
+                              onClick={() => handleMenuItemClick(`/home/services/catagory/ManageCategories-products-Edit/${x.id}`)}
+                            >
+                              <DoneAllIcon style={{ marginRight: '8px' }} />  {/* Added Icon */}
+                              {t("Edit Profile")}
+                            </MenuItem>
 
-    {/* Separator Line */}
-    <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div>
+                            {/* Separator Line */}
+                            <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div>
 
-    {/* "Delete" Menu Item with red color and custom icon */}
-    <MenuItem
-      style={{
-        fontSize: "15px",             // Larger font size for consistency
-        color: 'red',                 // Red color for "Delete"
-      }}
-      onClick={() => handleDelete(`${x.id}`)}
-    >
-      <DeleteIcon style={{ marginRight: '8px' }} />   {/* Added Delete Icon */}
-      {t("Delete")}
-    </MenuItem>
+                            {/* "Delete" Menu Item with red color and custom icon */}
+                            <MenuItem
+                              style={{
+                                fontSize: "15px",             // Larger font size for consistency
+                                color: 'red',                 // Red color for "Delete"
+                              }}
+                              onClick={() => handleDelete(`${x.id}`)}
+                            >
+                              <DeleteIcon style={{ marginRight: '8px' }} />   {/* Added Delete Icon */}
+                              {t("Delete")}
+                            </MenuItem>
 
-    {/* Additional MenuItems can be added here */}
-  </Menu>
-</div>
+                            {/* Additional MenuItems can be added here */}
+                          </Menu>
+                        </div>
 
                       </div>
                     </div>
@@ -328,26 +334,29 @@ function Managecategories() {
                   alignItems: 'center', // Center items horizontally
                   justifyContent: 'center' // Center items vertically
                 }}>
-                  <img src={modalContent.pic} alt="" style={{ width: '100%', height: 'auto',borderRadius:"12px" }} />
+                  <img src={modalContent.pic} alt="" style={{ width: '100%', height: 'auto', borderRadius: "12px" }} />
                 </div>
                 <Typography id="modal-modal-title" variant="h6" component="h2" style={{ marginTop: '1rem', fontSize: '18px', color: '#EE0000', fontWeight: "600" }}>
                   {modalContent.title}
                 </Typography>
                 <Typography >
-                  <span style={{fontSize:"8px"}}>Mental Health Clininc</span>
+                  <span style={{ fontSize: "8px" }}>Mental Health Clininc</span>
                 </Typography>
                 <Typography >
-                  <span style={{fontSize:"18px",fontWeight:"bold"}}>$120</span>
+                  <span style={{ fontSize: "18px", fontWeight: "bold" }}>$120</span>
                 </Typography>
                 <Typography id="modal-modal-description" variant="h6" component="p" style={{ marginTop: '1px', fontSize: '8px', color: '#777777' }}>
                   {modalContent.explain}
-                  
+
                 </Typography>
               </Box>
             </Modal>
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+      />
     </div>
   )
 }

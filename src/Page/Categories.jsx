@@ -206,12 +206,14 @@ function Categories() {
 
             // Delete the ServiceCategory after services have been removed
             await remove(itemRef);
-            console.log("Category deleted successfully");
+            toast.success("Category deleted successfully")
+            // console.log("Category deleted successfully");
 
             // Update local state
             setFirebasedata((previous) => previous.filter((item) => item.id !== id));
         } catch (error) {
             console.error("Error deleting item:", error);
+            toast.error("Error deleting item")
         }
     };
 
@@ -260,13 +262,13 @@ function Categories() {
                                         <div className="cardwidth">
                                             <div className="cardcenter">
                                                 <div className="cardcenter-width">
-                                                    <div style={{ width: '100%', height: "200px" }}>
+                                                    <div style={{ width: '100%', height: "150px" }}>
                                                         {/* image  */}
 
-                                                        <img style={{ maxHeight: "200px", width: "100%", marginTop: "7px", objectFit: "contain" }} src={x.imageurl} alt="" />
+                                                        <img style={{ maxHeight: "150px", width: "100%", marginTop: "7px", objectFit: "contain" }} src={x.imageurl} alt="" />
                                                     </div>
                                                     {/* title  */}
-                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                                                    <div style={{ marginTop: "10px", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                                                         <div style={{ color: "#EE0000", fontWeight: "500", width: "100%", marginLeft: "5px", display: "flex", flexDirection: "column", justifyContent: "start", }}>
                                                             <div style={{ width: "100%", display: "flex", alignItems: "center", marginTop: "5px" }}>
                                                                 <div style={{ fontSize: "18px" }}>{x.name}</div>
@@ -346,76 +348,76 @@ function Categories() {
 
                                                         </div> */}
 
-<div>
-  <IconButton
-    aria-label="more"
-    id="long-button"
-    aria-controls={open ? 'long-menu' : undefined}
-    aria-expanded={open ? 'true' : undefined}
-    aria-haspopup="true"
-    onClick={(event) => handleClick(event, x.id)} // Pass the item id
-    style={{
-      color: '#EE0000',
-      padding: "0",
-      margin: "0",
-      zIndex: "1",
-    }}
-  >
-    <MoreVertIcon />
-  </IconButton>
+                                                        <div>
+                                                            <IconButton
+                                                                aria-label="more"
+                                                                id="long-button"
+                                                                aria-controls={open ? 'long-menu' : undefined}
+                                                                aria-expanded={open ? 'true' : undefined}
+                                                                aria-haspopup="true"
+                                                                onClick={(event) => handleClick(event, x.id)} // Pass the item id
+                                                                style={{
+                                                                    color: '#EE0000',
+                                                                    padding: "0",
+                                                                    margin: "0",
+                                                                    zIndex: "1",
+                                                                }}
+                                                            >
+                                                                <MoreVertIcon />
+                                                            </IconButton>
 
-  <Menu
-    id="long-menu"
-    MenuListProps={{
-      'aria-labelledby': 'long-button',
-    }}
-    anchorEl={anchorEl}
-    open={Boolean(anchorEl && currentItemId === x.id)} // Check if the menu should be open for the current item
-    onClose={handleClose}
-    PaperProps={{
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5, // Set a max height to control overflow
-        width: '20ch',                // Updated width to match first block
-      },
-    }}
-    anchorOrigin={{
-      vertical: 'bottom',             // Menu will open below the button
-      horizontal: 'right',            // Menu will align to the right of the button
-    }}
-    transformOrigin={{
-      vertical: 'top',                // Menu starts from the top
-      horizontal: 'right',            // Menu aligns its right side to the right of the button
-    }}
-  >
-    {/* "Edit Profile" Menu Item with custom styles */}
-    <MenuItem
-      style={{
-        fontSize: "15px",            // Matching font size for consistency
-        color: '#7C7C7C',
-        borderBottom: '1px solid #ddd',
-      }}
-      onClick={() => handleMenuItemClick(`/home/services/serviceeditcategory/${x.id}`)}
-    >
-      <DoneAllIcon style={{ marginRight: '8px' }} />  {/* Added Icon for consistency */}
-      Edit Profile
-    </MenuItem>
+                                                            <Menu
+                                                                id="long-menu"
+                                                                MenuListProps={{
+                                                                    'aria-labelledby': 'long-button',
+                                                                }}
+                                                                anchorEl={anchorEl}
+                                                                open={Boolean(anchorEl && currentItemId === x.id)} // Check if the menu should be open for the current item
+                                                                onClose={handleClose}
+                                                                PaperProps={{
+                                                                    style: {
+                                                                        maxHeight: ITEM_HEIGHT * 4.5, // Set a max height to control overflow
+                                                                        width: '20ch',                // Updated width to match first block
+                                                                    },
+                                                                }}
+                                                                anchorOrigin={{
+                                                                    vertical: 'bottom',             // Menu will open below the button
+                                                                    horizontal: 'right',            // Menu will align to the right of the button
+                                                                }}
+                                                                transformOrigin={{
+                                                                    vertical: 'top',                // Menu starts from the top
+                                                                    horizontal: 'right',            // Menu aligns its right side to the right of the button
+                                                                }}
+                                                            >
+                                                                {/* "Edit Profile" Menu Item with custom styles */}
+                                                                <MenuItem
+                                                                    style={{
+                                                                        fontSize: "15px",            // Matching font size for consistency
+                                                                        color: '#7C7C7C',
+                                                                        borderBottom: '1px solid #ddd',
+                                                                    }}
+                                                                    onClick={() => handleMenuItemClick(`/home/services/serviceeditcategory/${x.id}`)}
+                                                                >
+                                                                    <DoneAllIcon style={{ marginRight: '8px' }} />  {/* Added Icon for consistency */}
+                                                                    Edit Profile
+                                                                </MenuItem>
 
-    {/* Separator Line */}
-    <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div>
+                                                                {/* Separator Line */}
+                                                                <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div>
 
-    {/* "Delete" Menu Item with red color and custom icon */}
-    <MenuItem
-      style={{
-        fontSize: "15px",             // Larger font size for "Delete"
-        color: 'red',                 // Red color for "Delete"
-      }}
-      onClick={() => handleDelete(`${x.categoryid}`)} // Call handleDelete with category ID
-    >
-      <DeleteIcon style={{ marginRight: '8px' }} />   {/* Added Delete Icon */}
-      Delete
-    </MenuItem>
-  </Menu>
-</div>
+                                                                {/* "Delete" Menu Item with red color and custom icon */}
+                                                                <MenuItem
+                                                                    style={{
+                                                                        fontSize: "15px",             // Larger font size for "Delete"
+                                                                        color: 'red',                 // Red color for "Delete"
+                                                                    }}
+                                                                    onClick={() => handleDelete(`${x.categoryid}`)} // Call handleDelete with category ID
+                                                                >
+                                                                    <DeleteIcon style={{ marginRight: '8px' }} />   {/* Added Delete Icon */}
+                                                                    Delete
+                                                                </MenuItem>
+                                                            </Menu>
+                                                        </div>
 
 
 

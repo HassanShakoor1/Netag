@@ -15,6 +15,9 @@ import redcross from "../images/redcross.svg"
 // <<<<<<< HEAD
 import { v4 as uuidv4 } from "uuid";
 import { useTranslation } from 'react-i18next'
+
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 // =======
 
 // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
@@ -29,7 +32,7 @@ function ServiceaddcategoryAddnewProduct() {
 
 
 
-    
+
     const [image, setImage] = useState(null);
 
 
@@ -37,47 +40,15 @@ function ServiceaddcategoryAddnewProduct() {
     const [name1, setname1] = useState("")
     const [description, setdescription] = useState("")
 
-    // const id = Date.now()
-    // function to send data to firebase
 
-    // const createnew=async()=>{
-
-    //     if(!name1 || !description || !image) return
-
-    //     const image_instorage=ref(storage,`${image.name}`)
-
-    //     try {
-    //         // upload image to storage 
-    //         const snapshot=await uploadBytes(image_instorage,image)
-    //         // get url of image 
-    //         const url=await getDownloadURL(snapshot.ref)
-
-    //         const categorypath=sRef(db,`categories/${localStorage.getItem("userId")}/brands`)
-
-    //         const categorydata={
-    //             name1:name1,
-    //             description:description,
-    //             image:url
-    //         }
-
-    //         const newcategories=push(categorypath,categorydata).key
-
-    //         console.log(newcategories)
-    //         // await set(newcategories,categorydata)
-
-    //         localStorage.setItem("imageurl",newcategories.key)
-
-
-
-
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
 
     const createnew = async () => {
 
-        if (!image || !name1 || !description) return
+        if (!image || !name1 || !description) 
+        {   
+            toast.error("Please fill all fields")
+            return
+        }
 
         const image_instorage = ref(storage, `${image.name}`)
 
@@ -112,7 +83,8 @@ function ServiceaddcategoryAddnewProduct() {
             websiteurl: ""
         }
         await set(newProductId, productData)
-        alert("Product created successfully")
+        toast.success("Product created successfully")
+        // alert("Product created successfully")
 
     }
 
@@ -163,24 +135,49 @@ function ServiceaddcategoryAddnewProduct() {
 
                         {/* input  */}
                         <div style={{ marginTop: "2rem" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" ,marginBottom:"10px"}}>{t("Name")}</div>
+                            <div style={{ marginLeft: "18px", fontWeight: "500", marginBottom: "10px" }}>{t("Name")}</div>
                             <div style={{ width: "100%" }}>
                                 <input type="text"
                                     placeholder="Mental Health Service"
-                                    style={{ width: "100%", padding: "10px", height: "6vh", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" }}
+                                    // style={{ width: "100%", padding: "13px", paddingLeft:"18px", height: "6vh", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" }}
+                                    // style={{ padding:"10px",outline:"none",resize: "none", width: "100%", height: "6vh", backgroundColor: "#F7F7F7", borderRadius: "16px", border:"none",boxSizing: "border-box" }}
+                                    style={{
+                                        padding: "10px 15px", // Adjust the horizontal padding
+                                        outline: "none",
+                                        resize: "none",
+                                        width: "100%",
+                                        height: "6vh",
+                                        backgroundColor: "#F7F7F7",
+                                        borderRadius: "16px",
+                                        border: "none",
+                                        boxSizing: "border-box",
+                                        lineHeight: "1.6" // Set consistent line-height
+                                    }}
                                     onChange={(e) => setname1(e.target.value)}
                                 />
                             </div>
                         </div>
                         {/* description */}
-                        <div style={{ marginTop: "8px",marginBottom:"8px" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500",marginBottom:"8px" }}>
+                        <div style={{ marginTop: "8px", marginBottom: "8px" }}>
+                            <div style={{ marginLeft: "18px", fontWeight: "500", marginBottom: "8px" }}>
                                 {t("Description")}
                             </div>
-                            <div>
+                            <div style={{ width: "100%" }}>
                                 <textarea
                                     placeholder="lorem ipsum"
-                                    style={{ outline:"none",resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "13px", paddingLeft:"18px", border:"none",boxSizing: "border-box" }}
+                                    // style={{ padding:"10px",outline:"none",resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px",  border:"none",boxSizing: "border-box" }}
+                                    style={{
+                                        padding: "10px 24px", // Adjust the horizontal padding
+                                        outline: "none",
+                                        resize: "none",
+                                        width: "100%",
+                                        height: "20vh",
+                                        backgroundColor: "#F7F7F7",
+                                        borderRadius: "16px",
+                                        border: "none",
+                                        boxSizing: "border-box",
+                                        lineHeight: "1.6" // Ensure consistent line-height
+                                    }}
                                     onChange={(e) => setdescription(e.target.value)}
                                 />
                             </div>
@@ -305,7 +302,9 @@ function ServiceaddcategoryAddnewProduct() {
                 </div>
             </div>
 
-
+            <ToastContainer
+                position="top-center"
+            />
         </div>
     )
 }

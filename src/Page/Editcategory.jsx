@@ -8,10 +8,13 @@ import { ref as sRef, onValue, update } from "firebase/database";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { database as db, storage } from "../firebase.jsx";
-import {useTranslation} from "react-i18next"
+import { useTranslation } from "react-i18next"
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Serviceeditcategory() {
-    const{t}=useTranslation()
+    const { t } = useTranslation()
 
 
     const { id } = useParams();
@@ -73,10 +76,11 @@ function Serviceeditcategory() {
                 description: description,
                 imageurl: imageUrl,
             });
-            
-            alert('Data updated successfully');
-            
+            toast.success('Data updated successfully')
+            // alert('Data updated successfully');
+
         } catch (error) {
+            toast.error("Error updating data")
             console.error("Error updating data:", error);
         }
     };
@@ -101,13 +105,13 @@ function Serviceeditcategory() {
                             <div></div>
                         </div>
                         <div style={{ marginLeft: "18px", color: "#EE0000", fontSize: "16px", fontWeight: "500", marginTop: "3rem" }}>
-                           {t("Service")}
+                            {t("Service")}
                         </div>
                         <div style={{ marginTop: "2rem" }}>
                             <div style={{ marginLeft: "18px", fontWeight: "500" }}>
                                 {t("Name")}
-                                
-                                </div>
+
+                            </div>
                             <div style={{ width: "100%" }}>
                                 <input
                                     type="text"
@@ -121,7 +125,7 @@ function Serviceeditcategory() {
                         <div style={{ marginTop: "5px" }}>
                             <div style={{ marginLeft: "18px", fontWeight: "500" }}>
                                 {t("Description")}
-                                </div>
+                            </div>
                             <div>
                                 <textarea
                                     placeholder="lorem ipsum"
@@ -183,6 +187,10 @@ function Serviceeditcategory() {
                     </div>
                 </div>
             </div>
+            <ToastContainer
+                position="top-center"
+            />
+
         </div>
     );
 }
