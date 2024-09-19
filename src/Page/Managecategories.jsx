@@ -16,13 +16,21 @@ import { database as db } from "../firebase.jsx"
 import { get, ref, remove } from "firebase/database"
 import { useTranslation } from "react-i18next";
 
+import DoneAllIcon from '@mui/icons-material/DoneAll';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // Style for the modal
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: "300px",
+  width: "270px",
+  // maxWidth:"50%",
   bgcolor: '#F5F5F5',
   borderRadius: "12px",
   boxShadow: 24,
@@ -92,6 +100,8 @@ function Managecategories() {
     try {
       await remove(dataToDelete);
       setProductOfCategory((previous) => previous.filter(x => x.id !== id));
+
+      toast.success("Item Deleted Successfully")
     } catch (error) {
       console.log("error while deleting", error);
     }
@@ -166,7 +176,7 @@ function Managecategories() {
                       </div>
                       {/* Menu Button */}
                       <div>
-                        <IconButton
+                        {/* <IconButton
                           aria-label="more"
                           id="long-button"
                           aria-controls={open ? 'long-menu' : undefined}
@@ -225,8 +235,82 @@ function Managecategories() {
                           >
                             <p>{t("Delete")}</p>
                           </MenuItem>
-                          {/* Additional MenuItems can be added here */}
-                        </Menu>
+                          
+                        </Menu> */}
+
+                        <div>
+                          <IconButton
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={open ? 'long-menu' : undefined}
+                            aria-expanded={open ? 'true' : undefined}
+                            aria-haspopup="true"
+                            onClick={(event) => handleClick(event, x.id)} // Pass the item id
+                            style={{
+                              color: '#EE0000',
+                              padding: "0",
+                              margin: "0",
+                              zIndex: "1",
+                            }}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+
+                          <Menu
+                            id="long-menu"
+                            MenuListProps={{
+                              'aria-labelledby': 'long-button',
+                            }}
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl && currentItemId === x.id)} // Check if the menu should be open for the current item
+                            onClose={handleClose}
+                            PaperProps={{
+                              style: {
+                                maxHeight: ITEM_HEIGHT * 4.5, // Set a max height to control overflow
+                                width: '20ch',                // Updated width to match first block
+                              },
+                            }}
+                            anchorOrigin={{
+                              vertical: 'bottom',             // Menu will open below the button
+                              horizontal: 'right',            // Menu will align to the right of the button
+                            }}
+                            transformOrigin={{
+                              vertical: 'top',                // Menu starts from the top
+                              horizontal: 'right',            // Menu aligns its right side to the right of the button
+                            }}
+                          >
+                            {/* "Edit Profile" Menu Item with custom styles and icon */}
+                            <MenuItem
+                              style={{
+                                fontSize: "15px",            // Matching font size for consistency
+                                color: '#7C7C7C',
+                                borderBottom: '1px solid #ddd',
+                              }}
+                              onClick={() => handleMenuItemClick(`/home/services/catagory/ManageCategories-products-Edit/${x.id}`)}
+                            >
+                              <DoneAllIcon style={{ marginRight: '8px' }} />  {/* Added Icon */}
+                              {t("Edit Profile")}
+                            </MenuItem>
+
+                            {/* Separator Line */}
+                            <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div>
+
+                            {/* "Delete" Menu Item with red color and custom icon */}
+                            <MenuItem
+                              style={{
+                                fontSize: "15px",             // Larger font size for consistency
+                                color: 'red',                 // Red color for "Delete"
+                              }}
+                              onClick={() => handleDelete(`${x.id}`)}
+                            >
+                              <DeleteIcon style={{ marginRight: '8px' }} />   {/* Added Delete Icon */}
+                              {t("Delete")}
+                            </MenuItem>
+
+                            {/* Additional MenuItems can be added here */}
+                          </Menu>
+                        </div>
+
                       </div>
                     </div>
                   </div>
@@ -240,25 +324,39 @@ function Managecategories() {
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
-              <Box sx={{
-                ...style,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center', // Center items horizontally
-                justifyContent: 'center' // Center items vertically
-              }}>
-                <img src={modalContent.pic} alt="" style={{ display: "flex", justifyContent: "center", alignItems: "center", width: '70%', height: 'auto' }} />
+              <Box sx={
+                style
+
+              }>
+                <  div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center', // Center items horizontally
+                  justifyContent: 'center' // Center items vertically
+                }}>
+                  <img src={modalContent.pic} alt="" style={{ width: '100%', height: 'auto', borderRadius: "12px" }} />
+                </div>
                 <Typography id="modal-modal-title" variant="h6" component="h2" style={{ marginTop: '1rem', fontSize: '18px', color: '#EE0000', fontWeight: "600" }}>
                   {modalContent.title}
                 </Typography>
-                <Typography id="modal-modal-description" variant="h6" component="p" style={{ marginTop: '10px', fontSize: '8px', color: '#777777' }}>
+                <Typography >
+                  <span style={{ fontSize: "8px" }}>Mental Health Clininc</span>
+                </Typography>
+                <Typography >
+                  <span style={{ fontSize: "18px", fontWeight: "bold" }}>$120</span>
+                </Typography>
+                <Typography id="modal-modal-description" variant="h6" component="p" style={{ marginTop: '1px', fontSize: '8px', color: '#777777' }}>
                   {modalContent.explain}
+
                 </Typography>
               </Box>
             </Modal>
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+      />
     </div>
   )
 }

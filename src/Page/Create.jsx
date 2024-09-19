@@ -247,7 +247,7 @@ function Create() {
                 onChange={(e) => setpassword(e.target.value)}
               />
             </div>
-            <div style={{ width: "10%" }}>
+            <div style={{ width: "5%" }}>
               <img src={eye} alt="" />
             </div>
           </div>
@@ -276,7 +276,7 @@ function Create() {
                 onChange={(e) => setconfirmpassword(e.target.value)}
               />
             </div>
-            <div style={{ width: "10%" }}>
+            <div style={{ width: "5%" }}>
               <img src={eye} alt="" />
             </div>
           </div>

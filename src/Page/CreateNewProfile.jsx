@@ -157,7 +157,7 @@ function CreateNewProfile() {
                         username: username,
                         userName1: "",
                         backgroundPicture: "",
-                        profilePicuture: "",
+                        profilePicuture: newDisplayDpImageUrl,
                         designation: designation,
                         martialStatus: status,
                         companyname: company,

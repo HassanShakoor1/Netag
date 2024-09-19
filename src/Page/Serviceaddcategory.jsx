@@ -9,17 +9,17 @@ import camera from "../images/camera.svg"
 
 import { useState } from "react"
 import { ref as sRef, push, set } from "firebase/database";
-import { ref , uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import redcross from "../images/redcross.svg"
 // <<<<<<< HEAD
 
 import { useTranslation } from 'react-i18next';
 // =======
 
-
-
-
-// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
+import { v4 as uuidv4 } from "uuid";
+import { useTranslation } from 'react-i18next';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
 
@@ -27,91 +27,52 @@ import { useTranslation } from 'react-i18next';
 function Serviceaddcategory() {
     const navigate = useNavigate()
 
-    const{t}=useTranslation()
+    const { t } = useTranslation()
     const [image, setImage] = useState(null);
-   
+
 
     // firebase states for fetching data 
     const [name1, setname1] = useState("")
     const [description, setdescription] = useState("")
 
-    console.log ( localStorage.getItem("userId"))
-    // function to send data to firebase
-   
-    // const createnew = async () => {
-    //     if (!image || !name1 || !description) return; // Ensure all required fields are provided
-    
-    //     const imageRef = ref(storage, `categoryimages/${image.name}`);
-    
-    //     try {
-    //         // Upload the image to Firebase Storage
-    //         const snapshot = await uploadBytes(imageRef, image);
-    //         const imageUrl = await getDownloadURL(snapshot.ref);
-    
-    //         // Create a new reference for the category
-    //         const categoryRef = sRef(db, 'categories'); // Adjust this path based on your DB structure
-    
-    //         // Create a new category entry with a unique key
-    //         const newCategoryRef = push(categoryRef);
-    
-    //         // Define the data to be saved
-    //         const categoryData = {
-    //             name1: name1,
-    //             description: description,
-    //             imageUrl: imageUrl
-    //         };
-    
-    //         // Save the data to the new reference
-    //         await set(newCategoryRef, categoryData);
-    
-    //         // Optionally store the push key in localStorage for future reference
-    //         localStorage.setItem("work1", newCategoryRef.key);
-    
-    //         // Optionally reset the form fields
-    //         // setname1("");
-    //         // setdescription("");
-    //         // setImage(null); // If you want to clear the image
-    
-    //     } catch (error) {
-    //         console.error("Error uploading image and saving data:", error.message);
-    //     }
-    // }
+    console.log(localStorage.getItem("userId"))
 
+    {/* ------------------------creating new service in firebase------------------- */ }
+    const createnew = async () => {
+           toast.dismiss()
+        if (!name1 || !description || !image) return
 
-    const createnew=async()=>{
-
-        if(!name1 || !description || !image) return
-
-        const image_instorage=ref(storage,`${image.name}`)
+        const image_instorage = ref(storage, `${image.name}`)
 
         try {
             // upload image to storage 
-            const snapshot=await uploadBytes(image_instorage,image)
+            const snapshot = await uploadBytes(image_instorage, image)
             // get url of image 
-            const url=await getDownloadURL(snapshot.ref)
+            const url = await getDownloadURL(snapshot.ref)
 
-            const categorypath=sRef(db,`ServiceCategory`)
+            const categorypath = sRef(db, `ServiceCategory`)
 
-         
 
-            const newcategories=push(categorypath)
-            const newcategories_id=newcategories.key
-            const categorydata={
-                categoryid:newcategories_id,
-                name:name1,
-                description:description,
-                imageurl:url,
-                uid:localStorage.getItem("userId"),
+
+            const newcategories = push(categorypath)
+            const newcategories_id = newcategories.key
+            const categorydata = {
+                categoryid: newcategories_id,
+                name: name1,
+                description: description,
+                imageurl: url,
+                uid: localStorage.getItem("userId"),
             }
             console.log(newcategories)
-            
-            await set(newcategories,categorydata)
+
+            await set(newcategories, categorydata)
 
             // localStorage.setItem("imageurl",newcategories.key)
-            alert('Data added successfully');
+            toast.success("Data added successfully")
+            // alert('Data added successfully');
 
 
-            
+
         } catch (error) {
             console.log(error)
         }
@@ -119,7 +80,7 @@ function Serviceaddcategory() {
 
     const handleRemoveImage = () => {
         setImage(null);
-      };
+    };
 
     // Function to handle file selection
     const handleFileChange = (event) => {
@@ -150,7 +111,7 @@ function Serviceaddcategory() {
                                 <img style={{ cursor: "pointer" }} onClick={handlegoBack} src={vector} alt="" />
                             </div>
                             <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "600" }}>
-                               {t("Add Category")}
+                                {t("Add Category")}
                             </div>
                             <div></div>
                         </div>
@@ -161,24 +122,24 @@ function Serviceaddcategory() {
 
                         {/* input  */}
                         <div style={{ marginTop: "2rem" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500",marginBottom:"8px" }}>{t("Name")}</div>
+                            <div style={{ marginLeft: "18px", fontWeight: "500", marginBottom: "8px" }}>{t("Name")}</div>
                             <div style={{ width: "100%" }}>
                                 <input type="text"
                                     placeholder="Mental Health Service"
-                                    style={{ width: "100%", padding: "8px", paddingLeft: "8px", height: "6vh", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" }}
+                                    style={{ width: "100%", padding: "18px", paddingLeft: "18px", height: "6vh", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" }}
                                     onChange={(e) => setname1(e.target.value)}
                                 />
                             </div>
                         </div>
                         {/* description */}
-                        <div style={{ marginTop: "8px",marginBottom:"8px" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" ,marginBottom:"8px"}}>
+                        <div style={{ marginTop: "8px", marginBottom: "8px" }}>
+                            <div style={{ marginLeft: "18px", fontWeight: "500", marginBottom: "8px" }}>
                                 {t("Description")}
                             </div>
                             <div>
                                 <textarea
                                     placeholder="lorem ipsum"
-                                    style={{ outline:"none",resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "18px", boxSizing: "border-box",border:"none" }}
+                                    style={{ outline: "none", resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "18px", boxSizing: "border-box", border: "none" }}
                                     onChange={(e) => setdescription(e.target.value)}
                                 />
                             </div>
@@ -209,15 +170,15 @@ function Serviceaddcategory() {
                             </div> */}
                             <div style={{ marginTop: '6px' }}>
                                 {image ? (
-                                    <div style={{ width: "100%", height: "25vh",position:"relative" }}>
-                                        <div onClick={handleRemoveImage} style={{position:"absolute",right:"1px"}}>
-                                            <img   src={redcross} alt="" />
+                                    <div style={{ width: "100%", height: "25vh", position: "relative" }}>
+                                        <div onClick={handleRemoveImage} style={{ position: "absolute", right: "1px" }}>
+                                            <img src={redcross} alt="" />
                                         </div>
                                         <div style={{ width: "100%", height: "25vh" }}>
-                                        <img src={URL.createObjectURL(image)} alt="Uploaded" style={{ width: "100%", height: "100%", objectFit: "fill", borderRadius: "12px" }} />
+                                            <img src={URL.createObjectURL(image)} alt="Uploaded" style={{ width: "100%", height: "100%", objectFit: "fill", borderRadius: "12px" }} />
+                                        </div>
                                     </div>
-                                    </div>
-                                    
+
                                 ) : (
                                     <div style={{ width: "100%", height: "25vh", position: "relative" }}>
                                         <div style={{ position: "absolute", right: "38%", top: "28%" }}>
@@ -294,7 +255,7 @@ function Serviceaddcategory() {
                             </div>
                             {/* button  */}
                             <div style={{ marginTop: "30px" }}>
-                                <button onClick={createnew} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white",fontSize:"16px",fontWeight:"500" }}>{t("Create")}</button>
+                                <button onClick={createnew} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white", fontSize: "16px", fontWeight: "500" }}>{t("Create")}</button>
                             </div>
                         </div>
 
@@ -303,7 +264,9 @@ function Serviceaddcategory() {
                 </div>
             </div>
 
-
+            <ToastContainer
+                position="top-center"
+            />
         </div>
     )
 }

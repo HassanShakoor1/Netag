@@ -10,6 +10,9 @@ import { v4 as uuidv4 } from "uuid";
 import { database as db, storage } from "../firebase.jsx";
 import { useTranslation } from 'react-i18next'
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function ManageCategoriesEdit() {
     const { t } = useTranslation()
 
@@ -79,16 +82,17 @@ function ManageCategoriesEdit() {
 
                 businesscontactno: "",
                 categoryid: category,
-               
-                // imageUrl: ,
-               
-                
-                // servicename: "user 1 category 1 product 1 ",
-               
-            });
 
+                // imageUrl: ,
+
+
+                // servicename: "user 1 category 1 product 1 ",
+
+            });
+           toast.success("Updated successfuly")
 
         } catch (error) {
+            toast.error("Error updating data")
             console.error("Error updating data:", error);
         }
     };
@@ -195,6 +199,10 @@ function ManageCategoriesEdit() {
                     </div>
                 </div>
             </div>
+            <ToastContainer
+                position="top-center"
+            />
+
         </div>
     );
 }

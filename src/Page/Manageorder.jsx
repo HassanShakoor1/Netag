@@ -2,8 +2,44 @@ import "./manageorder.css"
 import vector from "../images/Vector.svg";
 import { useState } from "react"
 import { useNavigate } from "react-router-dom";
+
+import { database as db } from "../firebase.jsx"
+import { equalTo, get, orderByChild, query, ref } from "firebase/database"
+import { useEffect } from "react";
 function Manageorder() {
     const navigate = useNavigate();
+    
+    const userId=localStorage.getItem('userId')
+    {/* -----------------fetching order----------------- */}
+      const orderData=async()=>{
+        
+        try {
+            const orderRef=ref(db,'/Orders')
+
+            const queryData=query(
+            orderRef,
+            orderByChild('uid'),
+            equalTo(userId)
+          )
+          const snapShot=await get(queryData)
+          const data=await snapShot.val()
+          
+          const arr=Object.keys(data).map((key)=>({
+            id:key,
+            ...data[key]
+          }))
+          console.log(arr)
+
+        } catch (error) {
+            alert("Orders not fetched")
+            console.log("error"+error)
+        }
+    
+    }
+
+    useEffect(()=>{
+        orderData()
+    },[])
 
 
     const goback = () => {

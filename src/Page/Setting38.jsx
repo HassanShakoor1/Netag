@@ -51,6 +51,13 @@ function Setting() {
         navigate("/home/setting/subscript");
       }
 
+
+    {/*--------------------------logout--------------------------*/}  
+    function logout() {
+        localStorage.removeItem("userId")
+        localStorage.removeItem("parentId")
+        navigate('/signup')
+    } 
     return (
         <div className="categories-maindiv">
             <div className="categories-width">
@@ -283,7 +290,7 @@ function Setting() {
                                     <div style={{ display: "flex", justifyContent: "center",alignItems:"center" , height:"10vh"}}>
                                         <div style={{width:"90%",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                                             <div style={{display:"flex",alignItems:"center"}}>
-                                                <div>
+                                                <div onClick={logout}>
                                                 <img src={Logout} alt="" />
                                                 </div>
                                                 <div style={{color:"#868686",marginLeft:"6px",fontSize:"16px"}}>Logout</div>
