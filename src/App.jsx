@@ -84,7 +84,7 @@ function App() {
           <Route path="/forget" element={<ForgetPassword />} />
           <Route path="/home" element={<ProtectedRoute element={<Profile />} />} />
           <Route path="/home/notifi"  element={<ProtectedRoute element={<Notification />} />} />
-          <Route path="/home/editimage/:recordid" element={<EditContact />} />
+          <Route path="/home/editimage/:id" element={<EditContact />} />
           <Route path="/home/Link" element={<Links/>} />
 
           <Route path="/home/order" element={<ProtectedRoute element={<ManageOrder />}  />} />

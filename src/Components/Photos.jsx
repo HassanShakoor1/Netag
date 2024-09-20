@@ -4,13 +4,13 @@ import { getDatabase, ref, set, update, get } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase';
 import { v4 as uuidv4 } from 'uuid';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Photos() {
   const [mediaFiles, setMediaFiles] = useState([]);
   const [recordid, setRecordid] = useState(null);
   const userId = localStorage.getItem('userId');
-
+const {id}=useParams()
 const navigate=useNavigate();
 
 useEffect(() => {
@@ -63,111 +63,89 @@ console.log(userId)
  
 
  
-  const handleImagemove=(userId)=>{
-    navigate(`/home/editimage/${userId}`)
-  }
+const handleImagemove = (mediaId) => {
+  navigate(`/home/editimage/${mediaId}`);
+};
+
 
   
   return (
     <div className='profile-design'>
-      <div className="p-vContainer">
-        <div className="data" style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <h2 className='head' style={{ fontSize: '22px', fontWeight: '100', color: 'rgb(238, 2, 0)', padding: '10px', margin: '0px' }}>
-            Photos & Videos:
-          </h2>
-        </div>
-
-        <div className="rows" style={{ display: 'flex', flexWrap: 'wrap', padding: '10px' }}>
-          {mediaFiles.slice(0, 3).map((media, index) => (
-            <div
-              className="column"
-              key={index}
-              style={{
-                width: '30%',
-                height: '100px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#f0f0f0',
-                marginRight: index < 2 ? '5px' : '0px',
-              }}
-            >
-              {media.type === 'image' ? (
-                <img
-                  src={media.url}
-                  alt={`Uploaded ${index}`}
-                  style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }}
-                />
-              ) : (
-                <video
-                  src={media.url}
-                  controls
-                  style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-
-        {mediaFiles.slice(3).map((media, index) => (
+    <div className="p-vContainer">
+      <div className="data" style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2 className='head' style={{ fontSize: '22px', fontWeight: '100', color: 'rgb(238, 2, 0)', padding: '10px', margin: '0px' }}>
+          Photos & Videos:
+        </h2>
+      </div>
+  
+      <div className="rows" style={{ display: 'flex', flexWrap: 'wrap', padding: '10px' }}>
+        {mediaFiles.map((media, index) => (
           <div
             className="column"
-            key={index + 3}
+            key={index}
             style={{
-              width: '95%',
+              width: index < 3 ? '30%' : '95%',
               height: '100px',
-              margin: '10px auto',
+              margin: index < 3 ? '0 5px 0 0' : '10px auto',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
               backgroundColor: '#f0f0f0',
             }}
+            onClick={() => handleImagemove(media.id || recordid)} // Add the click handler here
           >
             {media.type === 'image' ? (
               <img
                 src={media.url}
-                alt={`Uploaded ${index + 3}`}
+                alt={`Uploaded ${index}`}
                 style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }}
               />
             ) : (
               <video
                 src={media.url}
                 controls
-                style={{ width: '100%', objectFit: 'contain' }}
+                style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }}
               />
             )}
           </div>
         ))}
-
-        <label htmlFor="file-upload" style={{
-          Display: mediaFiles.length >= 9 ? 'none' : 'block',
-          width: '95%',
-          height: '50px',
-           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '0px auto',
-          backgroundColor: '#EFEFEF',
-          color: '#747474',
-          fontWeight: 'bold',
-          cursor: 'pointer',
-          textAlign: 'center',
-          borderRadius: '12px',
-        }}  onClick={()=>{handleImagemove(userId)}}>
-
+      </div>
+  
+      {mediaFiles.length < 9 && ( // Only show the label if less than 9 media files
+        <label
+          htmlFor="file-upload"
+          style={{
+            display: 'flex',
+            width: '95%',
+            height: '50px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0px auto',
+            backgroundColor: '#EFEFEF',
+            color: '#747474',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            textAlign: 'center',
+            borderRadius: '12px',
+          }}
+          onClick={() => handleImagemove(recordid)} // Use recordid for adding new images
+        >
           +Add
         </label>
-        {/* <input
+      )}
+      {/* 
+        <input
           id="file-upload"
           type="file"
           accept="image/*,video/*"
           multiple
-         
           onChange={handleImageUpload}
           style={{ display: 'none' }}
-        /> */}
-      </div>
+        />
+      */}
     </div>
+  </div>
+  
   );
 }
 
