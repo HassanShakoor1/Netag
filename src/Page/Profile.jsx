@@ -6,30 +6,18 @@ import './Slide.css';
 import { AiFillEdit } from "react-icons/ai";
 import Photos from '../Components/Photos';
 import Footer from '../Components/Footer';
-import circle from '../images/circle.png';
+import bitc from '../images/bitc.png'
+import bitcc from '../images/bitcc.png'
 import main from '../images/main.jpeg';
-import nav from '../images/circle.png';
+import nav from '../images/nav.png';
 import Card from '../Components/Card';
-import whatsapp from '../images/whatsapp.png';
-import call from '../images/call.png';
-import fb from '../images/fb.png';
-import mail from '../images/mail.png';
-import website from '../images/website.png';
-import snap from '../images/snap.png';
-import add from '../images/add.png';
-import instas from '../images/instas.png';
 import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly from 'firebase/database'
 import { database } from '../firebase.jsx'; // Import the initialized database
 import CircularProgress from '@mui/material/CircularProgress'; // Import the loader component
 import { Link } from 'react-router-dom'
-import Slide from '@mui/material/Slide';
-import IconOpener from './IconOpener';
 
-// <<<<<<< HEAD
+
 import { useTranslation } from 'react-i18next';
-// =======
-// >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
-
 
 function Profile() {
   const navigate = useNavigate();
@@ -41,15 +29,14 @@ function Profile() {
   const [loading, setLoading] = useState(true); // State for loading
   const [links, setLinks] = useState([]); // State to store fetched links
 
-  const [setting, setSetting] = useState(false); // State to manage Slide component visibility
-  const [linkdata, setLinkdata] = useState(null); // State to store currently selected link data
   const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
   const [profileData, setProfileData] = useState({
-    username: '@username',
-    nickname: 'Burden',
-    status: 'Married...',
-    company: 'your company',
-    designation: 'copmany',
+
+    username: '',
+    nickname: '',
+    status: '',
+    company: '',
+    designation: '',
     ladyImgUrl: '',
     mainImgUrl: ''
   })
@@ -62,26 +49,104 @@ function Profile() {
       console.error('Invalid input:', baseUrl, linkName);
       return;
     }
-
-    const dbRef = ref(database, `usersdata/${userId}`); // Fetch user-specific data
-    try {
-      const snapshot = await get(dbRef);
-      if (snapshot.exists()) {
-        setProfileData(snapshot.val()); // Set fetched data
+  
+    // Trim whitespace
+    const cleanedBaseUrl = baseUrl.trim();
+    
+    // Check if the baseUrl is a phone number
+    const isPhoneNumber = /^\+?\d+$/.test(cleanedBaseUrl);
+  
+    // Convert linkName to lowercase for comparison
+    const lowerLinkName = linkName.toLowerCase();
+  
+    if (lowerLinkName === 'whatsapp') {
+      // Handle WhatsApp number
+      if (isPhoneNumber) {
+        const formattedWhatsAppUrl = `https://wa.me/${cleanedBaseUrl}`;
+        window.open(formattedWhatsAppUrl, '_blank');
       } else {
-        console.log('No data available');
+        console.error('Invalid phone number for WhatsApp:', cleanedBaseUrl);
       }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally{
-      setLoading(false);
+    } else if (lowerLinkName === 'call') {
+      // Handle phone number
+      if (isPhoneNumber) {
+        window.location.href = `tel:${cleanedBaseUrl}`;
+      } else {
+        console.error('Invalid phone number for call:', cleanedBaseUrl);
+      }
+    } else if (cleanedBaseUrl.includes('@')) {
+      // Handle email address
+      const mailtoLink = cleanedBaseUrl.startsWith('mailto:') ? cleanedBaseUrl : `mailto:${cleanedBaseUrl}`;
+      window.location.href = mailtoLink; // Opens the default mail client
+    } else if (/^https?:\/\//i.test(cleanedBaseUrl)) {
+      // Handle web URLs
+      window.open(cleanedBaseUrl, '_blank');
+    } else {
+      console.error('Invalid input:', cleanedBaseUrl);
     }
   };
-
-  fetchData();
-}, []);
   
-const [imageLoading, setImageLoading] = useState(true);
+  
+  
+  
+  
+  
+
+  
+  
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userId = localStorage.getItem('userId'); // Get userId from localStorage
+  
+        if (!userId) {
+          console.error("No userId found in localStorage");
+          setLoading(false);
+          return;
+        }
+  
+        const userRef = ref(database, `User/${userId}`);
+        const snapshot = await get(userRef);
+  
+        if (snapshot.exists()) {
+          setProfileData(snapshot.val());
+          console.log("Fetched profileData:", snapshot.val()); // Log the fetched data
+        } else {
+          console.log("No data available for this userId:", userId);
+        }
+  
+        // Fetch links data
+        const linksRef = ref(database, 'SocialLinks');
+        const linksSnapshot = await get(linksRef);
+  
+        if (linksSnapshot.exists()) {
+          const allLinks = linksSnapshot.val();
+          const userLinks = Object.values(allLinks).filter(link => link.uid === userId);
+          setLinks(userLinks);
+        } else {
+          console.log("No links data available");
+        }
+  
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // End loading state after data fetch (success or failure)
+      }
+    };
+  
+    fetchData();
+  }, []);
+ 
+  console.log(profileData)
+
+
+const handlMoveLink=()=>{
+navigate(`/home/Link`)
+}
+
+  const [imageLoading, setImageLoading] = useState(true);
 
   const handleImageLoad = () => {
     setImageLoading(false);
@@ -92,13 +157,8 @@ const [imageLoading, setImageLoading] = useState(true);
     setActiveToggle(prevId => (prevId === toggleId ? null : toggleId));
   };
 
-  // Handler to toggle slide visibility and set link data
- 
-
-  // Navigate to the Edit Profile page
   const handleEditProfile = () => {
-    // navigate('/edit-profile');
-    navigate(`/home/create-new-profile/${userId}`)
+    navigate('/edit-profile');
   };
 
   // Navigate to notifications page
@@ -106,25 +166,6 @@ const [imageLoading, setImageLoading] = useState(true);
     navigate('/home/notifi');
   };
 
-
-  const handleSlide = (link) => {
-    setLinkdata(link);
-    setSetting(!setting);
-  };
-
-  const ReturnIcon = (id) => {
-    switch (id) {
-      case 1: return whatsapp;
-      case 2: return call;
-      case 3: return fb;
-      case 4: return mail;
-      case 5: return instas;
-      case 6: return website;
-      case 7: return snap;
-      case 8: return add;
-      default: return null;
-    }
-  }
   // Function to return the appropriate icon based on id
 
   if (loading) {
@@ -134,6 +175,7 @@ const [imageLoading, setImageLoading] = useState(true);
       </div>
     );
   }
+
 
 
 
@@ -155,38 +197,36 @@ const [imageLoading, setImageLoading] = useState(true);
 
           {/* Profile images */}
           <img
-  className='lady'
- 
-  src={profileData.profilePicture}  // Default profile image
-  alt="lady"
- 
-/>
-<div>
-  
-</div>
-<div style={{width:'100%',height:'200px',background:'transparent'}}>
-  <div style={{  width: '100%' }}>
-            <img
-              className='main-img'
-              src={profileData. logoUrl
-                 || main}  // Default cover image
-              alt="main-img"
-              onLoad={handleImageLoad}
-              style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
-            />
-            {imageLoading && (
-              <div style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                zIndex: 1
-              }}>
-                <CircularProgress />
-              </div>
-            )}
+            className='lady'
+style={{objectFit:'cover'}}
+            src={profileData.profilePicture || bitcc}  // Default profile image
+
+          />
+          <div>
+
           </div>
-</div>
+          <div style={{ width: '100%', height: '200px' }}>
+            <div style={{ width: '100%' }}>
+              <img
+                className='main-img'
+                src={profileData.backgroundPicture || bitc }  // Default cover image
+            
+                onLoad={handleImageLoad}
+                style={{ display: imageLoading ? 'none' : 'block', width: '100%' }}
+              />
+              {imageLoading && (
+                <div style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 1
+                }}>
+                  <CircularProgress />
+                </div>
+              )}
+            </div>
+          </div>
 
 
           <div style={{ paddingLeft: "10px", position: 'relative' }}>
@@ -197,8 +237,8 @@ const [imageLoading, setImageLoading] = useState(true);
             </div>
             {/* Profile details */}
             <h2 style={{ color: 'red', margin: '5px' }}>
-              {profileData.name} <br />
-              <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> ({profileData.username})</span>
+              {profileData?.username} <br />
+              <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> ({profileData.nickname})</span>
             </h2>
             <div className="data" style={{ lineHeight: '1' }}>
               <h2 className='head' style={{ marginBottom: '0px' }}>{t("Username")}: <span style={{ fontWeight: '100', }} className='para'>{profileData.username}</span></h2>
@@ -208,8 +248,7 @@ const [imageLoading, setImageLoading] = useState(true);
             </div>
             <div className="data" style={{ lineHeight: '0' }}>
               <h2 className='head'>Marital Status:
-                <br /> <span style={{ marginLeft: '145px', fontWeight: '100' }} className='para'>{profileData.materialStatus
-}</span></h2>
+                <br /> <span style={{ marginLeft: '145px', fontWeight: '100' }} className='para'>{profileData.materialStatus}</span></h2>
             </div>
             <div className="data"
               style={{
@@ -232,7 +271,7 @@ const [imageLoading, setImageLoading] = useState(true);
                   textOverflow: 'ellipsis',
                 }}
               >
-                {t("Company")}:
+                {("Company")}:
                 <span
                   className="para"
                   style={{
@@ -295,13 +334,7 @@ const [imageLoading, setImageLoading] = useState(true);
 
             </div>
           </div>
-
-
-
-{/* Fetching Links from Links FIle */}
-  
-
-
+       
  <div style={{
   display: 'grid',
   gridTemplateColumns: 'repeat(4, 1fr)',  // 4 columns in the grid
@@ -309,26 +342,52 @@ const [imageLoading, setImageLoading] = useState(true);
   padding: '10px',  // Space around the container
 }}>
 
-          <br /><br /><br />
+  {/* Add Button Section */}
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection:"column",  // Center the button and text
+    marginBottom: '10px',  // Space between button section and links
+    gridColumn: 'span 1',  // Takes up the first column
+  }}>
+    <div style={{
+      width: '50px',
+      height: '50px',
+      borderRadius: '50%',
+      backgroundColor: '#E2E2E2',
+      display: 'flex',
+      alignItems: 'center',
+      flexDirection:'column',
+      justifyContent: 'center',
+      // Space between button and text
+    }}>
+      <p style={{
+        margin: '0',
+        fontSize: '20px',
+        cursor: 'pointer',
+      }} onClick={handlMoveLink}>+</p>
+    </div>
+    <p style={{
+   color:'#898787',
+   fontSize:'12px'
+      
+    }}>
+      Add
+    </p>
+  </div>
 
-          <div className="i-menu" >
-            <div className="menus">
-              <Slide style={{ width: "96%" }} in={setting} direction="up" timeout={{ appear: 500, enter: 500, exit: 500 }}>
-                <div className="slide_main_div relative">
-                  <IconOpener handleSlide={handleSlide} ReturnIcon={ReturnIcon} linkdata={linkdata} />
-                </div>
-              </Slide>
+  {/* Render links */}
+{links.map((link, index) => (
+  <div key={index} style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '10px',cursor:"pointer" }}>
+    <img    onClick={() => handleImageClick(link?.baseUrl, link?.name)}    src={link?.image} alt={link?.name || 'Link'} style={{ width: '50px', height: '50px' }} />
+    <span style={{ color: '#898787', fontSize: '12px' }}>{link?.name}</span>
+  </div>
+))}
 
-              {links.map(link => (
-                <div key={link.id} className="fon" style={{ margin: 0, padding: 0 }}>
-                  <img src={link.imageUrl} alt={link.linkName} onClick={() => handleSlide(link)} />
-                  <p style={{ fontSize: '12px' }}>{link.linkName}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-
+ 
+  
+</div>
+<br /><br /><br />
 
 
 
@@ -337,7 +396,6 @@ const [imageLoading, setImageLoading] = useState(true);
 
         </div>
       </div>
-    </div>
     </div>
   );
 }

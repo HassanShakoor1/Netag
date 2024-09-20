@@ -13,7 +13,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import redcross from "../images/redcross.svg"
 // <<<<<<< HEAD
 
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 // =======
 
 import { v4 as uuidv4 } from "uuid";
