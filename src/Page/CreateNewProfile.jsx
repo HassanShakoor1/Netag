@@ -1,4 +1,3 @@
-
 import React, { useState, } from 'react';
 import { useNavigate,useParams } from 'react-router-dom';
 import { IoChevronBack } from "react-icons/io5";
@@ -10,9 +9,6 @@ import nav from '../images/nav.png';
 import { TextField, useForkRef } from '@mui/material';
 import { styled } from '@mui/system';
 
-// import { ref as sRef, push, set } from "firebase/database";
-// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-// import { database as db, storage } from "../firebase.jsx"
 
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useEffect } from 'react';
@@ -105,7 +101,7 @@ function CreateNewProfile() {
         
         setusername(data.username)
         setdesignation(data.designation)
-        setstatus(data.martialStatus)
+        setstatus(data.materialStatus)
         setcompany(data.companyname)
         setprofileName(data.profileUrl)
         setDisplayProfileImageUrl(data.profileImageUrl)
@@ -156,8 +152,8 @@ function CreateNewProfile() {
                         
                         username: username,
                         userName1: "",
-                        backgroundPicture: "",
-                        profilePicuture: newDisplayDpImageUrl,
+                        backgroundPicture: newDisplayDpImageUrl,
+                        profilePicture:newProfileImageUrl ,
                         designation: designation,
                         martialStatus: status,
                         companyname: company,
@@ -189,7 +185,7 @@ function CreateNewProfile() {
                         
                       
                         
-                        parentID: localStorage.getItem('userId'),
+                        parentID: localStorage.getItem('parentId'),
                         phone: "",
                         platorform: "",
                         proVersion: "",
@@ -237,8 +233,8 @@ function CreateNewProfile() {
                     
                     username: username,
                     userName1: "",
-                    backgroundPicture: "",
-                    profilePicuture: "",
+                    backgroundPicture:profile_image_url ,
+                    profilePicuture: dp_image_url,
                     designation: designation,
                     martialStatus: status,
                     companyname: company,
@@ -270,7 +266,7 @@ function CreateNewProfile() {
                     
                   
                     
-                    parentID: localStorage.getItem('userId'),
+                    parentID: localStorage.getItem('parentId'),
                     phone: "",
                     platorform: "",
                     proVersion: "",
