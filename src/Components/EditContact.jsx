@@ -21,8 +21,8 @@ function EditContact() {
         const checkAuthAndFetchData = async () => {
             const unsubscribe = onAuthStateChanged(auth, async (user) => {
                 if (user) {
-                    const userId = localStorage.getItem("userId");
-console.log( "now id ",userId)
+                    const userId = localStorage.getItem('userId');
+
                     // Retrieve or generate record ID
                     let recordId = localStorage.getItem(`recordid_${userId}`);
 
@@ -47,25 +47,18 @@ console.log( "now id ",userId)
    
 
     const fetchExistingMediaFiles = async (recordid) => {
-        // Get the current authenticated user
         const auth = getAuth();
         const currentUser = auth.currentUser;
+        const currentUid = localStorage.getItem('userId')
     
-        // Check if the current user is authenticated
-        if (!currentUser) {
+        if (!currentUid) {
             console.log("User is not authenticated.");
             return;
         }
     
-        // Get the UID directly from the current user
-        const currentUid = currentUser.uid;
-        console.log(currentUid);
-    
-        // Initialize the database
         const database = getDatabase(app);
         const recordRef = ref(database, `PhotosVideos/${recordid}`);
     
-        // Fetch the data from the database
         onValue(recordRef, (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
@@ -92,7 +85,43 @@ console.log( "now id ",userId)
     
     
     
- 
+    // useEffect(() => {
+    //     const auth = getAuth(app);
+    
+    //     const checkAuthAndFetchData = async () => {
+    //         const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    //             if (user) {
+    //                 const userId = user.uid;
+    
+    //                 // Fetch the record ID from the user's records
+    //                 const database = getDatabase(app);
+    //                 const userRecordRef = ref(database, `UserRecords/${userId}`);
+    //                 const snapshot = await get(userRecordRef);
+    
+    //                 if (snapshot.exists()) {
+    //                     const { recordid } = snapshot.val();
+    //                     localStorage.setItem(`recordid_${userId}`, recordid);
+    //                     setRecordid(recordid);
+    
+    //                     // Fetch existing media files for the specific recordid
+    //                     if (recordid) {
+    //                         await fetchExistingMediaFiles(recordid);
+    //                     }
+    //                 } else {
+    //                     console.error('Record ID not found.');
+    //                 }
+    //             } else {
+    //                 console.error('User is not authenticated.');
+    //                 navigate('/login'); // Redirect to login page if not authenticated
+    //             }
+    //         });
+    
+    //         return () => unsubscribe();
+    //     };
+    
+    //     checkAuthAndFetchData();
+    // }, [navigate]);
+    
     const handlegoBack = () => {
         navigate('/home');
     };
