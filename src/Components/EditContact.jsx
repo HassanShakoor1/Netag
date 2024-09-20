@@ -4,26 +4,23 @@ import { IoChevronBack } from "react-icons/io5";
 import video from '../images/video.png';
 import { useNavigate } from 'react-router-dom';
 import editcontact from '../images/editcontact.png';
-import { getDatabase, ref, set, update, get, remove, onValue } from 'firebase/database';
+import { getDatabase, ref, set, update, get, remove } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase'; // Adjust this import according to your Firebase setup
-import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Import Firebase Auth
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 function EditContact() {
     const [mediaFiles, setMediaFiles] = useState([]);
-    const [recordid, setRecordid] = useState(null);
+    const [recordId, setRecordId] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
 
-   
     useEffect(() => {
         const auth = getAuth(app);
-
         const checkAuthAndFetchData = async () => {
             const unsubscribe = onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     const userId = localStorage.getItem('userId');
-
-                    // Retrieve or generate record ID
                     let recordId = localStorage.getItem(`recordid_${userId}`);
 
                     if (!recordId) {
@@ -31,29 +28,21 @@ function EditContact() {
                         localStorage.setItem(`recordid_${userId}`, recordId);
                     }
 
-                    setRecordid(recordId);
+                    setRecordId(recordId);
                     await fetchExistingMediaFiles(recordId);
                 } else {
                     console.error('User is not authenticated.');
-                    navigate('/login'); // Redirect to login page if not authenticated
+                    navigate('/login');
                 }
             });
-
             return () => unsubscribe();
         };
-
         checkAuthAndFetchData();
     }, [navigate]);
-    console.log("Record ID before fetching:", recordid);
-
-
-    const fetchExistingMediaFiles = async (recordid) => {
+    const fetchExistingMediaFiles = async (recordId) => {
         const auth = getAuth();
         const currentUser = auth.currentUser;
         const currentUid = localStorage.getItem('userId');
-    
-        console.log("Current UID:", currentUid);
-        console.log("Fetching media for record ID:", recordid);
     
         if (!currentUid) {
             console.log("User is not authenticated.");
@@ -61,30 +50,28 @@ function EditContact() {
         }
     
         const database = getDatabase(app);
-        const recordRef = ref(database, `PhotosVideos/${recordid}`);
-    
-        console.log("Database Reference:", recordRef.toString());
+        const recordRef = ref(database, `PhotosVideos/${recordId}`);
     
         try {
-            const snapshot = await get(recordRef); // Use get() to fetch data once
+            const snapshot = await get(recordRef);
+            console.log('Fetched snapshot:', snapshot.val()); // Log fetched snapshot
     
             if (snapshot.exists()) {
                 const data = snapshot.val();
-                console.log("Fetched data:", data);
-    
-                // Check if the data belongs to the current user
                 if (data.uid === currentUid) {
                     const combinedMediaFiles = [
                         ...(data.selectedImages || []).map(url => ({ url, type: 'image' })),
                         ...(data.videosUri || []).map(url => ({ url, type: 'video' })),
                     ];
+                    console.log('Combined media files:', combinedMediaFiles); // Log combined media files
                     setMediaFiles(combinedMediaFiles);
+                    setIsEditing(true);
                 } else {
                     console.log("This record does not belong to the current user.");
                     setMediaFiles([]);
                 }
             } else {
-                console.log('No data found for the provided record ID.');
+                console.log("No data found for this record ID.");
                 setMediaFiles([]);
             }
         } catch (error) {
@@ -93,54 +80,13 @@ function EditContact() {
         }
     };
     
-    
-    
-    console.log("Record ID after fetching:", recordid);
-    
-    
-    // useEffect(() => {
-    //     const auth = getAuth(app);
-    
-    //     const checkAuthAndFetchData = async () => {
-    //         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    //             if (user) {
-    //                 const userId = user.uid;
-    
-    //                 // Fetch the record ID from the user's records
-    //                 const database = getDatabase(app);
-    //                 const userRecordRef = ref(database, `UserRecords/${userId}`);
-    //                 const snapshot = await get(userRecordRef);
-    
-    //                 if (snapshot.exists()) {
-    //                     const { recordid } = snapshot.val();
-    //                     localStorage.setItem(`recordid_${userId}`, recordid);
-    //                     setRecordid(recordid);
-    
-    //                     // Fetch existing media files for the specific recordid
-    //                     if (recordid) {
-    //                         await fetchExistingMediaFiles(recordid);
-    //                     }
-    //                 } else {
-    //                     console.error('Record ID not found.');
-    //                 }
-    //             } else {
-    //                 console.error('User is not authenticated.');
-    //                 navigate('/login'); // Redirect to login page if not authenticated
-    //             }
-    //         });
-    
-    //         return () => unsubscribe();
-    //     };
-    
-    //     checkAuthAndFetchData();
-    // }, [navigate]);
-    
-    const handlegoBack = () => {
+
+    const handleGoBack = () => {
         navigate('/home');
     };
 
     const handleImageUpload = async (event) => {
-        if (!recordid) {
+        if (!recordId) {
             console.error('Record ID is not available.');
             return;
         }
@@ -157,13 +103,13 @@ function EditContact() {
         const newMediaFiles = [...mediaFiles];
 
         for (const file of imageFiles) {
-            const fileRef = storageRef(storage, `PhotosVideos/${recordid}/${file.name}`);
+            const fileRef = storageRef(storage, `PhotosVideos/${recordId}/${file.name}`);
             try {
                 await uploadBytes(fileRef, file);
                 const url = await getDownloadURL(fileRef);
                 newMediaFiles.push({ url, type: 'image' });
                 setMediaFiles([...newMediaFiles]);
-                await saveMediaFiles(recordid, newMediaFiles);
+                await saveMediaFiles(recordId, newMediaFiles);
             } catch (error) {
                 console.error('Error uploading file:', error);
             }
@@ -171,7 +117,7 @@ function EditContact() {
     };
 
     const handleVideoUpload = async (event) => {
-        if (!recordid) {
+        if (!recordId) {
             console.error('Record ID is not available.');
             return;
         }
@@ -192,44 +138,41 @@ function EditContact() {
         const storage = getStorage(app);
         const newMediaFiles = [...mediaFiles];
 
-        const fileRef = storageRef(storage, `PhotosVideos/${recordid}/${videoFile.name}`);
+        const fileRef = storageRef(storage, `PhotosVideos/${recordId}/${videoFile.name}`);
         try {
             await uploadBytes(fileRef, videoFile);
             const url = await getDownloadURL(fileRef);
             newMediaFiles.push({ url, type: 'video' });
             setMediaFiles([...newMediaFiles]);
-            await saveMediaFiles(recordid, newMediaFiles);
+            await saveMediaFiles(recordId, newMediaFiles);
         } catch (error) {
             console.error('Error uploading file:', error);
         }
     };
 
-    const saveMediaFiles = async (recordid, newMediaFiles) => {
+    const saveMediaFiles = async (recordId, newMediaFiles) => {
         const database = getDatabase(app);
-        const recordRef = ref(database, `PhotosVideos/${recordid}`);
-    
+        const recordRef = ref(database, `PhotosVideos/${recordId}`);
+
         const mediaData = {
-            id: recordid,
-            uid: localStorage.getItem('userId'), // or user.uid if available directly
+            id: recordId,
+            uid: localStorage.getItem('userId'),
             selectedImages: newMediaFiles.filter((media) => media.type === 'image').map((media) => media.url),
             videosUri: newMediaFiles.filter((media) => media.type === 'video').map((media) => media.url),
         };
-    
+
         try {
             if (mediaData.selectedImages.length === 0 && mediaData.videosUri.length === 0) {
-                // Delete the main record if no media files are left
                 await remove(recordRef);
                 console.log('Main record deleted as no media files are left.');
                 return;
             }
-    
+
             const snapshot = await get(recordRef);
             if (snapshot.exists()) {
-                // Update existing record
                 await update(recordRef, mediaData);
                 console.log('Data updated successfully');
             } else {
-                // Create new record
                 await set(recordRef, mediaData);
                 console.log('Data saved successfully');
             }
@@ -237,19 +180,32 @@ function EditContact() {
             console.error(`Error saving data: ${error.message}`);
         }
     };
-    
 
     const handleRemoveImage = (index) => {
         const updatedMediaFiles = mediaFiles.filter((_, i) => i !== index);
         setMediaFiles(updatedMediaFiles);
-        saveMediaFiles(recordid, updatedMediaFiles);
+        saveMediaFiles(recordId, updatedMediaFiles);
     };
 
     const handleRemoveVideo = () => {
         const updatedMediaFiles = mediaFiles.filter(file => file.type !== 'video');
         setMediaFiles(updatedMediaFiles);
-        saveMediaFiles(recordid, updatedMediaFiles);
+        saveMediaFiles(recordId, updatedMediaFiles);
     };
+
+    const handleSave = async () => {
+        if (!recordId) {
+            console.error('Record ID is not available.');
+            return;
+        }
+        await saveMediaFiles(recordId, mediaFiles);
+        alert("Record saved successfully!");
+    };
+
+    const handlegoBack = () => {
+       navigate(-1)
+    };
+
 
     return (
         <div className="Editcontainer">
