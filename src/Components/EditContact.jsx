@@ -44,12 +44,16 @@ function EditContact() {
 
         checkAuthAndFetchData();
     }, [navigate]);
-   
+    console.log("Record ID before fetching:", recordid);
+
 
     const fetchExistingMediaFiles = async (recordid) => {
         const auth = getAuth();
         const currentUser = auth.currentUser;
-        const currentUid = localStorage.getItem('userId')
+        const currentUid = localStorage.getItem('userId');
+    
+        console.log("Current UID:", currentUid);
+        console.log("Fetching media for record ID:", recordid);
     
         if (!currentUid) {
             console.log("User is not authenticated.");
@@ -59,9 +63,14 @@ function EditContact() {
         const database = getDatabase(app);
         const recordRef = ref(database, `PhotosVideos/${recordid}`);
     
-        onValue(recordRef, (snapshot) => {
+        console.log("Database Reference:", recordRef.toString());
+    
+        try {
+            const snapshot = await get(recordRef); // Use get() to fetch data once
+    
             if (snapshot.exists()) {
                 const data = snapshot.val();
+                console.log("Fetched data:", data);
     
                 // Check if the data belongs to the current user
                 if (data.uid === currentUid) {
@@ -75,14 +84,18 @@ function EditContact() {
                     setMediaFiles([]);
                 }
             } else {
-                console.log('No data found.');
+                console.log('No data found for the provided record ID.');
                 setMediaFiles([]);
             }
-        }, {
-            onlyOnce: true
-        });
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            setMediaFiles([]);
+        }
     };
     
+    
+    
+    console.log("Record ID after fetching:", recordid);
     
     
     // useEffect(() => {

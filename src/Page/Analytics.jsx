@@ -1,23 +1,48 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import Footer from '../Components/Footer'
 import pop from '../images/pops.png'
 import Order from '../images/order.png'
 import connect from '../images/connection.png'
-import link from '../images/linkclicl.png'
+import links from '../images/linkclicl.png'
 import chrtt from '../images/chrt.png'
+import { ref, get } from 'firebase/database'; 
+import { database } from '../firebase.jsx';
 import upwork from '../images/up.png'
 import linee from '../images/linee.png'
 import scype from '../images/scype.png'
 import paypal from '../images/paypal.png'
 import './Analytics.css';
 function Analytics() {
-
+  const userId=localStorage.getItem("userId")
   const [count ,setCount]=useState(0)
+
+  const [link,setLinks]=useState([])
 
    const counter =()=>{
 
     setCount(count+1)
    }
+
+   useEffect(() => {
+  const FetchAnalytics= async()=>{
+    const dataref=ref(database,`Analytic`)
+    const snap= await get(dataref)
+    const data=snap.val()
+    const arr = Object.keys(data)
+    .filter(key => data[key].userid === userId) // First, filter the keys
+    .map(key => ({
+      id: key,
+      ...data[key] // Then, map the filtered keys to create a new object with the id and other link properties
+    }));
+  
+    console.log("array is",arr)
+    setLinks(arr)
+  }
+  FetchAnalytics()
+  }, []);
+ 
+
+
 
   return (
     <div className="Analytics-container">
@@ -26,7 +51,9 @@ function Analytics() {
                 <p style={{textAlign:'center',fontSize:'23px',color:'red'}}>Analytics</p>
        
                 <div className="row">
-            <div className="col" >
+                {link.map(item=>(
+              
+            <div key={item.id} className="col" >
             <div className="ana-d" style={{margin:'15px'}}>
 
 <div  className="points" style={{display:'flex',justifyContent:"start",flexDirection:'column'}}>
@@ -36,32 +63,37 @@ function Analytics() {
                  <img style={{width:'50px',height:'50px',cursor:'pointer'}} src={pop} alt="pop" />
 
             </div>
-            <h1 style={{color: '#E93428',margin:20,fontSize:'35px',letterSpacing:'3px'}}>5,283</h1>
+            <h1 style={{color: '#E93428',margin:20,fontSize:'35px',letterSpacing:'3px'}}>{item?.totalpops}</h1>
             </div>
-
+            ) )}
         
+{link.map(item=>(
+  
 
-            <div className="col" >
+            <div key={item.id} className="col" >
             <div className="ana-d" style={{margin:'15px'}}>
 
 <div  className="points" style={{display:'flex',justifyContent:"start",flexDirection:'column'}}>
 <p style={{  color: '#E93428', fontWeight: 'bold' ,margin:'0px',fontSize:'12px'}}>Total Link clicks</p>
                  <p style={{fontSize:'8px',color:'grey'}}>Lorem ipsum dolor consectetur</p>
 </div>
-                 <img style={{width:'50px',height:'50px',cursor:'pointer'}} src={link} alt="pop" />
+                 <img style={{width:'50px',height:'50px',cursor:'pointer'}} src={links} alt="pop" />
 
             </div>
-            <h1 style={{color: '#E93428',margin:20,fontSize:'35px',letterSpacing:'3px'}}>1,272</h1>
+            <h1 style={{color: '#E93428',margin:20,fontSize:'35px',letterSpacing:'3px'}}>{item?.totalClicks}</h1>
             </div>
-               
+            ))}   
           </div>
-          
+        
        
 
 
 
           <div className="row" style={{margin:"0px"}}>
-            <div className="col">
+          {link.map(item=>(
+
+        
+            <div key={item.id} className="col">
             <div className="ana-d" style={{margin:'15px'}}>
 
 <div  className="points" style={{display:'flex',justifyContent:"start",flexDirection:'column'}}>
@@ -71,25 +103,25 @@ function Analytics() {
                  <img style={{width:'50px',height:'50px',cursor:'pointer'}} src={connect} alt="pop" />
 
             </div>
-            <h1 style={{color: '#E93428',margin:20,fontSize:'35px',letterSpacing:'3px'}}>318</h1>
+            <h1 style={{color: '#E93428',margin:20,fontSize:'35px',letterSpacing:'3px'}}>{item?.newconnection}</h1>
        
             </div>
-            
-        
+            ))}
+            {link.map(item=>(
 
-            <div className="col" >
+            <div key={item.id} className="col" >
             <div className="ana-d" style={{margin:'15px'}}>
 
 <div  className="points" style={{display:'flex',justifyContent:"start",flexDirection:'column'}}>
-<p style={{  color: '#E93428', fontWeight: 'bold' ,margin:'0px',fontSize:'12px'}}>Total Pops</p>
+<p style={{  color: '#E93428', fontWeight: 'bold' ,margin:'0px',fontSize:'12px'}}>Total Orders</p>
                  <p style={{fontSize:'8px',color:'grey'}}>Lorem ipsum dolor consectetur</p>
 </div>
                  <img style={{width:'50px',height:'50px',cursor:'pointer'}} src={Order} alt="pop" />
 
             </div>
-            <h1 style={{ color: '#E93428',margin:20,fontSize:'35px',letterSpacing:'3px'}}>99</h1>
+            <h1 style={{ color: '#E93428',margin:20,fontSize:'35px',letterSpacing:'3px'}}>{item.totalorders}</h1>
             </div>
-               
+            ))}          
           </div>
 
 <br />
@@ -126,64 +158,31 @@ function Analytics() {
 <br />
 
 
+{/* ................... */}
 
-<div className="Counter" style={{width: '100%', display: 'flex', justifyContent: 'center',margin: 'auto'}}>
+{link.map(item=>(
+
+
+<div key={item.id}  className="Counter" style={{width: '100%', display: 'flex',flexDirection:'column', justifyContent: 'center',margin: 'auto',gap:'10px'}}>
+{item.links.map(linkItem => (
   <div className="Upwork" style={{ display: 'flex', alignItems: 'center',  border: '1px solid rgb(228, 228, 228)', borderRadius: '20px',  width: '97%', margin:'2px auto',maxWidth: '430px',  padding: '1rem',  boxSizing: 'border-box',  flexWrap: 'wrap',boxShadow:'1px 1px 1px 1px rgb(228, 228, 228)'}}>
-    <img onClick={counter} style={{ width: '18%', height: 'auto',  marginRight: '1rem'}} src={upwork} alt="Upwork logo" />
+    <img onClick={counter} style={{ width: '18%', height: 'auto',  marginRight: '1rem'}}  src={`/src/images/${linkItem?.name.toLowerCase()}.png`}  alt={linkItem?.name} />
     
     <div className="points" style={{  flex: '1', marginRight: '1rem' }}>
-      <p style={{fontWeight: 'bold', margin: '0', fontSize: '1rem', }}>Upwork</p>
-      <p style={{ fontSize: '0.75rem' }}>1 times user click on Upwork</p>
+      <p style={{ margin: '0', fontSize: '1rem', }}>{linkItem.name}</p>
+      <p style={{ fontSize: '0.75rem' ,gap:'10px' }}> <span style={{padding:'4px'}}>
+      {linkItem?.clicks}
+      </span>times user click on Upwork</p>
     </div>
     
-    <h3 style={{ margin: '0',  fontSize: '1.5rem', }}>1</h3>
+    <h3 style={{ margin: '0',  fontSize: '1rem', }}>{linkItem.clicks}</h3>
   </div>
-</div>
+  ))}
 
+</div>
+))}
 <br />
 
-<div className="Counter" style={{width: '100%', display: 'flex', justifyContent: 'center',margin: 'auto'}}>
-  <div className="Upwork" style={{ display: 'flex', alignItems: 'center',  border: '1px solid rgb(228, 228, 228)', borderRadius: '20px',  width: '97%', margin:'2px auto',maxWidth: '430px',  padding: '1rem',  boxSizing: 'border-box',  flexWrap: 'wrap',boxShadow:'1px 1px 1px 1px rgb(228, 228, 228)'}}>
-    <img style={{ width: '18%', height: 'auto',  marginRight: '1rem'}} src={linee} alt="Upwork logo" />
-    
-    <div className="points" style={{  flex: '1', marginRight: '1rem' }}>
-      <p style={{fontWeight: 'bold', margin: '0', fontSize: '1rem', }}>Upwork</p>
-      <p style={{ fontSize: '0.75rem' }}>1 times user click on Line</p>
-    </div>
-    
-    <h3 style={{ margin: '0',  fontSize: '1.5rem', }}>1</h3>
-  </div>
-</div>
-
-<br />
-
-<div className="Counter" style={{width: '100%', display: 'flex', justifyContent: 'center',margin: 'auto'}}>
-  <div className="Upwork" style={{ display: 'flex', alignItems: 'center',  border: '1px solid rgb(228, 228, 228)', borderRadius: '20px',  width: '97%', margin:'2px auto',maxWidth: '430px',  padding: '1rem',  boxSizing: 'border-box',  flexWrap: 'wrap',boxShadow:'1px 1px 1px 1px rgb(228, 228, 228)'}}>
-    <img style={{ width: '18%', height: 'auto',  marginRight: '1rem'}} src={scype} alt="Upwork logo" />
-    
-    <div className="points" style={{  flex: '1', marginRight: '1rem' }}>
-      <p style={{fontWeight: 'bold', margin: '0', fontSize: '1rem', }}>Upwork</p>
-      <p style={{ fontSize: '0.75rem' }}>1 times user click on skype</p>
-    </div>
-    
-    <h3 style={{ margin: '0',  fontSize: '1.5rem', }}>1</h3>
-  </div>
-</div>
-
-<br />
-
-<div className="Counter" style={{width: '100%', display: 'flex', justifyContent: 'center',margin: 'auto'}}>
-  <div className="Upwork" style={{ display: 'flex', alignItems: 'center',  border: '1px solid rgb(228, 228, 228)', borderRadius: '20px',  width: '97%', margin:'2px auto',maxWidth: '430px',  padding: '1rem',  boxSizing: 'border-box',  flexWrap: 'wrap',boxShadow:'1px 1px 1px 1px rgb(228, 228, 228)'}}>
-    <img style={{ width: '18%', height: 'auto',  marginRight: '1rem'}} src={paypal} alt="Upwork logo" />
-    
-    <div className="points" style={{  flex: '1', marginRight: '1rem' }}>
-      <p style={{fontWeight: 'bold', margin: '0', fontSize: '1rem', }}>Upwork</p>
-      <p style={{ fontSize: '0.75rem' }}>1 times user click on paypal</p>
-    </div>
-    
-    <h3 style={{ margin: '0',  fontSize: '1.5rem', }}>1</h3>
-  </div>
-</div>
 
 
 
