@@ -34,17 +34,12 @@ import { useTranslation } from 'react-i18next';
 function Profile() {
   const navigate = useNavigate();
 
-  // Array of link objects to display
-  const links = [
-    { id: 1, imageUrl: whatsapp, linkName: "Call", place: "Enter phone number", instruction: "Enter your Phone Number" },
-    { id: 2, imageUrl: call, linkName: "Whatsapp", place: "Enter whatsapp number", instruction: "Enter your Whatsapp Number" },
-    { id: 3, imageUrl: fb, linkName: "Facebook", place: "Enter Facebook URL", instruction: "Enter your Facebook URL" },
-    { id: 4, imageUrl: mail, linkName: "Mail", place: "Enter your Email", instruction: "Enter your Email" },
-    { id: 5, imageUrl: instas, linkName: "Instagram", place: "Enter Username", instruction: "Enter your Username" },
-    { id: 6, imageUrl: website, linkName: "Website", place: "Enter Website URL", instruction: "Enter your Website URL" },
-    { id: 7, imageUrl: snap, linkName: "Snapchat", place: "Enter Username", instruction: "Enter your Username" },
-    { id: 8, imageUrl: add, linkName: "", place: "", instruction: "Add new Links" },
-  ];
+  const [socialLinks, setSocialLink] = useState([])
+  const { t } = useTranslation()
+
+
+  const [loading, setLoading] = useState(true); // State for loading
+  const [links, setLinks] = useState([]); // State to store fetched links
 
   const [setting, setSetting] = useState(false); // State to manage Slide component visibility
   const [linkdata, setLinkdata] = useState(null); // State to store currently selected link data
@@ -58,15 +53,13 @@ function Profile() {
     ladyImgUrl: '',
     mainImgUrl: ''
   })
-   //  for translation 
-   const { t } = useTranslation()
-  // Fetch profile data from localStorage\
-  const [loading, setLoading] = useState(true); // State for loading
-useEffect(() => {
-  const fetchData = async () => {
-    const userId = localStorage.getItem('userId'); // Get the UID from localStorage
-    if (!userId) {
-      console.log('No UID found in localStorage');
+  
+  const userId = localStorage.getItem('userId');
+  console.log ("now user ",userId)
+
+  const handleImageClick = (baseUrl, linkName) => {
+    if (!baseUrl || !linkName) {
+      console.error('Invalid input:', baseUrl, linkName);
       return;
     }
 

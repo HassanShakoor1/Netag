@@ -21,7 +21,7 @@ function EditContact() {
         const checkAuthAndFetchData = async () => {
             const unsubscribe = onAuthStateChanged(auth, async (user) => {
                 if (user) {
-                    const userId = user.uid;
+                    const userId = localStorage.getItem('userId');
 
                     // Retrieve or generate record ID
                     let recordId = localStorage.getItem(`recordid_${userId}`);
@@ -49,7 +49,7 @@ function EditContact() {
     const fetchExistingMediaFiles = async (recordid) => {
         const auth = getAuth();
         const currentUser = auth.currentUser;
-        const currentUid = currentUser ? currentUser.uid : null;
+        const currentUid = localStorage.getItem('userId')
     
         if (!currentUid) {
             console.log("User is not authenticated.");

@@ -160,12 +160,12 @@ function Addcatagory() {
           </h4>
           <div style={{ width: '25px' }}></div>
         </div>
-<br /><br />
+
         <h3 style={{ color: 'red', fontWeight: '100', paddingLeft: '15px', fontSize: '20px' }}>Product</h3>
         <div className="name-input">
           <p style={{ paddingLeft: '15px', marginTop: "0px", marginBottom: "7px" }}>Name</p>
           <input
-            style={{ width: "98%", borderRadius: "20px", height: '30px', backgroundColor: '#F7F7F7', border: "none", paddingLeft: '20px' ,outline:'none',padding:'20px'}}
+            style={{ width: "97%", borderRadius: "20px", height: '30px', backgroundColor: '#F7F7F7', border: "none", paddingLeft: '20px' }}
             type="text"
             placeholder='Oil Brand'
             name="brandName"
@@ -178,7 +178,7 @@ function Addcatagory() {
         <div className="name-input2">
           <p style={{ paddingLeft: '15px', marginTop: "0px", marginBottom: "7px" }}>Description</p>
           <input
-            style={{ width: "98%", borderRadius: "20px", backgroundColor: '#F7F7F7', outline: "none", border: "none", paddingBottom: "100px", paddingTop: "10px" }}
+            style={{ width: "97%", borderRadius: "20px", backgroundColor: '#F7F7F7', outline: "none", border: "none", paddingBottom: "100px", paddingTop: "10px" }}
             placeholder="Type your message here..."
             className="custom-textarea"
             name="brandDescription"
@@ -190,7 +190,7 @@ function Addcatagory() {
 
         {image ? (
           <div style={{ position: 'relative', width: '100%' }}>
-            <img style={{ width:'20%', borderRadius: '5%', maxHeight: '200px' }} src={image} alt="Uploaded" />
+            <img style={{ width: '100%', borderRadius: '5%', maxHeight: '200px' }} src={image} alt="Uploaded" />
             <button
               style={crossButtonStyle}
               onClick={removeImage}

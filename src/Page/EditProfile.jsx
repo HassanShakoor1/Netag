@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBack } from "react-icons/io5";
 import editcontact from '../images/editcontact.png';
@@ -53,25 +53,70 @@ function EditProfile() {
     setCropModal(false);
   }
 
+  useEffect(() => {
+    if (!userId) {
+      console.error("No userId found in localStorage");
+      return;
+    }
+  
+    const userRef = ref(database, `User/${userId}`); // Use userId here
+  
+    const fetchUserData = async () => {
+      try {
+        const userSnapshot = await get(userRef);
+        if (userSnapshot.exists()) {
+          const userData = userSnapshot.val();
+  
+          // Log user data to confirm
+          console.log("Fetched User Data:", userData);
+  
+          // Populate state with user data
+          setUsername(userData.username || "");
+          setDesignation(userData.designation || "");
+          setStatus(userData.materialStatus || "");
+          setCompany(userData.companyname || "");
+          setNickname(userData.nickname || "");
+          
+          // Set existing images (if available) in the component's state
+          if (userData.profilePicture) {
+            setProfileImage(userData.profilePicture);
+          }
+  
+          if (userData.backgroundPicture) {
+            setCoverImage(userData.backgroundPicture);
+          }
+        } else {
+          console.log("No user data found for this userId");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, [userId]);
+  
+
+
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      if (!userId || !parentId) {
-        console.error("No userId or parentId found in localStorage");
-        alert("User ID or Parent ID not found. Please log in again.");
+      if (!userId) {
+        console.error("No userId found in localStorage");
+        alert("User ID not found. Please log in again.");
         return;
       }
-
+  
       const storage = getStorage(); // Initialize storage
-      const userRef = ref(database, `User/${parentId}`);
-
+      const userRef = ref(database, `User/${userId}`);
+  
       // Retrieve existing user data
       const userSnapshot = await get(userRef);
       const existingData = userSnapshot.val() || {};
-
+  
       let ImageUrl = [...(existingData.profilePicture ? [existingData.profilePicture] : [])];
       let BackgroundImageUrl = [...(existingData.backgroundPicture ? [existingData.backgroundPicture] : [])];
-
+  
       try {
         // Handle profile image upload
         if (profileImage) {
@@ -80,7 +125,7 @@ function EditProfile() {
           const url = await getDownloadURL(imageRef);
           ImageUrl[0] = url;
         }
-
+  
         // Handle cover image upload
         if (coverImage) {
           const imageRef1 = storageRef(storage, `images/${userId}/cropped-cover-image.jpg`);
@@ -88,7 +133,7 @@ function EditProfile() {
           const url1 = await getDownloadURL(imageRef1);
           BackgroundImageUrl[0] = url1;
         }
-
+  
         // Save or update user data
         await update(userRef, {
           username: username || existingData.username,
@@ -100,10 +145,10 @@ function EditProfile() {
           backgroundPicture: BackgroundImageUrl[0] || existingData.backgroundPicture,
           id: userId
         });
-
+  
         alert("Data saved successfully!");
         navigate(-1);
-
+  
       } catch (error) {
         console.error("Error uploading images or saving data:", error);
         alert("Error: " + error.message);
@@ -114,7 +159,7 @@ function EditProfile() {
       setIsSaving(false);
     }
   };
-
+  
   const handleFileChange = (event, type) => {
     const file = event.target.files[0];
     if (file) {
@@ -154,74 +199,75 @@ function EditProfile() {
         </nav>
 
         <div className="rel-div" style={{ flexDirection: "column" }}>
-          <div className='lady' style={ladyStyle}>
-            {profileImage ? (
-              <div style={{ position: 'relative' }}>
-                <img
-                  style={{ width: '120px', height: '120px', borderRadius: "100%", objectFit: 'cover' }}
-                  src={URL.createObjectURL(profileImage)}
-                  alt="Uploaded Lady Image"
-                />
-                        <button onClick={() => setProfileImage(null)} style={crossButtonStyle}>&times;</button>
-              </div>
-            ) : (
-              <img style={imgStyle} src={editcontact} alt="Upload Icon" />
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              id="lady-img-upload"
-              style={{ display: 'none' }}
-              onChange={(e) => handleFileChange(e, "profile")}
-            />
-            {!profileImage && (
-              <label htmlFor="lady-img-upload" style={uploadLabelStyle}>Upload Photos</label>
-            )}
-          </div>
+  <div className='lady' style={ladyStyle}>
+    {profileImage ? (
+      <div style={{ position: 'relative' }}>
+        <img
+          style={{ width: '120px', height: '120px', borderRadius: "100%", objectFit: 'cover' }}
+          src={typeof profileImage === "string" ? profileImage : URL.createObjectURL(profileImage)}
+          alt="Uploaded Lady Image"
+        />
+        <button onClick={() => setProfileImage(null)} style={crossButtonStyle}>&times;</button>
+      </div>
+    ) : (
+      <img style={imgStyle} src={editcontact} alt="Upload Icon" />
+    )}
+    <input
+      type="file"
+      accept="image/*"
+      id="lady-img-upload"
+      style={{ display: 'none' }}
+      onChange={(e) => handleFileChange(e, "profile")}
+    />
+    {!profileImage && (
+      <label htmlFor="lady-img-upload" style={uploadLabelStyle}>Upload Photos</label>
+    )}
+  </div>
 
-          <div>
-            <div className='main-img' style={mainImgStyle}>
-              {coverImage ? (
-                <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                  <img
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    src={URL.createObjectURL(coverImage)}
-                    alt="Uploaded Main Image"
-                  />
-                  <button onClick={() => setCoverImage(null)} style={crossButtonStyle}>&times;</button>
-                </div>
-              ) : (
-                <img style={uploadIconStyle} src={editcontact} alt="Upload Icon" />
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                id="main-img-upload"
-                style={{ display: 'none' }}
-                onChange={(e) => handleFileChange(e, "cover")}
-              />
-              {!coverImage && (
-                <label htmlFor="main-img-upload" style={uploadLabelStyle}>Upload Photos</label>
-              )}
-            </div>
-          </div>
+  <div>
+    <div className='main-img' style={mainImgStyle}>
+      {coverImage ? (
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <img
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            src={typeof coverImage === "string" ? coverImage : URL.createObjectURL(coverImage)}
+            alt="Uploaded Main Image"
+          />
+          <button onClick={() => setCoverImage(null)} style={crossButtonStyle}>&times;</button>
         </div>
+      ) : (
+        <img style={uploadIconStyle} src={editcontact} alt="Upload Icon" />
+      )}
+      <input
+        type="file"
+        accept="image/*"
+        id="main-img-upload"
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileChange(e, "cover")}
+      />
+      {!coverImage && (
+        <label htmlFor="main-img-upload" style={uploadLabelStyle}>Upload Photos</label>
+      )}
+    </div>
+  </div>
+</div>
+
 
         <br /><br /><br />
 
         <div className="input-data">
           <div className="edit-field">
-            <CustomTextField label="UserName" name="username" size="small" onChange={(e) => setUsername(e.target.value)} />
-            <CustomTextField label="Designation" name="designation" size="small" onChange={(e) => setDesignation(e.target.value)} />
+            <CustomTextField label="UserName" name="username" size="small" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <CustomTextField label="Designation" name="designation" size="small" value={designation} onChange={(e) => setDesignation(e.target.value)} />
           </div>
 
           <div className="edit-field">
-            <CustomTextField label="Material Status" name="status" size="small" onChange={(e) => setStatus(e.target.value)} />
-            <CustomTextField label="Company" name="company" size="small" onChange={(e) => setCompany(e.target.value)} />
+            <CustomTextField label="Material Status" name="status" size="small" value={status} onChange={(e) => setStatus(e.target.value)} />
+            <CustomTextField label="Company" name="company" size="small" value={company} onChange={(e) => setCompany(e.target.value)} />
           </div>
 
           <div className="edit-field">
-            <CustomTextField label="Nickname" name="nickname" size="small" onChange={(e) => setNickname(e.target.value)} />
+            <CustomTextField label="Nickname" name="nickname" size="small" value={nickname} onChange={(e) => setNickname(e.target.value)} />
           </div>
 
           <br /><br /><br /><br />

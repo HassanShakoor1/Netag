@@ -10,7 +10,7 @@ function Photos() {
   const [mediaFiles, setMediaFiles] = useState([]);
   const [recordid, setRecordid] = useState(null);
   const userId = localStorage.getItem('userId');
-  const recordId = localStorage.getItem('recordid');
+
 const navigate=useNavigate();
 
 useEffect(() => {
@@ -63,8 +63,8 @@ console.log(userId)
  
 
  
-  const handleImagemove=()=>{
-    navigate('/home/editimage')
+  const handleImagemove=(userId)=>{
+    navigate(`/home/editimage/${userId}`)
   }
 
   
@@ -153,7 +153,7 @@ console.log(userId)
           cursor: 'pointer',
           textAlign: 'center',
           borderRadius: '12px',
-        }}  onClick={handleImagemove}>
+        }}  onClick={()=>{handleImagemove(userId)}}>
 
           +Add
         </label>
