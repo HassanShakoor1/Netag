@@ -155,7 +155,7 @@ function CreateNewProfile() {
                         backgroundPicture: newDisplayDpImageUrl,
                         profilePicture:newProfileImageUrl ,
                         designation: designation,
-                        martialStatus: status,
+                        materialStatus: status,
                         companyname: company,
                         language: "",
                 
@@ -236,7 +236,7 @@ function CreateNewProfile() {
                     backgroundPicture:profile_image_url ,
                     profilePicuture: dp_image_url,
                     designation: designation,
-                    martialStatus: status,
+                    materialStatus: status,
                     companyname: company,
                     language: "",
             
