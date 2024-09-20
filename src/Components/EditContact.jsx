@@ -11,16 +11,18 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 function EditContact() {
     const [mediaFiles, setMediaFiles] = useState([]);
-    const [recordId, setRecordId] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);
+    const [recordid, setRecordid] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         const auth = getAuth(app);
+
         const checkAuthAndFetchData = async () => {
             const unsubscribe = onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     const userId = localStorage.getItem('userId');
+
+                    // Retrieve or generate record ID
                     let recordId = localStorage.getItem(`recordid_${userId}`);
 
                     if (!recordId) {
@@ -28,34 +30,35 @@ function EditContact() {
                         localStorage.setItem(`recordid_${userId}`, recordId);
                     }
 
-                    setRecordId(recordId);
+                    setRecordid(recordId); // Set the record ID in state
                     await fetchExistingMediaFiles(recordId);
                 } else {
                     console.error('User is not authenticated.');
-                    navigate('/login');
+                    navigate('/login'); // Redirect to login page if not authenticated
                 }
             });
+
             return () => unsubscribe();
         };
+
         checkAuthAndFetchData();
     }, [navigate]);
-    const fetchExistingMediaFiles = async (recordId) => {
+
+    const fetchExistingMediaFiles = async (recordid) => {
         const auth = getAuth();
         const currentUser = auth.currentUser;
         const currentUid = localStorage.getItem('userId');
-    
+
         if (!currentUid) {
             console.log("User is not authenticated.");
             return;
         }
-    
+
         const database = getDatabase(app);
-        const recordRef = ref(database, `PhotosVideos/${recordId}`);
-    
+        const recordRef = ref(database, `PhotosVideos/${recordid}`);
+
         try {
             const snapshot = await get(recordRef);
-            console.log('Fetched snapshot:', snapshot.val()); // Log fetched snapshot
-    
             if (snapshot.exists()) {
                 const data = snapshot.val();
                 if (data.uid === currentUid) {
@@ -63,15 +66,13 @@ function EditContact() {
                         ...(data.selectedImages || []).map(url => ({ url, type: 'image' })),
                         ...(data.videosUri || []).map(url => ({ url, type: 'video' })),
                     ];
-                    console.log('Combined media files:', combinedMediaFiles); // Log combined media files
                     setMediaFiles(combinedMediaFiles);
-                    setIsEditing(true);
                 } else {
                     console.log("This record does not belong to the current user.");
                     setMediaFiles([]);
                 }
             } else {
-                console.log("No data found for this record ID.");
+                console.log('No data found for the provided record ID.');
                 setMediaFiles([]);
             }
         } catch (error) {
@@ -79,14 +80,13 @@ function EditContact() {
             setMediaFiles([]);
         }
     };
-    
 
-    const handleGoBack = () => {
+    const handlegoBack = () => {
         navigate('/home');
     };
 
     const handleImageUpload = async (event) => {
-        if (!recordId) {
+        if (!recordid) {
             console.error('Record ID is not available.');
             return;
         }
@@ -103,13 +103,13 @@ function EditContact() {
         const newMediaFiles = [...mediaFiles];
 
         for (const file of imageFiles) {
-            const fileRef = storageRef(storage, `PhotosVideos/${recordId}/${file.name}`);
+            const fileRef = storageRef(storage, `PhotosVideos/${recordid}/${file.name}`);
             try {
                 await uploadBytes(fileRef, file);
                 const url = await getDownloadURL(fileRef);
                 newMediaFiles.push({ url, type: 'image' });
                 setMediaFiles([...newMediaFiles]);
-                await saveMediaFiles(recordId, newMediaFiles);
+                await saveMediaFiles(recordid, newMediaFiles); // Pass record ID
             } catch (error) {
                 console.error('Error uploading file:', error);
             }
@@ -117,7 +117,7 @@ function EditContact() {
     };
 
     const handleVideoUpload = async (event) => {
-        if (!recordId) {
+        if (!recordid) {
             console.error('Record ID is not available.');
             return;
         }
@@ -138,20 +138,21 @@ function EditContact() {
         const storage = getStorage(app);
         const newMediaFiles = [...mediaFiles];
 
-        const fileRef = storageRef(storage, `PhotosVideos/${recordId}/${videoFile.name}`);
+        const fileRef = storageRef(storage, `PhotosVideos/${recordid}/${videoFile.name}`);
         try {
             await uploadBytes(fileRef, videoFile);
             const url = await getDownloadURL(fileRef);
             newMediaFiles.push({ url, type: 'video' });
             setMediaFiles([...newMediaFiles]);
-            await saveMediaFiles(recordId, newMediaFiles);
+            await saveMediaFiles(recordid, newMediaFiles); // Pass record ID
         } catch (error) {
             console.error('Error uploading file:', error);
         }
     };
 
-    const saveMediaFiles = async (recordId, newMediaFiles) => {
+    const saveMediaFiles = async (existingRecordId, newMediaFiles) => {
         const database = getDatabase(app);
+        let recordId = existingRecordId || Date.now().toString(); // Generate a new record ID if not provided
         const recordRef = ref(database, `PhotosVideos/${recordId}`);
 
         const mediaData = {
@@ -174,6 +175,7 @@ function EditContact() {
                 console.log('Data updated successfully');
             } else {
                 await set(recordRef, mediaData);
+                localStorage.setItem(`recordid_${localStorage.getItem('userId')}`, recordId); // Save the new record ID in localStorage
                 console.log('Data saved successfully');
             }
         } catch (error) {
@@ -184,29 +186,14 @@ function EditContact() {
     const handleRemoveImage = (index) => {
         const updatedMediaFiles = mediaFiles.filter((_, i) => i !== index);
         setMediaFiles(updatedMediaFiles);
-        saveMediaFiles(recordId, updatedMediaFiles);
+        saveMediaFiles(recordid, updatedMediaFiles); // Pass record ID
     };
 
     const handleRemoveVideo = () => {
         const updatedMediaFiles = mediaFiles.filter(file => file.type !== 'video');
         setMediaFiles(updatedMediaFiles);
-        saveMediaFiles(recordId, updatedMediaFiles);
+        saveMediaFiles(recordid, updatedMediaFiles); // Pass record ID
     };
-
-    const handleSave = async () => {
-        if (!recordId) {
-            console.error('Record ID is not available.');
-            return;
-        }
-        await saveMediaFiles(recordId, mediaFiles);
-        alert("Record saved successfully!");
-    };
-
-    const handlegoBack = () => {
-       navigate(-1)
-    };
-
-
     return (
         <div className="Editcontainer">
             <div className="edit-Contact" style={{marginTop:"20px"}}>
