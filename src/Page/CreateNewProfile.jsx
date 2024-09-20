@@ -1,4 +1,3 @@
-
 import React, { useState, } from 'react';
 import { useNavigate,useParams } from 'react-router-dom';
 import { IoChevronBack } from "react-icons/io5";
@@ -10,9 +9,6 @@ import nav from '../images/nav.png';
 import { TextField, useForkRef } from '@mui/material';
 import { styled } from '@mui/system';
 
-// import { ref as sRef, push, set } from "firebase/database";
-// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-// import { database as db, storage } from "../firebase.jsx"
 
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useEffect } from 'react';
@@ -105,7 +101,7 @@ function CreateNewProfile() {
         
         setusername(data.username)
         setdesignation(data.designation)
-        setstatus(data.martialStatus)
+        setstatus(data.materialStatus)
         setcompany(data.companyname)
         setprofileName(data.profileUrl)
         setDisplayProfileImageUrl(data.profileImageUrl)
@@ -147,8 +143,8 @@ function CreateNewProfile() {
                 }
 
                 await update(dataRef,{
-                    backgroundPicture:newDisplayDpImageUrl,
-                    profilePicture:newProfileImageUrl,
+                    profileImageUrl:newDisplayDpImageUrl,
+                    logoUrl:newProfileImageUrl,
                     profileUrl:profileName,
                     profileOn:selected,
     
@@ -156,6 +152,8 @@ function CreateNewProfile() {
                         
                         username: username,
                         userName1: "",
+                        backgroundPicture: newDisplayDpImageUrl,
+                        profilePicture:newProfileImageUrl ,
                         designation: designation,
                         materialStatus: status,
                         companyname: company,
@@ -187,7 +185,7 @@ function CreateNewProfile() {
                         
                       
                         
-                        parentID: localStorage.getItem('userId'),
+                        parentID: localStorage.getItem('parentId'),
                         phone: "",
                         platorform: "",
                         proVersion: "",
@@ -226,8 +224,8 @@ function CreateNewProfile() {
                 // Designation:designation,
                 // martialStatus:status,
                 // Company:company,
-                backgroundPicture :profile_image_url,
-                profilePicture:dp_image_url,
+                profileImageUrl:profile_image_url,
+                logoUrl:dp_image_url,
                 profileUrl:profileName,
                 profileOn:selected,
 
@@ -235,7 +233,8 @@ function CreateNewProfile() {
                     
                     username: username,
                     userName1: "",
-                   
+                    backgroundPicture:profile_image_url ,
+                    profilePicuture: dp_image_url,
                     designation: designation,
                     materialStatus: status,
                     companyname: company,
@@ -267,7 +266,7 @@ function CreateNewProfile() {
                     
                   
                     
-                    parentID: localStorage.getItem('userId'),
+                    parentID: localStorage.getItem('parentId'),
                     phone: "",
                     platorform: "",
                     proVersion: "",

@@ -3,10 +3,9 @@ import './IconOpener.css';
 import { useNavigate } from 'react-router-dom';
 import crox from '../images/crox.png';
 import { getDatabase, ref, set, update, get, child, push, remove } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
+import Modal from 'react-modal';
 import { database } from '../firebase'; // Ensure this path is correct
 
-import Modal from 'react-modal';
 Modal.setAppElement('#root'); // This is required for accessibility
 
 function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
@@ -28,10 +27,9 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
+      const userId = localStorage.getItem('userId'); // Fetch userId from localStorage
 
-      if (user && linkdata?.id) {
+      if (userId && linkdata?.id) {
         try {
           const dbRef = ref(database, `SocialLinks`);
           const snapshot = await get(dbRef);
@@ -40,7 +38,7 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
           if (snapshot.exists()) {
             snapshot.forEach((childSnapshot) => {
               const data = childSnapshot.val();
-              if (data.id === linkdata.id && data.uid === user.uid) {
+              if (data.id === linkdata.id && data.uid === userId) {
                 setExistingData(data);
                 setInputValue(data.baseUrl);
                 setRecordStatus[data.id, data.isShared];
@@ -76,9 +74,7 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
   };
 
   const handleSave = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem('userId');
 
     if (!userId) {
       alert('User is not authenticated');
@@ -160,9 +156,7 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
   };
 
   const handleDelete = async () => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    const userId = user?.uid;
+    const userId = localStorage.getItem('userId'); // Get userId from localStorage
 
     const id = linkdata?.id;
     if (!id || !userId) {
