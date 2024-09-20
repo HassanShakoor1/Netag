@@ -7,21 +7,23 @@ import '../App.css';
 import { IoChevronBack } from "react-icons/io5";
 import whatsapp from '../images/whatsapp.png';
 import call from '../images/call.png';
-import fb from '../images/fb.png';
+import fb from '../images/facebook.png';
 import mail from '../images/mail.png';
 import website from '../images/website.png';
-import snap from '../images/snap.png';
-import add from '../images/add.png';
+import snap from '../images/snapchat.png';
 import tiktok from '../images/tiktok.png';
 import youtube from '../images/youtube.png';
 import vimeo from '../images/vimeo.png';
-import x from '../images/x.png';
+import x from '../images/twitter.png';
 import radit from '../images/radit.png';
-import pintrst from '../images/pintrst.png';
+import pintrst from '../images/pintrest.png';
 import custom from '../images/custom.png';
 import spotify from '../images/spotify.png';
-import instas from '../images/instas.png';
+import instas from '../images/instagram.png';
 import tick from '../images/tick.png';
+import paypal from '../images/paypal.png';
+import telegram from '../images/telegram.png';
+import linkedin from '../images/linkedin.png';
 import { database } from '../firebase';
 
 // Fetch User ID from localStorage
@@ -30,26 +32,27 @@ const USER_ID = localStorage.getItem('userId');
 const links = {
   socialLink: [
     { id: 1, imageUrl: vimeo, linkName: "vimeo", place: "Enter URL",   instruction: `1. Enter your Url for  Vimeo.\n2. Make sure it is a valid Vimeo ID.\n3. Check for any typos in the URL.\n4. Ensure the account is accessible.`},
-    { id: 2, imageUrl: call, linkName: "Whatsapp", place: "Enter whatsapp number",instruction: `1. Enter your WhatsApp number.\n2. Make sure the number includes the country code.\n3. Verify the number is active on WhatsApp .\n4. Ensure the number is publicly accessible.` },
-    { id: 3, imageUrl: fb, linkName: "Facebook", place: "Enter Facebook URL", instruction: `1. Enter your Facebook Url .\n2. Make sure it is a valid Facebook Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.` },
-    { id: 4, imageUrl: mail, linkName: "Mail", place: "Enter your Email",instruction:` 1. Enter your email address.\n2. Make sure it is a valid email address.\n3. Check for any typos in the email address.\n4. Ensure the email account is active and accessible.`},
-    { id: 5, imageUrl: instas, linkName: "Instagram", place: "Enter URL",instruction: `1. Enter your Instagram Url .\n2. Make sure it is a valid Instagram Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.`},
-    { id: 6, imageUrl: website, linkName: "Website", place: "Enter Website URL",  instruction: `1. Enter your Website Url .\n2. Make sure it is a valid Website Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.` },
-    { id: 7, imageUrl: snap, linkName: "Snapchat", place: "Enter UserName",  instruction: `1. Enter your snapchat userName .\n2. Make sure it is a valid UserName .\n3. Check for any typos in the Username.\n4. Ensure the Profile is  accessible.`},
-    { id: 8, imageUrl: tiktok, linkName: "TikTok", place: "Enter Username",   instruction: `1. Enter your Tiktok Username .\n2. Make sure it is a valid Username.\n3. Check for any typos in the userName.\n4. Ensure the Profile is accessible.` },
-    { id: 9, imageUrl: youtube, linkName: "YouTube", place: "Enter URL",instruction: `1. Enter your youtube Url .\n2. Make sure it is a valid Youtube Url.\n3. Check for any typos in the URL.\n4. Ensure the Account is publicly accessible.`},
-    { id: 10, imageUrl: radit, linkName: "Reddit", place: "Enter URL", instruction: `1. Enter your Radit Url .\n2. Make sure it is a valid  Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.` },
-    { id: 11, imageUrl: x, linkName: "X", place: "Enter URL",instruction: `1. Enter your Twitter Url .\n2. Make sure it is a valid Twitter Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.`},
-    { id: 12, imageUrl: pintrst, linkName: "Pinterest", place: "Enter URL" ,instruction: `1. Enter your Pinterest Url .\n2. Make sure it is a valid pinterest Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.` },
+    { id: 2, imageUrl: call, linkName: "whatsapp", place: "Enter whatsapp number",instruction: `1. Enter your WhatsApp number.\n2. Make sure the number includes the country code.\n3. Verify the number is active on WhatsApp .\n4. Ensure the number is publicly accessible.` },
+    { id: 3, imageUrl: fb, linkName: "facebook", place: "Enter Facebook URL", instruction: `1. Enter your Facebook Url .\n2. Make sure it is a valid Facebook Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.` },
+    { id: 4, imageUrl: linkedin, linkName: "linkedin", place: "Enter Url",instruction:` 1. Enter your Linkedin URL.\n2. Make sure it is a valid URL .\n3. Check for any typos in the URL .\n4. Ensure the Linkedin account is active and accessible.`},
+    { id: 5, imageUrl: instas, linkName: "instagram", place: "Enter URL",instruction: `1. Enter your Instagram Url .\n2. Make sure it is a valid Instagram Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.`},
+    { id: 6, imageUrl: telegram, linkName: "telegram", place: "Enter telegram number",  instruction: `1. Enter your telegram number .\n2. Make sure it is a valid number Url.` },
+    { id: 7, imageUrl: snap, linkName: "snapchat", place: "Enter UserName",  instruction: `1. Enter your snapchat userName .\n2. Make sure it is a valid UserName .\n3. Check for any typos in the Username.\n4. Ensure the Profile is  accessible.`},
+    { id: 8, imageUrl: tiktok, linkName: "tikTok", place: "Enter Username",   instruction: `1. Enter your Tiktok Username .\n2. Make sure it is a valid Username.\n3. Check for any typos in the userName.\n4. Ensure the Profile is accessible.` },
+    { id: 9, imageUrl: youtube, linkName: "youTube", place: "Enter URL",instruction: `1. Enter your youtube Url .\n2. Make sure it is a valid Youtube Url.\n3. Check for any typos in the URL.\n4. Ensure the Account is publicly accessible.`},
+    { id: 10, imageUrl: radit, linkName: "reddit", place: "Enter URL", instruction: `1. Enter your Radit Url .\n2. Make sure it is a valid  Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.` },
+    { id: 11, imageUrl: x, linkName: "x", place: "Enter URL",instruction: `1. Enter your Twitter Url .\n2. Make sure it is a valid Twitter Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.`},
+    { id: 12, imageUrl: pintrst, linkName: "pinterest", place: "Enter URL" ,instruction: `1. Enter your Pinterest Url .\n2. Make sure it is a valid pinterest Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.` },
   ],
   contactLinks: [
-    { id: 13, imageUrl: whatsapp, linkName: "Call", place: "Enter phone number", instruction: `1. Enter your Phone number.\n2. Make sure the number includes the country code.\n3. Ensure the number is publicly accessible.` },
-    { id: 14, imageUrl: website, linkName: "Website", place: "Enter URL", instruction: `1. Enter your Website Url .\n2. Make sure it is a valid Website Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.` },
-    { id: 15, imageUrl: custom, linkName: "Custom", place: "Enter URL", instruction: `1. Enter your Custom Url .\n2. Make sure it is a valid  Url.\n3. Check for any typos in the URL.` },
-    { id: 16, imageUrl: mail, linkName: "Mail", place: "Enter Email",instruction:` 1. Enter your email address.\n2. Make sure it is a valid email address.\n3. Check for any typos in the email address.\n4. Ensure the email account is active and accessible.` },
+    { id: 13, imageUrl: whatsapp, linkName: "call", place: "Enter phone number", instruction: `1. Enter your Phone number.\n2. Make sure the number includes the country code.\n3. Ensure the number is publicly accessible.` },
+    { id: 14, imageUrl: website, linkName: "website", place: "Enter URL", instruction: `1. Enter your Website Url .\n2. Make sure it is a valid Website Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.` },
+    { id: 15, imageUrl: custom, linkName: "custom", place: "Enter URL", instruction: `1. Enter your Custom Url .\n2. Make sure it is a valid  Url.\n3. Check for any typos in the URL.` },
+    { id: 16, imageUrl: mail, linkName: "mail", place: "Enter Email",instruction:` 1. Enter your email address.\n2. Make sure it is a valid email address.\n3. Check for any typos in the email address.\n4. Ensure the email account is active and accessible.` },
   ],
   others: [
     { id: 17, imageUrl: spotify, linkName: "spotify", place: "Enter URL",instruction:` 1. Enter your Spotify URL.\n2. Make sure it is a valid URL .\n3. Check for any typos in the  URL.` },
+    { id: 18, imageUrl: paypal, linkName: "paypal", place: "Enter number",instruction:` 1. Enter your paypal number.\n2. Make sure it is a valid number .` },
   ]
 };
   function Links() {
@@ -110,7 +113,7 @@ const links = {
         case 3: return fb;
         case 4: return mail;
         case 5: return instas;
-        case 6: return website;
+        case 6: return telegram;
         case 7: return snap;
         case 8: return tiktok;
         case 9: return youtube;
@@ -122,6 +125,7 @@ const links = {
         case 15: return custom;
         case 16: return mail;
         case 17: return spotify;
+        case 18: return paypal;
         default: return null;
       }
   

@@ -189,7 +189,7 @@ navigate(`/home/Link`)
             <img src={nav} alt="nav-img" />
           </div>
           <div className="nav-icon">
-            <FaBell onClick={handlenotifi} style={{ fontSize: '25px' }} />
+            <FaBell onClick={handlenotifi} style={{ fontSize: '25px',cursor:'pointer' }} />
           </div>
         </nav>
 
@@ -379,7 +379,7 @@ style={{objectFit:'cover'}}
   {/* Render links */}
 {links.map((link, index) => (
   <div key={index} style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '10px',cursor:"pointer" }}>
-    <img    onClick={() => handleImageClick(link?.baseUrl, link?.name)}    src={link?.image} alt={link?.name || 'Link'} style={{ width: '50px', height: '50px' }} />
+    <img    onClick={() => handleImageClick(link?.basl, link?.name)}    src={link?.image} alt={link?.name || 'Link'} style={{ width: '50px', height: '50px' }} />
     <span style={{ color: '#898787', fontSize: '12px' }}>{link?.name}</span>
   </div>
 ))}
