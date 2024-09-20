@@ -379,7 +379,14 @@ style={{objectFit:'cover'}}
   {/* Render links */}
 {links.map((link, index) => (
   <div key={index} style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '10px',cursor:"pointer" }}>
-    <img    onClick={() => handleImageClick(link?.basl, link?.name)}    src={link?.image} alt={link?.name || 'Link'} style={{ width: '50px', height: '50px' }} />
+  <img 
+  onClick={() => handleImageClick(link?.basl, link?.name)} 
+  src={link?.image || 'path/to/default/image.png'} 
+  alt={link?.name || 'Link'} 
+  style={{ width: '50px', height: '50px' }} 
+  onError={(e) => { e.target.src = 'path/to/default/image.png'; }} // Fallback on error
+/>
+
     <span style={{ color: '#898787', fontSize: '12px' }}>{link?.name}</span>
   </div>
 ))}
