@@ -22,7 +22,7 @@ console.log(userId)
       .then((snapshot) => {
         if (snapshot.exists()) {
           const data = snapshot.val();
-          console.log("photos data", data);
+          console.log("photos data now is", data);
           // Find the specific record associated with the current userId
           const userRecord = Object.keys(data).map(key => {
             const record = data[key];
