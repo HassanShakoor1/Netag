@@ -44,16 +44,12 @@ function EditContact() {
 
         checkAuthAndFetchData();
     }, [navigate]);
-    console.log("Record ID before fetching:", recordid);
-
+   
 
     const fetchExistingMediaFiles = async (recordid) => {
         const auth = getAuth();
         const currentUser = auth.currentUser;
-        const currentUid = localStorage.getItem('userId');
-    
-        console.log("Current UID:", currentUid);
-        console.log("Fetching media for record ID:", recordid);
+        const currentUid = localStorage.getItem('userId')
     
         if (!currentUid) {
             console.log("User is not authenticated.");
@@ -63,14 +59,9 @@ function EditContact() {
         const database = getDatabase(app);
         const recordRef = ref(database, `PhotosVideos/${recordid}`);
     
-        console.log("Database Reference:", recordRef.toString());
-    
-        try {
-            const snapshot = await get(recordRef); // Use get() to fetch data once
-    
+        onValue(recordRef, (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
-                console.log("Fetched data:", data);
     
                 // Check if the data belongs to the current user
                 if (data.uid === currentUid) {
@@ -78,27 +69,25 @@ function EditContact() {
                         ...(data.selectedImages || []).map(url => ({ url, type: 'image' })),
                         ...(data.videosUri || []).map(url => ({ url, type: 'video' })),
                     ];
+                    console.log("data is",data)
                     setMediaFiles(combinedMediaFiles);
                 } else {
                     console.log("This record does not belong to the current user.");
                     setMediaFiles([]);
                 }
             } else {
-                console.log('No data found for the provided record ID.');
+                console.log('No data found.');
                 setMediaFiles([]);
             }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            setMediaFiles([]);
-        }
+        }, {
+            onlyOnce: true
+        });
     };
     
     
     
-    console.log("Record ID after fetching:", recordid);
     
-    
-   
+  
     const handlegoBack = () => {
         navigate('/home');
     };
@@ -233,7 +222,7 @@ function EditContact() {
                     <h2>Upload Photo</h2>
                     <div className="upload-1">
                         <div className="img-btn">
-                            {mediaFiles?.filter(file => file.type === 'image')?.length < 4 ? (
+                            {mediaFiles.filter(file => file.type === 'image').length < 4 ? (
                                 <>
                                     <img style={{ width: "40px", display: "flex", justifyContent: "center", margin: "20px auto" }} src={editcontact} alt="nav-img" />
                                     <input
@@ -246,16 +235,16 @@ function EditContact() {
                                     <button
                                         style={{ display: "flex", justifyContent: "center", margin: "20px auto", alignItems: "center" }}
                                         className='save22'
-                                        onClick={() => document.querySelector('input[type="file"][accept="image/*"]')?.click()}
+                                        onClick={() => document.querySelector('input[type="file"][accept="image/*"]').click()}
                                     >
                                         Upload
                                     </button>
                                 </>
                             ) : (
                                 <div style={{ position: 'relative' }}>
-                                    <img src={mediaFiles?.filter(file => file?.type === 'image')[3]?.url} alt="Last uploaded" style={{ width: "100%", height: "140px", objectFit: "cover", borderRadius: "30px" }} />
+                                    <img src={mediaFiles.filter(file => file.type === 'image')[3]?.url} alt="Last uploaded" style={{ width: "100%", height: "140px", objectFit: "cover", borderRadius: "30px" }} />
                                     <button
-                                        onClick={() => handleRemoveImage(mediaFiles.findIndex(file => file?.type === 'image' && file?.url === mediaFiles?.filter(file => file?.type === 'image')[3]?.url))}
+                                        onClick={() => handleRemoveImage(mediaFiles.findIndex(file => file.type === 'image' && file.url === mediaFiles.filter(file => file.type === 'image')[3].url))}
                                         style={crossButtonStyle}
                                     >
                                         &times;
@@ -266,9 +255,9 @@ function EditContact() {
                     </div>
                     <div className="grid-container" style={{ maxWidth: '430px', display: 'flex', gap: '10px' }}>
   {mediaFiles
-    .filter((file) => file?.type === 'image')
-    .slice(0, 3)
-    .map((file, index) => (
+    ?.filter((file) => file?.type === 'image')
+    ?.slice(0, 3)
+    ?.map((file, index) => (
       <div
         key={index}
         className="grid-item"
@@ -311,7 +300,7 @@ function EditContact() {
                     <h2>Upload Video</h2>
                     <div className="upload-1">
                         <div className="img-btn">
-                            {mediaFiles?.filter(file => file?.type === 'video')?.length === 0 ? (
+                            {mediaFiles.filter(file => file.type === 'video').length === 0 ? (
                                 <>
                                     <img style={{ width: "40px", display: "flex", justifyContent: "center", margin: "20px auto" }} src={video} alt="nav-img" />
                                     <input
@@ -330,7 +319,7 @@ function EditContact() {
                                 </>
                             ) : (
                                 <div style={{ position: 'relative' }}>
-                                    <video src={mediaFiles?.find(file => file?.type === 'video')?.url} controls style={{ width: "100%", height: "140px", borderRadius: "30px" }} />
+                                    <video src={mediaFiles?.find(file => file.type === 'video')?.url} controls style={{ width: "100%", height: "140px", borderRadius: "30px" }} />
                                     <button
                                         onClick={handleRemoveVideo}
                                         style={crossButtonStyle}

@@ -63,8 +63,8 @@ console.log(userId)
  
 
  
-  const handleImagemove=(recordid)=>{
-    navigate(`/home/editimage/${recordid}`)
+  const handleImagemove=(userId)=>{
+    navigate(`/home/editimage/${userId}`)
   }
 
   
@@ -94,13 +94,13 @@ console.log(userId)
             >
               {media.type === 'image' ? (
                 <img
-                  src={media?.url}
+                  src={media.url}
                   alt={`Uploaded ${index}`}
                   style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }}
                 />
               ) : (
                 <video
-                  src={media?.url}
+                  src={media.url}
                   controls
                   style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }}
                 />
@@ -125,13 +125,13 @@ console.log(userId)
           >
             {media.type === 'image' ? (
               <img
-                src={media?.url}
+                src={media.url}
                 alt={`Uploaded ${index + 3}`}
                 style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }}
               />
             ) : (
               <video
-                src={media?.url}
+                src={media.url}
                 controls
                 style={{ width: '100%', objectFit: 'contain' }}
               />
@@ -153,7 +153,7 @@ console.log(userId)
           cursor: 'pointer',
           textAlign: 'center',
           borderRadius: '12px',
-        }}  onClick={()=>{handleImagemove(recordid)}}>
+        }}  onClick={()=>{handleImagemove(userId)}}>
 
           +Add
         </label>
