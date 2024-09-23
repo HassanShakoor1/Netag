@@ -47,34 +47,21 @@ function EditContact() {
    
 
     const fetchExistingMediaFiles = async (recordid) => {
-        const auth = getAuth();
-        const currentUser = auth.currentUser;
-        const currentUid = localStorage.getItem('userId')
-    
-        if (!currentUid) {
-            console.log("User is not authenticated.");
-            return;
-        }
-    
         const database = getDatabase(app);
         const recordRef = ref(database, `PhotosVideos/${recordid}`);
     
         onValue(recordRef, (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
+                console.log("Data from Firebase: ", data);
     
-                // Check if the data belongs to the current user
-                if (data.uid === currentUid) {
-                    const combinedMediaFiles = [
-                        ...(data.selectedImages || []).map(url => ({ url, type: 'image' })),
-                        ...(data.videosUri || []).map(url => ({ url, type: 'video' })),
-                    ];
-                    console.log("data is",data)
-                    setMediaFiles(combinedMediaFiles);
-                } else {
-                    console.log("This record does not belong to the current user.");
-                    setMediaFiles([]);
-                }
+                // Combine selected images and videos from the data
+                const combinedMediaFiles = [
+                    ...(data.selectedImages || []).map(url => ({ url, type: 'image' })),
+                    ...(data.videosUri || []).map(url => ({ url, type: 'video' })),
+                ];
+    
+                setMediaFiles(combinedMediaFiles);
             } else {
                 console.log('No data found.');
                 setMediaFiles([]);
@@ -83,6 +70,7 @@ function EditContact() {
             onlyOnce: true
         });
     };
+    
     
     
     
