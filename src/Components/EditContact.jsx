@@ -4,7 +4,7 @@ import { IoChevronBack } from "react-icons/io5";
 import video from '../images/video.png';
 import { useNavigate } from 'react-router-dom';
 import editcontact from '../images/editcontact.png';
-import { getDatabase, ref, set, update, get, remove, onValue } from 'firebase/database';
+import { getDatabase, ref, set, update, get, remove, onValue, query, orderByChild, equalTo } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase'; // Adjust this import according to your Firebase setup
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Import Firebase Auth
@@ -13,8 +13,8 @@ function EditContact() {
     const [mediaFiles, setMediaFiles] = useState([]);
     const [recordid, setRecordid] = useState(null);
     const navigate = useNavigate();
-
-   
+    console.log(recordid)
+    const userId = localStorage.getItem('userId');
     useEffect(() => {
         const auth = getAuth(app);
 
@@ -33,6 +33,7 @@ function EditContact() {
 
                     setRecordid(recordId);
                     await fetchExistingMediaFiles(recordId);
+
                 } else {
                     console.error('User is not authenticated.');
                     navigate('/login'); // Redirect to login page if not authenticated
@@ -48,20 +49,29 @@ function EditContact() {
 
     const fetchExistingMediaFiles = async (recordid) => {
         const database = getDatabase(app);
-        const recordRef = ref(database, `PhotosVideos/${recordid}`);
+        const recordRef = ref(database, `/PhotosVideos`);
     
-        onValue(recordRef, (snapshot) => {
+        const queryData = query(
+            recordRef,
+            orderByChild('uid'),
+            equalTo(userId)
+        );
+    
+        onValue(queryData, (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
                 console.log("Data from Firebase: ", data);
     
-                // Combine selected images and videos from the data
-                const combinedMediaFiles = [
-                    ...(data.selectedImages || []).map(url => ({ url, type: 'image' })),
-                    ...(data.videosUri || []).map(url => ({ url, type: 'video' })),
-                ];
+                // Flatten the Firebase data structure for easier handling
+                const combinedMediaFiles = Object.values(data).flatMap(tdata => {
+                    const images = tdata.selectedImages || [];
+                    const videos = tdata.videosUri || [];
+                    return [...images.map(url => ({ url, type: 'image' })), ...videos.map(url => ({ url, type: 'video' }))];
+                });
     
+                console.log("Combined Media Files: ", combinedMediaFiles);
                 setMediaFiles(combinedMediaFiles);
+            
             } else {
                 console.log('No data found.');
                 setMediaFiles([]);
@@ -73,8 +83,7 @@ function EditContact() {
     
     
     
-    
-    
+  
   
     const handlegoBack = () => {
         navigate('/home');
