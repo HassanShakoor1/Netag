@@ -4,8 +4,7 @@ import { IoChevronBack } from "react-icons/io5";
 import video from '../images/video.png';
 import { useNavigate } from 'react-router-dom';
 import editcontact from '../images/editcontact.png';
-import {database} from '../firebase.jsx'
-import {  ref, set, update, get, remove, onValue } from 'firebase/database';
+import { getDatabase, ref, set, update, get, remove, onValue, query, orderByChild, equalTo } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase'; // Adjust this import according to your Firebase setup
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Import Firebase Auth
@@ -14,8 +13,8 @@ function EditContact() {
     const [mediaFiles, setMediaFiles] = useState([]);
     const [recordid, setRecordid] = useState(null);
     const navigate = useNavigate();
-
-   
+    console.log(recordid)
+    const userId = localStorage.getItem('userId');
     useEffect(() => {
         const auth = getAuth(app);
 
@@ -34,6 +33,7 @@ function EditContact() {
 
                     setRecordid(recordId);
                     await fetchExistingMediaFiles(recordId);
+
                 } else {
                     console.error('User is not authenticated.');
                     navigate('/login'); // Redirect to login page if not authenticated
@@ -45,97 +45,46 @@ function EditContact() {
 
         checkAuthAndFetchData();
     }, [navigate]);
-    console.log("Record ID before fetching:", recordid);
-
+   
 
     const fetchExistingMediaFiles = async (recordid) => {
-        const auth = getAuth();
-        const currentUser = auth.currentUser;
-        const currentUid = localStorage.getItem('userId');
+        const database = getDatabase(app);
+        const recordRef = ref(database, `/PhotosVideos`);
     
-        console.log("Current UID:", currentUid);
-        console.log("Fetching media for record ID:", recordid);
+        const queryData = query(
+            recordRef,
+            orderByChild('uid'),
+            equalTo(userId)
+        );
     
-        if (!currentUid) {
-            console.log("User is not authenticated.");
-            return;
-        }
-    
-    
-        const recordRef = ref(database, `PhotosVideos/${recordid}`);
-    
-        console.log("Database Reference:", recordRef.toString());
-    
-        try {
-            const snapshot = await get(recordRef); // Use get() to fetch data once
-    
+        onValue(queryData, (snapshot) => {
             if (snapshot.exists()) {
                 const data = snapshot.val();
-                console.log("Fetched data:", data);
+                console.log("Data from Firebase: ", data);
     
-                // Check if the data belongs to the current user
-                if (data.uid === currentUid) {
-                    const combinedMediaFiles = [
-                        ...(data.selectedImages || []).map(url => ({ url, type: 'image' })),
-                        ...(data.videosUri || []).map(url => ({ url, type: 'video' })),
-                    ];
-                    setMediaFiles(combinedMediaFiles);
-                } else {
-                    console.log("This record does not belong to the current user.");
-                    setMediaFiles([]);
-                }
+                // Flatten the Firebase data structure for easier handling
+                const combinedMediaFiles = Object.values(data).flatMap(tdata => {
+                    const images = tdata.selectedImages || [];
+                    const videos = tdata.videosUri || [];
+                    return [...images.map(url => ({ url, type: 'image' })), ...videos.map(url => ({ url, type: 'video' }))];
+                });
+    
+                console.log("Combined Media Files: ", combinedMediaFiles);
+                setMediaFiles(combinedMediaFiles);
+            
             } else {
-                console.log('No data found for the provided record ID.');
+                console.log('No data found.');
                 setMediaFiles([]);
             }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            setMediaFiles([]);
-        }
+        }, {
+            onlyOnce: true
+        });
     };
     
     
     
-    console.log("Record ID after fetching:", recordid);
-    
-    
-    // useEffect(() => {
-    //     const auth = getAuth(app);
-    
-    //     const checkAuthAndFetchData = async () => {
-    //         const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    //             if (user) {
-    //                 const userId = user.uid;
-    
-    //                 // Fetch the record ID from the user's records
-    //                 const database = getDatabase(app);
-    //                 const userRecordRef = ref(database, `UserRecords/${userId}`);
-    //                 const snapshot = await get(userRecordRef);
-    
-    //                 if (snapshot.exists()) {
-    //                     const { recordid } = snapshot.val();
-    //                     localStorage.setItem(`recordid_${userId}`, recordid);
-    //                     setRecordid(recordid);
-    
-    //                     // Fetch existing media files for the specific recordid
-    //                     if (recordid) {
-    //                         await fetchExistingMediaFiles(recordid);
-    //                     }
-    //                 } else {
-    //                     console.error('Record ID not found.');
-    //                 }
-    //             } else {
-    //                 console.error('User is not authenticated.');
-    //                 navigate('/login'); // Redirect to login page if not authenticated
-    //             }
-    //         });
-    
-    //         return () => unsubscribe();
-    //     };
-    
-    //     checkAuthAndFetchData();
-    // }, [navigate]);
-    
+  
+  
     const handlegoBack = () => {
         navigate('/home');
     };
@@ -290,7 +239,7 @@ function EditContact() {
                                 </>
                             ) : (
                                 <div style={{ position: 'relative' }}>
-                                    <img src={mediaFiles.filter(file => file.type === 'image')[3].url} alt="Last uploaded" style={{ width: "100%", height: "140px", objectFit: "cover", borderRadius: "30px" }} />
+                                    <img src={mediaFiles.filter(file => file.type === 'image')[3]?.url} alt="Last uploaded" style={{ width: "100%", height: "140px", objectFit: "cover", borderRadius: "30px" }} />
                                     <button
                                         onClick={() => handleRemoveImage(mediaFiles.findIndex(file => file.type === 'image' && file.url === mediaFiles.filter(file => file.type === 'image')[3].url))}
                                         style={crossButtonStyle}
@@ -303,9 +252,9 @@ function EditContact() {
                     </div>
                     <div className="grid-container" style={{ maxWidth: '430px', display: 'flex', gap: '10px' }}>
   {mediaFiles
-    .filter((file) => file.type === 'image')
-    .slice(0, 3)
-    .map((file, index) => (
+    ?.filter((file) => file?.type === 'image')
+    ?.slice(0, 3)
+    ?.map((file, index) => (
       <div
         key={index}
         className="grid-item"
@@ -320,7 +269,7 @@ function EditContact() {
         }}
       >
         <img
-          src={file.url}
+          src={file?.url}
           alt={`Uploaded ${index}`}
           style={{
             width: '100%',
@@ -367,7 +316,7 @@ function EditContact() {
                                 </>
                             ) : (
                                 <div style={{ position: 'relative' }}>
-                                    <video src={mediaFiles.find(file => file.type === 'video').url} controls style={{ width: "100%", height: "140px", borderRadius: "30px" }} />
+                                    <video src={mediaFiles?.find(file => file.type === 'video')?.url} controls style={{ width: "100%", height: "140px", borderRadius: "30px" }} />
                                     <button
                                         onClick={handleRemoveVideo}
                                         style={crossButtonStyle}
