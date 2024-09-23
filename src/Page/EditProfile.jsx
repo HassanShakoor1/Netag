@@ -27,6 +27,7 @@ function EditProfile() {
   const [status, setStatus] = useState("");
   const [company, setCompany] = useState("");
   const [nickname, setNickname] = useState("");
+  const [name,setName]=useState("")
   const [imageFile, setImageFile] = useState(null);
   const [imageFile1, setImageFile1] = useState(null);
   const [imgurl, setImgurl] = useState("");
@@ -70,6 +71,7 @@ function EditProfile() {
           console.log("Fetched User Data:", userData);
   
           // Populate state with user data
+          setName(userData.name||"");
           setUsername(userData.username || "");
           setDesignation(userData.designation || "");
           setStatus(userData.materialStatus || "");
@@ -126,6 +128,7 @@ function EditProfile() {
   
       // 3. Prepare data to update
       const updatedData = {
+        name:name,
         username: username,
         designation: designation,
         materialStatus: status,
@@ -254,17 +257,21 @@ function EditProfile() {
 
         <div className="input-data">
           <div className="edit-field">
-            <CustomTextField label="UserName" name="username" size="small" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <CustomTextField label="Designation" name="designation" size="small" value={designation} onChange={(e) => setDesignation(e.target.value)} />
-          </div>
-
-          <div className="edit-field">
-            <CustomTextField label="Material Status" name="status" size="small" value={status} onChange={(e) => setStatus(e.target.value)} />
-            <CustomTextField label="Company" name="company" size="small" value={company} onChange={(e) => setCompany(e.target.value)} />
-          </div>
-
-          <div className="edit-field">
+            <CustomTextField label="name" name="name" size="small" value={name} onChange={(e) => setName(e.target.value)} />
             <CustomTextField label="Nickname" name="nickname" size="small" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+         
+          </div>
+
+          <div className="edit-field">
+          <CustomTextField label="username" name="username" size="small" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <CustomTextField label="designation" name="designation" size="small" value={designation} onChange={(e) => setDesignation(e.target.value)} />
+
+
+          </div>
+
+          <div className="edit-field">
+          <CustomTextField label="status" name="status" size="small" value={status} onChange={(e) => setStatus(e.target.value)} />
+            <CustomTextField label="company" name="company" size="small" value={company} onChange={(e) => setCompany(e.target.value)} />
           </div>
 
           <br /><br /><br /><br />

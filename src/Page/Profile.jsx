@@ -29,7 +29,7 @@ function Profile() {
 
   const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
   const [profileData, setProfileData] = useState({
-
+    
     username: '',
     nickname: '',
     status: '',
@@ -246,7 +246,7 @@ style={{objectFit:'cover'}}
             </div>
             {/* Profile details */}
             <h2 style={{ color: 'red', margin: '5px' }}>
-              {profileData?.username} <br />
+              {profileData?.name} <br />
               <span style={{ color: 'rgb(146, 146, 146)', fontWeight: '100', fontSize: '16px' }}> ({profileData.nickname})</span>
             </h2>
             <div className="data" style={{ lineHeight: '1' }}>
