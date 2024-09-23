@@ -8,15 +8,13 @@ import Photos from '../Components/Photos';
 import Footer from '../Components/Footer';
 import bitc from '../images/bitc.png'
 import bitcc from '../images/bitcc.png'
-import main from '../images/main.jpeg';
 import nav from '../images/nav.png';
 import Card from '../Components/Card';
 import { ref, get } from 'firebase/database'; // Import 'ref' and 'get' directly from 'firebase/database'
 import { database } from '../firebase.jsx'; // Import the initialized database
 import CircularProgress from '@mui/material/CircularProgress'; // Import the loader component
-import { Link } from 'react-router-dom'
-
-
+import AOS from 'aos';
+import 'aos/dist/aos.css'; 
 import { useTranslation } from 'react-i18next';
 
 function Profile() {
@@ -43,6 +41,17 @@ function Profile() {
   
   const userId = localStorage.getItem('userId');
   console.log ("now user ",userId)
+
+
+
+  useEffect(() => {
+    AOS.init({
+        duration: 1000, // Duration of animations in milliseconds
+        once: false, // Whether animation should happen only once
+    });
+}, []);
+
+
 
   const handleImageClick = (baseUrl, linkName) => {
     if (!baseUrl || !linkName) {
@@ -181,7 +190,7 @@ navigate(`/home/Link`)
 
   return (
 
-    <div className="ProfileContainer">
+    <div className="ProfileContainer" >
       <div className="profile-design" style={{ paddingBottom: '0px' }}>
         {/* Navigation bar with logo and notification icon */}
         <nav className='nav' style={{ marginBottom: '10px' }}>
@@ -286,8 +295,9 @@ style={{objectFit:'cover'}}
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '2px auto' }}>
-            <div style={{ width: "99%" }}>
-              <Card />
+            <div data-aos="fade-up" style={{ width: "99%" }}>
+           
+              <Card  />
             </div>
           </div>
 
@@ -296,7 +306,7 @@ style={{objectFit:'cover'}}
 
 
 
-          <div className="ip-btn" style={{ width: '100%' }}>
+          <div className="ip-btn" data-aos="zoom-in" style={{ width: '100%' }}>
             <div className="n-head" style={{ fontSize: "18px" }}>
               <h3 style={{ cursor: "pointer" }} className="link-heading">Links</h3>
             </div>

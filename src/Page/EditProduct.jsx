@@ -18,6 +18,8 @@ import './product.css'; // Assuming you have a CSS file for custom styles
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import AOS from 'aos';
+import 'aos/dist/aos.css'; 
 import { MdNavigateNext } from "react-icons/md";
 const ITEM_HEIGHT = 48;
 const style = {
@@ -189,6 +191,10 @@ function EditProduct() {
     };
 
     fetchData();
+    AOS.init({
+      duration: 1000, // Duration of animations in milliseconds
+      once: false,
+    })
   }, [id]);
 console.log( "products are ",products)
   return (
@@ -207,7 +213,7 @@ console.log( "products are ",products)
 
         <div style={{ width: '95%' }} className="Edit-product-Design">
           {products.map((product, index) => (
-            <div key={product.productid || `product-${index}`} style={{ marginTop: '20px' }} className="items">
+            <div data-aos="zoom-in" key={product.productid || `product-${index}`} style={{ marginTop: '20px' }} className="items">
               <img className='item-img' style={{ objectFit: 'cover' }} src={product?.imgurl} alt={product?.productname} onClick={() => handleOpen(product)} />
               <div className="item-data">
                 <h1 style={{ color: 'red', margin: 0, fontSize: 20 }}>

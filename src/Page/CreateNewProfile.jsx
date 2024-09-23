@@ -143,8 +143,8 @@ function CreateNewProfile() {
                 }
 
                 await update(dataRef,{
-                    profileImageUrl:newDisplayDpImageUrl,
-                    logoUrl:newProfileImageUrl,
+                    // profileImageUrl:newDisplayDpImageUrl,
+                    // logoUrl:newProfileImageUrl,
                     profileUrl:profileName,
                     profileOn:selected,
     
@@ -224,8 +224,8 @@ function CreateNewProfile() {
                 // Designation:designation,
                 // martialStatus:status,
                 // Company:company,
-                profileImageUrl:profile_image_url,
-                logoUrl:dp_image_url,
+                // profileImageUrl:profile_image_url,
+                // logoUrl:dp_image_url,
                 profileUrl:profileName,
                 profileOn:selected,
 
@@ -234,7 +234,7 @@ function CreateNewProfile() {
                     username: username,
                     userName1: "",
                     backgroundPicture:profile_image_url ,
-                    profilePicuture: dp_image_url,
+                    profilePicture: dp_image_url,
                     designation: designation,
                     materialStatus: status,
                     companyname: company,
