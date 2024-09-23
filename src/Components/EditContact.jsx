@@ -4,17 +4,17 @@ import { IoChevronBack } from "react-icons/io5";
 import video from '../images/video.png';
 import { useNavigate } from 'react-router-dom';
 import editcontact from '../images/editcontact.png';
-import {database} from '../firebase.jsx'
-import {  ref, set, update, get, remove, onValue } from 'firebase/database';
+import { getDatabase, ref, set, update, get, remove, onValue } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase'; // Adjust this import according to your Firebase setup
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Import Firebase Auth
 
 function EditContact() {
     const [mediaFiles, setMediaFiles] = useState([]);
     const [recordid, setRecordid] = useState(null);
     const navigate = useNavigate();
 
+   
     useEffect(() => {
         const auth = getAuth(app);
 
@@ -31,7 +31,7 @@ function EditContact() {
                         localStorage.setItem(`recordid_${userId}`, recordId);
                     }
 
-                    setRecordid(recordId); // Set the record ID in state
+                    setRecordid(recordId);
                     await fetchExistingMediaFiles(recordId);
                 } else {
                     console.error('User is not authenticated.');
@@ -44,24 +44,35 @@ function EditContact() {
 
         checkAuthAndFetchData();
     }, [navigate]);
+    console.log("Record ID before fetching:", recordid);
+
 
     const fetchExistingMediaFiles = async (recordid) => {
         const auth = getAuth();
         const currentUser = auth.currentUser;
         const currentUid = localStorage.getItem('userId');
-
+    
+        console.log("Current UID:", currentUid);
+        console.log("Fetching media for record ID:", recordid);
+    
         if (!currentUid) {
             console.log("User is not authenticated.");
             return;
         }
     
-    
+        const database = getDatabase(app);
         const recordRef = ref(database, `PhotosVideos/${recordid}`);
-
+    
+        console.log("Database Reference:", recordRef.toString());
+    
         try {
-            const snapshot = await get(recordRef);
+            const snapshot = await get(recordRef); // Use get() to fetch data once
+    
             if (snapshot.exists()) {
                 const data = snapshot.val();
+                console.log("Fetched data:", data);
+    
+                // Check if the data belongs to the current user
                 if (data.uid === currentUid) {
                     const combinedMediaFiles = [
                         ...(data.selectedImages || []).map(url => ({ url, type: 'image' })),
@@ -81,7 +92,13 @@ function EditContact() {
             setMediaFiles([]);
         }
     };
-
+    
+    
+    
+    console.log("Record ID after fetching:", recordid);
+    
+    
+   
     const handlegoBack = () => {
         navigate('/home');
     };
@@ -110,7 +127,7 @@ function EditContact() {
                 const url = await getDownloadURL(fileRef);
                 newMediaFiles.push({ url, type: 'image' });
                 setMediaFiles([...newMediaFiles]);
-                await saveMediaFiles(recordid, newMediaFiles); // Pass record ID
+                await saveMediaFiles(recordid, newMediaFiles);
             } catch (error) {
                 console.error('Error uploading file:', error);
             }
@@ -145,56 +162,59 @@ function EditContact() {
             const url = await getDownloadURL(fileRef);
             newMediaFiles.push({ url, type: 'video' });
             setMediaFiles([...newMediaFiles]);
-            await saveMediaFiles(recordid, newMediaFiles); // Pass record ID
+            await saveMediaFiles(recordid, newMediaFiles);
         } catch (error) {
             console.error('Error uploading file:', error);
         }
     };
 
-    const saveMediaFiles = async (existingRecordId, newMediaFiles) => {
+    const saveMediaFiles = async (recordid, newMediaFiles) => {
         const database = getDatabase(app);
-        let recordId = existingRecordId || Date.now().toString(); // Generate a new record ID if not provided
-        const recordRef = ref(database, `PhotosVideos/${recordId}`);
-
+        const recordRef = ref(database, `PhotosVideos/${recordid}`);
+    
         const mediaData = {
-            id: recordId,
-            uid: localStorage.getItem('userId'),
+            id: recordid,
+            uid: localStorage.getItem('userId'), // or user.uid if available directly
             selectedImages: newMediaFiles.filter((media) => media.type === 'image').map((media) => media.url),
             videosUri: newMediaFiles.filter((media) => media.type === 'video').map((media) => media.url),
         };
-
+    
         try {
             if (mediaData.selectedImages.length === 0 && mediaData.videosUri.length === 0) {
+                // Delete the main record if no media files are left
                 await remove(recordRef);
                 console.log('Main record deleted as no media files are left.');
                 return;
             }
-
+    
             const snapshot = await get(recordRef);
             if (snapshot.exists()) {
+                // Update existing record
                 await update(recordRef, mediaData);
                 console.log('Data updated successfully');
             } else {
+                // Create new record
                 await set(recordRef, mediaData);
-                localStorage.setItem(`recordid_${localStorage.getItem('userId')}`, recordId); // Save the new record ID in localStorage
                 console.log('Data saved successfully');
             }
         } catch (error) {
             console.error(`Error saving data: ${error.message}`);
         }
     };
+    
 
     const handleRemoveImage = (index) => {
         const updatedMediaFiles = mediaFiles.filter((_, i) => i !== index);
         setMediaFiles(updatedMediaFiles);
-        saveMediaFiles(recordid, updatedMediaFiles); // Pass record ID
+        saveMediaFiles(recordid, updatedMediaFiles);
     };
 
     const handleRemoveVideo = () => {
         const updatedMediaFiles = mediaFiles.filter(file => file.type !== 'video');
         setMediaFiles(updatedMediaFiles);
-        saveMediaFiles(recordid, updatedMediaFiles); // Pass record ID
+        saveMediaFiles(recordid, updatedMediaFiles);
     };
+
     return (
         <div className="Editcontainer">
             <div className="edit-Contact" style={{marginTop:"20px"}}>
@@ -213,7 +233,7 @@ function EditContact() {
                     <h2>Upload Photo</h2>
                     <div className="upload-1">
                         <div className="img-btn">
-                            {mediaFiles.filter(file => file.type === 'image').length < 4 ? (
+                            {mediaFiles?.filter(file => file.type === 'image')?.length < 4 ? (
                                 <>
                                     <img style={{ width: "40px", display: "flex", justifyContent: "center", margin: "20px auto" }} src={editcontact} alt="nav-img" />
                                     <input
@@ -226,16 +246,16 @@ function EditContact() {
                                     <button
                                         style={{ display: "flex", justifyContent: "center", margin: "20px auto", alignItems: "center" }}
                                         className='save22'
-                                        onClick={() => document.querySelector('input[type="file"][accept="image/*"]').click()}
+                                        onClick={() => document.querySelector('input[type="file"][accept="image/*"]')?.click()}
                                     >
                                         Upload
                                     </button>
                                 </>
                             ) : (
                                 <div style={{ position: 'relative' }}>
-                                    <img src={mediaFiles.filter(file => file.type === 'image')[3].url} alt="Last uploaded" style={{ width: "100%", height: "140px", objectFit: "cover", borderRadius: "30px" }} />
+                                    <img src={mediaFiles?.filter(file => file?.type === 'image')[3]?.url} alt="Last uploaded" style={{ width: "100%", height: "140px", objectFit: "cover", borderRadius: "30px" }} />
                                     <button
-                                        onClick={() => handleRemoveImage(mediaFiles.findIndex(file => file.type === 'image' && file.url === mediaFiles.filter(file => file.type === 'image')[3].url))}
+                                        onClick={() => handleRemoveImage(mediaFiles.findIndex(file => file?.type === 'image' && file?.url === mediaFiles?.filter(file => file?.type === 'image')[3]?.url))}
                                         style={crossButtonStyle}
                                     >
                                         &times;
@@ -246,7 +266,7 @@ function EditContact() {
                     </div>
                     <div className="grid-container" style={{ maxWidth: '430px', display: 'flex', gap: '10px' }}>
   {mediaFiles
-    .filter((file) => file.type === 'image')
+    .filter((file) => file?.type === 'image')
     .slice(0, 3)
     .map((file, index) => (
       <div
@@ -263,7 +283,7 @@ function EditContact() {
         }}
       >
         <img
-          src={file.url}
+          src={file?.url}
           alt={`Uploaded ${index}`}
           style={{
             width: '100%',
@@ -291,7 +311,7 @@ function EditContact() {
                     <h2>Upload Video</h2>
                     <div className="upload-1">
                         <div className="img-btn">
-                            {mediaFiles.filter(file => file.type === 'video').length === 0 ? (
+                            {mediaFiles?.filter(file => file?.type === 'video')?.length === 0 ? (
                                 <>
                                     <img style={{ width: "40px", display: "flex", justifyContent: "center", margin: "20px auto" }} src={video} alt="nav-img" />
                                     <input
@@ -310,7 +330,7 @@ function EditContact() {
                                 </>
                             ) : (
                                 <div style={{ position: 'relative' }}>
-                                    <video src={mediaFiles.find(file => file.type === 'video').url} controls style={{ width: "100%", height: "140px", borderRadius: "30px" }} />
+                                    <video src={mediaFiles?.find(file => file?.type === 'video')?.url} controls style={{ width: "100%", height: "140px", borderRadius: "30px" }} />
                                     <button
                                         onClick={handleRemoveVideo}
                                         style={crossButtonStyle}
