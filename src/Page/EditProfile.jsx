@@ -229,7 +229,7 @@ function EditProfile() {
       {coverImage ? (
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
           <img
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%',  }}
             src={typeof coverImage === "string" ? coverImage : URL.createObjectURL(coverImage)}
             alt="Uploaded Main Image"
           />

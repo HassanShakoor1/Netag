@@ -4,7 +4,8 @@ import { IoChevronBack } from "react-icons/io5";
 import video from '../images/video.png';
 import { useNavigate } from 'react-router-dom';
 import editcontact from '../images/editcontact.png';
-import { getDatabase, ref, set, update, get, remove, onValue } from 'firebase/database';
+import {database} from '../firebase.jsx'
+import {  ref, set, update, get, remove, onValue } from 'firebase/database';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase'; // Adjust this import according to your Firebase setup
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Import Firebase Auth
@@ -60,7 +61,7 @@ function EditContact() {
             return;
         }
     
-        const database = getDatabase(app);
+    
         const recordRef = ref(database, `PhotosVideos/${recordid}`);
     
         console.log("Database Reference:", recordRef.toString());
