@@ -201,11 +201,11 @@ async function handleDelete(id) {
                                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "20vh" }}>
                                                 <div style={{ display: "flex", alignItems: "center", width: "100%", height: "100%" }}>
                                                     <div>
-                                                        <img onClick={()=>handleProfile_Id(x.id)} style={{ objectFit: "contain", width: "70px", height: "70px", borderRadius: "50px" }} src={x.logoUrl} alt="" />
+                                                        <img onClick={()=>handleProfile_Id(x.id)} style={{ objectFit: "cover", width: "70px", height: "70px", borderRadius: "50px" }} src={x.profilePicture} alt="" />
                                                     </div>
                                                     <div style={{ marginLeft: "10px", }}>
-                                                        <div style={{ fontSize: "16px", fontWeight: "600", color: "#EE0000" }}>Mister Bruden</div>
-                                                        <div style={{ fontSize: "10px", color: "#929292" }}>(Burden)</div>
+                                                        <div style={{ fontSize: "16px", fontWeight: "600", color: "#EE0000" }}>{x.name}</div>
+                                                        <div style={{ fontSize: "10px", color: "#929292" }}>({x.nickname}</div>
                                                     </div>
                                                 </div>
                                                 <div>
@@ -311,3 +311,4 @@ async function handleDelete(id) {
     )
 }
 export default Myprofile
+

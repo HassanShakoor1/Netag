@@ -295,10 +295,10 @@ style={{objectFit:'cover'}}
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '2px auto' }}>
-            <div data-aos="fade-up" style={{ width: "99%" }}>
+      
            
               <Card  />
-            </div>
+            
           </div>
 
           <Photos />

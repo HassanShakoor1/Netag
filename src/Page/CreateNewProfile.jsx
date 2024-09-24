@@ -41,14 +41,16 @@ function CreateNewProfile() {
     const [selected, setSelected] = useState(false)
 
     const [profileImage, setprofileImage] = useState(null)
-    const [DisplayProfileImageUrl,setDisplayProfileImageUrl] = useState("")
+
 const [nickname,setNickname]=useState("")
     const [dpImage, setdpImage] = useState(null)
-    const [DisplayDpImageUrl,setDisplayDpImageUrl] = useState("")
+
     const [cropModal, setCropModal] = useState(false);
     const [currentImage, setCurrentImage] = useState(null);
     const [imageType, setImageType] = useState("");
-  
+    const [DisplayProfileImageUrl, setDisplayProfileImageUrl] = useState(null);
+    const [DisplayDpImageUrl, setDisplayDpImageUrl] = useState(null);
+    
 
 
     const handleclosecropper = () => {
@@ -68,79 +70,54 @@ const [nickname,setNickname]=useState("")
         setCropModal(false); // Close the cropping modal
     };
     
-
-     {/* -----------for displaying dpimage---------------  */} 
-    // function handlefileChangeForProfile(event,type) {
-    //     const file = event.target.files[0]
+    // const handleFileChange = (event, type) => {
+    //     const file = event.target.files[0];
     //     if (file) {
-    //         setprofileImage(file)
-    //          // Create a local URL for immediate display
     //         const reader = new FileReader();
     //         reader.onloadend = () => {
-    //             setDisplayProfileImageUrl(reader.result);
     //             setCurrentImage(reader.result);
     //             setImageType(type);
     //             setCropModal(true);
     //         };
     //         reader.readAsDataURL(file);
     //     }
-    // }
-      {/* -----------for removing dp image ---------------  */}
-    // const removeProfileImage = () => {
-    //     setprofileImage(null)
-    //     setDisplayProfileImageUrl(""); // Clear image URL
     // };
-
-
-
-    {/* -----------for displaying Profile image---------------  */} 
-    // function handlefileChangeForDp(event,type) {
-    //     const file = event.target.files[0]
-    //     if (file) {
-    //         setdpImage(file) 
-    //         const reader = new FileReader();
-    //         reader.onloadend = () => {
-    //             setDisplayDpImageUrl(reader.result);
-    //             setCurrentImage(reader.result);
-    //             setImageType(type);
-    //             setCropModal(true);
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    //     }
- {/* -----------for removing profile image ---------------  */}
-    // function removeDpImage() {
-    //     setdpImage(null)
-    //     setDisplayDpImageUrl("")
-    // }
-
-
-    const handleFileChange = (event, type) => {
-        const file = event.target.files[0];
+  
+    const handleProfileImageUpload = (e,type) => {
+        const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setCurrentImage(reader.result);
-                setImageType(type);
-                setCropModal(true);
+                setCurrentImage(reader.result); // Set the image preview
+                setImageType(type); // Assuming you want to specify this is for the profile
+                setCropModal(true); // Open the crop modal
             };
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(file); // Read file to a data URL
+            
+            // // Set display image URL for immediate feedback (before cropping)
+            // const imageUrl = URL.createObjectURL(file);
+            // setDisplayProfileImageUrl(imageUrl);
         }
     };
-    const removeImage = (type) => {
-        if (type === "profile") {
-            setprofileImage(null);
-            setDisplayProfileImageUrl('');
-        } else {
-            setdpImage(null);
-            setDisplayDpImageUrl('');
+    
+    const handleDpImageUpload = (e,type) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setCurrentImage(reader.result); // Set the image preview
+                setImageType(type); // Assuming you want to specify this is for the DP
+                setCropModal(true); // Open the crop modal
+            };
+            reader.readAsDataURL(file); // Read file to a data URL
+            
+            // // Set display image URL for immediate feedback (before cropping)
+            // const imageUrl = URL.createObjectURL(file);
+            // setDisplayDpImageUrl(imageUrl);
         }
     };
-
-
-
-
-
+    
+ 
     {/*   --------------checking if record is present in firebase for updating*--------------*/ }
   console.log(id)
     useEffect(()=>{
@@ -176,21 +153,21 @@ const [nickname,setNickname]=useState("")
             console.log("id", id);
     
             // Common variables for image URLs
-            let newProfileImageUrl = DisplayProfileImageUrl;
-            let newDisplayDpImageUrl = DisplayDpImageUrl;
+            let newProfileImageUrl = DisplayDpImageUrl;
+            let newDisplayDpImageUrl = DisplayProfileImageUrl;
     
             // Upload profile image if selected
             if (profileImage) {
                 const profileImageRef = storageRef(storage, `profiles/${profileImage.name}`);
                 const uploadResult = await uploadBytes(profileImageRef, profileImage);
-                newProfileImageUrl = await getDownloadURL(uploadResult.ref);
+                newDisplayDpImageUrl = await getDownloadURL(uploadResult.ref);
             }
     
             // Upload cover (dp) image if selected
             if (dpImage) {
                 const coverImageRef = storageRef(storage, `covers/${dpImage.name}`);
                 const uploadResult = await uploadBytes(coverImageRef, dpImage);
-                newDisplayDpImageUrl = await getDownloadURL(uploadResult.ref);
+                newProfileImageUrl = await getDownloadURL(uploadResult.ref);
             }
     
             // If updating an existing profile
@@ -341,7 +318,7 @@ const [nickname,setNickname]=useState("")
 
                                 <button
                                     style={crossButtonStyle}
-                                    onClick={() => removeImage("profile")}
+                                    onClick={ () => setDisplayDpImageUrl(null)}
                                 >
                                     &times;
                                 </button>
@@ -358,7 +335,7 @@ const [nickname,setNickname]=useState("")
                             accept="image/*"
                             style={{ display: 'none' }}
                             id="lady-img-upload"
-                            onChange={(e)=>handleFileChange(e,"profile")}
+                            onChange={(e)=>{handleDpImageUpload(e,'cover')}}
                         />
                         {!DisplayDpImageUrl && (
                             <label 
@@ -389,7 +366,7 @@ const [nickname,setNickname]=useState("")
 
                     <div >
 
-                        <div className='main-img' style={mainImgStyle}>
+                        <div className='main-img' style={mainImgStyle }>
                             {DisplayProfileImageUrl ? (
 
 
@@ -399,13 +376,13 @@ const [nickname,setNickname]=useState("")
                                         objectFit: 'cover',
                                         width: '100%',
                                         height: '-webkit-fill-available',
-
+                                        borderRadius:'25px'
                                     }}   src={ DisplayProfileImageUrl }>
 
                                     </img>
                                     <button
                                         style={crossButtonStyle}
-                                        onClick={() => removeImage("cover")}
+                                        onClick={() => setDisplayProfileImageUrl("")}
                                     >
                                         &times;
                                     </button>
@@ -429,7 +406,7 @@ const [nickname,setNickname]=useState("")
                                 accept="image/*"
                                 style={{ display: 'none' }}
                                 id="main-img-upload"
-                                onChange={(e)=>handleFileChange(e,"cover")}
+                                onChange={(e)=>{handleProfileImageUpload(e,'profile')}}
                             />
                             {!DisplayProfileImageUrl && (
                                 <label
@@ -520,14 +497,16 @@ const imgStyle = {
     alignItems: 'center',
     margin: "2px auto",
     width: "30px",
-    marginTop: '1rem'
+    marginTop: '1rem',
+  
 };
 
 const mainImgStyle = {
     width: "100%",
     height: '300px',
     backgroundColor: "#D9D9D9",
-    marginTop: '3rem'
+    marginTop: '3rem',
+
 };
 
 const saveButtonStyle = {
@@ -536,16 +515,21 @@ const saveButtonStyle = {
     width: "92%"
 };
 const crossButtonStyle = {
-    position: 'absolute',
-    top: '10px',
-    right: '10px',
-    backgroundColor: 'red',
-    color: 'white',
-    border: 'none',
-    borderRadius: '50%',
     width: '20px',
     height: '20px',
-    cursor: 'pointer'
+    borderRadius: '100%',
+    display: 'flex',
+    color:'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: 'none',
+    background: "#FFB9B9",
+    position: 'absolute',
+    top: '5px',
+    right: '9px',
+    cursor: 'pointer',
+    zIndex: 1,
+    fontSize:"20px",
 };
 
 export default CreateNewProfile;

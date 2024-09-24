@@ -309,13 +309,14 @@ function Editproductdetail() {
         >
           <img src={edit} style={{ width: "50px", margin: '0px auto' }} alt="Upload" />
           <input
-            type="file"
-            accept="image/*"
-            multiple
-            style={{ display: 'none' }}
-            id="upload-photos"
-            onChange={handleFileChange}
-          />
+    type="file"
+    accept="image/*"  // Change this to accept all image types
+    multiple
+    style={{ display: 'none' }}
+    id="upload-photos"
+    onChange={handleFileChange}
+/>
+
           <label htmlFor="upload-photos" style={{ cursor: 'pointer', textAlign: 'center', fontSize: '14px', color: '#a0aec0' }}>
             Upload photo
           </label>

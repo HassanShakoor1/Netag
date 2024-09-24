@@ -12,6 +12,9 @@ import linee from '../images/linee.png'
 import scype from '../images/scype.png'
 import paypal from '../images/paypal.png'
 import './Analytics.css';
+import { LineChart } from '@mui/x-charts/LineChart';
+
+
 function Analytics() {
   const userId=localStorage.getItem("userId")
   const [count ,setCount]=useState(0)
@@ -40,7 +43,7 @@ function Analytics() {
   }
   FetchAnalytics()
   }, []);
- 
+ console.log
 
 
 
@@ -125,8 +128,11 @@ function Analytics() {
           </div>
 
 <br />
+
+
+{/* dfsAGHSJKLAS;DKASDHJAK */}
 <div className="chart" style={{width:'97%',borderRadius:"30px",border: " 1px solid rgb(228, 228, 228)",boxShadow:'2px 2px 2px 2px rgb(228, 228, 228) ',margin:"auto"}}>
-<div className="ht-btn" style={{display:'flex',justifyContent:'space-between',margin:'20px'}}>
+<div className="ht-btn" style={{display:'flex',justifyContent:'space-around',margin:'0px',}}>
   <div className="points" style={{marginTop:"20px"}} >
   <p style={{  fontWeight: 'bold' ,margin:'0px',fontSize:'12px'}}>Sales Graph</p>
                  <p style={{fontSize:'8px',color:'grey'}}>Lorem ipsum dolor consectetur</p>
@@ -151,8 +157,55 @@ function Analytics() {
 
 
 </div>
+{link.map((item, index) => (
+  <LineChart
+    key={index}
+    xAxis={[
+      {
+        data: [0, 1, 2, 3, 4], // Numeric values corresponding to the labels
+        valueFormatter: (value) => {
+          // Map numeric values to string labels
+          switch (value) {
+            case 0: return '0';
+            case 1: return 'daily';
+            case 2: return 'weekly';
+            case 3: return 'monthly';
+            case 4: return 'yearly';
+            default: return '';
+          }
+        },
+      },
+    ]}
+    series={[
+      {
+        name: "Pops",
+        data: [
+                0,
+                item.dailyTaps ?? 0, 
+                item.weeklyTaps ?? 0,
+                item.monthlyTaps ?? 0,
+                item.yearlyTaps ?? 0
+                ],
+      },
+      {
+        name: "Clicks",
+        data: [
+          0,
+          item.dailyClicks??0,
+        item.weeklyClicks??0,
+        item.monthlyClicks??0,
+        item.yearlyClicks??0
+        ]
+      },
+     
+    ]}
+    width={400}
+    height={200}
+  />
+))}
 
- <img style={{width:'90%', height:"100px",display:'flex',justifyContent:'center',margin:'auto'}} src={chrtt} alt=" xhart" />
+
+
  <br />
 </div>
 <br />

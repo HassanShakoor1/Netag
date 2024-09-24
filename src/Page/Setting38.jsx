@@ -1,9 +1,11 @@
 import pic from "../images/Ellipse.png"
 import "./setting.css"
-import { useState,useContext } from "react"
+import { useState,useContext,useEffect } from "react"
 import person from "../images/personrounded.svg"
 import lead from "../images/lead.png"
 import member from "../images/membership.png"
+
+import { getDatabase, ref, update,get } from "firebase/database";
 
 import shop from "../images/shop.png"
 import languages from "../images/Languages.png"
@@ -18,13 +20,14 @@ import { useNavigate,Link } from "react-router-dom"
 import {AppContext} from './LanguageContextProvider'
 
 import { useTranslation } from 'react-i18next';
+import { database } from "../firebase"
 function Setting() {
      
     // for translation 
     const { t } = useTranslation()
 
     const{language}=useContext(AppContext)
-
+const [record, setRecord]=useState([])
     console.log(language)
     const [activeTab, setActiveTab] = useState('newOrders'); // State to track the active tab
 
@@ -51,6 +54,48 @@ function Setting() {
         navigate("/home/setting/subscript");
       }
 
+const userId=localStorage.getItem("userId")
+useEffect(() => {
+    const fetch = async () => {
+        try {
+            // Reference to the 'User' node in your Firebase Realtime Database
+            const dataRef = ref(database, `User`);
+            const snap = await get(dataRef);
+            const data = snap.val();
+    
+            if (data) {
+                // Filter and map the data to match the userId
+                let arr = Object.keys(data)
+                    .filter(key => data[key].id === userId) // Check if the id matches the userId
+                    .map(key => ({
+                        id: key,       // Key from the Firebase data
+                        ...data[key]   // Spread operator to get the rest of the data for each user
+                    }));
+                
+                console.log("User data is", arr);
+                setRecord(arr); // Set the filtered data in the state
+            } else {
+                console.log("No data available");
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+    
+    // Call the function
+    fetch();
+    
+}, [])
+
+
+
+
+
+
+
+
+
+
     return (
         <div className="categories-maindiv">
             <div className="categories-width">
@@ -61,15 +106,20 @@ function Setting() {
 
                         <div className="reddiv">
 
-                            <div className="reddiv-flex">
-                                <div >
-                                    <img src={pic} alt="" />
-                                </div>
-                                <div style={{ marginLeft: "10px", color: "white" }}>
-                                    <div style={{ fontSize: "16px", fontWeight: "600" }}>Mister Bruden</div>
-                                    <div style={{ fontSize: "10px", color: "#FFFFFF" }}>(Burden)</div>
-                                </div>
-                            </div>
+                        <div className="reddiv-flex">
+    {record.map((item, index) => (
+        <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
+            <div>
+                <img style={{width:'100px',height:'100px',borderRadius:"100%",objectFit:'cover'}} src={item.profilePicture} alt="" />
+            </div>
+            <div style={{ marginLeft: "10px", color: "white" }}>
+                <div style={{ fontSize: "20px", fontWeight:'100' }}>{item.name}</div>
+                <div style={{ fontSize: "10px", color: "#FFFFFF" }}>({item.nickname})</div>
+            </div>
+        </div>
+    ))}
+</div>
+
 
                             <div style={{ display: 'flex', justifyContent: 'center', cursor: "pointer" }}>
                                 <div style={{ padding: "1px", width: '60%', backgroundColor: '#FFFFFF', borderRadius: '48px', display: 'flex', justifyContent: 'space-between', height: '6vh' }}>

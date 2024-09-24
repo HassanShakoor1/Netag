@@ -18,3 +18,21 @@ margin: 0 auto;
     display: flex;
     justify-content: space-between;
 }
+
+.css-xyaj9i-MuiMarkElement-root {
+
+    stroke: #ff0000 !important;
+ 
+}
+.css-wn5hww-MuiLineElement-root {
+  
+    stroke: #ff0000 !important;
+  
+}
+
+
+.css-xyaj9i-MuiMarkElement-root {
+    fill: #fff;
+    stroke: #02B2AF;
+    stroke-width: 2;
+}
