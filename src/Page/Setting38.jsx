@@ -54,6 +54,13 @@ const [record, setRecord]=useState([])
         navigate("/home/setting/subscript");
       }
 
+
+    {/*--------------------------logout--------------------------*/}  
+    function logout() {
+        localStorage.removeItem("userId")
+        localStorage.removeItem("parentId")
+        navigate('/signup')
+    } 
 const userId=localStorage.getItem("userId")
 useEffect(() => {
     const fetch = async () => {
