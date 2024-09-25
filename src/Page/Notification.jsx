@@ -1,10 +1,11 @@
 import "./notification.css"
-import vector from "../images/vector.png"
+import { IoChevronBack } from "react-icons/io5";
 import { useNavigate } from "react-router-dom"
 import { useState,useEffect } from "react";
 import { ref, get, query, orderByChild, equalTo } from "firebase/database";
 import { database } from '../firebase';  // Ensure correct path
-import { Query, orderBy } from "firebase/firestore";
+import AOS from 'aos';
+import 'aos/dist/aos.css'; 
 function Notification(){
     const navigate = useNavigate();
 
@@ -38,6 +39,10 @@ useEffect(() => {
     }
     
 getData();
+AOS.init({
+    duration: 1000, // Duration of animations in milliseconds
+    once: false, // Whether animation should happen only once
+});
 
 }, [])
 
@@ -57,9 +62,9 @@ getData();
 
                         <div style={{display:'flex',justifyContent:"space-between",alignItems:"center",width:"65%"}}>
                             <div>
-                                <img onClick={goback}src={vector} alt="" style={{cursor:'pointer'}} />
+                                <IoChevronBack onClick={goback}  style={{cursor:'pointer',color:'red',fontSize:"22px",fontWeight:'500'}} />
                             </div>
-                            <div style={{color:"#EE0000",fontWeight:"500"}}>
+                            <div style={{color:"#EE0000",fontWeight:"500",fontSize:"22px"}}>
                             Notifications
                             </div>
                         </div>
@@ -74,7 +79,7 @@ getData();
                         {/* box1 */}
 
                         {data && data.length > 0 && data.map((item) => (
-    <div key={item.id} className="notification-boxwidth">
+    <div data-aos="zoom-in-up" key={item.id} className="notification-boxwidth">
         <div style={{color:"#EE0000",fontWeight:"500"}}>
             {item.title}
         </div>

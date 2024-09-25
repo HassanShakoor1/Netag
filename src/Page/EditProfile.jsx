@@ -27,6 +27,7 @@ function EditProfile() {
   const [status, setStatus] = useState("");
   const [company, setCompany] = useState("");
   const [nickname, setNickname] = useState("");
+  const [name,setName]=useState("")
   const [imageFile, setImageFile] = useState(null);
   const [imageFile1, setImageFile1] = useState(null);
   const [imgurl, setImgurl] = useState("");
@@ -39,8 +40,7 @@ function EditProfile() {
   const [imageType, setImageType] = useState("");
 
   const userId = localStorage.getItem("userId");
-  const parentId = localStorage.getItem("parentId");
-
+ 
   const [crop, setCrop] = useState({
     unit: "%",
     x: 50,
@@ -71,6 +71,7 @@ function EditProfile() {
           console.log("Fetched User Data:", userData);
   
           // Populate state with user data
+          setName(userData.name||"");
           setUsername(userData.username || "");
           setDesignation(userData.designation || "");
           setStatus(userData.materialStatus || "");
@@ -96,69 +97,64 @@ function EditProfile() {
     fetchUserData();
   }, [userId]);
   
-
-
+ 
   const handleSave = async () => {
+    if (!userId) {
+      console.error("No userId found, unable to save data");
+      return;
+    }
+  
     setIsSaving(true);
+  
     try {
-      if (!userId) {
-        console.error("No userId found in localStorage");
-        alert("User ID not found. Please log in again.");
-        return;
+      // Firebase Storage reference
+      const storage = getStorage();
+      let profileImageUrl = profileImage;
+      let coverImageUrl = coverImage;
+  
+      // 1. Upload Profile Image if it's a new file
+      if (profileImage instanceof File) {
+        const profileStorageRef = storageRef(storage, `User/${userId}/profilePicture`);
+        await uploadBytes(profileStorageRef, profileImage);
+        profileImageUrl = await getDownloadURL(profileStorageRef);
       }
   
-      const storage = getStorage(); // Initialize storage
+      // 2. Upload Cover Image if it's a new file
+      if (coverImage instanceof File) {
+        const coverStorageRef = storageRef(storage, `User/${userId}/backgroundPicture`);
+        await uploadBytes(coverStorageRef, coverImage);
+        coverImageUrl = await getDownloadURL(coverStorageRef);
+      }
+  
+      // 3. Prepare data to update
+      const updatedData = {
+        name:name,
+        username: username,
+        designation: designation,
+        materialStatus: status,
+        companyname: company,
+        nickname: nickname,
+        profilePicture: profileImageUrl,  // Set uploaded profile image URL
+        backgroundPicture: coverImageUrl, // Set uploaded cover image URL
+      };
+  
+      // 4. Update user data in Firebase Realtime Database
       const userRef = ref(database, `User/${userId}`);
+      await update(userRef, updatedData);
   
-      // Retrieve existing user data
-      const userSnapshot = await get(userRef);
-      const existingData = userSnapshot.val() || {};
+      console.log("User data successfully updated!");
   
-      let ImageUrl = [...(existingData.profilePicture ? [existingData.profilePicture] : [])];
-      let BackgroundImageUrl = [...(existingData.backgroundPicture ? [existingData.backgroundPicture] : [])];
-  
-      try {
-        // Handle profile image upload
-        if (profileImage) {
-          const imageRef = storageRef(storage, `images/${userId}/cropped-profile-image.jpg`);
-          await uploadBytes(imageRef, profileImage);
-          const url = await getDownloadURL(imageRef);
-          ImageUrl[0] = url;
-        }
-  
-        // Handle cover image upload
-        if (coverImage) {
-          const imageRef1 = storageRef(storage, `images/${userId}/cropped-cover-image.jpg`);
-          await uploadBytes(imageRef1, coverImage);
-          const url1 = await getDownloadURL(imageRef1);
-          BackgroundImageUrl[0] = url1;
-        }
-  
-        // Save or update user data
-        await update(userRef, {
-          username: username || existingData.username,
-          designation: designation || existingData.designation,
-          materialStatus: status || existingData.materialStatus,
-          companyname: company || existingData.companyname,
-          nickname: nickname || existingData.nickname,
-          profilePicture: ImageUrl[0] || existingData.profilePicture,
-          backgroundPicture: BackgroundImageUrl[0] || existingData.backgroundPicture,
-          id: userId
-        });
-  
-        alert("Data saved successfully!");
-        navigate(-1);
-  
-      } catch (error) {
-        console.error("Error uploading images or saving data:", error);
-        alert("Error: " + error.message);
-      }
+      // After successful save, navigate or show success message
+      setIsSaving(false);
+      navigate(-1); // Example: Navigate back to the profile page
     } catch (error) {
-      console.log("An unexpected error occurred:", error);
-    } finally {
+      console.error("Error updating user data:", error);
       setIsSaving(false);
     }
   };
+  
+  
+  
   
   const handleFileChange = (event, type) => {
     const file = event.target.files[0];
@@ -229,11 +225,15 @@ function EditProfile() {
       {coverImage ? (
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
           <img
-            style={{ width: '100%', height: '100%',  }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             src={typeof coverImage === "string" ? coverImage : URL.createObjectURL(coverImage)}
             alt="Uploaded Main Image"
           />
-          <button onClick={() => setCoverImage(null)} style={crossButtonStyle}>&times;</button>
+          <button 
+          onClick={() => setCoverImage(null)} 
+        style={crossButtonStyle}
+          
+          >&times;</button>
         </div>
       ) : (
         <img style={uploadIconStyle} src={editcontact} alt="Upload Icon" />
@@ -257,17 +257,21 @@ function EditProfile() {
 
         <div className="input-data">
           <div className="edit-field">
-            <CustomTextField label="UserName" name="username" size="small" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <CustomTextField label="Designation" name="designation" size="small" value={designation} onChange={(e) => setDesignation(e.target.value)} />
-          </div>
-
-          <div className="edit-field">
-            <CustomTextField label="Material Status" name="status" size="small" value={status} onChange={(e) => setStatus(e.target.value)} />
-            <CustomTextField label="Company" name="company" size="small" value={company} onChange={(e) => setCompany(e.target.value)} />
-          </div>
-
-          <div className="edit-field">
+            <CustomTextField label="name" name="name" size="small" value={name} onChange={(e) => setName(e.target.value)} />
             <CustomTextField label="Nickname" name="nickname" size="small" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+         
+          </div>
+
+          <div className="edit-field">
+          <CustomTextField label="username" name="username" size="small" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <CustomTextField label="designation" name="designation" size="small" value={designation} onChange={(e) => setDesignation(e.target.value)} />
+
+
+          </div>
+
+          <div className="edit-field">
+          <CustomTextField label="status" name="status" size="small" value={status} onChange={(e) => setStatus(e.target.value)} />
+            <CustomTextField label="company" name="company" size="small" value={company} onChange={(e) => setCompany(e.target.value)} />
           </div>
 
           <br /><br /><br /><br />
@@ -329,21 +333,22 @@ const uploadIconStyle = {
 };
 
 const crossButtonStyle = {
+  width: '20px',
+  height: '20px',
+  borderRadius: '100%',
+  display: 'flex',
+  color:'red',
+  justifyContent: 'center',
+  alignItems: 'center',
+  border: 'none',
+  background: "#FFB9B9",
   position: 'absolute',
   top: '5px',
   right: '5px',
-  background: '#FFEEEE',
-  color: 'red',
-  border: 'none',
-  borderRadius: '50%',
-  width: '20px',
-  height: '20px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
   cursor: 'pointer',
-  fontSize:'17px'
-};
+  zIndex: 1,
+  fontSize:"20px",
+}
 
 const uploadLabelStyle = {
   marginTop: "1.1rem",

@@ -9,7 +9,8 @@ import DoneAllIcon from '@mui/icons-material/DoneAll';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ref, get, remove, query, orderByChild, equalTo } from "firebase/database";
 import { database } from '../firebase';
-
+import AOS from 'aos';
+import 'aos/dist/aos.css'; 
 function ProductCatagory() {
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -17,6 +18,8 @@ function ProductCatagory() {
   const [brands, setBrands] = useState([]);
   const [error, setError] = useState(null);
 const {productid}=useParams();
+
+
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
@@ -26,6 +29,11 @@ const {productid}=useParams();
       console.error("User ID not found in localStorage");
       setError("User ID not found in localStorage");
     }
+    
+    AOS.init({
+      duration: 1000, // Duration of animations in milliseconds
+      once: false,
+    })
   }, []); // Empty dependency array ensures it runs only once
   
 
@@ -187,7 +195,7 @@ const fetchBrands = async (userId) => {
         <br />
 
         {brands.map((brand,index) => (
-          <div key={`${brand.id}-${index}`} className="HairoilContainer" style={{ margin: 'inherit' }}>
+          <div data-aos="zoom-in" key={`${brand.id}-${index}`} className="HairoilContainer" style={{ margin: 'inherit' }}>
             <div className="hair-img">
               <img
                 style={{ width: "100%", height: "170px", objectFit: 'cover', borderRadius: "20px" }}

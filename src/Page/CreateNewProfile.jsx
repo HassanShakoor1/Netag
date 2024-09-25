@@ -8,8 +8,7 @@ import '../App.css';
 import nav from '../images/nav.png';
 import { TextField, useForkRef } from '@mui/material';
 import { styled } from '@mui/system';
-
-
+import Cropper from './Cropper'; // Import Cropper component
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useEffect } from 'react';
 import { database as db,storage } from "../firebase.jsx"
@@ -25,6 +24,8 @@ const CustomTextField = styled(TextField)({
 });
 
 function CreateNewProfile() {
+   
+
     const navigate = useNavigate();
 
     const {id}=useParams()
@@ -33,61 +34,90 @@ function CreateNewProfile() {
     const [designation, setdesignation] = useState('')
     const [status, setstatus] = useState('')
     const [company, setcompany] = useState('')
+    const [name, setName] = useState('')
 
    
     const [profileName, setprofileName] = useState('')
     const [selected, setSelected] = useState(false)
 
     const [profileImage, setprofileImage] = useState(null)
-    const [DisplayProfileImageUrl,setDisplayProfileImageUrl] = useState("")
 
+const [nickname,setNickname]=useState("")
     const [dpImage, setdpImage] = useState(null)
-    const [DisplayDpImageUrl,setDisplayDpImageUrl] = useState("")
- 
+
+    const [cropModal, setCropModal] = useState(false);
+    const [currentImage, setCurrentImage] = useState(null);
+    const [imageType, setImageType] = useState("");
+    const [DisplayProfileImageUrl, setDisplayProfileImageUrl] = useState(null);
+    const [DisplayDpImageUrl, setDisplayDpImageUrl] = useState(null);
+    
 
 
-
-
-
-     {/* -----------for displaying dpimage---------------  */} 
-    function handlefileChangeForProfile(event) {
-        const file = event.target.files[0]
-        if (file) {
-            setprofileImage(file)
-             // Create a local URL for immediate display
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setDisplayProfileImageUrl(reader.result);
-            };
-            reader.readAsDataURL(file);
+    const handleclosecropper = () => {
+        setCropModal(false);
+      }
+      const handleCropImage = (croppedImageBlob) => {
+        const file = new File([croppedImageBlob], imageType === "profile" ? "cropped-profile-image.jpg" : "cropped-cover-image.jpg", { type: croppedImageBlob.type });
+    
+        if (imageType === "profile") {
+            setprofileImage(file); // This will be used for uploading
+            setDisplayProfileImageUrl(URL.createObjectURL(file)); // Show the cropped image
+        } else if (imageType === "cover") {
+            setdpImage(file); // This will be used for uploading
+            setDisplayDpImageUrl(URL.createObjectURL(file)); // Show the cropped image
         }
-    }
-      {/* -----------for removing dp image ---------------  */}
-    const removeProfileImage = () => {
-        setprofileImage(null)
-        setDisplayProfileImageUrl(""); // Clear image URL
+    
+        setCropModal(false); // Close the cropping modal
     };
-
-
-
-    {/* -----------for displaying Profile image---------------  */} 
-    function handlefileChangeForDp(event) {
-        const file = event.target.files[0]
+    
+    // const handleFileChange = (event, type) => {
+    //     const file = event.target.files[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onloadend = () => {
+    //             setCurrentImage(reader.result);
+    //             setImageType(type);
+    //             setCropModal(true);
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // };
+  
+    const handleProfileImageUpload = (e,type) => {
+        const file = e.target.files[0];
         if (file) {
-            setdpImage(file) 
             const reader = new FileReader();
             reader.onloadend = () => {
-                setDisplayDpImageUrl(reader.result);
+                setCurrentImage(reader.result); // Set the image preview
+                setImageType(type); // Assuming you want to specify this is for the profile
+                setCropModal(true); // Open the crop modal
             };
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(file); // Read file to a data URL
+            
+            // // Set display image URL for immediate feedback (before cropping)
+            // const imageUrl = URL.createObjectURL(file);
+            // setDisplayProfileImageUrl(imageUrl);
         }
+    };
+    
+    const handleDpImageUpload = (e,type) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setCurrentImage(reader.result); // Set the image preview
+                setImageType(type); // Assuming you want to specify this is for the DP
+                setCropModal(true); // Open the crop modal
+            };
+            reader.readAsDataURL(file); // Read file to a data URL
+            
+            // // Set display image URL for immediate feedback (before cropping)
+            // const imageUrl = URL.createObjectURL(file);
+            // setDisplayDpImageUrl(imageUrl);
         }
- {/* -----------for removing profile image ---------------  */}
-    function removeDpImage() {
-        setdpImage(null)
-        setDisplayDpImageUrl("")
-    }
-
+    };
+    
+ 
     {/*   --------------checking if record is present in firebase for updating*--------------*/ }
   console.log(id)
     useEffect(()=>{
@@ -104,8 +134,10 @@ function CreateNewProfile() {
         setstatus(data.materialStatus)
         setcompany(data.companyname)
         setprofileName(data.profileUrl)
-        setDisplayProfileImageUrl(data.profileImageUrl)
-        setDisplayDpImageUrl(data.logoUrl)
+        setNickname(data.nickname)
+        setDisplayProfileImageUrl(data.backgroundPicture)
+        setDisplayDpImageUrl(data.profilePicture)
+        setName(data.name)
 
         }
         checkForUpdate()
@@ -114,143 +146,55 @@ function CreateNewProfile() {
 
     {/*   --------------saving data to firebase if not already present in firebase otherwise updating-------------- */ }
     const handleSave = async () => {
-
-        // if (!profileImage || !dpImage || !username) {
-        //     alert("please select every field ")
-        //     return
-        // }
-
+        // Validation to ensure all required fields are present
+       
+    
         try {
-            console.log("id", id)
-            if(id){
-                const dataRef=sRef(db,`User/${id}`)
-                let newProfileImageUrl=DisplayProfileImageUrl
-                let newDisplayDpImageUrl=DisplayDpImageUrl
-                 
-                if(profileImage)
-                {
-                     
-                    const storageref = storageRef(storage, `${profileImage.name}`)
-                    const uploadResult = await uploadBytes(storageref, profileImage);
-                    newProfileImageUrl = await getDownloadURL(uploadResult.ref);
-                }
-
-                if(dpImage)
-                {
-                    const storageref = storageRef(storage, `${dpImage.name}`)
-                    const uploadResult = await uploadBytes(storageref, dpImage);
-                    newDisplayDpImageUrl = await getDownloadURL(uploadResult.ref);
-                }
-
-                await update(dataRef,{
-                    profileImageUrl:newDisplayDpImageUrl,
-                    logoUrl:newProfileImageUrl,
-                    profileUrl:profileName,
-                    profileOn:selected,
+            console.log("id", id);
     
-                        id: id,
-                        
-                        username: username,
-                        userName1: "",
-                        backgroundPicture: newDisplayDpImageUrl,
-                        profilePicture:newProfileImageUrl ,
-                        designation: designation,
-                        materialStatus: status,
-                        companyname: company,
-                        language: "",
-                
-                
-                        address: "",
-                        bgButtonColor: "",
-                        bgColor: "",
-                        bgTextColor: "",
-                        bio: "",
-                       
-                        createdOn: "",
-                        currentuser: "",
-                        deleted: "",
-                        
-                        directMode: "",
-                        dob: "",
-                        email: "",
-                        enterpriseMonthlyAllowed: "",
-                        enterpriseMonthlyRequested: "",
-                        enterpriseYearlyAllowed: "",
-                        enterpriseYearlyRequested: "",
-                        fcmToken: "",
-                        gender: "",
-                       
-                        ismain: "",
-                       
-                        
-                      
-                        
-                        parentID: localStorage.getItem('parentId'),
-                        phone: "",
-                        platorform: "",
-                        proVersion: "",
-                        proVersionExpiryDate: "",
-                        proVersionPurchaseDate: "",
-                        
-                        
-                        reqByMe: "",
-                        reqByOther: "",
-                        subscribed: "",
-                        subscription: "",
-                })
-
+            // Common variables for image URLs
+            let newProfileImageUrl = DisplayDpImageUrl;
+            let newDisplayDpImageUrl = DisplayProfileImageUrl;
+    
+            // Upload profile image if selected
+            if (profileImage) {
+                const profileImageRef = storageRef(storage, `profiles/${profileImage.name}`);
+                const uploadResult = await uploadBytes(profileImageRef, profileImage);
+                newDisplayDpImageUrl = await getDownloadURL(uploadResult.ref);
             }
-            else{
-            const storageref = storageRef(storage, `${profileImage.name}`)
-            const storagerefDp = storageRef(storage, `${dpImage.name}`)
-
-            // upload to storage 
-            const profile_image=await uploadBytes(storageref,profileImage)
-            const dp_image=await uploadBytes(storagerefDp,dpImage)
-
-            // get download url 
-            const profile_image_url=await getDownloadURL(profile_image.ref)
-            const dp_image_url=await getDownloadURL(dp_image.ref)
     
-            // refernce of new profile to Users table
-            const newprofile=sRef(db,"User")
-            const key_newprofile=push(newprofile)
-            const key=key_newprofile.key
-
-            const newprofile_data={
-                // profileId:key,
-                // parentId:localStorage.getItem('userId'),
-                // userName:username,
-                // Designation:designation,
-                // martialStatus:status,
-                // Company:company,
-                profileImageUrl:profile_image_url,
-                logoUrl:dp_image_url,
-                profileUrl:profileName,
-                profileOn:selected,
-
-                    id: key,
-                    
+            // Upload cover (dp) image if selected
+            if (dpImage) {
+                const coverImageRef = storageRef(storage, `covers/${dpImage.name}`);
+                const uploadResult = await uploadBytes(coverImageRef, dpImage);
+                newProfileImageUrl = await getDownloadURL(uploadResult.ref);
+            }
+    
+            // If updating an existing profile
+            if (id) {
+                const dataRef = sRef(db, `User/${id}`);
+                await update(dataRef, {
+                    profileUrl: name,
+                    profileOn: selected,
+                    id: id,
                     username: username,
                     userName1: "",
-                    backgroundPicture:profile_image_url ,
-                    profilePicuture: dp_image_url,
+                    backgroundPicture: newDisplayDpImageUrl,
+                    profilePicture: newProfileImageUrl,
                     designation: designation,
                     materialStatus: status,
                     companyname: company,
                     language: "",
-            
-            
+                    nickname: nickname,
+                    name: name,
                     address: "",
                     bgButtonColor: "",
                     bgColor: "",
                     bgTextColor: "",
                     bio: "",
-                   
                     createdOn: "",
                     currentuser: "",
                     deleted: "",
-                    
                     directMode: "",
                     dob: "",
                     email: "",
@@ -260,38 +204,77 @@ function CreateNewProfile() {
                     enterpriseYearlyRequested: "",
                     fcmToken: "",
                     gender: "",
-                   
                     ismain: "",
-                   
-                    
-                  
-                    
-                    parentID: localStorage.getItem('parentId'),
+                    parentID: localStorage.getItem('parentId'), // Ensure parentId is set
                     phone: "",
                     platorform: "",
                     proVersion: "",
                     proVersionExpiryDate: "",
                     proVersionPurchaseDate: "",
-                    
-                    
                     reqByMe: "",
                     reqByOther: "",
                     subscribed: "",
-                    subscription: "",
-           }
-            
-            // setting data to firebase 
-            await set(key_newprofile,newprofile_data)
-            alert("profile create successfully")
-        }
-
+                    subscription: ""
+                });
+                alert("Profile updated successfully");
+            } 
+            // If creating a new profile
+            else {
+                const newProfileRef = sRef(db, "User");
+                const newProfileKey = push(newProfileRef).key;
+    
+                const newProfileData = {
+                    id: newProfileKey,
+                    profileUrl: name,
+                    profileOn: selected,
+                    username: username,
+                    userName1: "",
+                    backgroundPicture: newDisplayDpImageUrl,
+                    profilePicture: newProfileImageUrl,
+                    designation: designation,
+                    materialStatus: status,
+                    companyname: company,
+                    language: "",
+                    nickname: nickname,
+                    name: name,
+                    address: "",
+                    bgButtonColor: "",
+                    bgColor: "",
+                    bgTextColor: "",
+                    bio: "",
+                    createdOn: "",
+                    currentuser: "",
+                    deleted: "",
+                    directMode: "",
+                    dob: "",
+                    email: "",
+                    enterpriseMonthlyAllowed: "",
+                    enterpriseMonthlyRequested: "",
+                    enterpriseYearlyAllowed: "",
+                    enterpriseYearlyRequested: "",
+                    fcmToken: "",
+                    gender: "",
+                    ismain: "",
+                    parentID: localStorage.getItem('parentId'), // Ensure parentId is set
+                    phone: "",
+                    platorform: "",
+                    proVersion: "",
+                    proVersionExpiryDate: "",
+                    proVersionPurchaseDate: "",
+                    reqByMe: "",
+                    reqByOther: "",
+                    subscribed: "",
+                    subscription: ""
+                };
+    
+                await set(sRef(db, `User/${newProfileKey}`), newProfileData);
+                alert("Profile created successfully");
+            }
         } catch (error) {
-
-            console.log("error for creating new profile",error)
+            console.log("Error creating or updating profile", error);
         }
-
-
-    }
+    };
+    
 
 
 
@@ -318,24 +301,24 @@ function CreateNewProfile() {
 
                 <div className="rel-div" style={{ flexDirection: "column" }}>
                     <div className='lady' style={ladyStyle}>
-                        {DisplayProfileImageUrl ? (
+                        {DisplayDpImageUrl ? (
 
 
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: "center", width: '100%', objectFit: 'cover' }} >
 
                                 <img style={
-                                    { width: '100px', height: '100px', borderRadius: "100%", objectFit: 'cover' }
+                                    { width: '120px', height: '120px', borderRadius: "100%", objectFit: 'cover' }
                                 }
                                     className="main-img"
 
-                                    src={DisplayProfileImageUrl}
+                                    src={ DisplayDpImageUrl}
                                     alt="Uploaded Lady Image"
                                 />
 
 
                                 <button
                                     style={crossButtonStyle}
-                                    onClick={() => removeProfileImage()}
+                                    onClick={ () => setDisplayDpImageUrl(null)}
                                 >
                                     &times;
                                 </button>
@@ -352,10 +335,10 @@ function CreateNewProfile() {
                             accept="image/*"
                             style={{ display: 'none' }}
                             id="lady-img-upload"
-                            onChange={handlefileChangeForProfile}
+                            onChange={(e)=>{handleDpImageUpload(e,'cover')}}
                         />
-                        {!DisplayProfileImageUrl && (
-                            <label
+                        {!DisplayDpImageUrl && (
+                            <label 
                                 htmlFor="lady-img-upload"
                                 style={{
                                     display: 'flex',
@@ -383,8 +366,8 @@ function CreateNewProfile() {
 
                     <div >
 
-                        <div className='main-img' style={mainImgStyle}>
-                            {DisplayDpImageUrl ? (
+                        <div className='main-img' style={mainImgStyle }>
+                            {DisplayProfileImageUrl ? (
 
 
                                 <div style={{ width: '100%', height: '-webkit-fill-available', }}>
@@ -393,11 +376,13 @@ function CreateNewProfile() {
                                         objectFit: 'cover',
                                         width: '100%',
                                         height: '-webkit-fill-available',
+                                        borderRadius:'25px'
+                                    }}   src={ DisplayProfileImageUrl }>
 
-                                    }} src={DisplayDpImageUrl} alt="Uploaded Main Image" />
+                                    </img>
                                     <button
                                         style={crossButtonStyle}
-                                        onClick={() => removeDpImage()}
+                                        onClick={() => setDisplayProfileImageUrl("")}
                                     >
                                         &times;
                                     </button>
@@ -421,9 +406,9 @@ function CreateNewProfile() {
                                 accept="image/*"
                                 style={{ display: 'none' }}
                                 id="main-img-upload"
-                                onChange={handlefileChangeForDp}
+                                onChange={(e)=>{handleProfileImageUpload(e,'profile')}}
                             />
-                            {!DisplayDpImageUrl && (
+                            {!DisplayProfileImageUrl && (
                                 <label
                                     htmlFor="main-img-upload"
                                     style={{
@@ -455,51 +440,25 @@ function CreateNewProfile() {
 
                 <br /><br /><br />
 
+              
                 <div className="input-data">
-                    <div className="edit-field">
-                        <CustomTextField
-                            label="UserName"
-                            name="username"
-                            value={username}
-                            onChange={(e) => setusername(e.target.value)}
-                            size="small"
-                        />
+          <div className="edit-field">
+            <CustomTextField label="name" name="name" size="small" value={name} onChange={(e) => setName(e.target.value)} />
+            <CustomTextField label="Nickname" name="nickname" size="small" value={nickname} onChange={(e) => setNickname(e.target.value)} />
+         
+          </div>
 
-                        <CustomTextField
-                            label="Designation"
-                            name="designation"
-                            value={designation}
-                            onChange={(e) => setdesignation(e.target.value)}
-                            size="small"
-                        />
-                    </div>
+          <div className="edit-field">
+          <CustomTextField label="username" name="username" size="small" value={username} onChange={(e) => setusername(e.target.value)} />
+            <CustomTextField label="designation" name="designation" size="small" value={designation} onChange={(e) => setdesignation(e.target.value)} />
 
-                    <div className="edit-field">
-                        <CustomTextField
-                            label="Material Status"
-                            name="status"
-                            value={status}
-                            onChange={(e) => setstatus(e.target.value)}
-                            size="small"
-                        />
 
-                        <CustomTextField
-                            label="Company"
-                            name="company"
-                            value={company}
-                            onChange={(e) => setcompany(e.target.value)}
-                            size="small"
-                        />
-                    </div>
-                    <div className="edit-field">
-                        <CustomTextField
-                            label="ProfileName"
-                            name="nickname"
-                            value={profileName}
-                            onChange={(e) => setprofileName(e.target.value)}
-                            size="small"
-                        />
-                    </div>
+          </div>
+
+          <div className="edit-field">
+          <CustomTextField label="status" name="status" size="small" value={status} onChange={(e) => setstatus(e.target.value)} />
+            <CustomTextField label="company" name="company" size="small" value={company} onChange={(e) => setcompany(e.target.value)} />
+          </div>
 
                     <br /><br /><br /><br />
                     <div className="btn-s">
@@ -513,7 +472,16 @@ function CreateNewProfile() {
                     </div>
                 </div>
             </div>
+            {cropModal && (
+            <Cropper
+              image={currentImage}
+              onClose={handleclosecropper}
+              onCrop={handleCropImage}
+            />
+         )}
         </div>
+      
+    
     );
 }
 
@@ -529,14 +497,16 @@ const imgStyle = {
     alignItems: 'center',
     margin: "2px auto",
     width: "30px",
-    marginTop: '1rem'
+    marginTop: '1rem',
+  
 };
 
 const mainImgStyle = {
     width: "100%",
     height: '300px',
     backgroundColor: "#D9D9D9",
-    marginTop: '3rem'
+    marginTop: '3rem',
+
 };
 
 const saveButtonStyle = {
@@ -545,16 +515,21 @@ const saveButtonStyle = {
     width: "92%"
 };
 const crossButtonStyle = {
-    position: 'absolute',
-    top: '10px',
-    right: '10px',
-    backgroundColor: 'red',
-    color: 'white',
-    border: 'none',
-    borderRadius: '50%',
     width: '20px',
     height: '20px',
-    cursor: 'pointer'
+    borderRadius: '100%',
+    display: 'flex',
+    color:'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: 'none',
+    background: "#FFB9B9",
+    position: 'absolute',
+    top: '5px',
+    right: '9px',
+    cursor: 'pointer',
+    zIndex: 1,
+    fontSize:"20px",
 };
 
 export default CreateNewProfile;

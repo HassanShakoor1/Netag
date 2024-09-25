@@ -12,6 +12,8 @@ import linee from '../images/linee.png'
 import scype from '../images/scype.png'
 import paypal from '../images/paypal.png'
 import './Analytics.css';
+import { LineChart } from '@mui/x-charts/LineChart';
+
 function Analytics() {
   const userId=localStorage.getItem("userId")
   const [count ,setCount]=useState(0)
@@ -40,7 +42,7 @@ function Analytics() {
   }
   FetchAnalytics()
   }, []);
- 
+ console.log
 
 
 
@@ -125,34 +127,112 @@ function Analytics() {
           </div>
 
 <br />
+
+
+{/* Chart */}
 <div className="chart" style={{width:'97%',borderRadius:"30px",border: " 1px solid rgb(228, 228, 228)",boxShadow:'2px 2px 2px 2px rgb(228, 228, 228) ',margin:"auto"}}>
-<div className="ht-btn" style={{display:'flex',justifyContent:'space-between',margin:'20px'}}>
+<div className="ht-btn" style={{display:'flex',margin:'20px',}}>
   <div className="points" style={{marginTop:"20px"}} >
-  <p style={{  fontWeight: 'bold' ,margin:'0px',fontSize:'12px'}}>Sales Graph</p>
-                 <p style={{fontSize:'8px',color:'grey'}}>Lorem ipsum dolor consectetur</p>
+  <p style={{  fontWeight: 'bold' ,margin:'0px',fontSize:'15px'}}>Sales Graph</p>
+                 <p style={{fontSize:'12px',color:'grey',lineHeight:'0px'}}>Lorem ipsum dolor consectetur</p>
   </div>
-
-  <input 
-  type="date" 
-  className='save' 
-  style={{
-    backgroundColor: '#FFE5E5',
-    color: '#E93428',
-    marginTop: '20px',
-    width: '25%',
-    height: '30px',
-    fontSize: '10px',
-    border: 'none',
-    borderRadius: '4px',
-    padding: '0 10px',
-    appearance: 'none' // To remove default styling in most browsers
-  }}
-/>
-
-
 </div>
 
- <img style={{width:'90%', height:"100px",display:'flex',justifyContent:'center',margin:'auto'}} src={chrtt} alt=" xhart" />
+<div style={{paddingLeft:"20px",width:'50%'}}>
+<div>
+  
+</div>
+<div style={{ display: 'grid', gridTemplateColumns: 'auto auto', alignItems: 'center', gap: '20px' }}>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+    <div style={{ width: '10px', height: '10px', borderRadius: '100%', background: 'red',border:'2px solid #d7baba' }}></div>
+    <h1 style={{ fontSize: '12px' }}>= Taps</h1>
+  </div>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+    <div style={{ width: '10px', height: '10px', borderRadius: '100%', background: 'blue',border:'2px solid #d7baba'  }}></div>
+    <h1 style={{ fontSize: '12px' }}>= Clicks</h1>
+  </div>
+</div>
+
+ 
+
+ 
+  </div>
+
+
+  {link.map((item, index) => (
+  <LineChart 
+  style={{display:'flex',justifyContent:'center',alignItems:'center'}}
+    key={index}
+    xAxis={[
+      {
+        data: [0, 1, 2, 3, 4], // Numeric values corresponding to the labels
+        valueFormatter: (value) => {
+          switch (value) {
+            case 0: return '0';
+            case 1: return 'daily';
+            case 2: return 'weekly';
+            case 3: return 'monthly';
+            case 4: return 'yearly';
+            default: return '';
+          }
+        },
+      },
+    ]}
+    series={[
+      {
+    name: "Clicks",
+    data: [
+        0,
+        item.dailyClicks ?? 0,
+        item.weeklyClicks ?? 0,
+        item.monthlyClicks ?? 0,
+        item.yearlyClicks ?? 0
+    ],
+    area: true,
+    color: 'blue',
+    strokeWidth: 0,
+    lineStyle: 'none',
+    zIndex: 1  // Lower z-index to be drawn behind "Pops"
+},
+{
+    name: "Pops",
+    data: [
+        0,
+        item.dailyTaps ?? 0,
+        item.weeklyTaps ?? 0,
+        item.monthlyTaps ?? 0,
+        item.yearlyTaps ?? 0
+    ],
+    area: true,
+    color: 'red',
+    strokeWidth: 0,
+    lineStyle: 'none',
+    zIndex: 2  // Higher z-index to be drawn on top of "Clicks"
+}
+
+    ]}
+    width={380}
+    height={200}
+    options={{
+      stroke: {
+        show: false,    // Turn off stroke globally if your charting library allows it
+        curve: 'smooth' // Optionally smooth the line, or remove it entirely
+      }
+    }}
+  />
+))}
+
+
+
+
+
+
+
+
+
+
+
+
  <br />
 </div>
 <br />
