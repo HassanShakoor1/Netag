@@ -31,8 +31,29 @@ margin: 0 auto;
 }
 
 
-.css-xyaj9i-MuiMarkElement-root {
-    fill: #fff;
-    stroke: #02B2AF;
+
+
+.css-ltrqdd-MuiMarkElement-root {
+    fill: #ff0000 !important;
+    stroke: red !important;
     stroke-width: 2;
+    -webkit-transition: opacity 0.2s ease-in, fill 0.2s ease-in;
+    transition: opacity 0.1s ease-in, fill 0.2s ease-in !important;
+    opacity: 0.3 !important;
+}
+
+.css-12emmik-MuiAreaElement-root {
+    stroke: none;
+    fill: #0022ff !important;
+    -webkit-transition: opacity 0.2s ease-in, fill 0.2s ease-in;
+    transition: opacity 0.1s ease-in, fill 0.2s ease-in !important;
+    opacity: 0.3 !important;
+}
+
+.css-3tu4it-MuiAreaElement-root {
+    stroke: none;
+    fill: #ff0000;
+    -webkit-transition: opacity 0.2s ease-in, fill 0.2s ease-in;
+    transition: opacity 0.2s ease-in, fill 0.2s ease-in;
+    opacity: 0.3 !important;
 }

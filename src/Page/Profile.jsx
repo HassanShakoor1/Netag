@@ -53,47 +53,102 @@ function Profile() {
 
 
 
-  const handleImageClick = (baseUrl, linkName) => {
-    if (!baseUrl || !linkName) {
-      console.error('Invalid input:', baseUrl, linkName);
-      return;
-    }
-  
-    // Trim whitespace
-    const cleanedBaseUrl = baseUrl.trim();
-    
-    // Check if the baseUrl is a phone number
-    const isPhoneNumber = /^\+?\d+$/.test(cleanedBaseUrl);
-  
-    // Convert linkName to lowercase for comparison
-    const lowerLinkName = linkName.toLowerCase();
-  
-    if (lowerLinkName === 'whatsapp') {
-      // Handle WhatsApp number
-      if (isPhoneNumber) {
-        const formattedWhatsAppUrl = `https://wa.me/${cleanedBaseUrl}`;
-        window.open(formattedWhatsAppUrl, '_blank');
-      } else {
-        console.error('Invalid phone number for WhatsApp:', cleanedBaseUrl);
-      }
-    } else if (lowerLinkName === 'call') {
-      // Handle phone number
-      if (isPhoneNumber) {
-        window.location.href = `tel:${cleanedBaseUrl}`;
-      } else {
-        console.error('Invalid phone number for call:', cleanedBaseUrl);
-      }
-    } else if (cleanedBaseUrl.includes('@')) {
-      // Handle email address
-      const mailtoLink = cleanedBaseUrl.startsWith('mailto:') ? cleanedBaseUrl : `mailto:${cleanedBaseUrl}`;
-      window.location.href = mailtoLink; // Opens the default mail client
-    } else if (/^https?:\/\//i.test(cleanedBaseUrl)) {
-      // Handle web URLs
-      window.open(cleanedBaseUrl, '_blank');
+
+ 
+const handleImageClick = (baseUrl, linkName) => {
+  if (!baseUrl || !linkName) {
+    console.error('Invalid input:', baseUrl, linkName);
+    return;
+  }
+
+  // Trim whitespace and remove spaces, dashes, or parentheses for phone numbers
+  const cleanedBaseUrl = baseUrl.trim();
+  const normalizedPhoneNumber = cleanedBaseUrl.replace(/[()\s-]/g, '');
+
+  // Convert linkName to lowercase for comparison
+  const lowerLinkName = linkName.toLowerCase();
+
+  // Check if the cleanedBaseUrl is a phone number (digits only with optional +)
+  const isPhoneNumber = /^\+?\d+$/.test(normalizedPhoneNumber);
+
+  if (lowerLinkName === 'whatsapp') {
+    if (isPhoneNumber) {
+      const formattedWhatsAppUrl = `https://wa.me/${normalizedPhoneNumber}`;
+      window.open(formattedWhatsAppUrl, '_blank');
     } else {
-      console.error('Invalid input:', cleanedBaseUrl);
+      console.error('Invalid phone number for WhatsApp:', cleanedBaseUrl);
     }
-  };
+  } else if (lowerLinkName === 'facebook' || cleanedBaseUrl.includes('facebook.com')) {
+    // Handle Facebook link
+    const formattedFacebookUrl = cleanedBaseUrl.startsWith('https://') 
+      ? cleanedBaseUrl 
+      : `https://www.facebook.com/${cleanedBaseUrl.replace('@', '')}`;
+    window.open(formattedFacebookUrl, '_blank');
+  } else if (lowerLinkName === 'telegram') {
+    if (isPhoneNumber) {
+      const formattedTelegramUrl = `https://t.me/${normalizedPhoneNumber}`;
+      window.open(formattedTelegramUrl, '_blank');
+    } else {
+      console.error('Invalid phone number for Telegram:', cleanedBaseUrl);
+    }
+  } else if (lowerLinkName === 'call') {
+    if (isPhoneNumber) {
+      window.location.href = `tel:${normalizedPhoneNumber}`;
+    } else {
+      console.error('Invalid phone number for call:', cleanedBaseUrl);
+    }
+  } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanedBaseUrl)) {
+    const mailtoLink = cleanedBaseUrl.startsWith('mailto:') ? cleanedBaseUrl : `mailto:${cleanedBaseUrl}`;
+    window.location.href = mailtoLink;
+  } else if (/^https?:\/\//i.test(cleanedBaseUrl) || /^www\./i.test(cleanedBaseUrl)) {
+    const formattedUrl = cleanedBaseUrl.startsWith('http') ? cleanedBaseUrl : `https://${cleanedBaseUrl}`;
+    window.open(formattedUrl, '_blank');
+  } else if (lowerLinkName === 'snapchat' || cleanedBaseUrl.includes('snapchat.com')) {
+    const formattedSnapchatUrl = `https://www.snapchat.com/add/${cleanedBaseUrl}`;
+    window.open(formattedSnapchatUrl, '_blank');
+  } else if (lowerLinkName === 'tiktok' || cleanedBaseUrl.includes('tiktok.com')) {
+    const formattedTikTokUrl = cleanedBaseUrl.startsWith('https://') 
+      ? cleanedBaseUrl 
+      : `https://www.tiktok.com/@${cleanedBaseUrl.replace('@', '')}`;
+    window.open(formattedTikTokUrl, '_blank');
+  } else if (lowerLinkName === 'instagram' || cleanedBaseUrl.includes('instagram.com')) {
+    const formattedInstagramUrl = cleanedBaseUrl.startsWith('https://') 
+      ? cleanedBaseUrl 
+      : `https://www.instagram.com/${cleanedBaseUrl.replace('@', '')}/`;
+    window.open(formattedInstagramUrl, '_blank');
+  } else if (lowerLinkName === 'x' || cleanedBaseUrl.includes('x.com')) {
+    const formattedTwitterUrl = cleanedBaseUrl.startsWith('https://') 
+      ? cleanedBaseUrl 
+      : `https://x.com/${cleanedBaseUrl.replace('@', '')}`;
+    window.open(formattedTwitterUrl, '_blank');
+  } else if (lowerLinkName === 'reddit' || cleanedBaseUrl.startsWith('u/')) {
+    const formattedRedditUrl = `https://www.reddit.com/user/${cleanedBaseUrl.replace('u/', '')}`;
+    window.open(formattedRedditUrl, '_blank');
+  } else if (lowerLinkName === 'pinterest' || cleanedBaseUrl.includes('pinterest.com')) {
+    const formattedPinterestUrl = cleanedBaseUrl.startsWith('https://') 
+      ? cleanedBaseUrl 
+      : `https://www.pinterest.com/${cleanedBaseUrl.replace('@', '')}/`;
+    window.open(formattedPinterestUrl, '_blank');
+  } else if (lowerLinkName === 'youtube' || cleanedBaseUrl.includes('youtube.com')) {
+    const formattedYouTubeUrl = cleanedBaseUrl.startsWith('https://') 
+      ? cleanedBaseUrl 
+      : `https://www.youtube.com/${cleanedBaseUrl.startsWith('channel') ? cleanedBaseUrl : `user/${cleanedBaseUrl}`}`;
+    window.open(formattedYouTubeUrl, '_blank');
+  } else {
+    console.error('Invalid input:', cleanedBaseUrl);
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
   
   
   
@@ -390,7 +445,7 @@ style={{objectFit:'cover'}}
 {links.map((link, index) => (
   <div key={index} style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', gap: '10px',cursor:"pointer" }}>
   <img 
-  onClick={() => handleImageClick(link?.basl, link?.name)} 
+  onClick={() => handleImageClick(link?.baseUrl, link?.name)} 
   src={link?.image || 'path/to/default/image.png'} 
   alt={link?.name || 'Link'} 
   style={{ width: '50px', height: '50px' }} 
