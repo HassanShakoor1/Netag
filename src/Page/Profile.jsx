@@ -37,6 +37,7 @@ import instas from '../images/instagram.png';
 import paypal from '../images/paypal.png';
 import telegram from '../images/telegram.png';
 import linkedin from '../images/linkedin.png';
+import Links from './Links';
 
 
 function Profile() {
@@ -406,7 +407,6 @@ style={{objectFit:'cover'}}
 
           <Photos />
           {/* <Contact /> */}
-
 
 
           <div className="ip-btn" data-aos="zoom-in" style={{ width: '100%' }}>

@@ -67,7 +67,7 @@ body{
 .main-img{
 
   width: 100%;
-  max-height: 200px;
+  height: 200px;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
