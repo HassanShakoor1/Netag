@@ -184,7 +184,7 @@ const fetchBrands = async (userId) => {
     <div className="productContainer">
       <div className="Product-design">
         <div className="bck-head-btn">
-          <IoChevronBack onClick={handleBackscreen} className="bck" style={{ paddingTop: "1.5rem", paddingRight: "2rem" }} />
+          <IoChevronBack onClick={handleBackscreen} className="bck" style={{ paddingTop: "1.5rem" }} />
           <h4 style={{ color: "red", fontSize: '20px', fontWeight: '100' }}>Product Category</h4>
           <button onClick={handleAddClick} style={{ marginTop: '1.5rem' }} className='add-btn'>Add</button>
         </div>
