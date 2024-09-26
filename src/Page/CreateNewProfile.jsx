@@ -35,7 +35,7 @@ function CreateNewProfile() {
     const [status, setstatus] = useState('')
     const [company, setcompany] = useState('')
     const [name, setName] = useState('')
-
+const [saving,setSaving]=useState('')
    
     const [profileName, setprofileName] = useState('')
     const [selected, setSelected] = useState(false)
@@ -172,6 +172,7 @@ const [nickname,setNickname]=useState("")
     
             // If updating an existing profile
             if (id) {
+                setSaving(true)
                 const dataRef = sRef(db, `User/${id}`);
                 await update(dataRef, {
                     profileUrl: name,
@@ -216,13 +217,18 @@ const [nickname,setNickname]=useState("")
                     subscribed: "",
                     subscription: ""
                 });
+          
                 alert("Profile updated successfully");
+                navigate(-1)
+             
             } 
-            // If creating a new profile
+
+       
             else {
+
                 const newProfileRef = sRef(db, "User");
                 const newProfileKey = push(newProfileRef).key;
-    
+                setSaving(true)
                 const newProfileData = {
                     id: newProfileKey,
                     profileUrl: name,
@@ -269,6 +275,8 @@ const [nickname,setNickname]=useState("")
     
                 await set(sRef(db, `User/${newProfileKey}`), newProfileData);
                 alert("Profile created successfully");
+                navigate(-1)
+                setSaving(false)
             }
         } catch (error) {
             console.log("Error creating or updating profile", error);
@@ -463,9 +471,12 @@ const [nickname,setNickname]=useState("")
                     <br /><br /><br /><br />
                     <div className="btn-s">
                         <button style={saveButtonStyle} className='save2' onClick={handleSave}>
-                            {
-                                id? "Update Profile" :"Create New Profile" 
-                            }
+                            
+                                {!saving 
+    ? (id ? "Update Profile" : "Create New Profile") 
+    : (id ? "updating..." : "creating...")}
+
+                            
                             
                             
                             </button>
@@ -503,7 +514,7 @@ const imgStyle = {
 
 const mainImgStyle = {
     width: "100%",
-    height: '300px',
+    height: '200px',
     backgroundColor: "#D9D9D9",
     marginTop: '3rem',
 

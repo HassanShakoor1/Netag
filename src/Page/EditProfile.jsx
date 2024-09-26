@@ -225,7 +225,7 @@ function EditProfile() {
       {coverImage ? (
         <div style={{ position: 'relative', width: '100%', height: '100%' }}>
           <img
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            style={{ width: '100%', height: '100%',borderRadius:'2rem' }}
             src={typeof coverImage === "string" ? coverImage : URL.createObjectURL(coverImage)}
             alt="Uploaded Main Image"
           />
@@ -317,7 +317,7 @@ const imgStyle = {
 
 const mainImgStyle = {
   width: "100%",
-  height: '300px',
+  height: '200px',
   backgroundColor: "#D9D9D9",
   marginTop: "1rem",
   display: 'flex',
