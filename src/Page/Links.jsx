@@ -5,25 +5,25 @@ import { useNavigate } from 'react-router-dom';
 import { getDatabase, ref, get} from 'firebase/database'; // Ensure you're importing 'child' for fetching data
 import '../App.css';
 import { IoChevronBack } from "react-icons/io5";
+import telegram from '../images/telegram.png';
+import linkedin from '../images/linkedin.png';
 import whatsapp from '../images/whatsapp.png';
 import call from '../images/call.png';
-import fb from '../images/facebook.png';
+import facebook from '../images/facebook.png';
 import mail from '../images/mail.png';
 import website from '../images/website.png';
-import snap from '../images/snapchat.png';
+import snapchat from '../images/snapchat.png';
 import tiktok from '../images/tiktok.png';
 import youtube from '../images/youtube.png';
 import vimeo from '../images/vimeo.png';
-import x from '../images/twitter.png';
-import radit from '../images/radit.png';
-import pintrst from '../images/pintrest.png';
+import twitter from '../images/twitter.png';
+import raddit from '../images/radit.png';
+import pinterest from '../images/pintrest.png';
 import custom from '../images/custom.png';
 import spotify from '../images/spotify.png';
-import instas from '../images/instagram.png';
-import tick from '../images/tick.png';
-import paypal from '../images/paypal.png';
-import telegram from '../images/telegram.png';
-import linkedin from '../images/linkedin.png';
+import instagram from '../images/instagram.png';
+import paypal from '../images/paypal.png'
+
 import { database } from '../firebase';
 
 // Fetch User ID from localStorage
@@ -33,16 +33,16 @@ const links = {
   socialLink: [
     { id: 1, imageUrl: vimeo, linkName: "vimeo", place: "Enter URL",   instruction: `1. Enter your Url for  Vimeo.\n2. Make sure it is a valid Vimeo ID.\n3. Check for any typos in the URL.\n4. Ensure the account is accessible.`},
     { id: 2, imageUrl: call, linkName: "whatsapp", place: "Enter whatsapp number",instruction: `1. Enter your WhatsApp number.\n2. Make sure the number includes the country code.\n3. Verify the number is active on WhatsApp .\n4. Ensure the number is publicly accessible.` },
-    { id: 3, imageUrl: fb, linkName: "facebook", place: "Enter Facebook URL", instruction: `1. Enter your Facebook Url .\n2. Make sure it is a valid Facebook Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.` },
+    { id: 3, imageUrl: facebook, linkName: "facebook", place: "Enter Facebook URL", instruction: `1. Enter your Facebook Url .\n2. Make sure it is a valid Facebook Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.` },
     { id: 4, imageUrl: linkedin, linkName: "linkedin", place: "Enter Url",instruction:` 1. Enter your Linkedin URL.\n2. Make sure it is a valid URL .\n3. Check for any typos in the URL .\n4. Ensure the Linkedin account is active and accessible.`},
-    { id: 5, imageUrl: instas, linkName: "instagram", place: "Enter URL",instruction: `1. Enter your Instagram Url .\n2. Make sure it is a valid Instagram Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.`},
+    { id: 5, imageUrl: instagram, linkName: "instagram", place: "Enter URL",instruction: `1. Enter your Instagram Url .\n2. Make sure it is a valid Instagram Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.`},
     { id: 6, imageUrl: telegram, linkName: "telegram", place: "Enter telegram number",  instruction: `1. Enter your telegram number .\n2. Make sure it is a valid number Url.` },
-    { id: 7, imageUrl: snap, linkName: "snapchat", place: "Enter UserName",  instruction: `1. Enter your snapchat userName .\n2. Make sure it is a valid UserName .\n3. Check for any typos in the Username.\n4. Ensure the Profile is  accessible.`},
+    { id: 7, imageUrl: snapchat, linkName: "snapchat", place: "Enter UserName",  instruction: `1. Enter your snapchat userName .\n2. Make sure it is a valid UserName .\n3. Check for any typos in the Username.\n4. Ensure the Profile is  accessible.`},
     { id: 8, imageUrl: tiktok, linkName: "tikTok", place: "Enter Username",   instruction: `1. Enter your Tiktok Username .\n2. Make sure it is a valid Username.\n3. Check for any typos in the userName.\n4. Ensure the Profile is accessible.` },
     { id: 9, imageUrl: youtube, linkName: "youTube", place: "Enter URL",instruction: `1. Enter your youtube Url .\n2. Make sure it is a valid Youtube Url.\n3. Check for any typos in the URL.\n4. Ensure the Account is publicly accessible.`},
-    { id: 10, imageUrl: radit, linkName: "reddit", place: "Enter URL", instruction: `1. Enter your Radit Url .\n2. Make sure it is a valid  Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.` },
-    { id: 11, imageUrl: x, linkName: "x", place: "Enter URL",instruction: `1. Enter your Twitter Url .\n2. Make sure it is a valid Twitter Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.`},
-    { id: 12, imageUrl: pintrst, linkName: "pinterest", place: "Enter URL" ,instruction: `1. Enter your Pinterest Url .\n2. Make sure it is a valid pinterest Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.` },
+    { id: 10, imageUrl: raddit, linkName: "reddit", place: "Enter URL", instruction: `1. Enter your Radit Url .\n2. Make sure it is a valid  Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.` },
+    { id: 11, imageUrl: twitter, linkName: "x", place: "Enter URL",instruction: `1. Enter your Twitter Url .\n2. Make sure it is a valid Twitter Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.`},
+    { id: 12, imageUrl: pinterest, linkName: "pinterest", place: "Enter URL" ,instruction: `1. Enter your Pinterest Url .\n2. Make sure it is a valid pinterest Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.` },
   ],
   contactLinks: [
     { id: 13, imageUrl: whatsapp, linkName: "call", place: "Enter phone number", instruction: `1. Enter your Phone number.\n2. Make sure the number includes the country code.\n3. Ensure the number is publicly accessible.` },
@@ -111,16 +111,16 @@ const links = {
       switch (id) {
         case 1: return vimeo;
         case 2: return call;
-        case 3: return fb;
+        case 3: return facebook;
         case 4: return mail;
-        case 5: return instas;
+        case 5: return instagram;
         case 6: return telegram;
-        case 7: return snap;
+        case 7: return snapchat;
         case 8: return tiktok;
         case 9: return youtube;
-        case 10: return radit;
-        case 11: return x;
-        case 12: return pintrst;
+        case 10: return raddit;
+        case 11: return twitter;
+        case 12: return pinterest;
         case 13: return whatsapp;
         case 14: return website;
         case 15: return custom;

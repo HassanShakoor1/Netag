@@ -7,15 +7,15 @@ import { IoAnalyticsOutline } from "react-icons/io5";
 import '../App.css';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-function Footer() {
+function Footer(Links) {
   const navigate = useNavigate();
   const location = useLocation(); // Get the current location
-
+  
   const handleActivecard = () => {
     navigate('/active-card');
   };
   const handleAnalytics = () => {
-    navigate('/Analytics-page');
+    navigate('/Analytics-page', { state: { Links } }); // Pass Links to the Analytics page
   };
   const handleSetting = () => {
     navigate('/setting-page');
@@ -66,6 +66,7 @@ function Footer() {
               style={location.pathname === '/active-card' ? activeStyle : iconStyle}
             />
             <IoAnalyticsOutline 
+            
               onClick={handleAnalytics}
               style={location.pathname === '/Analytics-page' ? activeStyle : iconStyle}
             />

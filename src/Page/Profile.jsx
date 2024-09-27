@@ -17,26 +17,24 @@ import AOS from 'aos';
 import 'aos/dist/aos.css'; 
 import { useTranslation } from 'react-i18next';
 
-
+import telegram from '../images/telegram.png';
+import linkedin from '../images/linkedin.png';
 import whatsapp from '../images/whatsapp.png';
 import call from '../images/call.png';
-import fb from '../images/facebook.png';
+import facebook from '../images/facebook.png';
 import mail from '../images/mail.png';
 import website from '../images/website.png';
-import snap from '../images/snapchat.png';
+import snapchat from '../images/snapchat.png';
 import tiktok from '../images/tiktok.png';
 import youtube from '../images/youtube.png';
 import vimeo from '../images/vimeo.png';
-import x from '../images/twitter.png';
-import radit from '../images/radit.png';
-import pintrst from '../images/pintrest.png';
+import twitter from '../images/twitter.png';
+import raddit from '../images/radit.png';
+import pinterest from '../images/pintrest.png';
 import custom from '../images/custom.png';
 import spotify from '../images/spotify.png';
-import instas from '../images/instagram.png';
-
-import paypal from '../images/paypal.png';
-import telegram from '../images/telegram.png';
-import linkedin from '../images/linkedin.png';
+import instagram from '../images/instagram.png';
+import paypal from '../images/paypal.png'
 import Links from './Links';
 
 
@@ -71,16 +69,16 @@ function Profile() {
     switch (id) {
       case 1: return vimeo;
       case 2: return call;
-      case 3: return fb;
+      case 3: return facebook;
       case 4: return linkedin
-      case 5: return instas;
+      case 5: return instagram;
       case 6: return telegram;
-      case 7: return snap;
+      case 7: return snapchat;
       case 8: return tiktok;
       case 9: return youtube;
-      case 10: return radit;
-      case 11: return x;
-      case 12: return pintrst;
+      case 10: return raddit;
+      case 11: return twitter;
+      case 12: return pinterest;
       case 13: return whatsapp;
       case 14: return website;
       case 15: return custom;
@@ -190,24 +188,6 @@ const handleImageClick = (baseUrl, linkName) => {
 
 
 
-
-
-
-
-
-
-
-
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -511,7 +491,7 @@ style={{objectFit:'cover'}}
 
 
 
-          <Footer />
+          <Footer Links={Links} />
           <br /><br /><br />
 
         </div>

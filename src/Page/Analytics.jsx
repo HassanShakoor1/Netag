@@ -9,23 +9,23 @@ import { ref, get } from 'firebase/database';
 import { database } from '../firebase.jsx';
 import upwork from '../images/up.png'
 import linee from '../images/linee.png'
-import scype from '../images/scype.png'
+import skype from '../images/scype.png'
 import paypal from '../images/paypal.png'
 import whatsapp from '../images/whatsapp.png';
 import call from '../images/call.png';
-import fb from '../images/facebook.png';
+import facebook from '../images/facebook.png';
 import mail from '../images/mail.png';
 import website from '../images/website.png';
-import snap from '../images/snapchat.png';
+import snapchat from '../images/snapchat.png';
 import tiktok from '../images/tiktok.png';
 import youtube from '../images/youtube.png';
 import vimeo from '../images/vimeo.png';
-import x from '../images/twitter.png';
-import radit from '../images/radit.png';
-import pintrst from '../images/pintrest.png';
+import twitter from '../images/twitter.png';
+import raddit from '../images/radit.png';
+import pinterest from '../images/pintrest.png';
 import custom from '../images/custom.png';
 import spotify from '../images/spotify.png';
-import instas from '../images/instagram.png';
+import instagram from '../images/instagram.png';
 import tick from '../images/tick.png';
 
 import telegram from '../images/telegram.png';
@@ -44,26 +44,26 @@ function Analytics() {
 
     setCount(count+1)
    }
-   const ReturnIcon = (id) => {
-    switch (id) {
-      case 1: return vimeo;
-      case 2: return call;
-      case 3: return fb;
-      case 4: return linkedin
-      case 5: return instas;
-      case 6: return telegram;
-      case 7: return snap;
-      case 8: return tiktok;
-      case 9: return youtube;
-      case 10: return radit;
-      case 11: return x;
-      case 12: return pintrst;
-      case 13: return whatsapp;
-      case 14: return website;
-      case 15: return custom;
-      case 16: return mail;
-      case 17: return spotify;
-      case 18: return paypal;
+   const ReturnIcon = (name) => {
+    switch (name) {
+      case "vimeo": return vimeo;
+      case "call": return call;
+      case "facebook": return facebook;
+      case "linkedin": return linkedin
+      case "instagram": return instagram;
+      case "telegram": return telegram;
+      case "snapchat": return snapchat;
+      case "tiktok": return tiktok;
+      case "youtube": return youtube;
+      case "raddit": return raddit;
+      case "twitter": return twitter;
+      case "pinterest": return pinterest;
+      case "whatsapp": return whatsapp;
+      case "website": return website;
+      case "custom": return custom;
+      case "mail": return mail;
+      case "spotify": return spotify;
+      case "paypal": return paypal;
       default: return null;
     }
 
@@ -290,7 +290,7 @@ function Analytics() {
 <div key={item.id}  className="Counter" style={{width: '100%', display: 'flex',flexDirection:'column', justifyContent: 'center',margin: 'auto',gap:'10px'}}>
 {item.links.map(linkItem => (
   <div className="Upwork" style={{ display: 'flex', alignItems: 'center',  border: '1px solid rgb(228, 228, 228)', borderRadius: '20px',  width: '97%', margin:'2px auto',maxWidth: '430px',  padding: '1rem',  boxSizing: 'border-box',  flexWrap: 'wrap',boxShadow:'1px 1px 1px 1px rgb(228, 228, 228)'}}>
-    <img onClick={counter} style={{ width: '18%', height: 'auto',  marginRight: '1rem'}}  src={`/src/images/${linkItem?.name.toLowerCase()}.png`}  alt={linkItem?.name} />
+    <img onClick={counter} style={{ width: '18%', height: 'auto',  marginRight: '1rem'}}  src={ReturnIcon(linkItem?.name)}  alt={linkItem?.name} />
     
     <div className="points" style={{  flex: '1', marginRight: '1rem' }}>
       <p style={{ margin: '0', fontSize: '1rem', }}>{linkItem.name}</p>
