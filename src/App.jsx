@@ -139,8 +139,6 @@ function App() {
           {/* create new profile  */}
           <Route path='/home/create-new-profile/:id?' element={<CreateNewProfile/>}></Route>
 
-          
-         
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/active-card" element={<ActiveCard />} />
           <Route path="/Analytics-page" element={<Analytics />} />
