@@ -78,13 +78,18 @@ function EditContact() {
 
     // Initialize the database
     const database = getDatabase(app);
+
+    // Reference to PhotosVideos and query by the authenticated user's uid
     const recordRef = ref(database, `/PhotosVideos`);
-
-    const queryData = query(recordRef, orderByChild("uid"), equalTo(userId));
-
-    // Fetch the data from the database
-    onValue(
+    const queryData = query(
       recordRef,
+      orderByChild("uid"),
+      equalTo(currentUid)
+    );
+
+    // Fetch the data using the query
+    onValue(
+      queryData,
       (snapshot) => {
         if (snapshot.exists()) {
           const data = snapshot.val();
