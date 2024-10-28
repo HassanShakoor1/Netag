@@ -62,32 +62,11 @@ function EditContact() {
   }, [navigate]);
 
   const fetchExistingMediaFiles = async (recordid) => {
-    // Get the current authenticated user
-    const auth = getAuth();
-    const currentUser = auth.currentUser;
-
-    // Check if the current user is authenticated
-    if (!currentUser) {
-      console.log("User is not authenticated.");
-      return;
-    }
-
-    // Get the UID directly from the current user
-    const currentUid = currentUser.uid;
-    console.log(currentUid);
-
-    // Initialize the database
     const database = getDatabase(app);
-
-    // Reference to PhotosVideos and query by the authenticated user's uid
     const recordRef = ref(database, `/PhotosVideos`);
-    const queryData = query(
-      recordRef,
-      orderByChild("uid"),
-      equalTo(currentUid)
-    );
 
-    // Fetch the data using the query
+    const queryData = query(recordRef, orderByChild("uid"), equalTo(userId));
+
     onValue(
       queryData,
       (snapshot) => {
