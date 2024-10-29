@@ -1,457 +1,377 @@
-import "./categories.css"
-import search from "../images/search.svg"
-import vector from "../images/Vector.svg"
-import doctor from "../images/doctor.png"
-import lung from "../images/lungs.png"
-import dot from "../images/dot.png"
-import * as React from 'react';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useNavigate, Link } from "react-router-dom"
-import { useEffect, useState } from "react"
-import { database as db } from "../firebase.jsx"
-import { equalTo, get, orderByChild, query, ref, remove } from "firebase/database"
-
-import DoneAllIcon from '@mui/icons-material/DoneAll';
-import DeleteIcon from '@mui/icons-material/Delete';
-
-import { useTranslation } from 'react-i18next';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-// const options = [
-//     { text: 'Edit Category', color: '#7C7C7C', pathkey: useNavigate('/home/services/edit') }, // Change color as needed
-//     { text: 'Delete Category', color: '#EE0000' } // Change color as needed
-// ];
+import "./categories.css";
+import search from "../images/search.svg";
+import vector from "../images/Vector.svg";
+import * as React from "react";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useNavigate, Link } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { database as db } from "../firebase.jsx";
+import {
+  equalTo,
+  get,
+  orderByChild,
+  query,
+  ref,
+  remove,
+} from "firebase/database";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useTranslation } from "react-i18next";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ITEM_HEIGHT = 48;
+
 function Categories() {
+  const categoryRefs = useRef([]);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [Firebasedata, setFirebasedata] = useState([]);
+  const [currentItemId, setCurrentItemId] = useState(null);
+  const userId = localStorage.getItem("userId");
+  const { t } = useTranslation();
+  const navigate = useNavigate();
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    //  get data from firebase 
-    const [Firebasedata, setFirebasedata] = useState([])
-    const [currentItemId, setCurrentItemId] = useState(null);
+  const getData = async () => {
+    toast.dismiss();
+    try {
+      const querydata = query(
+        ref(db, `ServiceCategory`),
+        orderByChild("uid"),
+        equalTo(userId)
+      );
+      const snap = await get(querydata);
+      const data = await snap.val();
 
-    const userId = localStorage.getItem('userId');
+      const filteredData = Object.keys(data).map((key) => ({
+        id: key,
+        ...data[key],
+      }));
 
-
-    const { t } = useTranslation()
-
-    // getting data from firebase 
-    // function getData() {
-    //     const dbref = ref(db, `ServiceCategory`)
-
-    //     const initialdata = async () => {
-
-    //         // const data=query(
-    //         //     dbref,
-    //         //     orderByChild("id"),
-    //         //     equalTo(userId) 
-    //         // )
-
-    //          // Fetch the data using the query
-    //     // const snapshot = await get(data);
-
-    //     // if (!snapshot.exists()) {
-    //     //     console.log('No data available');
-    //     //     return;
-    //     // } 
-    //     // const data1 = await snapshot.val()
-
-    //         const snap = await get(dbref)
-    //         const data = await snap.val()
-    //         console.log("data",data)
-    //         try {
-
-    //             // const filteredData=Object.keys(data1).map(key=>({
-    //             //     id:key,
-    //             //     ...data1[key]
-    //             // }))
-
-
-    //         const filteredData = Object.keys(data)
-    //             .filter(key => data[key].uid=== userId) // Filter based on userId
-    //             .map(key => ({
-    //                 id: key,
-    //                 ...data[key]
-    //             }));
-
-    //         console.log("filtered data",filteredData);
-
-    //         // Update the state or handle the filtered data
-    //         setFirebasedata(filteredData);
-    //         } 
-
-
-
-
-
-    //         catch (error) {
-    //             console.log(error)
-    //         }
-    //     }
-    //     initialdata()
-
-    // }
-    {/*------------getDataUingQuery------------*/ }
-    const getData = async () => {
-
-        toast.dismiss();
-        try {
-            const querydata = query(
-                ref(db, `ServiceCategory`),
-                orderByChild('uid'),
-                equalTo(userId)
-
-            )
-            const snap = await get(querydata)
-            const data = await snap.val()
-            console.log(data)
-
-            const filteredData = Object.keys(data).map(key => ({
-                id: key,
-                ...data[key]
-            }))
-            console.log(filteredData)
-
-            setFirebasedata(filteredData)
-        }
-        catch (error) {
-            console.log(error)
-            toast.error("No Data Found")
-        }
-
+      setFirebasedata(filteredData);
+      // Initialize refs array to the length of the filtered data
+      categoryRefs.current = new Array(filteredData.length).fill(null);
+    } catch (error) {
+      console.log(error);
+      toast.error("No Data Found");
     }
+  };
 
-    useEffect(() => {
+  useEffect(() => {
+    getData();
+  }, []);
 
-        getData()
+  const open = Boolean(anchorEl);
+  const [searchTerm, setSearchTerm] = useState("");
 
-    }, [])
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
-    console.log(Firebasedata)
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const foundCategoryIndex = Firebasedata.findIndex(
+      (category) => category.name.toLowerCase() === searchTerm.toLowerCase()
+    );
 
-
-
-
-    const open = Boolean(anchorEl);
-    // const handleClick = (event) => {
-    //     setAnchorEl(event.currentTarget);
-    // };
-
-    const handleClick = (event, id) => {
-        setAnchorEl(event.currentTarget);
-        setCurrentItemId(id);
+    if (foundCategoryIndex !== -1 && categoryRefs.current[foundCategoryIndex]) {
+      categoryRefs.current[foundCategoryIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    } else {
+      toast.error("Category not found!");
     }
+  };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-    const navigate = useNavigate();
+  const handleClick = (event, id) => {
+    setAnchorEl(event.currentTarget);
+    setCurrentItemId(id);
+  };
 
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-    // explore button navigation
-    const handlemanage = (id) => {
-        navigate(`/home/services/catagory/${id}`);
+  const handlemanage = (id) => {
+    navigate(`/home/services/catagory/${id}`);
+  };
+
+  const goback = () => {
+    navigate("/home");
+  };
+
+  const handleMenuItemClick = (path) => {
+    if (path) {
+      navigate(path);
     }
-    const goback = () => {
-        navigate("/home");
-    }
+    handleClose();
+  };
 
+  const handleDelete = async (id) => {
+    try {
+      const itemRef = ref(db, `ServiceCategory/${id}`);
+      const servicesRef = ref(db, "Services");
 
+      const servicesSnapshot = await get(servicesRef);
+      const servicesData = servicesSnapshot.val();
 
-
-
-
-    const handleMenuItemClick = (path) => {
-        console.log(path)
-        if (path) {
-            navigate(path);
+      if (servicesData) {
+        for (const [key, value] of Object.entries(servicesData)) {
+          if (value.categoryid === id) {
+            const serviceRef = ref(db, `Services/${key}`);
+            await remove(serviceRef);
+          }
         }
-        handleClose(); // Close the menu after an action is taken
-    };
+      }
 
+      await remove(itemRef);
+      toast.success("Category deleted successfully");
+      setFirebasedata((previous) => previous.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Error deleting item:", error);
+      toast.error("Error deleting item");
+    }
+  };
 
-
-    const handleDelete = async (id) => {
-        console.log(id);
-        try {
-            // Reference to the ServiceCategory in Firebase
-            const itemRef = ref(db, `ServiceCategory/${id}`);
-            const servicesRef = ref(db, 'Services');
-
-            console.log(itemRef);
-
-            // Fetch the services data
-            const servicesSnapshot = await get(servicesRef);
-            const servicesData = servicesSnapshot.val();
-            console.log("servicesData", servicesData);
-
-            // Check if services data exists
-            if (servicesData) {
-                // Loop through services data to find matching category IDs
-                for (const [key, value] of Object.entries(servicesData)) {
-                    if (value.categoryid === id) {
-                        // Reference to the service that needs to be deleted
-                        const serviceRef = ref(db, `Services/${key}`);
-                        console.log("Deleting service with key:", key);
-                        await remove(serviceRef);
-                    }
-                }
-            } else {
-                console.log("No services found for this category.");
-            }
-
-            // Delete the ServiceCategory after services have been removed
-            await remove(itemRef);
-            toast.success("Category deleted successfully")
-            // console.log("Category deleted successfully");
-
-            // Update local state
-            setFirebasedata((previous) => previous.filter((item) => item.id !== id));
-        } catch (error) {
-            console.error("Error deleting item:", error);
-            toast.error("Error deleting item")
-        }
-    };
-
-
-    return (
-        <div className="categories-maindiv">
-            <div className="categories-width">
-                <div className="categories-maindiv1">
-                    <div className="categories-width1">
-
-                        {/* Services Categories */}
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <div>
-                                <img onClick={goback} style={{ cursor: 'pointer' }} src={vector} alt="" />
-                            </div>
-                            <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "600", marginLeft: "2rem" }}>
-                                {t("Services Categories")}
-                            </div>
-                            <div style={{ backgroundColor: "none" }}>
-                                <Link to={"/home/services/serviceaddcategory"}>
-                                    <button style={{ border: "1.5px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", paddingTop: "5px", paddingBottom: "5px", color: '#EE0000', backgroundColor: "white", fontSize: "12px" }}>{t("Add")}</button>
-                                </Link>
-                            </div>
-
-                        </div>
-                        {/* input  */}
-                        <div className="categories-input">
-                            <div style={{ width: "23%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <div>
-                                    <img src={search} alt="" />
-                                </div>
-                                <div style={{ color: "#929292", width: "70%" }}>
-                                    Search
-                                </div>
-                            </div>
-
-                        </div>
-
-                        {/* health cards */}
-
-
-                        {
-                            Firebasedata.map((x, index) => {
-                                return (
-                                    <div key={index}>
-                                        <div className="cardwidth">
-                                            <div className="cardcenter">
-                                                <div className="cardcenter-width">
-                                                    <div style={{ width: '100%', height: "150px" }}>
-                                                        {/* image  */}
-
-                                                        <img style={{ maxHeight: "150px", width: "100%", marginTop: "7px", objectFit: "contain" }} src={x.imageurl} alt="" />
-                                                    </div>
-                                                    {/* title  */}
-                                                    <div style={{ marginTop: "10px", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                                                        <div style={{ color: "#EE0000", fontWeight: "500", width: "100%", marginLeft: "5px", display: "flex", flexDirection: "column", justifyContent: "start", }}>
-                                                            <div style={{ width: "100%", display: "flex", alignItems: "center", marginTop: "5px" }}>
-                                                                <div style={{ fontSize: "18px" }}>{x.name}</div>
-                                                                <div style={{ color: "#959595", fontSize: "9px", marginLeft: "4px" }}></div>
-                                                            </div>
-                                                            {/* para  */}
-                                                            <div style={{ marginTop: "5px", color: "#777777", fontSize: "8px", width: "95%" }}>
-
-                                                                {x.description}
-
-                                                            </div>
-                                                        </div>
-
-                                                        {/* <div >
-
-
-                                                            <IconButton
-                                                                aria-label="more"
-                                                                id="long-button"
-                                                                aria-controls={open ? 'long-menu' : undefined}
-                                                                aria-expanded={open ? 'true' : undefined}
-                                                                aria-haspopup="true"
-                                                                onClick={(event) => handleClick(event, x.id)} // Pass the item id
-                                                                style={{
-                                                                    color: '#EE0000',
-                                                                    padding: "0",
-                                                                    margin: "0",
-                                                                    zIndex: "1"
-                                                                }}
-                                                            >
-                                                                <MoreVertIcon />
-                                                            </IconButton>
-                                                            <Menu
-                                                                id="long-menu"
-                                                                MenuListProps={{
-                                                                    'aria-labelledby': 'long-button',
-                                                                }}
-                                                                anchorEl={anchorEl}
-                                                                open={Boolean(anchorEl && currentItemId === x.id)} // Check if the menu should be open for the current item
-                                                                onClose={handleClose}
-                                                                PaperProps={{
-                                                                    style: {
-                                                                        maxHeight: ITEM_HEIGHT * 4.5, // Set a max height to control overflow
-                                                                        width: '15ch',
-                                                                    },
-                                                                }}
-                                                                anchorOrigin={{
-                                                                    vertical: 'bottom', // Menu will open below the button
-                                                                    horizontal: 'right', // Menu will align to the right of the button
-                                                                }}
-                                                                transformOrigin={{
-                                                                    vertical: 'top', // Menu starts from the top
-                                                                    horizontal: 'right', // Menu aligns its right side to the right of the button
-                                                                }}
-                                                            >
-                                                                <MenuItem
-                                                                    style={{
-                                                                        color: '#7C7C7C',
-                                                                        borderBottom: '1px solid #ddd',
-                                                                        fontSize: '12px',
-                                                                    }}
-                                                                    onClick={() => handleMenuItemClick(`/home/services/serviceeditcategory/${x.id}`)}
-                                                                >
-                                                                    <p>{t("Edit Profile")}</p>
-                                                                </MenuItem>
-                                                                <MenuItem
-                                                                    style={{
-                                                                        color: '#EE0000',
-                                                                        borderBottom: '1px solid #ddd',
-                                                                        fontSize: '12px',
-                                                                    }}
-                                                                    onClick={() => handleDelete(`${x.categoryid}`)} // Call handleDelete with category ID
-                                                                >
-                                                                    <p>{t("Delete")}</p>
-                                                                </MenuItem>
-                                                            </Menu>
-
-                                                        </div> */}
-
-                                                        <div>
-                                                            <IconButton
-                                                                aria-label="more"
-                                                                id="long-button"
-                                                                aria-controls={open ? 'long-menu' : undefined}
-                                                                aria-expanded={open ? 'true' : undefined}
-                                                                aria-haspopup="true"
-                                                                onClick={(event) => handleClick(event, x.id)} // Pass the item id
-                                                                style={{
-                                                                    color: '#EE0000',
-                                                                    padding: "0",
-                                                                    margin: "0",
-                                                                    zIndex: "1",
-                                                                }}
-                                                            >
-                                                                <MoreVertIcon />
-                                                            </IconButton>
-
-                                                            <Menu
-                                                                id="long-menu"
-                                                                MenuListProps={{
-                                                                    'aria-labelledby': 'long-button',
-                                                                }}
-                                                                anchorEl={anchorEl}
-                                                                open={Boolean(anchorEl && currentItemId === x.id)} // Check if the menu should be open for the current item
-                                                                onClose={handleClose}
-                                                                PaperProps={{
-                                                                    style: {
-                                                                        maxHeight: ITEM_HEIGHT * 4.5, // Set a max height to control overflow
-                                                                        width: '20ch',                // Updated width to match first block
-                                                                    },
-                                                                }}
-                                                                anchorOrigin={{
-                                                                    vertical: 'bottom',             // Menu will open below the button
-                                                                    horizontal: 'right',            // Menu will align to the right of the button
-                                                                }}
-                                                                transformOrigin={{
-                                                                    vertical: 'top',                // Menu starts from the top
-                                                                    horizontal: 'right',            // Menu aligns its right side to the right of the button
-                                                                }}
-                                                            >
-                                                                {/* "Edit Profile" Menu Item with custom styles */}
-                                                                <MenuItem
-                                                                    style={{
-                                                                        fontSize: "15px",            // Matching font size for consistency
-                                                                        color: '#7C7C7C',
-                                                                        borderBottom: '1px solid #ddd',
-                                                                    }}
-                                                                    onClick={() => handleMenuItemClick(`/home/services/serviceeditcategory/${x.id}`)}
-                                                                >
-                                                                    <DoneAllIcon style={{ marginRight: '8px' }} />  {/* Added Icon for consistency */}
-                                                                    Edit Profile
-                                                                </MenuItem>
-
-                                                                {/* Separator Line */}
-                                                                <div style={{ height: '1px', backgroundColor: 'grey', width: '100%' }}></div>
-
-                                                                {/* "Delete" Menu Item with red color and custom icon */}
-                                                                <MenuItem
-                                                                    style={{
-                                                                        fontSize: "15px",             // Larger font size for "Delete"
-                                                                        color: 'red',                 // Red color for "Delete"
-                                                                    }}
-                                                                    onClick={() => handleDelete(`${x.categoryid}`)} // Call handleDelete with category ID
-                                                                >
-                                                                    <DeleteIcon style={{ marginRight: '8px' }} />   {/* Added Delete Icon */}
-                                                                    Delete
-                                                                </MenuItem>
-                                                            </Menu>
-                                                        </div>
-
-
-
-                                                    </div>
-
-                                                    {/* button  */}
-                                                    <div onClick={() => handlemanage(x.id)}>
-                                                        <button style={{ marginTop: "1rem", marginBottom: "10px", width: "100%", border: "2px solid #EE0000", borderRadius: "10px", backgroundColor: "#FFDEDE", height: "6vh", color: "#EE0000" }}>{t("Explore")} </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-
-
-                                )
-                            })
-                        }
-
-                    </div>
-
-                </div>
-
-                <ToastContainer
-                    position="top-center"
-                />
-
+  return (
+    <div className="categories-maindiv">
+      <div className="categories-width">
+        <div className="categories-maindiv1">
+          <div className="categories-width1">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: "30px",
+              }}
+            >
+              <img
+                onClick={goback}
+                style={{ cursor: "pointer" }}
+                src={vector}
+                alt=""
+              />
+              <div
+                style={{
+                  color: "#EE0000",
+                  fontSize: "16px",
+                  fontWeight: "600",
+                  marginLeft: "2rem",
+                }}
+              >
+                {t("Services Categories")}
+              </div>
+              <Link to={"/home/services/serviceaddcategory"}>
+                <button
+                  style={{
+                    border: "1.5px solid #EE0000",
+                    borderRadius: "14px",
+                    padding: "5px 18px",
+                    color: "#EE0000",
+                    backgroundColor: "white",
+                    fontSize: "12px",
+                  }}
+                >
+                  {t("Add")}
+                </button>
+              </Link>
             </div>
 
+            <div className="categories-input">
+              <form
+                onSubmit={handleSearchSubmit}
+                style={{ display: "flex", alignItems: "center", width: "100%" }}
+              >
+                <img src={search} alt="Search" style={{ marginRight: "8px" }} />
+                <input
+                  type="search"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  placeholder="Search..."
+                  style={{
+                    color: "#929292",
+                    width: "100%",
+                    border: "none",
+                    outline: "none",
+                  }}
+                />
+              </form>
+            </div>
 
+            {Firebasedata.map((x, index) => (
+              <div key={x.id} ref={(el) => (categoryRefs.current[index] = el)}>
+                <div className="cardwidth">
+                  <div className="cardcenter">
+                    <div className="cardcenter-width">
+                      <div style={{ width: "100%", height: "150px" }}>
+                        <img
+                          style={{
+                            maxHeight: "150px",
+                            width: "100%",
+                            marginTop: "7px",
+                            objectFit: "cover",
+                            borderRadius: "20px",
+                          }}
+                          src={x.imageurl}
+                          alt=""
+                        />
+                      </div>
+                      <div
+                        style={{
+                          marginTop: "10px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          width: "100%",
+                        }}
+                      >
+                        <div
+                          style={{
+                            color: "#EE0000",
+                            fontWeight: "500",
+                            width: "100%",
+                            marginLeft: "5px",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "start",
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                              marginTop: "5px",
+                            }}
+                          >
+                            <div
+                              style={{ fontSize: "22px", fontWeight: "500" }}
+                            >
+                              {x.name}
+                            </div>
+                          </div>
+                          <div
+                            style={{
+                              marginTop: "5px",
+                              color: "#777777",
+                              fontSize: "15px",
+                              width: "90%",
+                            }}
+                          >
+                            {x.description}
+                          </div>
+                        </div>
+
+                        <div>
+                          <IconButton
+                            aria-label="more"
+                            id="long-button"
+                            aria-controls={open ? "long-menu" : undefined}
+                            aria-expanded={open ? "true" : undefined}
+                            aria-haspopup="true"
+                            onClick={(event) => handleClick(event, x.id)}
+                            style={{
+                              color: "#EE0000",
+                              padding: "0",
+                              margin: "0",
+                              zIndex: "1",
+                            }}
+                          >
+                            <MoreVertIcon />
+                          </IconButton>
+
+                          <Menu
+                            id="long-menu"
+                            MenuListProps={{
+                              "aria-labelledby": "long-button",
+                            }}
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl && currentItemId === x.id)}
+                            onClose={handleClose}
+                            PaperProps={{
+                              style: {
+                                maxHeight: ITEM_HEIGHT * 4.5,
+                                width: "20ch",
+                              },
+                            }}
+                            anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "right",
+                            }}
+                            transformOrigin={{
+                              vertical: "top",
+                              horizontal: "right",
+                            }}
+                          >
+                            <MenuItem
+                              style={{
+                                fontSize: "15px",
+                                color: "#7C7C7C",
+                                borderBottom: "1px solid #ddd",
+                              }}
+                              onClick={() =>
+                                handleMenuItemClick(
+                                  `/home/services/serviceeditcategory/${x.id}`
+                                )
+                              }
+                            >
+                              <DoneAllIcon style={{ marginRight: "8px" }} />
+                              Edit Profile
+                            </MenuItem>
+                            <div
+                              style={{
+                                height: "1px",
+                                backgroundColor: "grey",
+                                width: "100%",
+                              }}
+                            ></div>
+                            <MenuItem
+                              style={{
+                                fontSize: "15px",
+                                color: "red",
+                              }}
+                              onClick={() => handleDelete(x.id)}
+                            >
+                              <DeleteIcon style={{ marginRight: "8px" }} />
+                              Delete
+                            </MenuItem>
+                          </Menu>
+                        </div>
+                      </div>
+
+                      <div onClick={() => handlemanage(x.id)}>
+                        <button
+                          style={{
+                            marginTop: "1rem",
+                            marginBottom: "10px",
+                            width: "100%",
+                            border: "1px solid #EE0000",
+                            borderRadius: "10px",
+                            backgroundColor: "#FFDEDE",
+                            height: "5.5vh",
+                            color: "#EE0000",
+                            boxShadow: "1px 1px 1px 2px gainsboro",
+                          }}
+                        >
+                          {t("Explore")}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-    )
+
+        <ToastContainer position="top-center" />
+      </div>
+    </div>
+  );
 }
-export default Categories
+
+export default Categories;

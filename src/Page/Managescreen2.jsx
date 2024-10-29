@@ -1,122 +1,324 @@
-import "./managescreen.css"
+import React, { useEffect, useState } from "react";
+import "./managescreen.css";
 import vector from "../images/Vector.svg";
-import { useNavigate } from "react-router-dom";
-function Managescreen(){
-   const navigate = useNavigate();
+import { useNavigate, useParams } from "react-router-dom";
+import { database as db } from "../firebase.jsx";
+import {
+  equalTo,
+  get,
+  orderByChild,
+  query,
+  ref,
+  update,
+} from "firebase/database";
 
-   const goback=()=>{
-     navigate(-1);
-   }
+function Managescreen2() {
+  const navigate = useNavigate();
+  const { orderId } = useParams();
+  const userId = localStorage.getItem("userId");
+  const [orderDetails, setOrderDetails] = useState(null);
+  console.log("order", orderDetails); // Log the order details to check the structure
 
-    return(
-      <div className="managescreen-main">
-        <div className="managescreen-width">
-            <div className="managescreen-divcenter">
-                <div className="managescreen-divwidth">
-                   
-                   {/* top */}
-                   {/* <div style={{display:"flex",justifyContent:"space-between",width:"59%",marginLeft:"10px"}}>
-                    <div>
-                         <img style={{cursor:'pointer'}} onClick={goback} src={vector} alt="" />
-                    </div>
-                    <div style={{color:"#EE0000",fontWeight:"450"}}>
-                    Single Order
-                    </div>
-                   </div> */}
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                            <div>
-                                <img style={{ cursor: "pointer" }} onClick={goback} src={vector} alt="" />
-                            </div>
-                            <div style={{ color: "#EE0000", fontWeight: "500" }}>
-                            Manage Orders
-                            </div>
-                            <div></div>
-                        </div>
+  const orderData = async () => {
+    try {
+      const orderRef = ref(db, "/Orders");
+      const queryData = query(orderRef, orderByChild("uid"), equalTo(userId));
+      const snapShot = await get(queryData);
+      const data = snapShot.val();
 
-                   {/* box */}
-                   <div style={{marginTop:"3rem"}} className="managescreen-boxwidth">
-                     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                        <div style={{color:"#EE0000",fontWeight:"500",fontSize:"18px"}}>Robin Denio</div>
-                        <div style={{fontSize:"11px",fontWeight:"500"}}>12:34PM - 12/02/2024</div>
-                     </div>
-                     {/* dollar */}
-                     <div style={{color:"#545454",fontWeight:"500"}}>
-                     $59.99
-                     </div>
-                     {/* email */}
-                     <div style={{marginTop:"1.3rem",display:"flex",justifyContent:"space-between",width:"97%"}}>
-                        <div>
-                            <div style={{color:"#555555",fontSize:"12px"}}>Email address</div>
-                            <div style={{color:"#545454",fontSize:"14px",fontWeight:"500"}}>robindenio@gmail.com</div>
-                        </div>
-                        <div>
-                            <div style={{color:"#555555",fontSize:"12px"}}>Phone number</div>
-                            <div style={{color:"#545454",fontWeight:"500",fontSize:"14px"}}>+92 300 0120211</div>
-                        </div>
-                     </div>
-                     {/* address  */}
-                     <div style={{marginTop:"1.3rem"}}>
-                        <div style={{color:"#555555",fontSize:"12px"}}>Address</div>
-                        <div style={{color:"#545454",fontSize:"14px",fontWeight:"500"}}>St nagaraka, juwain sendor 123, El Salvadar</div>
-                     </div>
-                     {/* detail  */}
+      if (data) {
+        const arr = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
 
-                     <div style={{marginTop:"1.3rem",width:"95%"}}>
-                        <div style={{color:"#555555",fontSize:"12px"}}>Details</div>
-                        <div style={{color:"#545454",fontSize:"14px",fontWeight:"500"}}>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab laudantium temporibus, laborum optio recusandae ad aut quia asperiores repudiandae rem.
-                        </div>
-                     </div>
+        // Find the specific order details based on orderId
+        const order = arr.find((order) => order.id === orderId);
+        setOrderDetails(order || {}); // Set order details or an empty object if not found
+      } else {
+        console.log("No orders found for this user.");
+        setOrderDetails({}); // Set to an empty object if no orders found
+      }
+    } catch (error) {
+      alert("Orders not fetched");
+      console.error("Error fetching order details:", error);
+    }
+  };
 
-                     {/* line */}
+  const updateOrderStatus = async (status) => {
+    try {
+      const orderRef = ref(db, `/Orders/${orderId}`);
+      await update(orderRef, { orderstatus: status });
+      alert(
+        `Order has been ${status === "accepted" ? "accepted" : "rejected"}.`
+      );
+      // You can navigate back or to another page here if needed
+      navigate("/home/order"); // Adjust the navigation as needed
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      alert("Failed to update order status.");
+    }
+  };
 
-                     <div style={{marginTop:"2rem",width:"100%",marginBottom:"2rem"}}>
-                        <div className="managescreen-line"></div>
-                     </div>
+  useEffect(() => {
+    orderData();
+  }, [userId, orderId]); // Dependencies: userId and orderId
 
-                     {/* hair oil */}
-                     <div style={{display:"flex",justifyContent:"space-between"}}>
-                        <div>
-                            <div style={{color:"#7B7B7B",display:"flex",alignItems:"center"}}>Hair Oil <span style={{fontSize:"9px",fontWeight:"500",marginLeft:"5px",color:"#393838"}}>(1x)</span></div>
-                            <div style={{color:"#7B7B7B",display:"flex",alignItems:"center"}}>Croate Oil <span style={{fontSize:"9px",fontWeight:"500",marginLeft:"5px",color:"#393838"}}>(2x)</span></div>
-                            <div style={{color:"#7B7B7B",display:"flex",alignItems:"center"}}>Hair Care<span style={{fontSize:"9px",fontWeight:"500",marginLeft:"5px",color:"#393838"}}>(2x)</span></div>
-                            <div style={{color:"#7B7B7B",display:"flex",alignItems:"center"}}>Arm Oil<span style={{fontSize:"9px",fontWeight:"500",marginLeft:"5px",color:"#393838"}}>(2x)</span></div>
-                            <div style={{color:"#7B7B7B",display:"flex",alignItems:"center"}}>Tax<span style={{fontSize:"9px",fontWeight:"500",marginLeft:"5px",color:"#393838"}}>(2x)</span></div>
-                           
-                        </div>
-                        <div style={{display:"flex",flexDirection:"column",alignItems:"end"}}>
-                            <div style={{color:"#545454",fontSize:"16px",fontWeight:"450"}}>$59.99</div>
-                            <div style={{color:"#545454",fontWeight:"450"}}>$529.99</div>
-                            <div style={{color:"#545454",fontWeight:"450"}}>$22.99</div>
-                            <div style={{color:"#545454",fontWeight:"450"}}>$29.99</div>
-                            <div style={{color:"#545454",fontWeight:"450"}}>$2.00</div>
-                        </div>
-                        
-                     </div>
-                     {/* line  */}
-                     <div style={{marginTop:"1rem",width:"100%",marginBottom:"12px"}}>
-                        <div className="managescreen-line"></div>
-                     </div>
-                     {/* sub total */}
-                     <div style={{display:"flex",justifyContent:"space-between"}}>
-                        <div style={{color:"#7B7B7B",fontWeight:"bold"}}>Sub Total</div>
-                        <div style={{color:"#545454",fontWeight:"bold"}}>$644.99</div>
-                     </div>
-                     {/* button  */}
-                     <div style={{marginTop:"1rem",display:"flex",justifyContent:"space-between"}}>
-                        <button style={{border:"none",borderRadius:"6px",fontSize:"11px",fontWeight:"500",color:"white",width:"48%",height:"5vh",backgroundColor:"#EE0000",display:"flex",justifyContent:"center",alignItems:"center",padding:"14px"}}>Reject Offer</button>
-                        <button style={{border:"none",borderRadius:"6px",fontSize:"11px",fontWeight:"500",color:"white",width:"48%",height:"5vh",backgroundColor:"#169923",display:"flex",justifyContent:"center",alignItems:"center",padding:"14px"}}>Accept Offer</button>
-                     </div>
+  const goback = () => {
+    navigate(-1);
+  };
 
+  // If orderDetails is null or empty, show loading or message
+  if (!orderDetails) {
+    return <div>Loading...</div>;
+  }
 
-                   </div>
-                </div>
-
+  return (
+    <div className="managescreen-main">
+      <div className="managescreen-width">
+        <div className="managescreen-divcenter">
+          <div className="managescreen-divwidth">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <div>
+                <img
+                  style={{ cursor: "pointer" }}
+                  onClick={goback}
+                  src={vector}
+                  alt="Go Back"
+                />
+              </div>
+              <div style={{ color: "#EE0000", fontWeight: "500" }}>
+                Manage Orders
+              </div>
+              <div></div>
             </div>
 
-        </div>
+            {/* Order Details */}
+            <div
+              style={{ marginTop: "3rem" }}
+              className="managescreen-boxwidth"
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    color: "#EE0000",
+                    fontWeight: "500",
+                    fontSize: "18px",
+                  }}
+                >
+                  {orderDetails?.name || "Customer Name"}
+                </div>
+                <div style={{ fontSize: "11px", fontWeight: "500" }}>
+                  {orderDetails?.time || "Order Date"}
+                </div>
+              </div>
+              <div style={{ color: "#545454", fontWeight: "500" }}>
+                ${orderDetails?.price || "0.00"}
+              </div>
 
+              {/* Email and Phone */}
+              <div
+                style={{
+                  marginTop: "1.3rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "97%",
+                }}
+              >
+                <div>
+                  <div style={{ color: "#555555", fontSize: "12px" }}>
+                    Email address
+                  </div>
+                  <div
+                    style={{
+                      color: "#545454",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {orderDetails?.email}
+                  </div>
+                </div>
+                <div>
+                  <div style={{ color: "#555555", fontSize: "12px" }}>
+                    Phone number
+                  </div>
+                  <div
+                    style={{
+                      color: "#545454",
+                      fontWeight: "500",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {orderDetails?.phonenumber}
+                  </div>
+                </div>
+              </div>
+
+              {/* Address */}
+              <div style={{ marginTop: "1.3rem" }}>
+                <div style={{ color: "#555555", fontSize: "12px" }}>
+                  Address
+                </div>
+                <div
+                  style={{
+                    color: "#545454",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  {orderDetails?.address}
+                </div>
+              </div>
+
+              {/* Order Description */}
+              <div style={{ marginTop: "1.3rem", width: "95%" }}>
+                <div style={{ color: "#555555", fontSize: "12px" }}>
+                  Details
+                </div>
+                <div
+                  style={{
+                    color: "#545454",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                  }}
+                >
+                  {orderDetails?.description}
+                </div>
+              </div>
+
+              {/* Items and Prices */}
+              <div style={{ marginTop: "1.3rem" }}>
+                <div style={{ color: "#555555", fontSize: "12px" }}>Items</div>
+                {orderDetails?.list && orderDetails.list.length > 0 ? (
+                  orderDetails.list.map((item, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          color: "#7B7B7B",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        {item.productname || "Product Name"}{" "}
+                        <span
+                          style={{
+                            fontSize: "9px",
+                            fontWeight: "500",
+                            marginLeft: "5px",
+                            color: "#393838",
+                          }}
+                        >
+                          ({item.quantity || 0}x)
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "end",
+                        }}
+                      >
+                        <div style={{ color: "#545454", fontWeight: "450" }}>
+                          {item.price || "0.00"}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div>No items in this order.</div>
+                )}
+              </div>
+
+              {/* Sub Total */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: "1rem",
+                }}
+              >
+                <div style={{ color: "#7B7B7B", fontWeight: "bold" }}>
+                  Sub Total
+                </div>
+                <div style={{ color: "#545454", fontWeight: "bold" }}>
+                  ${orderDetails?.subtotoal || "0.00"}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div
+                style={{
+                  marginTop: "1rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <button
+                  onClick={() => updateOrderStatus("rejected")}
+                  style={{
+                    border: "none",
+                    borderRadius: "6px",
+                    fontSize: "11px",
+                    fontWeight: "500",
+                    color: "white",
+                    width: "48%",
+                    height: "5vh",
+                    backgroundColor: "#EE0000",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "14px",
+                  }}
+                >
+                  Reject Offer
+                </button>
+                <button
+                  onClick={() => updateOrderStatus("accepted")}
+                  style={{
+                    border: "none",
+                    borderRadius: "6px",
+                    fontSize: "11px",
+                    fontWeight: "500",
+                    color: "white",
+                    width: "48%",
+                    height: "5vh",
+                    backgroundColor: "#169923",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "14px",
+                  }}
+                >
+                  Accept Offer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    )
+    </div>
+  );
 }
-export default Managescreen
+
+export default Managescreen2;

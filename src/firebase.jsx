@@ -1,17 +1,19 @@
 // src/firebase.js
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getDatabase } from 'firebase/database';
-import { getStorage } from 'firebase/storage';
-import { getFirestore } from 'firebase/firestore';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getDatabase } from "firebase/database";
+import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC5h_8FSLcG2fKkIpejRno8ZlwfufM3D3M",
-  authDomain: "business-54df9.firebaseapp.com",
-  projectId: "business-54df9",
-  storageBucket: "business-54df9.appspot.com",
-  messagingSenderId: "1055277060346",
-  appId: "1:1055277060346:web:a30d745972271d3dbe3943"
+  apiKey: "AIzaSyDLIotrz42mxVvZQe7VMROLMiZdQzOYvEg",
+  authDomain: "netag-test.firebaseapp.com",
+  databaseURL: "https://netag-test-default-rtdb.firebaseio.com",
+  projectId: "netag-test",
+  storageBucket: "netag-test.appspot.com",
+  messagingSenderId: "485872082237",
+  appId: "1:485872082237:web:2b9b1891cfeff8356bb954",
+  measurementId: "G-QXC29FVHS8",
 };
 
 // Initialize Firebase
@@ -23,4 +25,4 @@ const database = getDatabase(app);
 const storage = getStorage(app);
 const firestore = getFirestore(app);
 
-export { app, auth, database, storage, firestore }; 
+export { app, auth, database, storage, firestore };
