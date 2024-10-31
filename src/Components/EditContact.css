@@ -75,3 +75,8 @@
     border-radius: 15px;
     border: 1px solid #ACACAC;
 }
+
+.slick-slider{
+    display: flex !important;
+    gap:10px !important;
+}

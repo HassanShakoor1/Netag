@@ -4,17 +4,18 @@ import { IoChevronBack } from "react-icons/io5";
 import video from "../images/video.png";
 import { useNavigate } from "react-router-dom";
 import editcontact from "../images/editcontact.png";
+import CircularProgress from "@mui/material/CircularProgress";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from 'react-slick'; // Import the Slider component
+
 import {
   getDatabase,
   ref,
   set,
-  update,
   get,
-  remove,
-  onValue,
-  query,
-  orderByChild,
-  equalTo,
+  remove
+ 
 } from "firebase/database";
 import {
   getStorage,
@@ -25,12 +26,51 @@ import {
 import { app } from "../firebase"; // Adjust this import according to your Firebase setup
 import { getAuth, onAuthStateChanged } from "firebase/auth"; // Import Firebase Auth
 
-function EditContact() {
-  const [mediaFiles, setMediaFiles] = useState([]);
+function EditContact() { 
+  
+ 
+  
+ const [mediaFiles, setMediaFiles] = useState([]);
+ const [imageFiles, setImageFiles] = useState([]);
+ const [videoFiles, setVideoFiles] = useState([]);
+ const [loading, setLoading] = useState(false);
   const [recordid, setRecordid] = useState(null);
+
   const navigate = useNavigate();
-  console.log(recordid);
+ 
   const userId = localStorage.getItem("userId");
+
+
+
+
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3.5,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+
+
+
   useEffect(() => {
     const auth = getAuth(app);
 
@@ -48,7 +88,7 @@ function EditContact() {
           }
 
           setRecordid(recordId);
-          await fetchExistingMediaFiles(recordId);
+          await fetchExistingMediaFiles(recordId); // Fetch media files and set in state
         } else {
           console.error("User is not authenticated.");
           navigate("/login"); // Redirect to login page if not authenticated
@@ -59,113 +99,125 @@ function EditContact() {
     };
 
     checkAuthAndFetchData();
-  }, [navigate]);
-
-  const fetchExistingMediaFiles = async (recordid) => {
+  }, [navigate, app]);
+  const fetchExistingMediaFiles = async (recordId) => {
     const database = getDatabase(app);
-    const recordRef = ref(database, `/PhotosVideos`);
-
-    const queryData = query(recordRef, orderByChild("uid"), equalTo(userId));
-
-    onValue(
-      queryData,
-      (snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          console.log("Data from Firebase: ", data);
-
-          // Flatten the Firebase data structure for easier handling
-          const combinedMediaFiles = Object.values(data).flatMap((tdata) => {
-            const images = tdata.selectedImages || [];
-            const videos = tdata.videosUri || [];
-            return [
-              ...images.map((url) => ({ url, type: "image" })),
-              ...videos.map((url) => ({ url, type: "video" })),
-            ];
-          });
-
-          console.log("Combined Media Files: ", combinedMediaFiles);
-          setMediaFiles(combinedMediaFiles);
-        } else {
-          console.log("No data found.");
-          setMediaFiles([]);
-        }
-      },
-      {
-        onlyOnce: true,
+    
+    // Reference for featuredPhotos and featuredVideos
+    const photosRef = ref(database, `User/${userId}/featuredPhotos`);
+    const videosRef = ref(database, `User/${userId}/featuredVideos`);
+  
+    try {
+      // Fetch featuredPhotos
+      const photosSnapshot = await get(photosRef);
+      let existingMediaFiles = [];
+  
+      if (photosSnapshot.exists()) {
+        const existingPhotos = photosSnapshot.val();
+        const photosArray = Object.values(existingPhotos);
+        existingMediaFiles = existingMediaFiles.concat(photosArray);
+        console.log("Fetched photos successfully:", photosArray);
+        setImageFiles(photosArray);
+      } else {
+        console.log("No existing media files found in featuredPhotos.");
       }
-    );
+  
+      // Fetch featuredVideos
+      const videosSnapshot = await get(videosRef);
+      
+      if (videosSnapshot.exists()) {
+        const existingVideos = videosSnapshot.val();
+        const videosArray = Object.values(existingVideos);
+        existingMediaFiles = existingMediaFiles.concat(videosArray);
+        console.log("Fetched videos successfully:", videosArray);
+        setVideoFiles(videosArray);
+      } else {
+        console.log("No existing media files found in featuredVideos.");
+      }
+  
+      // Set the combined media files in state
+      setMediaFiles(existingMediaFiles);
+      
+    } catch (error) {
+      console.error(`Error fetching media files: ${error.message}`);
+      setMediaFiles([]); // Set an empty array in case of error
+    }
   };
+  
 
   const handlegoBack = () => {
     navigate("/home");
   };
 
   const handleImageUpload = async (event) => {
+    // Check if recordid is available
     if (!recordid) {
       console.error("Record ID is not available.");
       return;
     }
-
+  
+    // Get the uploaded files and filter out image files
     const files = Array.from(event.target.files);
+  
     const imageFiles = files.filter((file) => file.type.startsWith("image/"));
-
-    if (
-      mediaFiles.filter((file) => file.type === "image").length +
-        imageFiles.length >
-      4
-    ) {
-      console.warn("You can only upload up to 4 images.");
-      return;
-    }
-
+  
+    // Initialize Firebase storage
     const storage = getStorage(app);
-    const newMediaFiles = [...mediaFiles];
-
+    const newMediaFiles = [...mediaFiles]; // Create a copy of the existing media files
+  
+    // Set loading state to true
+    setLoading(true);
+  
+    // Iterate through the selected image files and upload them
     for (const file of imageFiles) {
-      const fileRef = storageRef(
-        storage,
-        `PhotosVideos/${recordid}/${file.name}`
-      );
+      const fileRef = storageRef(storage, `User/${recordid}/${file.name}`);
       try {
-        await uploadBytes(fileRef, file);
-        const url = await getDownloadURL(fileRef);
-        newMediaFiles.push({ url, type: "image" });
-        setMediaFiles([...newMediaFiles]);
-        await saveMediaFiles(recordid, newMediaFiles);
+        await uploadBytes(fileRef, file); // Upload the file to Firebase Storage
+        const url = await getDownloadURL(fileRef); // Get the download URL
+        newMediaFiles.push({ url, type: "image" }); // Add the new file to the media files array
+        setMediaFiles([...newMediaFiles]); // Update the media files state
+        await saveMediaFiles(recordid, newMediaFiles); // Save media files to your backend or state
       } catch (error) {
-        console.error("Error uploading file:", error);
+        console.error("Error uploading file:", error); // Handle upload errors
       }
     }
+    
+    // Set loading state to false
+    setLoading(false);
   };
+  
 
   const handleVideoUpload = async (event) => {
+    // Start loading
+ 
+  
     if (!recordid) {
       console.error("Record ID is not available.");
+
       return;
     }
-
+  
     const files = Array.from(event.target.files);
     const videoFile = files.find((file) => file.type.startsWith("video/"));
-
+  
     if (!videoFile) {
       console.warn("No valid video selected.");
+   
       return;
     }
-
+  
     if (mediaFiles.filter((file) => file.type === "video").length >= 1) {
       console.warn("You can only upload one video.");
+ 
       return;
     }
-
+  
     const storage = getStorage(app);
     const newMediaFiles = [...mediaFiles];
-
-    const fileRef = storageRef(
-      storage,
-      `PhotosVideos/${recordid}/${videoFile.name}`
-    );
+    const fileRef = storageRef(storage, `User/${recordid}/${videoFile.name}`);
+  
     try {
+      // Upload the video file
       await uploadBytes(fileRef, videoFile);
       const url = await getDownloadURL(fileRef);
       newMediaFiles.push({ url, type: "video" });
@@ -173,63 +225,137 @@ function EditContact() {
       await saveMediaFiles(recordid, newMediaFiles);
     } catch (error) {
       console.error("Error uploading file:", error);
+    } finally {
+      // Ensure loading is set to false after the upload completes or fails
+  
     }
   };
+  
+  
 
+  
+
+ 
   const saveMediaFiles = async (recordid, newMediaFiles) => {
     const database = getDatabase(app);
-    const recordRef = ref(database, `PhotosVideos/${recordid}`);
+    const featuredPhotosRef = `User/${userId}/featuredPhotos`;
+    const featuredVideosRef = `User/${userId}/featuredVideos`;
 
-    const mediaData = {
-      id: recordid,
-      uid: localStorage.getItem("userId"), // or user.uid if available directly
-      selectedImages: newMediaFiles
-        .filter((media) => media.type === "image")
-        .map((media) => media.url),
-      videosUri: newMediaFiles
-        .filter((media) => media.type === "video")
-        .map((media) => media.url),
-    };
+    const imageEntries = newMediaFiles
+      .filter(media => media.type === "image")
+      .map(media => ({
+        detail: "",
+        id: `${recordid}`,
+        imageUrl: media.url,
+        title: "",
+      }));
+
+    const videoEntries = newMediaFiles
+      .filter(media => media.type === "video")
+      .map(media => ({
+        detail: "Video details here",
+        id: `${recordid}`,
+        videoUrl: media.url,
+        title: "Video Title",
+      }));
 
     try {
-      if (
-        mediaData.selectedImages.length === 0 &&
-        mediaData.videosUri.length === 0
-      ) {
-        // Delete the main record if no media files are left
-        await remove(recordRef);
-        console.log("Main record deleted as no media files are left.");
-        return;
+      
+
+      if (imageEntries.length > 0) {
+        const snapshot = await get(ref(database, featuredPhotosRef));
+        const existingFiles = snapshot.val() || {};
+        const newImgKey = Object.keys(existingFiles).length;
+
+        for (const entry of imageEntries) {
+          const imageFilePath = `${featuredPhotosRef}/${newImgKey}`;
+          await set(ref(database, imageFilePath), entry);
+        }
+        console.log("Images saved successfully");
       }
 
-      const snapshot = await get(recordRef);
-      if (snapshot.exists()) {
-        // Update existing record
-        await update(recordRef, mediaData);
-        console.log("Data updated successfully");
-      } else {
-        // Create new record
-        await set(recordRef, mediaData);
-        console.log("Data saved successfully");
+      if (videoEntries.length > 0) {
+        const videoSnapshot = await get(ref(database, featuredVideosRef));
+        const existingVideoFiles = videoSnapshot.val() || {};
+        const newVideoKey = Object.keys(existingVideoFiles).length;
+
+        for (const entry of videoEntries) {
+          const videoFilePath = `${featuredVideosRef}/${newVideoKey}`;
+          await set(ref(database, videoFilePath), entry);
+        }
+        console.log("Videos saved successfully");
       }
     } catch (error) {
       console.error(`Error saving data: ${error.message}`);
+    } finally {
+      // Step 3: Set loading to false after the upload
     }
   };
+  
+  
 
-  const handleRemoveImage = (index) => {
-    const updatedMediaFiles = mediaFiles.filter((_, i) => i !== index);
-    setMediaFiles(updatedMediaFiles);
-    saveMediaFiles(recordid, updatedMediaFiles);
-  };
+ // Remove image by index and update mediaFiles
+const handleRemoveImage = async (recordId) => {
+  const updatedMediaFiles = imageFiles.filter((item, index) => index !== recordId);
+  const db = getDatabase();
+  
+  // Assuming each image is stored under its unique key in the featuredPhotos
+  const dataRef = ref(db, `User/${userId}/featuredPhotos/${recordId}`);
+  
+  try {
+    // Get the snapshot of the data
+    const snapshot = await get(dataRef); // Await for the promise to resolve
 
-  const handleRemoveVideo = () => {
-    const updatedMediaFiles = mediaFiles.filter(
-      (file) => file.type !== "video"
-    );
-    setMediaFiles(updatedMediaFiles);
-    saveMediaFiles(recordid, updatedMediaFiles);
-  };
+    if (snapshot.exists()) {
+      // If data exists, remove it
+      await remove(dataRef); // Await for the remove operation to complete
+      console.log("image deleted successfully!");
+    } else {
+      console.log("No data available at this path. image not found.");
+    }
+  } catch (error) {
+    console.error("Error deleting image:", error);
+  }
+  setImageFiles(updatedMediaFiles);
+  setMediaFiles(updatedMediaFiles);
+  saveMediaFiles(recordId, updatedMediaFiles);
+  
+};
+
+
+
+// Remove all videos from mediaFiles
+const handleRemoveVideo = async (recordId) => {
+  console.log(recordId);
+ 
+  const updatedMediaFiles = videoFiles.filter((item, index) => index !== recordId);
+  const db = getDatabase();
+  const dataRef = ref(db, `User/${userId}/featuredVideos/${recordId}`); // Use the correct path for featuredVideos
+
+  try {
+    // Get the snapshot of the data
+    const snapshot = await get(dataRef); // Await for the promise to resolve
+
+    if (snapshot.exists()) {
+      // If data exists, remove it
+      await remove(dataRef); // Await for the remove operation to complete
+      console.log("Video deleted successfully!");
+    } else {
+      console.log("No data available at this path. Video not found.");
+    }
+  } catch (error) {
+    console.error("Error deleting video:", error);
+  }
+
+  setVideoFiles(updatedMediaFiles);
+  setMediaFiles(updatedMediaFiles);
+  saveMediaFiles(recordId, updatedMediaFiles); // Ensure `recordId` is used correctly
+};
+
+
+
+
+  console.log("video files is", videoFiles);
 
   return (
     <div className="Editcontainer">
@@ -261,179 +387,156 @@ function EditContact() {
         </nav>
 
         <br />
-        <div className="Upload-p">
-          <h2>Upload Photo</h2>
-          <div className="upload-1">
-            <div className="img-btn">
-              {mediaFiles.filter((file) => file.type === "image").length < 4 ? (
-                <>
-                  <img
-                    style={{
-                      width: "40px",
-                      display: "flex",
-                      justifyContent: "center",
-                      margin: "20px auto",
-                    }}
-                    src={editcontact}
-                    alt="nav-img"
-                  />
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*" // Only accept image files
-                    onChange={handleImageUpload}
-                    style={{ display: "none" }}
-                  />
-                  <button
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      margin: "20px auto",
-                      alignItems: "center",
-                    }}
-                    className="save22"
-                    onClick={() =>
-                      document
-                        .querySelector('input[type="file"][accept="image/*"]')
-                        .click()
-                    }
-                  >
-                    Upload
-                  </button>
-                </>
-              ) : (
-                <div style={{ position: "relative" }}>
-                  <img
-                    src={
-                      mediaFiles.filter((file) => file.type === "image")[3]?.url
-                    }
-                    alt="Last uploaded"
-                    style={{
-                      width: "100%",
-                      height: "140px",
-                      objectFit: "cover",
-                      borderRadius: "30px",
-                    }}
-                  />
-                  <button
-                    onClick={() =>
-                      handleRemoveImage(
-                        mediaFiles.findIndex(
-                          (file) =>
-                            file.type === "image" &&
-                            file.url ===
-                              mediaFiles.filter(
-                                (file) => file.type === "image"
-                              )[3].url
-                        )
-                      )
-                    }
-                    style={crossButtonStyle}
-                  >
-                    &times;
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-          <div
-            className="grid-container"
-            style={{ maxWidth: "430px", display: "flex", gap: "10px" }}
-          >
-            {mediaFiles
-              ?.filter((file) => file?.type === "image")
-              ?.slice(0, 3)
-              ?.map((file, index) => (
+        {loading && (
                 <div
-                  key={index}
-                  className="grid-item"
                   style={{
-                    position: "relative",
-                    overflow: "hidden",
-                    width: "calc(33% - 30px)", // Ensures equal width with the gap considered
-                    height: "90px",
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    zIndex: 1,
                   }}
                 >
-                  <img
-                    src={file?.url}
-                    alt={`Uploaded ${index}`}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                    }}
-                  />
-                  <button
-                    onClick={() => handleRemoveImage(index)}
-                    style={crossButtonStyle}
-                  >
-                    &times;
-                  </button>
+                  <CircularProgress />
                 </div>
-              ))}
-          </div>
+              )}
+              <div className="Upload-p">
+      <h2>Upload Photo</h2>
+      <div className="upload-1">
+        <div className="img-btn">
+          <img
+            style={{
+              width: "40px",
+              display: "flex",
+              justifyContent: "center",
+              margin: "20px auto",
+            }}
+            src={editcontact}
+            alt="nav-img"
+          />
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageUpload}
+            style={{ display: "none" }}
+          />
+          <button
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "20px auto",
+              alignItems: "center",
+            }}
+            className="save22"
+            onClick={() =>
+              document
+                .querySelector('input[type="file"][accept="image/*"]')
+                .click()
+            }
+          >
+            Upload
+          </button>
         </div>
+      </div>
+      <Slider {...settings} style={{padding:"20px "}}>
+        {imageFiles?.map((file, index) => (
+          <div key={index} style={{ position: "relative", height: "140px",display:"flex",gap:"20px" }}>
+            <img
+              src={file?.imageUrl}
+              alt={`Uploaded ${index}`}
+              style={{
+                width: "80%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "10px",
+               display:'flex',
+               gap:"20px",
+               outline:"none",
+               padding:'10px '
+               
+              }}
+            />
+            <button
+              onClick={() => handleRemoveImage(index)}
+              style={crossButtonStyle}
+            >
+              &times;
+            </button>
+          </div>
+        ))}
+      </Slider>
+    </div>
+
+
         <br />
         <br />
         <div className="Upload-p">
           <h2>Upload Video</h2>
           <div className="upload-1">
             <div className="img-btn">
-              {mediaFiles.filter((file) => file.type === "video").length ===
-              0 ? (
-                <>
-                  <img
-                    style={{
-                      width: "40px",
-                      display: "flex",
-                      justifyContent: "center",
-                      margin: "20px auto",
-                    }}
-                    src={video}
-                    alt="nav-img"
-                  />
-                  <input
-                    type="file"
-                    accept="video/*" // Only accept video files
-                    onChange={handleVideoUpload}
-                    style={{ display: "none" }}
-                  />
-                  <button
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      margin: "20px auto",
-                      alignItems: "center",
-                    }}
-                    className="save22"
-                    onClick={() =>
-                      document
-                        .querySelector('input[type="file"][accept="video/*"]')
-                        .click()
-                    }
-                  >
-                    Upload
-                  </button>
-                </>
-              ) : (
-                <div style={{ position: "relative" }}>
-                  <video
-                    src={mediaFiles?.find((file) => file.type === "video")?.url}
-                    controls
-                    style={{
-                      width: "100%",
-                      height: "140px",
-                      borderRadius: "30px",
-                    }}
-                  />
-                  <button onClick={handleRemoveVideo} style={crossButtonStyle}>
-                    &times;
-                  </button>
-                </div>
-              )}
+            {videoFiles.length > 0 ?  videoFiles?.map((item, index) => (
+  // Display video if available
+  <div style={{ position: "relative" }}>
+    <video
+      src={item.videoUrl} // Use video URL from videoFiles array
+      controls
+      style={{
+        width: "100%",
+        height: "140px",
+        borderRadius: "30px",
+      }}
+    />
+    <button onClick={ () => {handleRemoveVideo(index)}} style={crossButtonStyle}>
+      &times;
+    </button>
+  </div>
+)) : (
+  // Show upload button if no video is available
+  <>
+    <img
+      style={{
+        width: "40px",
+        display: "block",
+        margin: "20px auto",
+      }}
+      src={video} // Use a placeholder image if needed
+      alt="nav-img"
+    />
+   <>
+  
+    
+    
+    <input
+      type="file"
+      accept="video/*"
+      onChange={handleVideoUpload}
+      style={{ display: "none" }}
+      id="video-upload" // Optional: Add an ID for later reference
+    />
+
+</>
+
+    <button
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        margin: "20px auto",
+        alignItems: "center",
+      }}
+      className="save22"
+      onClick={() =>
+        document
+          .querySelector('input[type="file"][accept="video/*"]')
+          .click()
+      }
+    >
+      Upload
+    </button>
+  </>
+)}
+
+              
             </div>
           </div>
         </div>
@@ -457,6 +560,7 @@ const crossButtonStyle = {
   justifyContent: "center",
   cursor: "pointer",
   fontSize: "17px",
+  zIndex:'10px'
 };
 
 export default EditContact;
