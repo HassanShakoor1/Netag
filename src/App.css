@@ -408,3 +408,8 @@ body {
   transform: scale(0.95);
   transition: opacity 300ms, transform 300ms;
 }
+.slick-list{
+width: 100% !important;
+}
+
+

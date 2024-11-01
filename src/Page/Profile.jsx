@@ -35,6 +35,7 @@ import spotify from "../images/spotify.png";
 import instagram from "../images/instagram.png";
 import paypal from "../images/paypal.png";
 import Links from "./Links";
+import { PaddingTwoTone } from "@mui/icons-material";
 
 function Profile() {
   const navigate = useNavigate();
@@ -336,14 +337,14 @@ function Profile() {
           <img
             className="lady"
             style={{ objectFit: "cover" }}
-            src={profileData.profilePicture || bitcc} // Default profile image
+            src={profileData.profileUrl || bitcc} // Default profile image
           />
           <div></div>
           <div style={{ width: "100%", height: "200px" }}>
             <div style={{ width: "100%" }}>
               <img
                 className="main-img"
-                src={profileData.backgroundPicture || bitc} // Default cover image
+                src={profileData.coverUrl || bitc} // Default cover image
                 onLoad={handleImageLoad}
                 style={{
                   display: imageLoading ? "none" : "block",
@@ -395,15 +396,8 @@ function Profile() {
                 ({profileData.username})
               </span>
             </h2>
-            {/* <div className="data" style={{ lineHeight: "1" }}>
-              <h2 className="head" style={{ marginBottom: "0px" }}>
-                {t("Username")}:{" "}
-                <span style={{ fontWeight: "100" }} className="para">
-                  {profileData.username}
-                </span>
-              </h2>
-            </div> */}
-            <div className="data" style={{ lineHeight: "1" }}>
+            
+            <div className="data" style={{ lineHeight: "0" ,marginTop:"20px"}}>
               <h2 className="head">
                 {t("Designation")}:
                 <span

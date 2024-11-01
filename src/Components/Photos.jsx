@@ -1,150 +1,158 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
-import { getDatabase, ref, set, update, get } from 'firebase/database';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getDatabase, ref, get } from 'firebase/database';
 import { app } from '../firebase';
-import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
+import Slider from 'react-slick'; // Import the Slider component
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 
 function Photos() {
   const [mediaFiles, setMediaFiles] = useState([]);
-  const [recordid, setRecordid] = useState(null);
   const userId = localStorage.getItem('userId');
-
-const navigate=useNavigate();
-
-useEffect(() => {
-  if (userId) {
-    const database = getDatabase(app);
-    const userRef = ref(database, `/PhotosVideos`);
-console.log(userId)
-    get(userRef)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          console.log("photos data now is", data);
-          // Find the specific record associated with the current userId
-          const userRecord = Object.keys(data).map(key => {
-            const record = data[key];
-            if (record.uid === userId) {
-              return {
-                id: recordid,
-                ...record
-              };
-            }
-            return null; // or handle records that don't match
-          }).filter(record => record !== null); 
-          console.log(userRecord);
-          if (userRecord.length > 0) {
-            const record = userRecord[0]; // Use the first record or filter based on your needs
-            setRecordid(record.id); // Set the record ID for further use
-            const images = record.selectedImages || [];
-            const videos = record.videosUri || [];
-            const mediaUrls = [
-              ...images.map((url) => ({ url, type: 'image' })),
-              ...videos.map((url) => ({ url, type: 'video' })),
-            ];
-            setMediaFiles(mediaUrls);
-          } else {
-            console.log('No record found for this user.');
-          }
-        } else {
-          console.log('No data found.');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }
-}, [userId]);
-
-
-
- 
-
- 
-  const handleImagemove=(userId)=>{
-    navigate(`/home/editimage/${userId}`)
-  }
+  
+  const navigate = useNavigate();
 
   
+  useEffect(() => {
+    const fetchMediaFiles = async () => {
+      if (userId) {
+        const database = getDatabase(app);
+        const featuredPhotosRef = ref(database, `User/${userId}/featuredPhotos`);
+        const featuredVideosRef = ref(database, `User/${userId}/featuredVideos`);
+
+        try {
+          // Fetch images
+          const photoSnapshot = await get(featuredPhotosRef);
+          const videoSnapshot = await get(featuredVideosRef);
+          const mediaUrls = [];
+
+          // Handle photo data
+          if (photoSnapshot.exists()) {
+            const photoData = photoSnapshot.val();
+            const photoRecords = Object.keys(photoData).map(key => ({
+              id: key,
+              url: photoData[key].imageUrl,
+              type: 'image',
+            }));
+            mediaUrls.push(...photoRecords);
+            console.log("photos",photoRecords)
+          }
+         
+
+          // Handle video data
+          if (videoSnapshot.exists()) {
+            const videoData = videoSnapshot.val();
+            const videoRecords = Object.keys(videoData).map(key => ({
+              id: key,
+              url: videoData[key].videoUrl,
+              type: 'video',
+            }));
+            mediaUrls.push(...videoRecords);
+          }
+
+          setMediaFiles(mediaUrls);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      } else {
+        console.warn('User ID not found in local storage.');
+      }
+    };
+
+    fetchMediaFiles();
+  }, [userId]);
+
+  const handleImagemove = () => {
+    navigate(`/home/editimage/${userId}`);
+  };
+
+  const images = mediaFiles.filter(media => media.type === 'image');
+  const videos = mediaFiles.filter(media => media.type === 'video');
+  console.log( "fgbdfh",mediaFiles)
+  // Slider settings
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+  };
+console.log(images)
+let [run,setRun]=useState(false)
+useEffect(()=>{
+  // console.log("running")
+    setRun(true)
+
+},[images])
   return (
     <div className='profile-design'>
       <div className="p-vContainer">
         <div className="data" style={{ display: 'flex', justifyContent: 'space-between' }}>
           <h2 className='head' style={{ fontSize: '22px', fontWeight: '100', color: 'rgb(238, 2, 0)', padding: '10px', margin: '0px' }}>
-            Photos & Videos:
+            Photos and Video
           </h2>
         </div>
-
-        <div className="rows" style={{ display: 'flex', flexWrap: 'wrap', padding: '10px' }}>
-          {mediaFiles.slice(0, 3).map((media, index) => (
-            <div
-              className="column"
-              key={index}
-              style={{
-                width: '30%',
-                height: '100px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#f0f0f0',
-                marginRight: index < 2 ? '5px' : '0px',
-              }}
-            >
-              {media.type === 'image' ? (
-                <img
-                  src={media.url}
-                  alt={`Uploaded ${index}`}
-                  style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }}
-                />
-              ) : (
+     
+        <div className="slider-container" style={{ padding: '10px', maxHeight: '120px' }}>
+        {run &&
+        <>
+          {images?.length > 0 ? (
+            
+            <Slider {...settings} style={{ width: '100%' }}>
+              {images?.map(media => (
+                <div key={media?.id} style={{outline:'none'}}>
+                  <img
+                    src={media?.url}
+                    alt={`Uploaded ${media?.id}`}
+                    style={{ height: '100px', width: '90%', objectFit: 'cover', display: 'flex', gap: "10px", borderRadius: "20px",outline:'none' }} // Set max height for slider images
+                  />
+                </div>
+              ))}
+          
+            </Slider>
+          ) : (
+            <p>No images found.</p>
+          )}
+          </>
+        }
+        </div>
+      
+        <div style={{ marginTop: '6px',width:"98%"}}>
+          {videos.length > 0 ? (
+            videos.map((media, index) => (
+              <div
+                className="column"
+                key={media.id}
+                style={{
+                  width: '95%',
+                  minHeight: '175px',
+                  margin: '10px auto',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: '#f0f0f0',
+                }}
+              >
                 <video
                   src={media.url}
                   controls
-                  style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }}
+                  style={{ width: '100%', objectFit: 'cover', maxHeight: "200px" }}
                 />
-              )}
-            </div>
-          ))}
+              </div>
+            ))
+          ) : (
+            <p>No videos found.</p>
+          )}
         </div>
 
-        {mediaFiles.slice(3).map((media, index) => (
-          <div
-            className="column"
-            key={index + 3}
-            style={{
-              width: '95%',
-              height: '100px',
-              margin: '10px auto',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#f0f0f0',
-            }}
-          >
-            {media.type === 'image' ? (
-              <img
-                src={media.url}
-                alt={`Uploaded ${index + 3}`}
-                style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'cover' }}
-              />
-            ) : (
-              <video
-                src={media.url}
-                controls
-                style={{ width: '100%', objectFit: 'contain' }}
-              />
-            )}
-          </div>
-        ))}
-
         <label htmlFor="file-upload" style={{
-          Display: mediaFiles.length >= 9 ? 'none' : 'block',
+          display: 'block',
           width: '95%',
           height: '50px',
-           display: 'flex',
+          display: 'flex',
           alignItems: 'center',
+          marginTop:"30px",
           justifyContent: 'center',
           margin: '0px auto',
           backgroundColor: '#EFEFEF',
@@ -153,19 +161,9 @@ console.log(userId)
           cursor: 'pointer',
           textAlign: 'center',
           borderRadius: '12px',
-        }}  onClick={()=>{handleImagemove(userId)}}>
-
+        }} onClick={handleImagemove}>
           +Add
         </label>
-        {/* <input
-          id="file-upload"
-          type="file"
-          accept="image/*,video/*"
-          multiple
-         
-          onChange={handleImageUpload}
-          style={{ display: 'none' }}
-        /> */}
       </div>
     </div>
   );

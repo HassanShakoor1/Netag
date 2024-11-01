@@ -67,13 +67,16 @@
 }
 
 .grid-item {
-    background-color:#F5F5F5;
+ position: relative;
     color: white;
-    padding: 20px;
+    padding: 10px;
+    height: 100px !important;
+width:100px !important;
 
     text-align: center;
     border-radius: 15px;
-    border: 1px solid #ACACAC;
+    outline: none;
+ 
 }
 
 .slick-slider{

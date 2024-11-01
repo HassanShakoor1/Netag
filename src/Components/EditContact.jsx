@@ -5,10 +5,9 @@ import video from "../images/video.png";
 import { useNavigate } from "react-router-dom";
 import editcontact from "../images/editcontact.png";
 import CircularProgress from "@mui/material/CircularProgress";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from 'react-slick'; // Import the Slider component
-
+import 'slick-carousel/slick/slick.css'; 
+import 'slick-carousel/slick/slick-theme.css';
+import Slider from 'react-slick';
 import {
   getDatabase,
   ref,
@@ -42,30 +41,15 @@ function EditContact() {
 
 
 
-
-
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
-    slidesToShow: 3.5,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
+    slidesToShow: 3, // Change this according to your need
+    slidesToScroll: 3,
+    autoplay: false,
+    autoplaySpeed: 2000,
+    arrows:false
   };
 
 
@@ -158,13 +142,11 @@ function EditContact() {
   
     // Get the uploaded files and filter out image files
     const files = Array.from(event.target.files);
-  
     const imageFiles = files.filter((file) => file.type.startsWith("image/"));
   
     // Initialize Firebase storage
     const storage = getStorage(app);
-    const newMediaFiles = [...mediaFiles]; // Create a copy of the existing media files
-  
+    
     // Set loading state to true
     setLoading(true);
   
@@ -174,48 +156,52 @@ function EditContact() {
       try {
         await uploadBytes(fileRef, file); // Upload the file to Firebase Storage
         const url = await getDownloadURL(fileRef); // Get the download URL
-        newMediaFiles.push({ url, type: "image" }); // Add the new file to the media files array
-        setMediaFiles([...newMediaFiles]); // Update the media files state
-        await saveMediaFiles(recordid, newMediaFiles); // Save media files to your backend or state
+        
+        // Create a new media file object
+        const newMediaFile = { url, type: "image" };
+        
+        // Update the media files state immediately after uploading
+        setMediaFiles((prevFiles) => [...prevFiles, newMediaFile]); 
+        
+        // Optionally, save media files to your backend or state
+        await saveMediaFiles(recordid, [...mediaFiles, newMediaFile]); // You can choose to update this based on your requirement
+  
       } catch (error) {
         console.error("Error uploading file:", error); // Handle upload errors
       }
     }
     
-    // Set loading state to false
+    // Set loading state to false after all uploads are complete
     setLoading(false);
   };
   
+  
 
   const handleVideoUpload = async (event) => {
-    // Start loading
- 
-  
     if (!recordid) {
       console.error("Record ID is not available.");
-
       return;
     }
-  
+
     const files = Array.from(event.target.files);
     const videoFile = files.find((file) => file.type.startsWith("video/"));
-  
+
     if (!videoFile) {
       console.warn("No valid video selected.");
-   
       return;
     }
-  
+
     if (mediaFiles.filter((file) => file.type === "video").length >= 1) {
       console.warn("You can only upload one video.");
- 
       return;
     }
-  
+
     const storage = getStorage(app);
+    setLoading(true); // Start loading
+
     const newMediaFiles = [...mediaFiles];
     const fileRef = storageRef(storage, `User/${recordid}/${videoFile.name}`);
-  
+
     try {
       // Upload the video file
       await uploadBytes(fileRef, videoFile);
@@ -226,8 +212,7 @@ function EditContact() {
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
-      // Ensure loading is set to false after the upload completes or fails
-  
+      setLoading(false); // Stop loading
     }
   };
   
@@ -358,7 +343,23 @@ const handleRemoveVideo = async (recordId) => {
   console.log("video files is", videoFiles);
 
   return (
+
+
+    
     <div className="Editcontainer">
+      {loading && (
+    <div
+      style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        zIndex: 1,
+      }}
+    >
+      <CircularProgress />
+    </div>
+  )}
       <div className="edit-Contact" style={{ marginTop: "20px" }}>
         <nav
           className="nav2"
@@ -387,74 +388,72 @@ const handleRemoveVideo = async (recordId) => {
         </nav>
 
         <br />
-        {loading && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    zIndex: 1,
-                  }}
-                >
-                  <CircularProgress />
-                </div>
-              )}
+      
               <div className="Upload-p">
-      <h2>Upload Photo</h2>
-      <div className="upload-1">
-        <div className="img-btn">
-          <img
+  <h2>Upload Photo</h2>
+  <div className="upload-1">
+    <div className="img-btn">
+      <img
+        style={{
+          width: "40px",
+          display: "flex",
+          justifyContent: "center",
+          margin: "20px auto",
+        }}
+        src={editcontact}
+        alt="nav-img"
+      />
+      <input
+        type="file"
+        multiple
+        accept="image/*" // Only accept image files
+        onChange={handleImageUpload}
+        style={{ display: "none" }}
+      />
+      <button
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          margin: "20px auto",
+          alignItems: "center",
+        }}
+        className="save22"
+        onClick={() =>
+          document
+            .querySelector('input[type="file"][accept="image/*"]')
+            .click()
+        }
+      >
+        Upload
+      </button>
+    </div>
+  </div>
+  
+  <div
+    className="grid-container"
+    style={{ maxWidth: "430px", display: "flex", gap: "10px", flexWrap: "wrap" }}
+  >
+    {imageFiles.length > 3 ? ( // Check if more than 3 images
+      <Slider {...settings} style={{ width: "100%" }}>
+        {imageFiles.map((file, index) => (
+          <div
+            key={index}
+            className="grid-item"
             style={{
-              width: "40px",
-              display: "flex",
-              justifyContent: "center",
-              margin: "20px auto",
+              position: "relative",
+              overflow: "hidden",
+              height: '100%',
+              maxHeight: "100px",
             }}
-            src={editcontact}
-            alt="nav-img"
-          />
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleImageUpload}
-            style={{ display: "none" }}
-          />
-          <button
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              margin: "20px auto",
-              alignItems: "center",
-            }}
-            className="save22"
-            onClick={() =>
-              document
-                .querySelector('input[type="file"][accept="image/*"]')
-                .click()
-            }
           >
-            Upload
-          </button>
-        </div>
-      </div>
-      <Slider {...settings} style={{padding:"20px "}}>
-        {imageFiles?.map((file, index) => (
-          <div key={index} style={{ position: "relative", height: "140px",display:"flex",gap:"20px" }}>
             <img
               src={file?.imageUrl}
               alt={`Uploaded ${index}`}
               style={{
-                width: "80%",
+                width: "100%",
                 height: "100%",
                 objectFit: "cover",
                 borderRadius: "10px",
-               display:'flex',
-               gap:"20px",
-               outline:"none",
-               padding:'10px '
-               
               }}
             />
             <button
@@ -466,80 +465,108 @@ const handleRemoveVideo = async (recordId) => {
           </div>
         ))}
       </Slider>
-    </div>
-
-
-        <br />
-        <br />
-        <div className="Upload-p">
-          <h2>Upload Video</h2>
-          <div className="upload-1">
-            <div className="img-btn">
-            {videoFiles.length > 0 ?  videoFiles?.map((item, index) => (
-  // Display video if available
-  <div style={{ position: "relative" }}>
-    <video
-      src={item.videoUrl} // Use video URL from videoFiles array
-      controls
-      style={{
-        width: "100%",
-        height: "140px",
-        borderRadius: "30px",
-      }}
-    />
-    <button onClick={ () => {handleRemoveVideo(index)}} style={crossButtonStyle}>
-      &times;
-    </button>
-  </div>
-)) : (
-  // Show upload button if no video is available
-  <>
-    <img
-      style={{
-        width: "40px",
-        display: "block",
-        margin: "20px auto",
-      }}
-      src={video} // Use a placeholder image if needed
-      alt="nav-img"
-    />
-   <>
-  
-    
-    
-    <input
-      type="file"
-      accept="video/*"
-      onChange={handleVideoUpload}
-      style={{ display: "none" }}
-      id="video-upload" // Optional: Add an ID for later reference
-    />
-
-</>
-
-    <button
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        margin: "20px auto",
-        alignItems: "center",
-      }}
-      className="save22"
-      onClick={() =>
-        document
-          .querySelector('input[type="file"][accept="video/*"]')
-          .click()
-      }
-    >
-      Upload
-    </button>
-  </>
-)}
-
-              
-            </div>
-          </div>
+    ) : (
+      imageFiles.map((file, index) => (
+        <div
+          key={index}
+          className="grid-item"
+          style={{
+            position: "relative",
+            overflow: "hidden",
+            height: '100%',
+            maxHeight: "100px",
+          }}
+        >
+          <img
+            src={file?.imageUrl}
+            alt={`Uploaded ${index}`}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              borderRadius: "10px",
+            }}
+          />
+          <button
+            onClick={() => handleRemoveImage(index)}
+            style={crossButtonStyle}
+          >
+            &times;
+          </button>
         </div>
+      ))
+    )}
+  </div>
+</div>
+
+        <br />
+        <br />
+      
+
+        <div className="Upload-p">
+  <h2>Upload Video</h2>
+  <div className="upload-1">
+    <div className="img-btn">
+      {videoFiles.length > 0 ? (
+        videoFiles.map((item, index) => (
+          <div style={{ position: "relative" }} key={index}>
+          
+            <video
+              src={item.videoUrl} // Use video URL from videoFiles array
+              controls
+              style={{
+                width: "100%",
+                height: "140px",
+                borderRadius: "30px",
+                objectFit:"cover"
+              }}
+            />
+            <button
+              onClick={() => handleRemoveVideo(index)}
+              style={crossButtonStyle}
+            >
+              &times;
+            </button>
+          </div>
+        ))
+      ) : (
+        <>
+          <img
+            style={{
+              width: "40px",
+              display: "block",
+              margin: "20px auto",
+            }}
+            src={video} // Use a placeholder image if needed
+            alt="nav-img"
+          />
+          <input
+            type="file"
+            accept="video/*"
+            onChange={handleVideoUpload}
+            style={{ display: "none" }}
+            id="video-upload" // Optional: Add an ID for later reference
+          />
+          <button
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "20px auto",
+              alignItems: "center",
+            }}
+            className="save22"
+            onClick={() =>
+              document.querySelector('input[type="file"][accept="video/*"]').click()
+            }
+          >
+            Upload
+          </button>
+        </>
+      )}
+    </div>
+  </div>
+</div>
+
       </div>
     </div>
   );
@@ -560,7 +587,6 @@ const crossButtonStyle = {
   justifyContent: "center",
   cursor: "pointer",
   fontSize: "17px",
-  zIndex:'10px'
 };
 
 export default EditContact;

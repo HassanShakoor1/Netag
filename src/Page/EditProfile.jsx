@@ -31,7 +31,7 @@ function EditProfile() {
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [designation, setDesignation] = useState("");
-  const [about, setAbout] = useState("");
+  const [aboutUs, setAbout] = useState("");
   const [company, setCompany] = useState("");
   const [phone, setPhone] = useState("");
   const [businesslocatioon, setBusinessLocation] = useState("");
@@ -78,18 +78,18 @@ function EditProfile() {
           setUsername(userData.username || "");
           setName(userData.name || "");
           setDesignation(userData.designation || "");
-          setAbout(userData.about || "");
+          setAbout(userData.aboutUs || "");
           setCompany(userData.companyname || "");
           setPhone(userData.phone || "");
           setBusinessLocation(userData.businesslocatioon || "");
 
           // Set existing images (if available) in the component's state
-          if (userData.profilePicture) {
-            setProfileImage(userData.profilePicture);
+          if (userData.profileUrl) {
+            setProfileImage(userData.profileUrl);
           }
 
-          if (userData.backgroundPicture) {
-            setCoverImage(userData.backgroundPicture);
+          if (userData.coverUrl) {
+            setCoverImage(userData.coverUrl);
           }
         } else {
           console.log("No user data found for this userId");
@@ -119,11 +119,11 @@ function EditProfile() {
       const existingData = userSnapshot.val() || {};
 
       let ImageUrl = [
-        ...(existingData.profilePicture ? [existingData.profilePicture] : []),
+        ...(existingData.profileUrl ? [existingData.profileUrl] : []),
       ];
       let BackgroundImageUrl = [
-        ...(existingData.backgroundPicture
-          ? [existingData.backgroundPicture]
+        ...(existingData.coverUrl
+          ? [existingData.coverUrl]
           : []),
       ];
 
@@ -155,14 +155,14 @@ function EditProfile() {
           username: username || existingData.username,
           name: name || existingData.name,
           designation: designation || existingData.designation,
-          about: about || existingData.about,
+          aboutUs: aboutUs || existingData.aboutUs,
           companyname: company || existingData.companyname,
           phone: phone || existingData.phone,
           businesslocatioon:
             businesslocatioon || existingData.businesslocatioon,
-          profilePicture: ImageUrl[0] || existingData.profilePicture,
-          backgroundPicture:
-            BackgroundImageUrl[0] || existingData.backgroundPicture,
+          profileUrl: ImageUrl[0] || existingData.profileUrl,
+          coverUrl:
+            BackgroundImageUrl[0] || existingData.coverUrl,
           id: userId,
         });
 
@@ -378,10 +378,10 @@ function EditProfile() {
           >
             <CustomTextField
               style={{ width: "100%" }}
-              label="About"
-              name="about"
+              label="about"
+              name="aboutUs"
               size="small"
-              value={about}
+              value={aboutUs}
               onChange={(e) => setAbout(e.target.value)}
             />
           </div>
