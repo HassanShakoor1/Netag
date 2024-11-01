@@ -316,6 +316,7 @@ function Profile() {
     );
   }
 
+  console.log("i am cover",profileData.coverUrl)
   return (
     <div className="ProfileContainer">
       <div className="profile-design" style={{ paddingBottom: "0px" }}>
@@ -344,7 +345,7 @@ function Profile() {
             <div style={{ width: "100%" }}>
               <img
                 className="main-img"
-                src={profileData.coverUrl || bitc} // Default cover image
+                src={profileData?.coverUrl || bitc} // Default cover image
                 onLoad={handleImageLoad}
                 style={{
                   display: imageLoading ? "none" : "block",

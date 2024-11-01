@@ -41,7 +41,7 @@ function CreateNewProfile() {
   const [username, setusername] = useState("");
   const [name, setName] = useState("");
   const [designation, setdesignation] = useState("");
-  const [about, setAbout] = useState("");
+  const [aboutUs, setAbout] = useState("");
   const [company, setcompany] = useState("");
   const [phone, setPhone] = useState("");
   const [businesslocatioon, setBusinessLocation] = useState("");
@@ -144,13 +144,13 @@ function CreateNewProfile() {
 
       setusername(data.username);
       setdesignation(data.designation);
-      setAbout(data.about);
+      setAbout(data.aboutUs);
       setPhone(data.phone);
       setcompany(data.companyname);
       setprofileName(data.profileUrl);
       setBusinessLocation(data.businesslocatioon);
-      setDisplayProfileImageUrl(data.backgroundPicture);
-      setDisplayDpImageUrl(data.profilePicture);
+      setDisplayProfileImageUrl(data.coverUrl);
+      setDisplayDpImageUrl(data.profileUrl);
       setName(data.name);
     };
     checkForUpdate();
@@ -166,8 +166,8 @@ function CreateNewProfile() {
       console.log("id", id);
 
       // Common variables for image URLs
-      let newProfileImageUrl = DisplayDpImageUrl;
-      let newDisplayDpImageUrl = DisplayProfileImageUrl;
+      let coverUrl= DisplayProfileImageUrl;
+      let profileUrl = DisplayDpImageUrl;
 
       // Upload profile image if selected
       if (profileImage) {
@@ -176,14 +176,14 @@ function CreateNewProfile() {
           `profiles/${profileImage.name}`
         );
         const uploadResult = await uploadBytes(profileImageRef, profileImage);
-        newDisplayDpImageUrl = await getDownloadURL(uploadResult.ref);
+        profileUrl = await getDownloadURL(uploadResult.ref);
       }
 
       // Upload cover (dp) image if selected
       if (dpImage) {
         const coverImageRef = storageRef(storage, `covers/${dpImage.name}`);
         const uploadResult = await uploadBytes(coverImageRef, dpImage);
-        newProfileImageUrl = await getDownloadURL(uploadResult.ref);
+        coverUrl = await getDownloadURL(uploadResult.ref);
       }
 
       // If updating an existing profile
@@ -191,20 +191,20 @@ function CreateNewProfile() {
         setSaving(true);
         const dataRef = sRef(db, `User/${id}`);
         await update(dataRef, {
-          profileUrl: name,
+          ProfileUrl: name,
           profileOn: selected,
           id: id,
           username: username,
           userName1: "",
-          backgroundPicture: newDisplayDpImageUrl,
-          profilePicture: newProfileImageUrl,
+          coverUrl: profileUrl,
+          ProfileUrl: coverUrl,
           designation: designation,
           phone: phone,
           companyname: company,
           language: "",
           businesslocatioon: businesslocatioon,
           name: name,
-          about: about,
+          aboutUs: aboutUs,
           address: "",
           bgButtonColor: "",
           bgColor: "",
@@ -224,7 +224,7 @@ function CreateNewProfile() {
           gender: "",
           ismain: "",
           parentID: localStorage.getItem("parentId"), // Ensure parentId is set
-          phone: "",
+          phone: phone,
           platorform: "",
           proVersion: "",
           proVersionExpiryDate: "",
@@ -243,19 +243,19 @@ function CreateNewProfile() {
         setSaving(true);
         const newProfileData = {
           id: newProfileKey,
-          profileUrl: name,
+          ProfileUrl: name,
           profileOn: selected,
           username: username,
           userName1: "",
-          backgroundPicture: newDisplayDpImageUrl,
-          profilePicture: newProfileImageUrl,
+          coverUrl: profileUrl,
+          profileUrl: coverUrl,
           designation: designation,
           phone: phone,
           companyname: company,
           language: "",
           businesslocatioon: businesslocatioon,
           name: name,
-          about: about,
+          aboutUs: aboutUs,
           address: "",
           bgButtonColor: "",
           bgColor: "",
@@ -275,7 +275,7 @@ function CreateNewProfile() {
           gender: "",
           ismain: "",
           parentID: localStorage.getItem("parentId"), // Ensure parentId is set
-          phone: "",
+          phone: phone,
           platorform: "",
           proVersion: "",
           proVersionExpiryDate: "",
@@ -512,9 +512,9 @@ function CreateNewProfile() {
             <CustomTextField
               style={{ width: "100%" }}
               label="About"
-              name="about"
+              name="aboutUs"
               size="small"
-              value={about}
+              value={aboutUs}
               onChange={(e) => setAbout(e.target.value)}
             />
           </div>

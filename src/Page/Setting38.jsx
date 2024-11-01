@@ -112,7 +112,7 @@ function Setting() {
                           borderRadius: "100%",
                           objectFit: "cover",
                         }}
-                        src={item.profilePicture}
+                        src={item.profileUrl}
                         alt=""
                       />
                     </div>
@@ -121,7 +121,7 @@ function Setting() {
                         {item.name}
                       </div>
                       <div style={{ fontSize: "10px", color: "#FFFFFF" }}>
-                        ({item.nickname})
+                        ({item.username})
                       </div>
                     </div>
                   </div>
