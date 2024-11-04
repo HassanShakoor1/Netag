@@ -4,6 +4,7 @@ import { getDatabase, ref as dbRef, get, remove } from "firebase/database";
 import { getStorage, ref as storageRef, deleteObject } from "firebase/storage";
 import { database, storage } from "../firebase"; // Adjust the import path as needed
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@mui/material/Modal";
 import { IoChevronBack } from "react-icons/io5";
 import IconButton from "@mui/material/IconButton";
@@ -88,7 +89,7 @@ function EditProduct() {
   };
 
   const ADD = () => {
-    navigate(`/edit-product-detail/${id}`);
+    navigate(`/edit-product-detail/${id}`,{state:{name}});
   };
 
   const handleDeleteProduct = async (productid) => {
@@ -173,6 +174,7 @@ function EditProduct() {
           setProducts(brandsArray);
           setProductCount(brandsArray.length);
           brandsArray.reverse();
+          
         } else {
           console.log("No data found for category:", id);
         }
@@ -190,8 +192,26 @@ function EditProduct() {
     });
   }, [id]);
   console.log("products are ", products);
+
+   
+  {loading && (
+    <div
+      style={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        zIndex: 1,
+      }}
+    >
+      <CircularProgress />
+    </div>
+  )}
   return (
     <div className="productContainer">
+     
+
+     
       <div className="Product-design">
         <div className="bck-head-btn">
           <IoChevronBack
@@ -227,6 +247,10 @@ function EditProduct() {
         <br />
         <br />
 
+      
+
+      
+      
         <div style={{ width: "95%" }} className="Edit-product-Design">
           {products.map((product, index) => (
             <div
@@ -235,6 +259,7 @@ function EditProduct() {
               style={{ marginTop: "20px" }}
               className="items"
             >
+          
               <img
                 className="item-img"
                 style={{ objectFit: "cover" }}
@@ -469,8 +494,11 @@ function EditProduct() {
               ></div>
             </Box>
           </Modal>
+      
         )}
+       
       </div>
+
     </div>
   );
 }

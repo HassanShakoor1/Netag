@@ -83,7 +83,7 @@ body {
   font-size: 15px;
 }
 .para {
-  margin-left: 4rem;
+  margin-left: 2rem !important;
   color: rgb(153, 153, 153);
   text-align: right;
 }

@@ -330,6 +330,7 @@ function Addcatagory() {
               borderRadius: "20px",
               height: "50px",
               cursor: "pointer",
+              fontSize:"20px"
             }}
           >
             {id ? "Update" : "Add"}

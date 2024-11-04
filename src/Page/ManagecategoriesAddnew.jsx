@@ -27,6 +27,12 @@ function ServiceaddcategoryAddnewProduct() {
 
   // firebase states for fetching data
   const [name1, setname1] = useState("");
+  const [price, setprice] = useState("");
+  const [mail, setMail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [site, setSite] = useState("");
+  const [avaliable, setIsavaliable] = useState(false)
+ 
   const [description, setdescription] = useState("");
 
   const createnew = async () => {
@@ -48,26 +54,24 @@ function ServiceaddcategoryAddnewProduct() {
     const productId = newProductId.key;
 
     const productData = {
-      // productId: productId,
-      // name1: name1,
-      // description: description,
-      imageUrl: url,
-      // serviceId: id,
+      imageURL: url,
 
-      businesscontactno: "",
-      categoryid: id,
-      categoryname: "",
+      businesscontactno: phone,
+      categoryId:id ,
+      categoryName:"",
       description: description,
-      email: "",
-      isavailable: "",
-      serviceid: productId,
-      servicename: name1,
-      serviceprice: "",
+      email: mail,
+      id:productId,
+      isAvailableForAppointment: avaliable,
+     
+      name: name1,
+      price: price,
       uid: localStorage.getItem("userId"),
-      websiteurl: "",
+      website: site
     };
     await set(newProductId, productData);
     toast.success("Product created successfully");
+    navigate(-1)
     // alert("Product created successfully")
   };
 
@@ -94,11 +98,7 @@ function ServiceaddcategoryAddnewProduct() {
       <div className="categories-width">
         <div className="categories-maindiv1">
           <div className="categories-width1">
-            {/* add category  */}
-            {/* <div style={{ marginLeft: "18px", display: "flex", justifyContent: "space-between", alignItems: "center", width: "60%" }}>
-                            <div><img src={vector} alt="" /> </div>
-                            <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "500" }}>Add Category</div>
-                        </div> */}
+          
             <div
               style={{
                 display: "flex",
@@ -136,44 +136,155 @@ function ServiceaddcategoryAddnewProduct() {
                 marginTop: "3rem",
               }}
             >
-              {t("Service")}
+              {t("Service Details")}
             </div>
 
             {/* input  */}
             <div style={{ marginTop: "2rem" }}>
-              <div
-                style={{
-                  marginLeft: "18px",
-                  fontWeight: "500",
-                  marginBottom: "10px",
-                }}
+             
+             
+              <div className="formRow">
+            <div className="formColumn">
+              <label
+                style={{ paddingLeft: "10px", fontWeight: "100" }}
+                className="formHeading"
               >
-                {t("Name")}
-              </div>
-              <div style={{ width: "100%" }}>
-                <input
-                  type="text"
-                  placeholder="Mental Health Service"
-                  // style={{ width: "100%", padding: "13px", paddingLeft:"18px", height: "6vh", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" }}
-                  // style={{ padding:"10px",outline:"none",resize: "none", width: "100%", height: "6vh", backgroundColor: "#F7F7F7", borderRadius: "16px", border:"none",boxSizing: "border-box" }}
-                  style={{
-                    padding: "10px 15px", // Adjust the horizontal padding
-                    outline: "none",
-                    resize: "none",
-                    width: "100%",
-                    height: "6vh",
-                    backgroundColor: "#F7F7F7",
-                    borderRadius: "16px",
-                    border: "none",
-                    boxSizing: "border-box",
-                    lineHeight: "1.6", // Set consistent line-height
-                  }}
-                  onChange={(e) => setname1(e.target.value)}
-                />
-              </div>
+                Service name
+              </label>
+              <input
+                style={{
+                  borderRadius: "20px",
+                  backgroundColor: "#F7F7F7",
+                  width: "95%",
+                }}
+                type="text"
+                className="formInput"
+                placeholder="Service Name"
+                name="productname"
+                onChange={(e) => setname1(e.target.value)}
+              
+               
+              />
             </div>
+            <div className="formColumn">
+              <label
+                style={{ paddingLeft: "10px", fontWeight: "100" }}
+                className="formHeading"
+              >
+                Price
+              </label>
+              <input
+                style={{
+                  borderRadius: "20px",
+                  backgroundColor: "#F7F7F7",
+                  width: "100%",
+                }}
+                type="text"
+                className="formInput"
+                placeholder="$44"
+                name="price"
+              
+                onChange={(e) => setprice(e.target.value)}
+              />
+            </div>
+          </div>
+
+
+             
+          <div className="formRow" style={{marginTop:"40px"}}>
+            <div className="formColumn">
+              <label
+                style={{ paddingLeft: "10px", fontWeight: "100" }}
+                className="formHeading"
+              >
+                Business Contact
+              </label>
+              <input
+                style={{
+                  borderRadius: "20px",
+                  backgroundColor: "#F7F7F7",
+                  width: "95%",
+                }}
+                type="text"
+                className="formInput"
+                placeholder="Your Business Contact"
+                name="productname"
+                onChange={(e) => setPhone(e.target.value)}
+               
+              />
+            </div>
+            <div className="formColumn">
+              <label
+                style={{ paddingLeft: "10px", fontWeight: "100" }}
+                className="formHeading"
+              >
+                Website
+              </label>
+              <input
+                style={{
+                  borderRadius: "20px",
+                  backgroundColor: "#F7F7F7",
+                  width: "100%",
+                }}
+                type="text"
+                className="formInput"
+                placeholder="Your Website"
+                name="price"
+              
+                onChange={(e) => setSite(e.target.value)}
+              />
+            </div>
+
+          </div>
+
+
+          <div className="formColumn" style={{marginTop:"40px"}}>
+              <label
+                style={{ paddingLeft: "10px", fontWeight: "100" }}
+                className="formHeading"
+              >
+                Email
+              </label>
+              <input
+                style={{
+                  borderRadius: "20px",
+                  backgroundColor: "#F7F7F7",
+                  width: "100%",
+                }}
+                type="text"
+                className="formInput"
+                placeholder="Your Email id"
+                name="mail"
+              
+                onChange={(e) => setMail(e.target.value)}
+              />
+            </div>
+
+            </div>
+
+       <div style={{ display: 'flex', alignItems: 'center', marginTop: "30px" ,marginLeft:"10px"}}>
+  <input
+    style={{
+      borderRadius: "20px",
+      backgroundColor: "#F7F7F7",
+      width: "20px", // Adjust width to make it smaller, as it’s a checkbox
+      height: "20px", // Optional: Adjust height for better visibility
+      marginRight: "10px", // Space between checkbox and text
+    }}
+    type="checkbox"
+    className="formInput"
+    name="mail"
+    onChange={(e) => setIsavaliable(e.target.checked)} // Use e.target.checked for checkboxes
+  />
+  <p>Avaliable for Appointment</p>
+</div>
+
+
+ 
+
+
             {/* description */}
-            <div style={{ marginTop: "8px", marginBottom: "8px" }}>
+            <div style={{ marginTop: "28px", marginBottom: "8px" }}>
               <div
                 style={{
                   marginLeft: "18px",
@@ -202,31 +313,7 @@ function ServiceaddcategoryAddnewProduct() {
                   onChange={(e) => setdescription(e.target.value)}
                 />
               </div>
-              {/* <div style={{ marginTop: "6px" }}>
-                                <div style={{ width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "8px" }}>
-                                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
-                                        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                                            <img src={camera} alt="" />
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                multiple
-                                                className='input-file'
-                                                id="upload-photos"
-                                                
-                                            />
-                                            <label
-                                                htmlFor="upload-photos"
-                                                className='label'
-                                            >
-                                                Upload Photos
-                                            </label>
-                                            <div style={{ color: "#726F6F", textAlign: "center", fontSize: "10px" }}>Upload Image</div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div> */}
+             
               <div style={{ marginTop: "6px" }}>
                 {image ? (
                   <div
@@ -325,37 +412,8 @@ function ServiceaddcategoryAddnewProduct() {
                   </div>
                 )}
 
-                {/* <div style={{ width: "100%", height: "20vh", position: "relative" }}>
-                                    {!isImageUploaded && (
-                                        <div style={{ width: "100%", height: "20vh", position: "absolute" }}>
-                                            <img src={imageSrc} alt="Camera" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                        </div>
-                                    )}
-                                    <input
-                                        type="file"
-                                        onChange={handleImageChange}
-                                        style={{
-                                            width: "100%",
-                                            height: "20vh",
-                                            backgroundColor: "#F1F1F1",
-                                            border: "none",
-                                            borderRadius: "12px",
-                                            position: "absolute",
-                                            top: 0,
-                                            left: 0,
-                                            cursor: "pointer",
-                                            opacity: 0 // Hide the input but keep it clickable
-                                        }}
-                                        accept="image/*"
-                                    />
-                                    {isImageUploaded && (
-                                        <img
-                                            src={imageSrc}
-                                            alt="Uploaded"
-                                            style={{ width: "100%", height: "20vh", objectFit: "cover", borderRadius: "12px" }}
-                                        />
-                                    )}
-                                </div> */}
+               
+                   
               </div>
               {/* button  */}
               <div style={{ marginTop: "30px" }}>
@@ -368,6 +426,8 @@ function ServiceaddcategoryAddnewProduct() {
                     borderRadius: "16px",
                     backgroundColor: "#EE0000",
                     color: "white",
+                    cursor:'pointer',
+                    fontSize:"20px"
                   }}
                 >
                   {t("Create")}

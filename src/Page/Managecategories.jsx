@@ -1,7 +1,7 @@
 import vector from "../images/Vector.svg"
 import search from "../images/search.svg"
 import doctor1 from "../images/doctor1.svg"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect ,useRef} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -11,7 +11,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import pic4 from "../images/pic4.svg"
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, Link, useParams,useLocation } from "react-router-dom";
 import { database as db } from "../firebase.jsx"
 import { get, ref, remove } from "firebase/database"
 import { useTranslation } from "react-i18next";
@@ -52,6 +52,14 @@ function Managecategories() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentItemId, setCurrentItemId] = useState(null);
   const openMenu = Boolean(anchorEl);
+  const location = useLocation();
+  const { state } = location; // Access the state from location
+  const { FireBasedata } = state || {}; // Access Firebasedata
+  const [count, setCount] = useState(0); 
+  const name=FireBasedata?.name
+  const categoryRefs = useRef([]);
+
+  console.log( "name is",name);
 
   // id from header 
   const { id } = useParams();
@@ -67,9 +75,9 @@ function Managecategories() {
   };
 
   const navigate = useNavigate();
-  const goback = () => {
-    navigate(`/home/services`);
-  }
+  const goback = (count) => {
+    navigate(`/home/services`, { state: { count } }); // Pass count as part of the state object
+};
 
   const handleMenuItemClick = (path) => {
     console.log(path);
@@ -80,19 +88,37 @@ function Managecategories() {
   };
 
   // function to get data of all products of specific category from firebase 
+  useEffect(() => {
+    getProductsData();
+  }, []);
+  
   const getProductsData = async () => {
     const dbRef = ref(db, 'Services');
     const snapshot = await get(dbRef);
     const data = snapshot.val();
 
-    const filterData = Object.keys(data).filter(key => data[key].categoryid === id)
-      .map(key => ({
-        id: key,
-        ...data[key]
-      }));
-    console.log(filterData);
+    // Filter the data based on categoryId
+    const filterData = Object.keys(data)
+        .filter(key => data[key].categoryId === id)
+        .map(key => {
+            return {
+                id: key,
+                ...data[key],
+            };
+        });
+
+    console.log(filterData); // Check the data here
     setProductOfCategory(filterData);
-  }
+
+    // Count the total products in the filtered data
+    const count = filterData.length; // This gives the number of products for the specific category
+    setCount(count); // Update the count state
+
+    categoryRefs.current = new Array(count).fill(null); // Update categoryRefs
+    console.log("count is", count); // Log the count
+}
+
+
 
   // delete function 
   const handleDelete = async (id) => {
@@ -107,15 +133,39 @@ function Managecategories() {
     }
   }
 
-  useEffect(() => {
-    getProductsData();
-  }, []);
+ 
 
   // Open modal with product details
   const handleOpen = (pic, title, explain) => {
     setModalContent({ pic, title, explain });
     setOpen(true);
   }
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    console.log("Search Term:", searchTerm); // Log the search term
+    console.log("Categories:", productOfCategory); // Log categories being searched
+  
+    const foundCategoryIndex = productOfCategory.findIndex(
+      (category) => category.name && category.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  
+    if (foundCategoryIndex !== -1 && categoryRefs.current[foundCategoryIndex]) {
+      categoryRefs.current[foundCategoryIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    } else {
+      toast.error("Category not found!");
+    }
+  };
+  
+
 
   return (
     <div className="categories-maindiv">
@@ -124,14 +174,14 @@ function Managecategories() {
           <div className="categories-width1">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
               <div>
-                <img style={{ cursor: "pointer" }} onClick={goback} src={vector} alt="" />
+                <img style={{ cursor: "pointer" }} onClick={() => goback(count)} src={vector} alt="" />
               </div>
-              <div style={{ color: "#EE0000", fontWeight: "600" }}>
-                {t("Manage Health Products")}
+              <div style={{ color: "#EE0000", fontWeight: "100",fontSize:"20px" }}>
+               <p>{name}</p>
               </div>
               <div style={{ backgroundColor: "none" }}>
                 <Link to={`/home/services/catagory-products/${id}/serviceaddcategory-product`}>
-                  <button style={{ border: "1.5px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", paddingTop: "5px", paddingBottom: "5px", color: '#EE0000', backgroundColor: "white" }}>
+                  <button style={{ border: "1.5px solid #EE0000", borderRadius: "14px", paddingLeft: "18px", paddingRight: "18px", paddingTop: "5px", paddingBottom: "5px", color: '#EE0000', backgroundColor: "white" ,cursor:"pointer"}}>
                     {t("Add")}
                   </button>
                 </Link>
@@ -139,17 +189,24 @@ function Managecategories() {
             </div>
             {/* input  */}
             <div className="categories-input">
-              <div style={{ width: "23%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <div>
-                  <img src={search} alt="" />
-                </div>
-                <div style={{ color: "#929292", width: "70%" }}>
-                  {t(" Search")}
-                </div>
-              </div>
-            </div>
+      <form onSubmit={handleSearchSubmit} style={{ display: "flex", alignItems: "center", width: "100%" }}>
+        <img src={search} alt="Search" style={{ marginRight: "8px" }} />
+        <input
+          type="search"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          placeholder="Search..."
+          style={{
+            color: "#929292",
+            width: "100%",
+            border: "none",
+            outline: "none",
+          }}
+        />
+      </form>
+    </div>
             {productOfCategory.map((x, index) => (
-              <div className="managecategories-card" key={index}>
+              <div className="managecategories-card" key={x.id}  ref={(el) => (categoryRefs.current[index] = el)}>
                 {console.log(index)}
                 <div className="cardcenter">
                   <div className="cardcenter-width" style={{ paddingTop: '4px', paddingBottom: '4px' }}>
@@ -157,19 +214,19 @@ function Managecategories() {
                       <div style={{ width: '80%' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center', height: '110px' }}>
                           {/* Image */}
-                          <div style={{ width: "25%", display: "flex", justifyContent: "center" }}>
+                          <div style={{ width: "35%", display: "flex", justifyContent: "center",height:"100%" }}>
                             <img
-                              src={x.imageUrl}
+                              src={x.imageURL}
                               alt=""
-                              style={{ cursor: 'pointer', width: "100%", objectFit: "contain" }}
-                              onClick={() => handleOpen(x.imageUrl, x.servicename, x.description)}
+                              style={{ cursor: 'pointer', width: "100%", objectFit: "cover",borderRadius:"10px" }}
+                              onClick={() => handleOpen(x.imageURL, x.name, x.description)}
                             />
                           </div>
                           {/* Title */}
-                          <div style={{ width: '70%', display: 'flex', justifyContent: 'start', alignItems: 'center' }}>
+                          <div style={{ width: '60%', display: 'flex', justifyContent: 'start', alignItems: 'center' }}>
                             <div>
-                              <div style={{ fontSize: '18px', color: '#EE0000' }}>{x.servicename}</div>
-                              <div style={{ fontSize: '8px', color: '#777777' }}>{x.description}</div>
+                              <div style={{ fontSize: "20px", color: '#EE0000' }}>{x.name}</div>
+                              <div style={{ fontSize: '12px', color: '#777777' }}>{x.description}</div>
                             </div>
                           </div>
                         </div>
@@ -361,3 +418,9 @@ function Managecategories() {
   )
 }
 export default Managecategories;
+
+
+
+
+
+  

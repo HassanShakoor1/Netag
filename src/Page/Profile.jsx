@@ -410,11 +410,11 @@ function Profile() {
               </h2>
             </div>
             <div className="data" style={{ lineHeight: "0" }}>
-              <h2 className="head">
+              <h2 className="head" >
                 Phone:
                 <br />{" "}
                 <span
-                  style={{ marginLeft: "145px", fontWeight: "100" }}
+                  style={{ marginLeft: "145px", fontWeight: "100",paddingLeft:"5.5rem" }}
                   className="para"
                 >
                   {profileData.phone}
@@ -448,7 +448,7 @@ function Profile() {
                   className="para"
                   style={{
                     fontWeight: "400",
-                    paddingLeft: "8px",
+                    paddingLeft: "15px",
                   }}
                 >
                   {profileData.companyname}

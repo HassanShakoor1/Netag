@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link,useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { database as db } from "../firebase.jsx";
 import {
@@ -22,6 +22,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useTranslation } from "react-i18next";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { X } from "@mui/icons-material";
 
 const ITEM_HEIGHT = 48;
 
@@ -33,36 +34,68 @@ function Categories() {
   const userId = localStorage.getItem("userId");
   const { t } = useTranslation();
   const navigate = useNavigate();
+  
+  const location = useLocation();
+  // Access the state from location
+  // const { count } = state || {}; // Destructure count from state
+  const count = location.state?.count || {};
+    console.log("is count =", count); // Check the count structure
 
-  const getData = async () => {
-    toast.dismiss();
-    try {
-      const querydata = query(
-        ref(db, `ServiceCategory`),
-        orderByChild("uid"),
-        equalTo(userId)
-      );
-      const snap = await get(querydata);
-      const data = await snap.val();
-
-      const filteredData = Object.keys(data).map((key) => ({
-        id: key,
-        ...data[key],
-      }));
-
-      setFirebasedata(filteredData);
-      // Initialize refs array to the length of the filtered data
-      categoryRefs.current = new Array(filteredData.length).fill(null);
-    } catch (error) {
-      console.log(error);
-      toast.error("No Data Found");
-    }
+   
+    const getData = async () => {
+      toast.dismiss();
+      try {
+          const querydata = query(
+              ref(db, `ServiceCategory`),
+              orderByChild("uid"),
+              equalTo(userId)
+          );
+          const snap = await get(querydata);
+          const data = await snap.val();
+  
+          if (data) {
+              const filteredData = await Promise.all(
+                  Object.keys(data).map(async (key) => {
+                      const servicesQuery = query(
+                          ref(db, `Services`),
+                          orderByChild("categoryid"),
+                          equalTo(key)
+                      );
+                      const servicesSnapshot = await get(servicesQuery);
+                      const servicesData = servicesSnapshot.val();
+  
+                      // Log servicesData to check its structure
+                      console.log(`Services data for category ${key}:`, servicesData);
+  
+                      // Count the number of services
+                      const serviceCount = servicesData ? Object.keys(servicesData).length : 0;
+  
+                      return {
+                          id: key,
+                          ...data[key],
+                          count: serviceCount,
+                      };
+                  })
+              );
+  
+              console.log("Filtered Data:", filteredData); // Log the filtered data
+              setFirebasedata(filteredData);
+          } else {
+              toast.error("No Data Found");
+          }
+      } catch (error) {
+          console.log(error);
+          toast.error("No Data Found");
+      }
   };
+  
+  
+  
+  
 
-  useEffect(() => {
-    getData();
-  }, []);
-
+    useEffect(() => {
+        getData();
+    }, [count]);
   const open = Boolean(anchorEl);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -95,10 +128,11 @@ function Categories() {
     setAnchorEl(null);
   };
 
-  const handlemanage = (id) => {
-    navigate(`/home/services/catagory/${id}`);
+  const handlemanage = (id,Firebasedata) => {
+    console.log(Firebasedata)
+    navigate(`/home/services/catagory/${id}`,{state:{Firebasedata}});
   };
-
+console.log(Firebasedata)
   const goback = () => {
     navigate("/home");
   };
@@ -158,8 +192,8 @@ function Categories() {
               <div
                 style={{
                   color: "#EE0000",
-                  fontSize: "16px",
-                  fontWeight: "600",
+                  fontSize: "20px",
+                  fontWeight: 0,
                   marginLeft: "2rem",
                 }}
               >
@@ -174,6 +208,7 @@ function Categories() {
                     color: "#EE0000",
                     backgroundColor: "white",
                     fontSize: "12px",
+                    cursor:'pointer'
                   }}
                 >
                   {t("Add")}
@@ -181,7 +216,7 @@ function Categories() {
               </Link>
             </div>
 
-            <div className="categories-input">
+            <div className="categories-input" >
               <form
                 onSubmit={handleSearchSubmit}
                 style={{ display: "flex", alignItems: "center", width: "100%" }}
@@ -251,7 +286,7 @@ function Categories() {
                             <div
                               style={{ fontSize: "22px", fontWeight: "500" }}
                             >
-                              {x.name}
+                              {x.name}    <span style={{ color: "grey", fontSize: "15px" }}>{x.count}</span>
                             </div>
                           </div>
                           <div
@@ -343,7 +378,7 @@ function Categories() {
                         </div>
                       </div>
 
-                      <div onClick={() => handlemanage(x.id)}>
+                      <div onClick={() => handlemanage(x.id,x)}>
                         <button
                           style={{
                             marginTop: "1rem",
@@ -355,9 +390,10 @@ function Categories() {
                             height: "5.5vh",
                             color: "#EE0000",
                             boxShadow: "1px 1px 1px 2px gainsboro",
+                            fontSize:"14px"
                           }}
                         >
-                          {t("Explore")}
+                          {t("Explore more")}
                         </button>
                       </div>
                     </div>

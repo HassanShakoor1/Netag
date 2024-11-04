@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { IoChevronBack } from "react-icons/io5";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ref, set, push, get, update } from "firebase/database";
 import {
   ref as storageRef,
@@ -18,11 +18,14 @@ function Editproductdetail() {
   console.log("categoryid from params:", id);
   console.log("productid from params:", productid);
 
+  const location = useLocation();
+  const { name } = location.state || {};
+
   const [images, setImages] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const [formData, setFormData] = useState({
     categoryid: "",
-    categoryname: "",
+    categoryname: name,
     color: [],
     description: "",
     imgurl: [],
@@ -210,44 +213,7 @@ function Editproductdetail() {
           </h4>
         </div>
 
-        <div style={{ margin: "20px" }} className="headings">
-          <h4
-            style={{
-              paddingLeft: "1rem",
-              color: "red",
-              fontWeight: "100",
-              fontSize: "20px",
-            }}
-          >
-            Business details
-          </h4>
-          <h5
-            style={{
-              margin: "auto",
-              paddingLeft: "1rem",
-              fontWeight: "100",
-              fontSize: "15px",
-            }}
-          >
-            Business Name
-          </h5>
-          <input
-            style={{
-              width: "100%",
-              height: "40px",
-              border: "none",
-              borderRadius: "17px",
-              backgroundColor: "#F7F7F7",
-              paddingLeft: "10px",
-            }}
-            type="text"
-            placeholder="Enter business name"
-            name="categoryname"
-            value={formData?.categoryname}
-            onChange={handleInputChange}
-          />
-        </div>
-
+     
         <h3
           style={{
             paddingLeft: "1rem",
@@ -313,7 +279,7 @@ function Editproductdetail() {
               >
                 Size
               </label>
-              <select
+              <input 
                 style={{
                   borderRadius: "20px",
                   backgroundColor: "#F7F7F7",
@@ -322,16 +288,13 @@ function Editproductdetail() {
                 }}
                 className="formInput"
                 name="size"
+                type="text"
+                placeholder="Size"
                 value={formData.size}
                 onChange={handleInputChange}
-              >
-                <option value="" disabled>
-                  Select Size
-                </option>
-                <option value="small">Small</option>
-                <option value="medium">Medium</option>
-                <option value="large">Large</option>
-              </select>
+              />
+              
+              
             </div>
 
             <div className="formColumn">
@@ -341,7 +304,7 @@ function Editproductdetail() {
               >
                 Color
               </label>
-              <select
+              <input
                 style={{
                   borderRadius: "20px",
                   backgroundColor: "#F7F7F7",
@@ -350,18 +313,12 @@ function Editproductdetail() {
                 }}
                 className="formInput"
                 name="color"
+                type="text"
                 value={formData.color}
+                placeholder="Color"
                 onChange={handleColorChange}
-              >
-                <option value="" disabled>
-                  Select Color
-                </option>
-                <option value="red">Red</option>
-                <option value="green">Green</option>
-                <option value="blue">Blue</option>
-                <option value="yellow">Yellow</option>
-                {/* Add more colors as needed */}
-              </select>
+             / >
+              
 
               <div style={{ position: "relative", width: "100%" }}></div>
             </div>
@@ -633,7 +590,7 @@ function Editproductdetail() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            width: "80%",
+            width: "90%",
             height: "50px",
             marginTop: "20px",
             padding: "10px 20px",
@@ -642,8 +599,9 @@ function Editproductdetail() {
             backgroundColor: "red",
             color: "#fff",
             cursor: "pointer",
-            fontSize: "16px",
+            fontSize: "20px",
             margin: "0px auto",
+            marginLeft:"27px"
           }}
           disabled={loading}
         >

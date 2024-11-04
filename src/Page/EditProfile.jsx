@@ -322,19 +322,26 @@ function EditProfile() {
 
         <div className="input-data">
           <div className="edit-field">
-            <CustomTextField
-              label="Name"
-              name="name"
-              size="small"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+          <CustomTextField
+  label="Name"
+  name="name"
+  size="small"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+  InputProps={{
+    style: { paddingLeft: 0 },
+  }}
+/>
+
             <CustomTextField
               label="Username"
               name="username"
               size="small"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              InputProps={{
+    style: { paddingLeft: 0 },
+  }}
             />
           </div>
 
@@ -345,6 +352,9 @@ function EditProfile() {
               size="small"
               value={designation}
               onChange={(e) => setDesignation(e.target.value)}
+              InputProps={{
+    style: { paddingLeft: 0 },
+  }}
             />
             <CustomTextField
               label="Company"
@@ -352,6 +362,9 @@ function EditProfile() {
               size="small"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
+              InputProps={{
+    style: { paddingLeft: 0 },
+  }}
             />
           </div>
 
@@ -362,6 +375,9 @@ function EditProfile() {
               size="small"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              InputProps={{
+    style: { paddingLeft: 0 },
+  }}
             />
 
             <CustomTextField
@@ -370,6 +386,9 @@ function EditProfile() {
               size="small"
               value={businesslocatioon}
               onChange={(e) => setBusinessLocation(e.target.value)}
+              InputProps={{
+    style: { paddingLeft: 0 },
+  }}
             />
           </div>
           <div
@@ -377,12 +396,15 @@ function EditProfile() {
             style={{ justifyContent: "start", width: "100%" }}
           >
             <CustomTextField
-              style={{ width: "100%" }}
+              style={{ width: "94%",margin:"0px auto",marginLeft:"20px" }}
               label="about"
               name="aboutUs"
               size="small"
               value={aboutUs}
               onChange={(e) => setAbout(e.target.value)}
+              InputProps={{
+    style: { paddingLeft: 0 },
+  }}
             />
           </div>
 

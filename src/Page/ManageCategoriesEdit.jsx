@@ -23,7 +23,11 @@ function ManageCategoriesEdit() {
     const [name1, setName1] = useState("");
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState("")
-    const [serviceId, setserviceId] = useState()
+    const [price, setprice] = useState("");
+    const [mail, setMail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [site, setSite] = useState("");
+    const [avaliable, setIsavaliable] = useState(false)
 
     // Fetch data from Firebase
     const gettingdata = async () => {
@@ -31,10 +35,15 @@ function ManageCategoriesEdit() {
         onValue(starCountRef, async (snapshot) => {
             let fetchData = await snapshot.val();
             console.log(fetchData)
-            setName1(fetchData.servicename);
+            setName1(fetchData.name);
+            setprice(fetchData.price);
+            setMail(fetchData.email);
+            setPhone(fetchData.businesscontactno)
+            setSite(fetchData.website)
+            setIsavaliable(fetchData.isAvailableForAppointment)
             setDescription(fetchData.description);
-            setImageURL(fetchData.imageUrl); // Set the URL of the existing image
-            setCategory(fetchData.categoryid)
+            setImageURL(fetchData.imageURL); // Set the URL of the existing image
+            setCategory(fetchData.categoryId)
 
         });
     };
@@ -76,20 +85,23 @@ function ManageCategoriesEdit() {
             }
 
             await update(starCountRef, {
-                servicename: name1,
+                name: name1,
                 description: description,
-                imageUrl: imageUrl,
+                imageURL: imageURL,
+                 price:price,
+                businesscontactno:phone,
+                website:site,
+                email:mail,
+                isAvailableForAppointment:avaliable,
+                categoryId: category,
 
-                businesscontactno: "",
-                categoryid: category,
-
-                // imageUrl: ,
 
 
-                // servicename: "user 1 category 1 product 1 ",
+               
 
             });
            toast.success("Updated successfuly")
+           navigate(-1)
 
         } catch (error) {
             toast.error("Error updating data")
@@ -122,26 +134,175 @@ function ManageCategoriesEdit() {
                         <div style={{ marginLeft: "18px", color: "#EE0000", fontSize: "16px", fontWeight: "500", marginTop: "3rem" }}>
                             {t("Service")}
                         </div>
+                      
+
+
+
                         <div style={{ marginTop: "2rem" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>Name</div>
-                            <div style={{ width: "100%" }}>
-                                <input
-                                    type="text"
-                                    placeholder="Mental Health Service"
-                                    style={{ width: "100%", padding: "8px", paddingLeft: "16px", height: "", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" }}
-                                    value={name1}
-                                    onChange={(e) => setName1(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                        <div style={{ marginTop: "5px" }}>
+             
+             
+             <div className="formRow">
+           <div className="formColumn">
+             <label
+               style={{ paddingLeft: "10px", fontWeight: "100" }}
+               className="formHeading"
+             >
+               Service name
+             </label>
+             <input
+               style={{
+                 borderRadius: "20px",
+                 backgroundColor: "#F7F7F7",
+                 width: "95%",
+               }}
+               type="text"
+               className="formInput"
+               placeholder="Service Name"
+               name="name1"
+               value={name1}
+            
+
+               onChange={(e) => setName1(e.target.value)}
+             
+              
+             />
+           </div>
+           <div className="formColumn">
+             <label
+               style={{ paddingLeft: "10px", fontWeight: "100" }}
+               className="formHeading"
+             >
+               Price
+             </label>
+             <input
+               style={{
+                 borderRadius: "20px",
+                 backgroundColor: "#F7F7F7",
+                 width: "100%",
+               }}
+               type="text"
+               className="formInput"
+               placeholder="$44"
+               name="price"
+               value={price}
+             
+               onChange={(e) => setprice(e.target.value)}
+             />
+           </div>
+         </div>
+
+
+            
+         <div className="formRow" style={{marginTop:"40px"}}>
+           <div className="formColumn">
+             <label
+               style={{ paddingLeft: "10px", fontWeight: "100" }}
+               className="formHeading"
+             >
+               Business Contact
+             </label>
+             <input
+               style={{
+                 borderRadius: "20px",
+                 backgroundColor: "#F7F7F7",
+                 width: "95%",
+               }}
+               type="text"
+               className="formInput"
+               placeholder="Your Business Contact"
+               name="phone"
+               value={phone}
+               onChange={(e) => setPhone(e.target.value)}
+              
+             />
+           </div>
+           <div className="formColumn">
+             <label
+               style={{ paddingLeft: "10px", fontWeight: "100" }}
+               className="formHeading"
+             >
+               Website
+             </label>
+             <input
+               style={{
+                 borderRadius: "20px",
+                 backgroundColor: "#F7F7F7",
+                 width: "100%",
+               }}
+               type="text"
+               className="formInput"
+               placeholder="Your Website"
+               name="site"
+               value={site}
+             
+               onChange={(e) => setSite(e.target.value)}
+             />
+           </div>
+
+         </div>
+
+
+         <div className="formColumn" style={{marginTop:"40px"}}>
+             <label
+               style={{ paddingLeft: "10px", fontWeight: "100" }}
+               className="formHeading"
+             >
+               Email
+             </label>
+             <input
+               style={{
+                 borderRadius: "20px",
+                 backgroundColor: "#F7F7F7",
+                 width: "100%",
+               }}
+               type="text"
+               className="formInput"
+               placeholder="Your Email id"
+               name="mail"
+               value={mail}
+             
+               onChange={(e) => setMail(e.target.value)}
+             />
+           </div>
+
+           </div>
+
+
+           <div style={{ display: 'flex', alignItems: 'center', marginTop: "30px" ,marginLeft:"10px"}}>
+           <input
+  type="checkbox"
+  style={{
+    borderRadius: "20px",
+    backgroundColor: "#F7F7F7",
+    width: "20px", // Checkbox width
+    height: "20px", // Checkbox height
+    marginRight: "10px", // Space between checkbox and text
+  }}
+  className="formInput"
+  name="available" // Make sure this matches your form data
+  checked={avaliable} // Set checked state based on the avaliable value
+  onChange={(e) => setIsavaliable(e.target.checked)} // Use e.target.checked for checkboxes
+/>
+
+  <p>Avaliable for Appointment</p>
+</div>
+
+
+
+
+
+
+
+
+
+                        <div style={{ marginTop: "25px" }}>
                             <div style={{ marginLeft: "18px", fontWeight: "500" }}>
                                 {t("Description")}
                             </div>
                             <div>
                                 <textarea
                                     placeholder="lorem ipsum"
-                                    style={{ resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "8px", boxSizing: "border-box" }}
+                                    style={{ resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "8px", boxSizing: "border-box",border:"none",outline:'none',fontStyle:'normal' }}
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
@@ -193,7 +354,7 @@ function ManageCategoriesEdit() {
                                 )}
                             </div>
                             <div style={{ marginTop: "10px" }}>
-                                <button onClick={updatingdata} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white" }}>{t("Edit")}</button>
+                                <button onClick={updatingdata} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white",fontSize:'20px',cursor:'pointer' }}>{t("Edit")}</button>
                             </div>
                         </div>
                     </div>
