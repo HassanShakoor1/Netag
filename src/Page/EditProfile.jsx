@@ -38,6 +38,11 @@ function EditProfile() {
   const [isSaving, setIsSaving] = useState(false);
   const [profileImage, setProfileImage] = useState(null); // State for cropped profile image
   const [coverImage, setCoverImage] = useState(null); // State for cropped cover image
+
+  const [currentProfile, setCurrentProfile] = useState(null); // State for cropped profile image
+  const [currentCover, setCurrentCover] = useState(null); // State for cropped cover image
+
+
   const [cropModal, setCropModal] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
   const [imageType, setImageType] = useState("");
@@ -85,11 +90,11 @@ function EditProfile() {
 
           // Set existing images (if available) in the component's state
           if (userData.profileUrl) {
-            setProfileImage(userData.profileUrl);
+            setCurrentProfile(userData.profileUrl);
           }
 
           if (userData.coverUrl) {
-            setCoverImage(userData.coverUrl);
+            setCurrentCover(userData.coverUrl);
           }
         } else {
           console.log("No user data found for this userId");
@@ -101,7 +106,7 @@ function EditProfile() {
 
     fetchUserData();
   }, [userId]);
-
+console.log(currentProfile)
   const handleSave = async () => {
     setIsSaving(true);
     try {
@@ -126,7 +131,8 @@ function EditProfile() {
           ? [existingData.coverUrl]
           : []),
       ];
-
+      console.log("cover img",BackgroundImageUrl)
+      console.log("profile img",ImageUrl)
       try {
         // Handle profile image upload
         if (profileImage) {
@@ -149,6 +155,8 @@ function EditProfile() {
           const url1 = await getDownloadURL(imageRef1);
           BackgroundImageUrl[0] = url1;
         }
+        console.log("cover img",BackgroundImageUrl[0])
+        console.log("profile img",ImageUrl[0])
 
         // Save or update user data
         await update(userRef, {
@@ -203,8 +211,10 @@ function EditProfile() {
 
     if (imageType === "profile") {
       setProfileImage(file);
+      setCurrentProfile(file);
     } else if (imageType === "cover") {
       setCoverImage(file);
+      setCurrentCover(file);
     }
     setCropModal(false);
   };
@@ -223,7 +233,7 @@ function EditProfile() {
 
         <div className="rel-div" style={{ flexDirection: "column" }}>
           <div className="lady" style={ladyStyle}>
-            {profileImage ? (
+            {currentProfile ? (
               <div style={{ position: "relative" }}>
                 <img
                   style={{
@@ -233,14 +243,14 @@ function EditProfile() {
                     objectFit: "cover",
                   }}
                   src={
-                    typeof profileImage === "string"
-                      ? profileImage
-                      : URL.createObjectURL(profileImage)
+                    typeof currentProfile === "string"
+                      ? currentProfile
+                      : URL.createObjectURL(currentProfile)
                   }
                   alt="Uploaded Lady Image"
                 />
                 <button
-                  onClick={() => setProfileImage(null)}
+                  onClick={() => setCurrentProfile(null)}
                   style={crossButtonStyle}
                 >
                   &times;
@@ -256,7 +266,7 @@ function EditProfile() {
               style={{ display: "none" }}
               onChange={(e) => handleFileChange(e, "profile")}
             />
-            {!profileImage && (
+            {!currentProfile && (
               <label htmlFor="lady-img-upload" style={uploadLabelStyle}>
                 Upload Photos
               </label>
@@ -265,7 +275,7 @@ function EditProfile() {
 
           <div>
             <div className="main-img" style={mainImgStyle}>
-              {coverImage ? (
+              {currentCover ? (
                 <div
                   style={{
                     position: "relative",
@@ -280,14 +290,14 @@ function EditProfile() {
                       borderRadius: "2rem",
                     }}
                     src={
-                      typeof coverImage === "string"
-                        ? coverImage
-                        : URL.createObjectURL(coverImage)
+                      typeof currentCover === "string"
+                        ? currentCover
+                        : URL.createObjectURL(currentCover)
                     }
                     alt="Uploaded Main Image"
                   />
                   <button
-                    onClick={() => setCoverImage(null)}
+                    onClick={() => setCurrentCover(null)}
                     style={crossButtonStyle}
                   >
                     &times;
@@ -307,7 +317,7 @@ function EditProfile() {
                 style={{ display: "none" }}
                 onChange={(e) => handleFileChange(e, "cover")}
               />
-              {!coverImage && (
+              {!currentCover && (
                 <label htmlFor="main-img-upload" style={uploadLabelStyle}>
                   Upload Photos
                 </label>

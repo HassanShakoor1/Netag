@@ -10,7 +10,7 @@ import bitc from "../images/bitc.png";
 import bitcc from "../images/bitcc.png";
 import nav from "../images/nav.png";
 import Card from "../Components/Card";
-import { ref, get } from "firebase/database"; // Import 'ref' and 'get' directly from 'firebase/database'
+import { ref, get,update } from "firebase/database"; // Import 'ref' and 'get' directly from 'firebase/database'
 import { database } from "../firebase.jsx"; // Import the initialized database
 import CircularProgress from "@mui/material/CircularProgress"; // Import the loader component
 import AOS from "aos";
@@ -42,10 +42,11 @@ function Profile() {
 
   const [socialLinks, setSocialLink] = useState([]);
   const { t } = useTranslation();
+ 
 
   const [loading, setLoading] = useState(true); // State for loading
   const [links, setLinks] = useState([]); // State to store fetched links
-
+  
   const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
   const [profileData, setProfileData] = useState({
     username: "",
@@ -113,6 +114,9 @@ function Profile() {
   }, []);
 
   const handleImageClick = (baseUrl, linkName) => {
+    if(direct){
+      return;
+    }
     if (!baseUrl || !linkName) {
       console.error("Invalid input:", baseUrl, linkName);
       return;
@@ -228,49 +232,92 @@ function Profile() {
     }
   };
 
+  const [leadMode, setLeadMode] = useState(false); // State for leadMode
+  const [direct, setDirect] = useState(false); // State for leadMode
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userId = localStorage.getItem("userId"); // Get userId from localStorage
+      const fetchData = async () => {
+          try {
+              const userId = localStorage.getItem("userId");
 
-        if (!userId) {
-          console.error("No userId found in localStorage");
-          setLoading(false);
-          return;
-        }
+              if (!userId) {
+                  console.error("No userId found in localStorage");
+                  setLoading(false);
+                  return;
+              }
 
-        const userRef = ref(database, `User/${userId}`);
-        const snapshot = await get(userRef);
+              const userRef = ref(database, `User/${userId}`);
+              const snapshot = await get(userRef);
 
-        if (snapshot.exists()) {
-          setProfileData(snapshot.val());
-          console.log("Fetched profileData:", snapshot.val()); // Log the fetched data
-        } else {
-          console.log("No data available for this userId:", userId);
-        }
+              if (snapshot.exists()) {
+                  setProfileData(snapshot.val());
+                  console.log("Fetched profileData:", snapshot.val());
+              } else {
+                  console.log("No data available for this userId:", userId);
+              }
 
-        // Fetch links data
-        const linksRef = ref(database, "SocialLinks");
-        const linksSnapshot = await get(linksRef);
+              // Fetch links data
+              const linksRef = ref(database, `User/${userId}/links`);
+              const linksSnapshot = await get(linksRef);
 
-        if (linksSnapshot.exists()) {
-          const allLinks = linksSnapshot.val();
-          const userLinks = Object.values(allLinks).filter(
-            (link) => link.uid === userId
-          );
-          setLinks(userLinks);
-        } else {
-          console.log("No links data available");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false); // End loading state after data fetch (success or failure)
-      }
-    };
+              if (linksSnapshot.exists()) {
+                  const allLinks = linksSnapshot.val();
+                  const userLinks = Object.values(allLinks).filter(
+                      (link) => link.uid === userId
+                  );
+                  setLinks(userLinks);
+              } else {
+                  console.log("No links data available");
+              }
+          } catch (error) {
+              console.error("Error fetching data:", error);
+          } finally {
+              setLoading(false);
+          }
+      };
 
-    fetchData();
+      fetchData();
   }, []);
+console.log(direct)
+  const updateData = async (leadMode) => {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+          console.error("No userId found in localStorage");
+          return;
+      }
+
+      const userRef = ref(database, `User/${userId}`); // Adjust the path if needed
+      try {
+          // await userRef.update({ ...profileData, leadMode }); // Include leadMode in the update
+          await update(userRef, {
+            ...profileData,
+            leadMode: leadMode,
+            directMode:direct === false ? true :false
+          });
+          console.log('User data updated successfully');
+      } catch (error) {
+          console.error('Error updating user data: ', error);
+      }
+  };
+
+
+  const handleToggle = (action) => {
+    if(action=="lead")
+    {
+      setLeadMode(!leadMode); // Toggle leadMode state
+      updateData(!leadMode); // Update the database with the new leadMode
+      setDirect(false);
+    }
+    else if(action=="direct"){
+      setDirect(!direct); // Toggle leadMode state
+      updateData(!direct);
+      setLeadMode(false);
+
+    }
+   
+      
+  };
+
 
   console.log(profileData);
 
@@ -285,9 +332,17 @@ function Profile() {
   };
 
   // Toggle handler to switch between lead and direct modes
-  const handleToggle = (toggleId) => {
-    setActiveToggle((prevId) => (prevId === toggleId ? null : toggleId));
-  };
+  // const handleToggle = (toggleId) => {
+  //   setActiveToggle((prevId) => (prevId === toggleId ? null : toggleId));
+  // };
+  useEffect(() => {
+    if (direct && links.length > 0) {
+      updateDirectLink(direct, links[0]);
+    }
+    else{
+      updateDirectLink(direct, null);
+    }
+  }, [direct]);
 
   const handleEditProfile = () => {
     navigate("/edit-profile");
@@ -297,7 +352,9 @@ function Profile() {
   const handlenotifi = () => {
     navigate("/home/notifi");
   };
-
+  
+  const [selectedLink, setSelectedLink] = useState(links[0] || null);
+  
   // Function to return the appropriate icon based on id
 
   if (loading) {
@@ -315,6 +372,77 @@ function Profile() {
       </div>
     );
   }
+
+
+  const updateDirectLink = async (status, link) => {
+    
+    if(status == true)
+    { 
+      
+     const userRef = ref(database, `User/${userId}`); // Adjust the path if needed
+      try {
+          // await userRef.update({ ...profileData, leadMode }); // Include leadMode in the update
+          await update(userRef, {
+            ...profileData,
+            direct: link,
+            directMode:status
+          });
+          console.log('User data updated successfully');
+      } catch (error) {
+          console.error('Error updating user data: ', error);
+      }
+    }
+    else
+    {
+      const userRef = ref(database, `User/${userId}`); // Adjust the path if needed
+      try {
+          // await userRef.update({ ...profileData, leadMode }); // Include leadMode in the update
+          await update(userRef, {
+            ...profileData,
+            direct: null,
+            directMode:status
+          });
+          console.log('User data updated successfully');
+      } catch (error) {
+          console.error('Error updating user data: ', error);
+      }
+    }
+    
+
+
+  };
+
+
+
+
+
+// const handleLinkClick = async (baseUrl,name, linkId) => {
+//     // Update selected state of links
+//     const updatedLinks = selectedLink.map((link, i) => ({
+//       ...link,
+//       selected: i === index,
+//     }));
+//     setSelectedLink(linkId);
+//     // Save selected link to Realtime Database if directmode is true
+//     if (ourInfo.directmode) {
+//       try {
+//         const selectedLink = selectlinks[index];
+//         const currentUser = localStorage.getItem('useruid');
+//         const userRef = ref(db, `user/${currentUser}/direct`);
+//         await update(userRef, { selectedLink: selectedLink.name, value: selectedLink.value, linkId: selectedLink.linkId });
+//         console.log('Selected link saved to Realtime Database');
+//       } catch (error) {
+//         console.error('Error saving selected link to Realtime Database:', error);
+//       }
+//     } else {
+//       // Set elm.value to window.value when directmode is false
+//       //window.open(linkValue)
+//     }
+//   };
+
+
+
+
 
   console.log("i am cover",profileData.coverUrl)
   return (
@@ -536,8 +664,10 @@ function Profile() {
                     type="checkbox"
                     id="toggle-lead"
                     className="toggle-input"
-                    checked={activeToggle === "lead"}
+                    checked={leadMode}
                     onChange={() => handleToggle("lead")}
+                    
+                   
                   />
                   <label htmlFor="toggle-lead" className="toggle-label"></label>
                 </div>
@@ -554,7 +684,7 @@ function Profile() {
                     type="checkbox"
                     id="toggle-direct"
                     className="toggle-input"
-                    checked={activeToggle === "direct"}
+                    checked={direct}
                     onChange={() => handleToggle("direct")}
                   />
                   <label
@@ -631,10 +761,18 @@ function Profile() {
                 }}
               >
                 <img
-                  onClick={() => handleImageClick(link?.baseUrl, link?.name)}
+                  onClick={
+                    direct ? () => updateDirectLink(direct, link) : 
+                    () => handleImageClick(link?.baseUrl, link?.name)}
                   src={ReturnIcon(link.id)}
                   alt={link?.name || "Link"}
-                  style={{ width: "50px", height: "50px" }}
+                  style={{ width: "50px", height: "50px",opacity: direct
+                ? selectedLink === link.id
+                  ? "100%"
+                  : "30%"
+                : "100%", // Apply 30% opacity in Direct Mode, 100% otherwise
+              transition: "opacity 0.3s ease", // Smooth transition effect
+            }}
                   onError={(e) => {
                     e.target.src = "path/to/default/image.png";
                   }} // Fallback on error

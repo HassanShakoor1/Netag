@@ -47,18 +47,20 @@ function Serviceaddcategory() {
       const newcategories = push(categorypath);
       const newcategories_id = newcategories.key;
       const categorydata = {
-        categoryid: newcategories_id,
+        id: newcategories_id,
         name: name1,
         description: description,
-        imageurl: url,
+        imageURL: url,
         uid: localStorage.getItem("userId"),
       };
+      
       console.log(newcategories);
 
       await set(newcategories, categorydata);
 
       // localStorage.setItem("imageurl",newcategories.key)
       toast.success("Data added successfully");
+      navigate(-1)
       // alert('Data added successfully');
     } catch (error) {
       console.log(error);

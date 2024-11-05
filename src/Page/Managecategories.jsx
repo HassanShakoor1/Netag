@@ -3,19 +3,18 @@ import search from "../images/search.svg"
 import doctor1 from "../images/doctor1.svg"
 import React, { useState, useEffect ,useRef} from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import CircularProgress from "@mui/material/CircularProgress";
+
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import pic4 from "../images/pic4.svg"
 import { useNavigate, Link, useParams,useLocation } from "react-router-dom";
 import { database as db } from "../firebase.jsx"
 import { get, ref, remove } from "firebase/database"
 import { useTranslation } from "react-i18next";
-
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -48,7 +47,8 @@ function Managecategories() {
   const { t } = useTranslation();
   const [productOfCategory, setProductOfCategory] = useState([]);
   const [open, setOpen] = useState(false);
-  const [modalContent, setModalContent] = useState({ pic: '', title: '', explain: '' });
+  const [loading, setLoading] = useState(false);
+  const [modalContent, setModalContent] = useState({ pic: '', title: '', explain: '',price:'' });
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentItemId, setCurrentItemId] = useState(null);
   const openMenu = Boolean(anchorEl);
@@ -93,6 +93,7 @@ function Managecategories() {
   }, []);
   
   const getProductsData = async () => {
+    setLoading(true)
     const dbRef = ref(db, 'Services');
     const snapshot = await get(dbRef);
     const data = snapshot.val();
@@ -109,13 +110,14 @@ function Managecategories() {
 
     console.log(filterData); // Check the data here
     setProductOfCategory(filterData);
+    setLoading(false)
 
     // Count the total products in the filtered data
     const count = filterData.length; // This gives the number of products for the specific category
-    setCount(count); // Update the count state
+     // Update the count state
 
     categoryRefs.current = new Array(count).fill(null); // Update categoryRefs
-    console.log("count is", count); // Log the count
+    // Log the count
 }
 
 
@@ -126,18 +128,17 @@ function Managecategories() {
     try {
       await remove(dataToDelete);
       setProductOfCategory((previous) => previous.filter(x => x.id !== id));
-
+      setLoading(false)
       toast.success("Item Deleted Successfully")
     } catch (error) {
       console.log("error while deleting", error);
+      setLoading(false)
     }
   }
 
- 
-
   // Open modal with product details
-  const handleOpen = (pic, title, explain) => {
-    setModalContent({ pic, title, explain });
+  const handleOpen = (pic, title, explain,price) => {
+    setModalContent({ pic, title, explain,price });
     setOpen(true);
   }
   const [searchTerm, setSearchTerm] = useState("");
@@ -166,7 +167,21 @@ function Managecategories() {
   };
   
 
-
+  if (loading) {
+    return (
+      <div
+        className="loader-container"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <div className="categories-maindiv">
       <div className="categories-width">
@@ -206,94 +221,36 @@ function Managecategories() {
       </form>
     </div>
             {productOfCategory.map((x, index) => (
-              <div className="managecategories-card" key={x.id}  ref={(el) => (categoryRefs.current[index] = el)}>
+              <div className="managecategories-card" style={{height:'150px'}}  key={x.id}  ref={(el) => (categoryRefs.current[index] = el)}>
                 {console.log(index)}
-                <div className="cardcenter">
-                  <div className="cardcenter-width" style={{ paddingTop: '4px', paddingBottom: '4px' }}>
+                <div className="cardcenter" style={{height:'auto'}}>
+                  <div className="cardcenter-width" style={{ paddingTop: '10px', paddingBottom: '4px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ width: '80%' }}>
+                      <div style={{ width: '100%' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center', height: '110px' }}>
                           {/* Image */}
-                          <div style={{ width: "35%", display: "flex", justifyContent: "center",height:"100%" }}>
+                          <div style={{ width: "35%", display: "flex", justifyContent: "center",height:"auto" }}>
                             <img
                               src={x.imageURL}
                               alt=""
-                              style={{ cursor: 'pointer', width: "100%", objectFit: "cover",borderRadius:"10px" }}
-                              onClick={() => handleOpen(x.imageURL, x.name, x.description)}
+                              style={{ cursor: 'pointer', width: "100%", objectFit: "cover",borderRadius:"10px",height:"130px" }}
+                              onClick={() => handleOpen(x.imageURL, x.name, x.description,x.price)}
                             />
                           </div>
                           {/* Title */}
                           <div style={{ width: '60%', display: 'flex', justifyContent: 'start', alignItems: 'center' }}>
                             <div>
-                              <div style={{ fontSize: "20px", color: '#EE0000' }}>{x.name}</div>
-                              <div style={{ fontSize: '12px', color: '#777777' }}>{x.description}</div>
+                              <div style={{ fontSize: "20px", color: '#EE0000' }}>{x.name}  </div>
+                              <div style={{ fontSize: "27px", color: 'grey' }}>{x.price}  </div>
+                            
+                              <div style={{ fontSize: '14px', color: 'black' }}>{x.description}</div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      {/* Menu Button */}
+               
                       <div>
-                        {/* <IconButton
-                          aria-label="more"
-                          id="long-button"
-                          aria-controls={open ? 'long-menu' : undefined}
-                          aria-expanded={open ? 'true' : undefined}
-                          aria-haspopup="true"
-                          onClick={(event) => handleClick(event, x.id)} // Pass the item id
-                          style={{
-                            color: '#EE0000',
-                            padding: "0",
-                            margin: "0",
-                            zIndex: "1"
-                          }}
-                        >
-                          <MoreVertIcon />
-                        </IconButton>
-                        <Menu
-                          id="long-menu"
-                          MenuListProps={{
-                            'aria-labelledby': 'long-button',
-                          }}
-                          anchorEl={anchorEl}
-                          open={Boolean(anchorEl && currentItemId === x.id)} // Check if the menu should be open for the current item
-                          onClose={handleClose}
-                          PaperProps={{
-                            style: {
-                              maxHeight: ITEM_HEIGHT * 4.5,
-                              width: '15ch',
-                            },
-                          }}
-                          anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'left', // Open menu from the left of the button
-                          }}
-                          transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right', // Align the right side of the menu to the left side of the button
-                          }}
-                        >
-                          <MenuItem
-                            style={{
-                              color: '#7C7C7C',
-                              borderBottom: '1px solid #ddd',
-                              fontSize: '12px'
-                            }}
-                            onClick={() => handleMenuItemClick(`/home/services/catagory/ManageCategories-products-Edit/${x.id}`)}
-                          >
-                            <p>{t("Edit Profile")}</p>
-                          </MenuItem>
-                          <MenuItem
-                            style={{
-                              color: '#7C7C7C',
-                              borderBottom: '1px solid #ddd',
-                              fontSize: '12px'
-                            }}
-                            onClick={() => handleDelete(`${x.id}`)}
-                          >
-                            <p>{t("Delete")}</p>
-                          </MenuItem>
-                          
-                        </Menu> */}
+                      
 
                         <div>
                           <IconButton
@@ -391,21 +348,24 @@ function Managecategories() {
                   alignItems: 'center', // Center items horizontally
                   justifyContent: 'center' // Center items vertically
                 }}>
-                  <img src={modalContent.pic} alt="" style={{ width: '100%', height: 'auto', borderRadius: "12px" }} />
+                  <img src={modalContent.pic} alt="" style={{ width: '100%', height: '200px', borderRadius: "12px" }} />
                 </div>
-                <Typography id="modal-modal-title" variant="h6" component="h2" style={{ marginTop: '1rem', fontSize: '18px', color: '#EE0000', fontWeight: "600" }}>
+                <Typography id="modal-modal-title" variant="h6" component="h2" style={{ marginTop: '1px', fontSize: '18px', color: '#EE0000', fontWeight: "600" }}>
                   {modalContent.title}
                 </Typography>
+
                 <Typography >
-                  <span style={{ fontSize: "8px" }}>Mental Health Clininc</span>
+                  <span style={{ fontSize: "18px", fontWeight: "bold" }}>{modalContent.price}</span>
                 </Typography>
+
                 <Typography >
-                  <span style={{ fontSize: "18px", fontWeight: "bold" }}>$120</span>
+                  <span style={{ fontSize: "14px",paddingTop:"0px" ,paddingBottom:"20px"}}>{modalContent.explain}</span>
                 </Typography>
-                <Typography id="modal-modal-description" variant="h6" component="p" style={{ marginTop: '1px', fontSize: '8px', color: '#777777' }}>
+                
+                {/* <Typography id="modal-modal-description" variant="h6" component="p" style={{ marginTop: '1px', fontSize: '8px', color: '#777777' }}>
                   {modalContent.explain}
 
-                </Typography>
+                </Typography> */}
               </Box>
             </Modal>
           </div>

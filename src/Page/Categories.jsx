@@ -9,6 +9,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useNavigate, Link,useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { database as db } from "../firebase.jsx";
+import CircularProgress from "@mui/material/CircularProgress";
 import {
   equalTo,
   get,
@@ -30,21 +31,20 @@ function Categories() {
   const categoryRefs = useRef([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [Firebasedata, setFirebasedata] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [currentItemId, setCurrentItemId] = useState(null);
   const userId = localStorage.getItem("userId");
   const { t } = useTranslation();
   const navigate = useNavigate();
   
   const location = useLocation();
-  // Access the state from location
-  // const { count } = state || {}; // Destructure count from state
-  const count = location.state?.count || {};
-    console.log("is count =", count); // Check the count structure
 
    
     const getData = async () => {
       toast.dismiss();
       try {
+        setLoading(true)
+    
           const querydata = query(
               ref(db, `ServiceCategory`),
               orderByChild("uid"),
@@ -58,7 +58,7 @@ function Categories() {
                   Object.keys(data).map(async (key) => {
                       const servicesQuery = query(
                           ref(db, `Services`),
-                          orderByChild("categoryid"),
+                          orderByChild("categoryId"),
                           equalTo(key)
                       );
                       const servicesSnapshot = await get(servicesQuery);
@@ -74,28 +74,29 @@ function Categories() {
                           id: key,
                           ...data[key],
                           count: serviceCount,
+
                       };
                   })
               );
   
               console.log("Filtered Data:", filteredData); // Log the filtered data
               setFirebasedata(filteredData);
+              setLoading(false)
           } else {
               toast.error("No Data Found");
+              setLoading(false)
           }
       } catch (error) {
           console.log(error);
           toast.error("No Data Found");
+          setLoading(false)
       }
   };
   
   
-  
-  
-
     useEffect(() => {
         getData();
-    }, [count]);
+    }, []);
   const open = Boolean(anchorEl);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -170,6 +171,21 @@ console.log(Firebasedata)
     }
   };
 
+  if (loading) {
+    return (
+      <div
+        className="loader-container"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <div className="categories-maindiv">
       <div className="categories-width">
@@ -251,7 +267,7 @@ console.log(Firebasedata)
                             objectFit: "cover",
                             borderRadius: "20px",
                           }}
-                          src={x.imageurl}
+                          src={x.imageURL}
                           alt=""
                         />
                       </div>
@@ -286,7 +302,7 @@ console.log(Firebasedata)
                             <div
                               style={{ fontSize: "22px", fontWeight: "500" }}
                             >
-                              {x.name}    <span style={{ color: "grey", fontSize: "15px" }}>{x.count}</span>
+                              {x.name}    <span style={{ color: "grey", fontSize: "15px" }}>({x.count})</span>
                             </div>
                           </div>
                           <div
@@ -390,7 +406,8 @@ console.log(Firebasedata)
                             height: "5.5vh",
                             color: "#EE0000",
                             boxShadow: "1px 1px 1px 2px gainsboro",
-                            fontSize:"14px"
+                            fontSize:"14px",
+                            cursor:'pointer'
                           }}
                         >
                           {t("Explore more")}

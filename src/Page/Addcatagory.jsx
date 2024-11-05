@@ -39,11 +39,11 @@ function Addcatagory() {
           setFormData({
             brandName: data.name || "", // Ensure this matches your database field
             brandDescription: data.description || "", // Ensure this matches your database field
-            existingImageUrl: data.imageurl || "", // Ensure this matches your database field
+            existingImageUrl: data.imageURL || "", // Ensure this matches your database field
             brandImage: null, // Ensure that new image is not set by default
           });
           // Set the image state to display the existing image
-          setImage(data.imageurl || null);
+          setImage(data.imageURL || null);
         } else {
           console.log("No data found for the provided ID.");
         }
@@ -80,7 +80,7 @@ function Addcatagory() {
         const updatedData = {
           name: formData.brandName,
           description: formData.brandDescription,
-          imageurl: brandImageUrl, // Use the correct image URL
+          imageURL: brandImageUrl, // Use the correct image URL
         };
 
         await update(brandRef, updatedData);
@@ -94,7 +94,7 @@ function Addcatagory() {
         const newRecord = {
           name: formData.brandName,
           description: formData.brandDescription,
-          imageurl: brandImageUrl, // Correctly set the image URL
+          imageURL: brandImageUrl, // Correctly set the image URL
           id: recordKey,
           uid: userId,
         };

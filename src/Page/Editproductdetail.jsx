@@ -26,7 +26,7 @@ function Editproductdetail() {
   const [formData, setFormData] = useState({
     categoryid: "",
     categoryname: name,
-    color: [],
+    color:"",
     description: "",
     imgurl: [],
     price: "",
@@ -111,13 +111,6 @@ function Editproductdetail() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleColorChange = (e) => {
-    const color = e.target.value
-      .split(",")
-      .map((color) => color.trim())
-      .filter((color) => color.length > 0);
-    setFormData((prevData) => ({ ...prevData, color }));
-  };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -316,7 +309,7 @@ function Editproductdetail() {
                 type="text"
                 value={formData.color}
                 placeholder="Color"
-                onChange={handleColorChange}
+                
              / >
               
 

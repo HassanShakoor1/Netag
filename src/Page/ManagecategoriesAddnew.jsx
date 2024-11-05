@@ -55,15 +55,13 @@ function ServiceaddcategoryAddnewProduct() {
 
     const productData = {
       imageURL: url,
-
-      businesscontactno: phone,
+      businessContact: phone,
       categoryId:id ,
       categoryName:"",
       description: description,
       email: mail,
       id:productId,
       isAvailableForAppointment: avaliable,
-     
       name: name1,
       price: price,
       uid: localStorage.getItem("userId"),

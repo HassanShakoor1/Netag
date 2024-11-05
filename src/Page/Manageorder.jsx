@@ -4,21 +4,23 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { database as db } from "../firebase.jsx";
 import { equalTo, get, orderByChild, query, ref } from "firebase/database";
-
+import CircularProgress from "@mui/material/CircularProgress"; 
 function Manageorder() {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState("newOrders");
+  const [loading, setLoading] = useState(false);
   const orderData = async () => {
     try {
+      setLoading(true)
       console.log("Fetching orders for user ID:", userId); // Log userId
       const orderRef = ref(db, "/Orders");
       const queryData = query(orderRef, orderByChild("uid"), equalTo(userId));
       const snapShot = await get(queryData);
-
+  
       console.log("Order snapshot data:", snapShot.val()); // Log snapshot data
-
+  
       const data = snapShot.val();
       if (data) {
         const arr = Object.keys(data)
@@ -26,27 +28,31 @@ function Manageorder() {
             id: key,
             ...data[key],
           }))
-          .filter((order) => order.orderstatus.toLowerCase() === "pending");
-        // Ensure this condition is correct
-
-        console.log("Filtered orders:", data); // Log the filtered orders
+          .filter(
+            (order) => order.orderstatus && order.orderstatus.toLowerCase() === "pending"
+          ); // Only include orders with defined orderstatus
+  
+        console.log("Filtered orders:", arr); // Log the filtered orders
         setOrders(arr);
+        setLoading(false)
       } else {
         console.log("No data found for user ID:", userId);
         setOrders([]);
+        setLoading(false)
       }
     } catch (error) {
       alert("Orders not fetched");
       console.error("Error fetching orders:", error); // Log the error
+      setLoading(false)
     }
   };
-
+  
   useEffect(() => {
     orderData();
   }, [userId]);
 
   const goback = () => {
-    navigate(-1);
+    navigate('/home');
   };
 
   const handleSingleview = (orderId) => {
@@ -69,6 +75,21 @@ function Manageorder() {
     fontWeight: "normal",
   };
 
+  if (loading) {
+    return (
+      <div
+        className="loader-container"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <div className="Manageorder-main">
       <div className="Manageorder-width">

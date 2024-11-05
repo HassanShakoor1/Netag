@@ -47,7 +47,7 @@ function EditProduct() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [productCount, setProductCount] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [proid, setProid] = useState(false);
 
@@ -194,19 +194,21 @@ function EditProduct() {
   console.log("products are ", products);
 
    
-  {loading && (
-    <div
-      style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        zIndex: 1,
-      }}
-    >
-      <CircularProgress />
-    </div>
-  )}
+  if (loading) {
+    return (
+      <div
+        className="loader-container"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <div className="productContainer">
      
@@ -256,7 +258,7 @@ function EditProduct() {
             <div
               data-aos="zoom-in"
               key={product.productid || `product-${index}`}
-              style={{ marginTop: "20px" }}
+              style={{ marginTop: "20px",borderRadius:"20px" ,border:"1px solid #DDDDDD"}}
               className="items"
             >
           

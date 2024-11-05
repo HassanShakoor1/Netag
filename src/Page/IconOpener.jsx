@@ -26,12 +26,15 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
   };
 
   useEffect(() => {
+
+
+
     const fetchData = async () => {
       const userId = localStorage.getItem('userId'); // Fetch userId from localStorage
 
       if (userId && linkdata?.id) {
         try {
-          const dbRef = ref(database, `SocialLinks`);
+          const dbRef = ref(database, `User/${userId}/links`);
           const snapshot = await get(dbRef);
           let dataFound = false;
 
@@ -75,52 +78,55 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
 
   const handleSave = async () => {
     const userId = localStorage.getItem('userId');
-
+  
     if (!userId) {
       alert('User is not authenticated');
       return;
     }
-
+  
     const id = linkdata?.id || 'defaultLinkId';
     const baseUrl = inputValue;
     const imageUrl = ReturnIcon(id);
-
+  
     if (!imageUrl) {
       alert('Image URL not found!');
       return;
     }
-
+  
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (linkdata?.place.toLowerCase().includes('email') && !emailRegex.test(inputValue)) {
       setError('Invalid email address');
       return;
     }
-
+  
     const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+.*)$/i;
     if (linkdata?.place.toLowerCase().includes('url') && !urlRegex.test(inputValue)) {
       setError('Invalid URL');
       return;
     }
-
+  
     try {
-      const dbRef = ref(database);
-      const existingDataRef = ref(database, `SocialLinks`);
-      const snapshot = await get(child(dbRef, `SocialLinks`));
-
-      let dataExists = false;
-      let existingKey = '';
-
+      const linksRef = ref(database, `User/${userId}/links`);
+      const snapshot = await get(linksRef);
+  
+      let nextIndex = 0;
+      let existingKey = null;
+  
+      // Check if the link already exists and find the next available index
       if (snapshot.exists()) {
         snapshot.forEach((childSnapshot) => {
           const data = childSnapshot.val();
           if (data.id === id && data.uid === userId) {
-            dataExists = true;
             existingKey = childSnapshot.key;
+          }
+          const currentIndex = parseInt(childSnapshot.key, 10);
+          if (!isNaN(currentIndex) && currentIndex >= nextIndex) {
+            nextIndex = currentIndex + 1;
           }
         });
       }
-
-      const dataa = {
+  
+      const linkData = {
         name: linkdata?.linkName || 'Unnamed Link',
         image: imageUrl,
         uid: userId,
@@ -131,29 +137,29 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
         isShared: true,
         packageName: '',
       };
-
-      if (dataExists) {
-        await update(ref(database, `SocialLinks/${existingKey}`), dataa);
+  
+      if (existingKey) {
+        // Update existing link
+        await update(ref(database, `User/${userId}/links/${existingKey}`), linkData);
         alert('Data updated successfully!');
-        setRecordStatus[dataa.isShared];
-        handleSlide();
       } else {
-        const newLinkRef = push(existingDataRef);
-        const keyy = newLinkRef.key;
-        dataa.sociallinkid = keyy;
-
-        await set(newLinkRef, dataa);
+        // Save new link at the next available index
+        await set(ref(database, `User/${userId}/links/${nextIndex}`), linkData);
         alert('Data saved successfully!');
-        setRecordStatus[dataa.isShared];
-        handleSlide();
       }
-
+  
+      setRecordStatus(linkData.isShared);
+      handleSlide();
       setInputValue('');
     } catch (error) {
       console.error('Error saving or updating data:', error);
       alert('Failed to save or update data');
     }
   };
+  
+  
+  
+  
 
   const handleDelete = async () => {
     const userId = localStorage.getItem('userId'); // Get userId from localStorage
@@ -165,7 +171,7 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
     }
 
     try {
-      const dbRef = ref(database, `SocialLinks`);
+      const dbRef = ref(database, `User/${userId}/links`);
       const snapshot = await get(dbRef);
 
       if (snapshot.exists()) {
@@ -173,7 +179,7 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
           const data = childSnapshot.val();
           if (data.id === id && data.uid === userId) {
             const key = childSnapshot.key;
-            remove(ref(database, `SocialLinks/${key}`));
+            remove(ref(database, `User/${userId}/links/${key}`));
             alert('Data deleted successfully!');
             setRecordStatus[data.isShared];
             handleSlide();

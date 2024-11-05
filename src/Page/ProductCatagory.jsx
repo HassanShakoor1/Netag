@@ -18,11 +18,13 @@ import {
 import { database } from "../firebase";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import CircularProgress from "@mui/material/CircularProgress"; 
 function ProductCatagory() {
   const navigate = useNavigate();
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [activeBrandId, setActiveBrandId] = useState(null);
   const [brands, setBrands] = useState([]);
+  const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const { productid } = useParams();
   const location = useLocation();
@@ -45,6 +47,7 @@ function ProductCatagory() {
   }, []); // Empty dependency array ensures it runs only once
   const fetchBrands = async (userId) => {
     try {
+      setLoading(true)
       const brandsRef = ref(database, `ProductCategory`);
       const snapshot = await get(brandsRef);
 
@@ -89,7 +92,9 @@ function ProductCatagory() {
               };
             } catch (productError) {
               return { id: key, productCount: 0, ...data[key] };
+             
             }
+        
           })
         );
 
@@ -98,12 +103,14 @@ function ProductCatagory() {
         // console.log("Brands data after sorting:", brandsArray);
 
         setBrands(brandsArray);
+        setLoading(false)
       } else {
         // console.log("No data found in ProductCategory.");
         setBrands([]);
       }
     } catch (error) {
       console.error("Error fetching brand data:", error.message);
+      setLoading(false)
     }
   };
 
@@ -189,6 +196,21 @@ function ProductCatagory() {
 
   const ITEM_HEIGHT = 48;
 
+  if (loading) {
+    return (
+      <div
+        className="loader-container"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <div className="productContainer">
       <div className="Product-design">
@@ -234,7 +256,7 @@ function ProductCatagory() {
                   objectFit: "cover",
                   borderRadius: "20px",
                 }}
-                src={brand.imageurl}
+                src={brand.imageURL}
                 alt={brand.name}
               />
             </div>

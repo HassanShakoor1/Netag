@@ -112,7 +112,7 @@ useEffect(()=>{
           
             </Slider>
           ) : (
-            <p>No images found.</p>
+            <p>loading...</p>
           )}
           </>
         }
@@ -142,7 +142,7 @@ useEffect(()=>{
               </div>
             ))
           ) : (
-            <p>No videos found.</p>
+            <p>loading...</p>
           )}
         </div>
 

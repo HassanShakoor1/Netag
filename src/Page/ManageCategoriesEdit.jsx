@@ -35,10 +35,10 @@ function ManageCategoriesEdit() {
         onValue(starCountRef, async (snapshot) => {
             let fetchData = await snapshot.val();
             console.log(fetchData)
-            setName1(fetchData.name);
+            setName1(fetchData.name1);
             setprice(fetchData.price);
             setMail(fetchData.email);
-            setPhone(fetchData.businesscontactno)
+            setPhone(fetchData.businessContact)
             setSite(fetchData.website)
             setIsavaliable(fetchData.isAvailableForAppointment)
             setDescription(fetchData.description);
@@ -89,7 +89,7 @@ function ManageCategoriesEdit() {
                 description: description,
                 imageURL: imageURL,
                  price:price,
-                businesscontactno:phone,
+                businessContact:phone,
                 website:site,
                 email:mail,
                 isAvailableForAppointment:avaliable,
@@ -115,7 +115,7 @@ function ManageCategoriesEdit() {
     };
 
     return (
-        <div className="addcategory-main">
+        <div className="addcategory-main" style={{marginTop:"30px"}}>
             <div className="categories-width">
                 <div className="categories-maindiv1">
                     <div className="categories-width1">
@@ -124,14 +124,14 @@ function ManageCategoriesEdit() {
                                 <Link to={`/home/services/catagory/${category}`}>
                                     <img style={{ cursor: "pointer" }} onClick={handleGoBack} src={vector} alt="" />
                                 </Link>
-                                {/* <img style={{ cursor: "pointer" }} onClick={handleGoBack} src={vector} alt="" /> */}
+                                
                             </div>
-                            <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "500" }}>
+                            <div style={{ color: "#EE0000", fontSize: "20px", fontWeight: "500" }}>
                                 {t("Edit Category")}
                             </div>
                             <div></div>
                         </div>
-                        <div style={{ marginLeft: "18px", color: "#EE0000", fontSize: "16px", fontWeight: "500", marginTop: "3rem" }}>
+                        <div style={{ marginLeft: "18px", color: "#EE0000", fontSize: "20px", fontWeight: "500", marginTop: "3rem" }}>
                             {t("Service")}
                         </div>
                       
@@ -193,7 +193,7 @@ function ManageCategoriesEdit() {
 
 
             
-         <div className="formRow" style={{marginTop:"40px"}}>
+         <div className="formRow" style={{marginTop:"30px"}}>
            <div className="formColumn">
              <label
                style={{ paddingLeft: "10px", fontWeight: "100" }}
@@ -242,7 +242,7 @@ function ManageCategoriesEdit() {
          </div>
 
 
-         <div className="formColumn" style={{marginTop:"40px"}}>
+         <div className="formColumn" style={{marginTop:"20px"}}>
              <label
                style={{ paddingLeft: "10px", fontWeight: "100" }}
                className="formHeading"
@@ -268,7 +268,7 @@ function ManageCategoriesEdit() {
            </div>
 
 
-           <div style={{ display: 'flex', alignItems: 'center', marginTop: "30px" ,marginLeft:"10px"}}>
+           <div style={{ display: 'flex', alignItems: 'center', marginTop: "10px" ,marginLeft:"10px"}}>
            <input
   type="checkbox"
   style={{
@@ -295,19 +295,19 @@ function ManageCategoriesEdit() {
 
 
 
-                        <div style={{ marginTop: "25px" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>
+                        <div style={{ marginTop: "15px" }}>
+                            <div style={{ marginLeft: "13px", fontWeight: "500" }}>
                                 {t("Description")}
                             </div>
                             <div>
                                 <textarea
                                     placeholder="lorem ipsum"
-                                    style={{ resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "8px", boxSizing: "border-box",border:"none",outline:'none',fontStyle:'normal' }}
+                                    style={{ resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "8px 8px 8px 19px", boxSizing: "border-box",border:"none",outline:'none',fontStyle:'normal',marginTop:"10px" }}
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
                             </div>
-                            <div style={{ marginTop: '6px' }}>
+                            <div style={{ marginTop: '15px' }}>
                                 {imageURL ? (
                                     <div style={{ width: "100%", height: "25vh", position: "relative" }}>
                                         <div onClick={handleRemoveImage} style={{ position: "absolute", right: "1px" }}>

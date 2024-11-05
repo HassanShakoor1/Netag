@@ -23,6 +23,7 @@ function Serviceeditcategory() {
     const [imageURL, setImageURL] = useState("");
     const [name1, setName1] = useState("");
     const [description, setDescription] = useState("");
+    const [edit ,setEditing]=useState(false)
 
     // Fetch data from Firebase
     const gettingdata = async () => {
@@ -31,7 +32,7 @@ function Serviceeditcategory() {
             let fetchData = await snapshot.val();
             setName1(fetchData.name);
             setDescription(fetchData.description);
-            setImageURL(fetchData.imageurl); // Set the URL of the existing image
+            setImageURL(fetchData.imageURL); // Set the URL of the existing image
         });
     };
 
@@ -76,6 +77,8 @@ function Serviceeditcategory() {
                 description: description,
                 imageurl: imageUrl,
             });
+            setEditing(true)
+            navigate(-1)
             toast.success('Data updated successfully')
             // alert('Data updated successfully');
 
@@ -91,7 +94,7 @@ function Serviceeditcategory() {
     };
 
     return (
-        <div className="addcategory-main">
+        <div className="addcategory-main" style={{paddingTop:"30px"}}>
             <div className="categories-width">
                 <div className="categories-maindiv1">
                     <div className="categories-width1">
@@ -99,12 +102,12 @@ function Serviceeditcategory() {
                             <div>
                                 <img style={{ cursor: "pointer" }} onClick={handleGoBack} src={vector} alt="" />
                             </div>
-                            <div style={{ color: "#EE0000", fontSize: "16px", fontWeight: "500" }}>
+                            <div style={{ color: "#EE0000", fontSize: "20px", fontWeight: "500" }}>
                                 {t("Edit Category")}
                             </div>
                             <div></div>
                         </div>
-                        <div style={{ marginLeft: "18px", color: "#EE0000", fontSize: "16px", fontWeight: "500", marginTop: "3rem" }}>
+                        <div style={{ marginLeft: "18px", color: "#EE0000", fontSize: "20px", fontWeight: "500", marginTop: "3rem" }}>
                             {t("Service")}
                         </div>
                         <div style={{ marginTop: "2rem" }}>
@@ -116,32 +119,32 @@ function Serviceeditcategory() {
                                 <input
                                     type="text"
                                     placeholder="Mental Health Service"
-                                    style={{ width: "100%", padding: "8px", paddingLeft: "16px", height: "", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" }}
+                                    style={{ width: "100%", padding: "12px 12px 12px 19px", height: "", borderRadius: "18px", border: "none", backgroundColor: "#F7F7F7", outline: "none", boxSizing: "border-box" ,marginTop:"10px"}}
                                     value={name1}
                                     onChange={(e) => setName1(e.target.value)}
                                 />
                             </div>
                         </div>
-                        <div style={{ marginTop: "5px" }}>
-                            <div style={{ marginLeft: "18px", fontWeight: "500" }}>
+                        <div style={{ marginTop: "20px" }}>
+                            <div style={{ marginLeft: "17px", fontWeight: "500" }}>
                                 {t("Description")}
                             </div>
                             <div>
                                 <textarea
                                     placeholder="lorem ipsum"
-                                    style={{ resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "8px", boxSizing: "border-box" }}
+                                    style={{ resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px", padding: "8px 8px 8px 19px", boxSizing: "border-box",marginTop:"10px",border:"none",outline:"none" ,textDecoration:'normal',wordSpacing:"-1px",letterSpacing:'-1px'}}
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
                             </div>
                             <div style={{ marginTop: '6px' }}>
                                 {imageURL ? (
-                                    <div style={{ width: "100%", height: "25vh", position: "relative" }}>
-                                        <div onClick={handleRemoveImage} style={{ position: "absolute", right: "1px" }}>
+                                    <div style={{ width: "100%", height: "25vh", position: "relative",paddingTop:"20px" }}>
+                                        <div onClick={handleRemoveImage} style={{ position: "absolute", right: "1px",cursor:"pointer" }}>
                                             <img src={redcross} alt="" />
                                         </div>
                                         <div style={{ width: "100%", height: "25vh" }}>
-                                            <img src={imageURL} alt="Uploaded" style={{ width: "100%", height: "100%", objectFit: "fill", borderRadius: "12px" }} />
+                                            <img src={imageURL} alt="Uploaded" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "12px" }} />
                                         </div>
                                     </div>
                                 ) : (
@@ -181,7 +184,7 @@ function Serviceeditcategory() {
                                 )}
                             </div>
                             <div style={{ marginTop: "10px" }}>
-                                <button onClick={updatingdata} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white" }}>{t("Edit")}</button>
+                                <button onClick={updatingdata} style={{ border: "none", width: "100%", height: "7vh", borderRadius: "16px", backgroundColor: "#EE0000", color: "white",fontSize:"20px",cursor:"pointer" }}> {edit ? t("Editing...") : t("Edit")}</button>
                             </div>
                         </div>
                     </div>

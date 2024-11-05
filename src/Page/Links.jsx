@@ -173,9 +173,12 @@ function Links() {
   const db = getDatabase();
 
   useEffect(() => {
+
+
     const userid = localStorage.getItem("userId");
     const fetcheddata = async () => {
-      const dataRef = ref(database, `SocialLinks`);
+      const userId=localStorage.getItem("userId")
+      const dataRef = ref(database, `User/${userId}/links`);
       const snap = await get(dataRef);
 
       const data = snap.val();
@@ -331,7 +334,8 @@ function Links() {
             </Slide>
 
             {links.socialLink.map((link) => {
-              const match = recordStatuses.find((icon) => icon.id === link.id);
+           const match = Array.isArray(recordStatuses) ? recordStatuses.find((icon) => icon.id === link.id) : null;
+
               return (
                 <div
                   key={link.id}
@@ -378,7 +382,8 @@ function Links() {
             </h2>
 
             {links.contactLinks.map((link) => {
-              const match = recordStatuses.find((icon) => icon.id === link.id);
+           const match = Array.isArray(recordStatuses) ? recordStatuses.find((icon) => icon.id === link.id) : null;
+
               return (
                 <div
                   key={link.id}
@@ -425,7 +430,8 @@ function Links() {
               Others
             </h2>
             {links.others.map((link) => {
-              const match = recordStatuses.find((icon) => icon.id === link.id);
+           const match = Array.isArray(recordStatuses) ? recordStatuses.find((icon) => icon.id === link.id) : null;
+
               return (
                 <div
                   key={link.id}
