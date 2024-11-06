@@ -66,24 +66,14 @@ function Create() {
       console.log(user);
       localStorage.setItem("userId", user?.uid);
       localStorage.setItem("parentId", user?.uid);
-      // <<<<<<< HEAD
       const id = Date.now();
       const useref = ref(db, "User/" + user?.uid);
-      // =======
-      //  const useref=ref(db,"User/"+user?.uid)
-      //  set(useref,{
-      //   id:user?.uid,
-      //   name:name,
-      //   username:username,
-      //   email:email,
-      //  })
-      // >>>>>>> 3cf830f32c46925aa6ced489a114c01ef1b53503
       set(useref, {
         id: user?.uid,
         name: name,
         username: username,
         parentID: user?.uid,
-        aboutUs:"",
+        bio:"",
         nickname:"",
        coverUrl:"",
         profileUrl: "",
@@ -100,7 +90,6 @@ function Create() {
         currentuser: false,
         deleted: false,
         directMode: "",
-        dob: "",
         email: email,
         enterpriseMonthlyAllowed: "",
         enterpriseMonthlyRequested: "",

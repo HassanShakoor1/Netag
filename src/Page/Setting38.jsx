@@ -13,6 +13,7 @@ import Footer from "../Components/Footer";
 import Logout from "../images/Logout.png";
 import vectorrr from "../images/vectorrr.svg";
 import { useNavigate, Link } from "react-router-dom";
+import {  query, orderByChild, equalTo, remove } from "firebase/database";
 
 import { AppContext } from "./LanguageContextProvider";
 
@@ -89,6 +90,84 @@ function Setting() {
     // Call the function
     fetch();
   }, []);
+
+
+  // Delete data
+
+  
+  // Make sure to initialize your Firebase app and database
+
+  const deleteUserData = async (uid) => {
+    try {
+      // Tables in which the UID is stored
+      const tables = ['User', 'Products', 'Services', 'ProductCategory', 'ServiceCategory', 'Orders'];
+  
+      // 1. First, delete all entries where `uid` is directly matching the UID in each table.
+      for (const table of tables) {
+        const tableRef = ref(database, table);
+        const uidQuery = (table === 'User') 
+          ? query(tableRef, orderByChild('id'), equalTo(uid))  // For the User table, query by `id`
+          : query(tableRef, orderByChild('uid'), equalTo(uid));  // For other tables, query by `uid`
+          
+        const snapshot = await get(uidQuery);
+        if (snapshot.exists()) {
+          snapshot.forEach((childSnapshot) => {
+            remove(childSnapshot.ref);
+          });
+        }
+      }
+  
+      // 2. Retrieve the `parentID` from localStorage
+      const parentID = localStorage.getItem("parentId");
+      console.log('Parent ID retrieved from localStorage:', parentID);
+  
+      if (!parentID) {
+        console.log("No parentID found in localStorage. Exiting function.");
+        return;  // Exit if no parentID found
+      }
+  
+      // 3. Query all users with the same parentId
+      // const userTableRef = ref(database, 'User');
+      // const parentQuery = query(userTableRef, orderByChild('parentID'), equalTo(parentID));
+      // const parentSnapshot = await get(parentQuery);
+
+      const parentQuery = query(
+        ref(database, `User`),
+        orderByChild("parentID"),
+        equalTo(parentID)
+      
+    );
+    const parentSnapshot = await get(parentQuery);
+    console.log("parent data",parentSnapshot)
+
+  
+      if (parentSnapshot.exists()) {
+        console.log( "hyy",parentSnapshot)
+        console.log(`Found ${parentSnapshot.size} records with parentID ${parentID}. Deleting them...`);
+        parentSnapshot.forEach((childSnapshot) => {
+          console.log(`Deleting user with UID: ${childSnapshot.key}`);
+          remove(childSnapshot.ref); // Delete the user record
+          
+        });
+
+      } else {
+        console.log(`No users found with parentID ${parentID}.`);
+      }
+  
+      console.log(`User data with UID ${uid} and related parentId entries deleted from all tables.`);
+    } catch (error) {
+      console.error("Error deleting user data:", error);
+    }
+  };
+  
+
+  
+  
+
+  const handleDelete = () => {
+    const userUid = localStorage.getItem("userId");  // Replace with the UID you want to delete
+    deleteUserData(userUid);
+  };
 
   return (
     <div className="categories-maindiv">
@@ -352,9 +431,12 @@ function Setting() {
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
+                        cursor:"pointer"
                       }}
                     >
-                      <div style={{ display: "flex", alignItems: "center" }}>
+                      <div  onClick={() => {
+      window.open('https://netagstore.com/shop/', '_blank');
+  }} style={{ display: "flex", alignItems: "center",cursor:'pointer' }}>
                         <div>
                           <img src={shop} alt="" />
                         </div>
@@ -453,9 +535,14 @@ function Setting() {
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
+                        cursor:'pointer'
                       }}
+                      onClick={() => {
+      window.open('https://avicennaenterpse.blogspot.com/2022/02/app-terms-and-services.html', '_blank');}}
                     >
-                      <div style={{ display: "flex", alignItems: "center" }}>
+                      <div  style={{ display: "flex", alignItems: "center",cursor :"pointer" }}
+                      
+                      >
                         <div>
                           <img src={privacy} alt="" />
                         </div>
@@ -503,7 +590,8 @@ function Setting() {
                         alignItems: "center",
                       }}
                     >
-                      <div style={{ display: "flex", alignItems: "center" }}>
+                      <div style={{ display: "flex", alignItems: "center" }}
+                      onClick={handleDelete}>
                         <div>
                           <img src={Delete} alt="" />
                         </div>
@@ -543,16 +631,17 @@ function Setting() {
                       height: "10vh",
                     }}
                   >
-                    <div
+                    <div onClick={logout}
                       style={{
                         width: "90%",
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
+                        cursor:"pointer",
                       }}
                     >
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <div onClick={logout}>
+                      <div style={{ display: "flex", alignItems: "center",cursor:"pointer" }}>
+                        <div >
                           <img src={Logout} alt="" />
                         </div>
                         <div

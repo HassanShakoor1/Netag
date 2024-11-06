@@ -55,6 +55,7 @@ import ServiceAddCategory from "./Page/Serviceaddcategory";
 import ServiceEditCategory from "./Page/Editcategory";
 
 import Links from "./Page/Links";
+import Front from "./Page/Front";
 
 // Correctly handle Protected Routes
 function ProtectedRoute({ element }) {
@@ -74,7 +75,8 @@ function App() {
         unmountOnExit
       >
         <Routes location={location}>
-          <Route path="/" element={<Welcome />} />
+        <Route path="/" element={<Front />} />
+          <Route path="/welcome" element={<Welcome />} />
           <Route path="/create" element={<Create />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forget" element={<ForgetPassword />} />

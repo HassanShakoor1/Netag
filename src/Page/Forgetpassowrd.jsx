@@ -1,21 +1,40 @@
-import logo from "../images/logo.png"
-import rafik from "../images/rafik.png"
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import styles from "../Page/ForgotPassword.module.css";
 import vector from "../images/Vector.svg";
-function Forgetpassword() {
-    const navigate = useNavigate(); // Use the hook here
+import logo from "../images/logo.svg"
+const ForgotPassword = () => {
 
-    const handlegoBack = () => {
-        navigate('/signup');
-    };
+    const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const handleChange = (e) => {
+    setEmail(e.target.value);
+  };
+  const handleResetPassword = async () => {
+    const auth = getAuth();
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setMessage("A password reset email has been sent to your email address.");
+      setError(""); // Clear any previous errors
+    } catch (error) {
+      setError(error.message); // Set error message
+      setMessage(""); // Clear any previous success message
+    }
+    navigate(-1)
+  };
 
-    return (
-        <div className="welcome-center">
-
-
-            <div className="welcome-widt">
-                   {/* top  */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+  const handlegoBack=()=>{
+    navigate(-1)
+  }
+  return (
+    <div className={styles.main}>
+      <div className={styles.section}>
+       
+    {/* top  */}
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                     <div>
                         <img style={{ cursor: "pointer" }} onClick={handlegoBack} src={vector} alt="" />
                     </div>
@@ -35,39 +54,30 @@ function Forgetpassword() {
 
                 </div>
 
-                {/* lastdiv */}
-
-                <div style={{marginTop:"25%", display: "flex", alignItems: "center", flexDirection: "column", width: "100%" }}>
-
-                    <div style={{ color: "red", fontSize: "30px" }}>
-                        Forget Passowrd
-                    </div>
-                    <div style={{ width: "100%" }}>
-                        <p style={{ textAlign: "center", color: "#BDC1B8" }}>
-                            Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet
-                        </p>
-
-                    </div>
-                </div>
-             
 
 
-                
-                <div style={{marginTop:"8%", width:"100%", display: "flex", justifyContent: "space-between",  flexDirection: "column", height: "110px" }}>
-                    <div style={{ width: "100%" }}>
-                        <input style={{boxShadow: "0px 0px 4.5px 0px #00000040", outline: "none", width: "99%", height: "50px",border:"none", borderRadius: "12px" }} type="text" placeholder="Email" />
-                    </div>
-
-                    <div style={{width:"100%" }}>
-
-                        <button style={{ borderRadius: "12px", width: "100%", height: "50px", color: "white",}} className="btn-colr">Reset Password</button>
-                    </div>
-                </div>
-
-
-            </div>
+        <div style={{ marginTop: "200px" }}>
+          <h1 style={{ textAlign: "center", padding: "10px" }}>Forgot Password!</h1>
+          <p style={{ textAlign: "center", fontSize: "13px" }}>
+            Please enter your email address. We will send you a link to reset your password.
+          </p>
         </div>
-
-    )
-}
-export default Forgetpassword
+        <div className="form">
+          <input
+            type="email"
+            placeholder="Email"
+            className={styles.inputtext}
+            value={email}
+            onChange={handleChange}
+          />
+        </div>
+        {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
+        {message && <p style={{ color: "green", textAlign: "center" }}>{message}</p>}
+        <button className={styles.button} onClick={handleResetPassword}>
+          Reset Password
+        </button>
+      </div>
+    </div>
+  );
+};
+export default ForgotPassword;

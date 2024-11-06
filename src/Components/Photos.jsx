@@ -36,7 +36,7 @@ function Photos() {
               type: 'image',
             }));
             mediaUrls.push(...photoRecords);
-            console.log("photos",photoRecords)
+            // console.log("photos",photoRecords)
           }
          
 
@@ -69,7 +69,7 @@ function Photos() {
 
   const images = mediaFiles.filter(media => media.type === 'image');
   const videos = mediaFiles.filter(media => media.type === 'video');
-  console.log( "fgbdfh",mediaFiles)
+  // console.log( "fgbdfh",mediaFiles)
   // Slider settings
   const settings = {
     dots: false,
@@ -111,9 +111,7 @@ useEffect(()=>{
               ))}
           
             </Slider>
-          ) : (
-            <p>loading...</p>
-          )}
+          ) :null}
           </>
         }
         </div>
@@ -141,9 +139,9 @@ useEffect(()=>{
                 />
               </div>
             ))
-          ) : (
-            <p>loading...</p>
-          )}
+          ) :  null
+
+          }
         </div>
 
         <label htmlFor="file-upload" style={{

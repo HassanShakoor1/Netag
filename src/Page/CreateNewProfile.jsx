@@ -41,7 +41,7 @@ function CreateNewProfile() {
   const [username, setusername] = useState("");
   const [name, setName] = useState("");
   const [designation, setdesignation] = useState("");
-  const [aboutUs, setAbout] = useState("");
+  const [bio, setAbout] = useState("");
   const [company, setcompany] = useState("");
   const [phone, setPhone] = useState("");
   const [businesslocatioon, setBusinessLocation] = useState("");
@@ -144,7 +144,7 @@ function CreateNewProfile() {
 
       setusername(data.username);
       setdesignation(data.designation);
-      setAbout(data.aboutUs);
+      setAbout(data.bio);
       setPhone(data.phone);
       setcompany(data.companyname);
       setprofileName(data.profileUrl);
@@ -204,7 +204,7 @@ function CreateNewProfile() {
           language: "",
           businesslocatioon: businesslocatioon,
           name: name,
-          aboutUs: aboutUs,
+          bio: bio,
           address: "",
           bgButtonColor: "",
           bgColor: "",
@@ -255,12 +255,11 @@ function CreateNewProfile() {
           language: "",
           businesslocatioon: businesslocatioon,
           name: name,
-          aboutUs: aboutUs,
+          bio: bio,
           address: "",
           bgButtonColor: "",
           bgColor: "",
           bgTextColor: "",
-          bio: "",
           createdOn: "",
           currentuser: "",
           deleted: "",
@@ -533,9 +532,9 @@ function CreateNewProfile() {
             <CustomTextField
               style={{ width: "100%" ,margin:"0px auto",marginLeft:"20px"  }}
               label="About"
-              name="aboutUs"
+              name="bio"
               size="small"
-              value={aboutUs}
+              value={bio}
               onChange={(e) => setAbout(e.target.value)}
               InputProps={{
     style: { paddingLeft: 0 },

@@ -31,7 +31,7 @@ function EditProfile() {
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [designation, setDesignation] = useState("");
-  const [aboutUs, setAbout] = useState("");
+  const [bio, setAbout] = useState("");
   const [company, setCompany] = useState("");
   const [phone, setPhone] = useState("");
   const [businesslocatioon, setBusinessLocation] = useState("");
@@ -83,7 +83,7 @@ function EditProfile() {
           setUsername(userData.username || "");
           setName(userData.name || "");
           setDesignation(userData.designation || "");
-          setAbout(userData.aboutUs || "");
+          setAbout(userData.bio || "");
           setCompany(userData.companyname || "");
           setPhone(userData.phone || "");
           setBusinessLocation(userData.businesslocatioon || "");
@@ -163,7 +163,7 @@ console.log(currentProfile)
           username: username || existingData.username,
           name: name || existingData.name,
           designation: designation || existingData.designation,
-          aboutUs: aboutUs || existingData.aboutUs,
+          bio: bio || existingData.bio,
           companyname: company || existingData.companyname,
           phone: phone || existingData.phone,
           businesslocatioon:
@@ -408,9 +408,9 @@ console.log(currentProfile)
             <CustomTextField
               style={{ width: "94%",margin:"0px auto",marginLeft:"20px" }}
               label="about"
-              name="aboutUs"
+              name="bio"
               size="small"
-              value={aboutUs}
+              value={bio}
               onChange={(e) => setAbout(e.target.value)}
               InputProps={{
     style: { paddingLeft: 0 },

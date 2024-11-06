@@ -36,6 +36,7 @@ import instagram from "../images/instagram.png";
 import paypal from "../images/paypal.png";
 import Links from "./Links";
 import { PaddingTwoTone } from "@mui/icons-material";
+import zIndex from "@mui/material/styles/zIndex";
 
 function Profile() {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ function Profile() {
   });
 
   const userId = localStorage.getItem("userId");
-  console.log("now user ", userId);
+  // console.log("now user ", userId);
 
   const ReturnIcon = (id) => {
     switch (id) {
@@ -233,6 +234,7 @@ function Profile() {
   };
 
   const [leadMode, setLeadMode] = useState(false); // State for leadMode
+  // console.log(profileData?.directMode)
   const [direct, setDirect] = useState(false); // State for leadMode
 
   useEffect(() => {
@@ -251,7 +253,7 @@ function Profile() {
 
               if (snapshot.exists()) {
                   setProfileData(snapshot.val());
-                  console.log("Fetched profileData:", snapshot.val());
+                  // console.log("Fetched profileData:", snapshot.val());
               } else {
                   console.log("No data available for this userId:", userId);
               }
@@ -278,7 +280,6 @@ function Profile() {
 
       fetchData();
   }, []);
-console.log(direct)
   const updateData = async (leadMode) => {
       const userId = localStorage.getItem("userId");
       if (!userId) {
@@ -300,26 +301,83 @@ console.log(direct)
       }
   };
 
-
   const handleToggle = (action) => {
-    if(action=="lead")
-    {
-      setLeadMode(!leadMode); // Toggle leadMode state
-      updateData(!leadMode); // Update the database with the new leadMode
-      setDirect(false);
-    }
-    else if(action=="direct"){
-      setDirect(!direct); // Toggle leadMode state
-      updateData(!direct);
-      setLeadMode(false);
-
-    }
+    console.log(action);
+  
+    if (action === "lead") {
+      if (direct) {
+        alert("Please turn off Direct Mode before enabling Lead Mode.");
+        return; // Exit the function if direct mode is active
+      }
+      setLeadMode((prevLeadMode) => {
+        const newLeadMode = !prevLeadMode;
+        updateData(newLeadMode); // Update the database with the new leadMode
+        setDirect(false); // Turn off direct mode when lead mode is activated
+        localStorage.setItem("leadMode", newLeadMode); // Save Lead mode state in localStorage
+        return newLeadMode;
+      });
+    } else if (action === "direct") {
+      if (leadMode) {
+        alert("Please turn off Lead Mode before enabling Direct Mode.");
+        return; // Exit the function if lead mode is active
+      }
+      setDirect((prevDirect) => {
+        const newDirect = !prevDirect;
+        updateData(newDirect); // Update the database with the new directMode
+        setLeadMode(false); // Turn off lead mode when direct mode is activated
+        localStorage.setItem("directMode", newDirect); // Save Direct mode state in localStorage
    
-      
+        // If Direct mode is enabled, set the first link's opacity to 1
+        if (newDirect && links.length > 0) {
+          const firstLinkId = links[0].id;
+          setSelectedLink(firstLinkId); // Select the first link
+          updateDirectLink(newDirect, links[0]); // Update the direct link in the database
+          localStorage.setItem("selectedLink", firstLinkId); // Save the selected link ID in localStorage
+        } else {
+          setSelectedLink(null); // No link selected if direct mode is off
+          updateDirectLink(newDirect, null);
+          // localStorage.removeItem("selectedLink"); // Remove selected link ID from localStorage
+        }
+   
+        return newDirect;
+      });
+    }
   };
+  
+  
 
+  useEffect(() => {
+    // Load the saved states from localStorage
+    const savedDirectMode = localStorage.getItem("directMode");
+    const savedLeadMode = localStorage.getItem("leadMode");
+   
+  
+    // Set the states if they exist in localStorage
+    if (savedDirectMode !== null) {
+      setDirect(JSON.parse(savedDirectMode)); // Parse and set Direct mode state
+    }
+  
+    if (savedLeadMode !== null) {
+      setLeadMode(JSON.parse(savedLeadMode)); // Parse and set Lead mode state
+    }
+  
+  
 
-  console.log(profileData);
+    const savedSelectedLink = localStorage.getItem("selectedLink");
+    if (savedSelectedLink !== null) {
+      setSelectedLink(savedSelectedLink);  // Set the selected link from localStorage
+    }
+
+  }, []);
+  
+  
+
+  
+  
+  
+  
+
+  // console.log(profileData);
 
   const handlMoveLink = () => {
     navigate(`/home/Link`);
@@ -331,19 +389,8 @@ console.log(direct)
     setImageLoading(false);
   };
 
-  // Toggle handler to switch between lead and direct modes
-  // const handleToggle = (toggleId) => {
-  //   setActiveToggle((prevId) => (prevId === toggleId ? null : toggleId));
-  // };
-  useEffect(() => {
-    if (direct && links.length > 0) {
-      updateDirectLink(direct, links[0]);
-    }
-    else{
-      updateDirectLink(direct, null);
-    }
-  }, [direct]);
 
+  
   const handleEditProfile = () => {
     navigate("/edit-profile");
   };
@@ -353,7 +400,7 @@ console.log(direct)
     navigate("/home/notifi");
   };
   
-  const [selectedLink, setSelectedLink] = useState(links[0] || null);
+  const [selectedLink, setSelectedLink] = useState(links.length > 0 ? links[0].id : null); 
   
   // Function to return the appropriate icon based on id
 
@@ -375,71 +422,23 @@ console.log(direct)
 
 
   const updateDirectLink = async (status, link) => {
-    
-    if(status == true)
-    { 
-      
-     const userRef = ref(database, `User/${userId}`); // Adjust the path if needed
-      try {
-          // await userRef.update({ ...profileData, leadMode }); // Include leadMode in the update
-          await update(userRef, {
-            ...profileData,
-            direct: link,
-            directMode:status
-          });
-          console.log('User data updated successfully');
-      } catch (error) {
-          console.error('Error updating user data: ', error);
-      }
-    }
-    else
-    {
-      const userRef = ref(database, `User/${userId}`); // Adjust the path if needed
-      try {
-          // await userRef.update({ ...profileData, leadMode }); // Include leadMode in the update
-          await update(userRef, {
-            ...profileData,
-            direct: null,
-            directMode:status
-          });
-          console.log('User data updated successfully');
-      } catch (error) {
-          console.error('Error updating user data: ', error);
-      }
+    try {
+        const userRef = ref(database, `User/${userId}`); // Adjust the path if needed
+        await update(userRef, {
+          ...profileData,
+          direct: status ? link :null ,
+          directMode:status
+        });
+        console.log('Direct mode updated successfully');
+    } catch (error) {
+        console.error('Error updating user data: ', error);
     }
     
 
 
   };
 
-
-
-
-
-// const handleLinkClick = async (baseUrl,name, linkId) => {
-//     // Update selected state of links
-//     const updatedLinks = selectedLink.map((link, i) => ({
-//       ...link,
-//       selected: i === index,
-//     }));
-//     setSelectedLink(linkId);
-//     // Save selected link to Realtime Database if directmode is true
-//     if (ourInfo.directmode) {
-//       try {
-//         const selectedLink = selectlinks[index];
-//         const currentUser = localStorage.getItem('useruid');
-//         const userRef = ref(db, `user/${currentUser}/direct`);
-//         await update(userRef, { selectedLink: selectedLink.name, value: selectedLink.value, linkId: selectedLink.linkId });
-//         console.log('Selected link saved to Realtime Database');
-//       } catch (error) {
-//         console.error('Error saving selected link to Realtime Database:', error);
-//       }
-//     } else {
-//       // Set elm.value to window.value when directmode is false
-//       //window.open(linkValue)
-//     }
-//   };
-
+ 
 
 
 
@@ -584,40 +583,7 @@ console.log(direct)
               </h2>
             </div>
 
-            {/* <div
-              className="data"
-              style={{
-                lineHeight: "1.5",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                flexWrap: "nowrap",
-                gap: "10px",
-              }}
-            >
-              <h2
-                className="head"
-                style={{
-                  margin: "0px",
-                  flex: "1 1 auto",
-                  minWidth: "0",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                {"Location"}:
-                <span
-                  className="para"
-                  style={{
-                    fontWeight: "400",
-                    paddingLeft: "13px",
-                  }}
-                >
-                  {profileData.businesslocatioon}
-                </span>
-              </h2>
-            </div> */}
+          
           </div>
 
           <div
@@ -760,23 +726,35 @@ console.log(direct)
                   cursor: "pointer",
                 }}
               >
-                <img
-                  onClick={
-                    direct ? () => updateDirectLink(direct, link) : 
-                    () => handleImageClick(link?.baseUrl, link?.name)}
-                  src={ReturnIcon(link.id)}
-                  alt={link?.name || "Link"}
-                  style={{ width: "50px", height: "50px",opacity: direct
-                ? selectedLink === link.id
-                  ? "100%"
-                  : "30%"
-                : "100%", // Apply 30% opacity in Direct Mode, 100% otherwise
-              transition: "opacity 0.3s ease", // Smooth transition effect
-            }}
-                  onError={(e) => {
-                    e.target.src = "path/to/default/image.png";
-                  }} // Fallback on error
-                />
+           <img
+  key={link.id}
+  onClick={
+    direct
+      ? () => {
+          setSelectedLink(link.id);  // Set the selected link when clicked
+          localStorage.setItem("selectedLink", link.id);  // Save the selected link ID to localStorage
+          updateDirectLink(direct, link);  // Update the link in Direct mode
+        }
+      : () => handleImageClick(link?.baseUrl, link?.name)
+  }
+  src={ReturnIcon(link.id)}
+  alt={link?.name || "Link"}
+  style={{
+    width: "50px",
+    height: "50px",
+    opacity: link.id === selectedLink
+      ? "1"  // Full opacity for the selected link
+      : direct
+      ? "40%"  // Reduced opacity for unselected links in Direct mode
+      : "1",  // Default opacity for all images
+    transition: "opacity 0.3s ease",  // Smooth transition effect
+  }}
+  onError={(e) => {
+    e.target.src = "path/to/default/image.png";  // Fallback on error
+  }}
+/>
+
+
 
                 <span style={{ color: "#898787", fontSize: "12px" }}>
                   {link?.name}
