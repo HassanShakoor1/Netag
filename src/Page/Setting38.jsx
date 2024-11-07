@@ -43,7 +43,7 @@ function Setting() {
 
         if (!userId) {
           console.error("No userId found in localStorage");
-          setLoading(false);
+         
           return;
         }
 
@@ -61,7 +61,7 @@ function Setting() {
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        setLoading(false);
+       
       }
     };
 
