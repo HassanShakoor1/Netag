@@ -4,7 +4,7 @@ import { useState, useContext, useEffect } from "react";
 import person from "../images/personrounded.svg";
 import lead from "../images/lead.png";
 import member from "../images/membership.png";
-import { getDatabase, ref, update, get } from "firebase/database";
+import { getDatabase, ref, update, get,set } from "firebase/database";
 import shop from "../images/shop.png";
 import languages from "../images/Languages.png";
 import privacy from "../images/privacy.png";
@@ -27,6 +27,70 @@ function Setting() {
   const [record, setRecord] = useState([]);
   console.log(language);
   const [activeTab, setActiveTab] = useState("newOrders"); // State to track the active tab
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    // Check localStorage for activeTab on initial render
+    const savedTab = localStorage.getItem("activeTab");
+
+    if (savedTab) {
+      setActiveTab(savedTab); // Use saved activeTab from localStorage if available
+    }
+
+    const fetchData = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+
+        if (!userId) {
+          console.error("No userId found in localStorage");
+          setLoading(false);
+          return;
+        }
+
+        const userRef = ref(database, `User/${userId}`);
+        const snapshot = await get(userRef);
+
+        if (snapshot.exists()) {
+          const profileData = snapshot.val();
+          const userActiveTab = profileData.profileOn === 1 ? "ordersHistory" : "newOrders";
+          setActiveTab(userActiveTab); // Set the tab based on profileOn field in Firebase
+        } else {
+          console.log("No data available for this userId:", userId);
+        }
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  
+  const updateProfileOn = (newTab) => {
+    setActiveTab(newTab);
+    localStorage.setItem("activeTab", newTab); 
+
+    const profileOn = newTab === "ordersHistory" ? 1 : 0; 
+    const userId = localStorage.getItem("userId");
+    
+    if (!userId) return; 
+    
+    const userRef = query(ref(database, 'User'), orderByChild('parentID'), equalTo(userId));
+
+    get(userRef).then(snapshot => {
+      if (snapshot.exists()) {
+        snapshot.forEach(childSnapshot => {
+          const userKey = childSnapshot.key;
+          
+          set(ref(database, `User/${userKey}/profileOn`), profileOn);
+        });
+      }
+    });
+  };
+
 
   // Define styles for active and inactive tabs
   const activeStyle = {
@@ -59,7 +123,7 @@ function Setting() {
     localStorage.removeItem("parentId");
     navigate("/signup");
   }
-  const userId = localStorage.getItem("userId");
+  
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -100,22 +164,37 @@ function Setting() {
   const deleteUserData = async (uid) => {
     try {
       // Tables in which the UID is stored
-      const tables = ['User', 'Products', 'Services', 'ProductCategory', 'ServiceCategory', 'Orders'];
+      const tables = ['User', 'Products', 'Services', 'ProductCategory', 'ServiceCategory', 'Orders','Notifications'];
   
       // 1. First, delete all entries where `uid` is directly matching the UID in each table.
       for (const table of tables) {
         const tableRef = ref(database, table);
-        const uidQuery = (table === 'User') 
-          ? query(tableRef, orderByChild('id'), equalTo(uid))  // For the User table, query by `id`
-          : query(tableRef, orderByChild('uid'), equalTo(uid));  // For other tables, query by `uid`
-          
-        const snapshot = await get(uidQuery);
-        if (snapshot.exists()) {
-          snapshot.forEach((childSnapshot) => {
-            remove(childSnapshot.ref);
-          });
+        let uidQuery;
+      
+        if (table === 'User') {
+          uidQuery = query(tableRef, orderByChild('id'), equalTo(uid)); // For the 'User' table, query by 'id'
+        } else if (table === 'Notifications' || table === 'Analytic') {
+          uidQuery = query(tableRef, orderByChild('parentid'), equalTo(uid)); // For 'Notifications' and 'Analytic', query by 'parentid'
+        } else {
+          uidQuery = query(tableRef, orderByChild('uid'), equalTo(uid)); // For all other tables, query by 'uid'
+        }
+      
+        try {
+          const snapshot = await get(uidQuery);
+          if (snapshot.exists()) {
+            // Iterate over each child in the snapshot and remove it
+            snapshot.forEach((childSnapshot) => {
+              // Use remove to delete the data at the child's reference
+               remove(childSnapshot.ref);
+            });
+          } else {
+            console.log(`No data found for table: ${table}`);
+          }
+        } catch (error) {
+          console.error(`Error while querying or deleting data from table ${table}:`, error);
         }
       }
+      
   
       // 2. Retrieve the `parentID` from localStorage
       const parentID = localStorage.getItem("parentId");
@@ -167,6 +246,7 @@ function Setting() {
   const handleDelete = () => {
     const userUid = localStorage.getItem("userId");  // Replace with the UID you want to delete
     deleteUserData(userUid);
+    navigate("/")
   };
 
   return (
@@ -237,7 +317,7 @@ function Setting() {
                       height: "100%",
                       alignItems: "center",
                     }}
-                    onClick={() => setActiveTab("newOrders")}
+                    onClick={() => updateProfileOn("newOrders")}
                   >
                     {t("Profile Off")}
                   </div>
@@ -251,9 +331,9 @@ function Setting() {
                       display: "flex",
                       justifyContent: "center",
                       height: "100%",
-                      alignItems: "center",
+                      alignItems: "center"
                     }}
-                    onClick={() => setActiveTab("ordersHistory")}
+                    onClick={() => updateProfileOn("ordersHistory")}
                   >
                     Profile On
                   </div>
@@ -580,6 +660,7 @@ function Setting() {
                       justifyContent: "center",
                       alignItems: "center",
                       height: "10vh",
+                      cursor:"pointer"
                     }}
                   >
                     <div

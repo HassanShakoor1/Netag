@@ -10,6 +10,7 @@ import bitc from "../images/bitc.png";
 import bitcc from "../images/bitcc.png";
 import nav from "../images/nav.png";
 import Card from "../Components/Card";
+import notifi from "../images/noti.png"
 import { ref, get,update } from "firebase/database"; // Import 'ref' and 'get' directly from 'firebase/database'
 import { database } from "../firebase.jsx"; // Import the initialized database
 import CircularProgress from "@mui/material/CircularProgress"; // Import the loader component
@@ -399,6 +400,9 @@ function Profile() {
   const handlenotifi = () => {
     navigate("/home/notifi");
   };
+  const handleAppoint = () => {
+    navigate("/home/appoint");
+  };
   
   const [selectedLink, setSelectedLink] = useState(links.length > 0 ? links[0].id : null); 
   
@@ -447,12 +451,15 @@ function Profile() {
   return (
     <div className="ProfileContainer">
       <div className="profile-design" style={{ paddingBottom: "0px" }}>
-        {/* Navigation bar with logo and notification icon */}
+       
         <nav className="nav" style={{ marginBottom: "10px" }}>
           <div className="nav-logo">
+         
             <img src={nav} alt="nav-img" />
           </div>
-          <div className="nav-icon">
+          
+          <div style={{display:'flex', position:"relative",top:"5px"}} className="nav-icon">
+          <img style={{widthL:"25px",height:'22px',paddingRight:"22px",cursor:"pointer"}} onClick={handleAppoint}k src={notifi} alt="nav-img" />
             <FaBell
               onClick={handlenotifi}
               style={{ fontSize: "25px", cursor: "pointer" }}

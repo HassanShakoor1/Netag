@@ -52,7 +52,9 @@ function EditContact() {
     arrows:false
   };
 
-
+  const handlegoBack = () => {
+    navigate("/home");
+  };
 
 
   useEffect(() => {
@@ -129,51 +131,53 @@ function EditContact() {
   };
   
 
-  const handlegoBack = () => {
-    navigate("/home");
-  };
+  
 
+  
   const handleImageUpload = async (event) => {
-    // Check if recordid is available
     if (!recordid) {
       console.error("Record ID is not available.");
       return;
     }
   
-    // Get the uploaded files and filter out image files
     const files = Array.from(event.target.files);
     const imageFiles = files.filter((file) => file.type.startsWith("image/"));
   
-    // Initialize Firebase storage
     const storage = getStorage(app);
-    
-    // Set loading state to true
     setLoading(true);
   
-    // Iterate through the selected image files and upload them
+    const newMediaFiles = []; // Array to store new media files to be added to the state
+  
     for (const file of imageFiles) {
       const fileRef = storageRef(storage, `User/${recordid}/${file.name}`);
       try {
-        await uploadBytes(fileRef, file); // Upload the file to Firebase Storage
-        const url = await getDownloadURL(fileRef); // Get the download URL
-        
-        // Create a new media file object
+        await uploadBytes(fileRef, file);
+        const url = await getDownloadURL(fileRef);
+  
         const newMediaFile = { url, type: "image" };
-        
-        // Update the media files state immediately after uploading
-        setMediaFiles((prevFiles) => [...prevFiles, newMediaFile]); 
-        
-        // Optionally, save media files to your backend or state
-        await saveMediaFiles(recordid, [...mediaFiles, newMediaFile]); // You can choose to update this based on your requirement
+  
+        // Add the new media file to the array to be added to state
+        newMediaFiles.push(newMediaFile);
+  
+        // Update state immediately for immediate rendering
+        setImageFiles((prevFiles) => {
+          const newImageFiles = [...prevFiles, { url: newMediaFile.url, type: 'image' }];
+          console.log("Updated Image Files:", newImageFiles); // Check what URLs are being set
+          return newImageFiles;
+        });
+  
+        // Optionally, re-fetch the media files from Firebase to ensure consistency
+        await saveMediaFiles(recordid, [...imageFiles, ...newMediaFiles]);
   
       } catch (error) {
-        console.error("Error uploading file:", error); // Handle upload errors
+        console.error("Error uploading file:", error);
       }
     }
-    
-    // Set loading state to false after all uploads are complete
+  
+    // Set loading to false once the process is completed
     setLoading(false);
   };
+  
   
   
 
@@ -225,7 +229,7 @@ function EditContact() {
     const database = getDatabase(app);
     const featuredPhotosRef = `User/${userId}/featuredPhotos`;
     const featuredVideosRef = `User/${userId}/featuredVideos`;
-
+  
     const imageEntries = newMediaFiles
       .filter(media => media.type === "image")
       .map(media => ({
@@ -234,7 +238,7 @@ function EditContact() {
         imageUrl: media.url,
         title: "",
       }));
-
+  
     const videoEntries = newMediaFiles
       .filter(media => media.type === "video")
       .map(media => ({
@@ -243,39 +247,41 @@ function EditContact() {
         videoUrl: media.url,
         title: "Video Title",
       }));
-
+  
     try {
-      
-
       if (imageEntries.length > 0) {
         const snapshot = await get(ref(database, featuredPhotosRef));
         const existingFiles = snapshot.val() || {};
-        const newImgKey = Object.keys(existingFiles).length;
-
+        let newImgKey = Object.keys(existingFiles).length;
+  
         for (const entry of imageEntries) {
           const imageFilePath = `${featuredPhotosRef}/${newImgKey}`;
           await set(ref(database, imageFilePath), entry);
+          newImgKey += 1; // Increment key to avoid overwriting existing entries
         }
         console.log("Images saved successfully");
       }
-
+  
       if (videoEntries.length > 0) {
         const videoSnapshot = await get(ref(database, featuredVideosRef));
         const existingVideoFiles = videoSnapshot.val() || {};
-        const newVideoKey = Object.keys(existingVideoFiles).length;
-
+        let newVideoKey = Object.keys(existingVideoFiles).length;
+  
         for (const entry of videoEntries) {
           const videoFilePath = `${featuredVideosRef}/${newVideoKey}`;
           await set(ref(database, videoFilePath), entry);
+          newVideoKey += 1; // Increment key to avoid overwriting existing entries
         }
         console.log("Videos saved successfully");
       }
     } catch (error) {
       console.error(`Error saving data: ${error.message}`);
     } finally {
-      // Step 3: Set loading to false after the upload
+      // Set loading to false after the upload completes
+      setLoading(false);
     }
   };
+  
   
   
 
@@ -447,7 +453,7 @@ const handleRemoveVideo = async (recordId) => {
             }}
           >
             <img
-              src={file?.imageUrl}
+              src={file?.url}
               alt={`Uploaded ${index}`}
               style={{
                 width: "100%",
