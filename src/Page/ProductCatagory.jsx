@@ -218,7 +218,7 @@ function ProductCatagory() {
           <IoChevronBack
             onClick={handleBackscreen}
             className="bck"
-            style={{ paddingTop: "1.5rem" }}
+            style={{ paddingTop: "1.5rem",paddingLeft:"10px" }}
           />
           <h4 style={{ color: "red", fontSize: "20px", fontWeight: "100" }}>
             Product Category
