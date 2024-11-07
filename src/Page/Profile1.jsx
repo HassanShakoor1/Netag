@@ -422,7 +422,7 @@ const handleCopy = (name) => {
     <FaRegCopy
   style={{
     cursor: "pointer",
-    color: "#929292",
+    color: "#929293",
     fontSize: "14px",
   }}
   onClick={() => handleCopy(openedData?.message)} // Pass the name here
