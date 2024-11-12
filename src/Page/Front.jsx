@@ -4,15 +4,29 @@ import netag from '../images/netag.png';
 const Front = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    // Redirect to the welcome page after 5 seconds (5000ms)
+    // Set the background color, margin, and padding when the component mounts
+    document.body.style.backgroundColor = "rgb(243, 41, 0)";
+    document.body.style.margin = "0"; // Remove margin
+    document.body.style.padding = "0"; // Remove padding
+
+    // Redirect to the welcome page after 2 seconds (2000ms)
     const timer = setTimeout(() => {
       navigate('/welcome');
     }, 2000);
-    return () => clearTimeout(timer);
+
+    // Cleanup function to reset the background color, margin, and padding after the timer
+    return () => {
+      document.body.style.backgroundColor = ""; // Reset background color to default
+      document.body.style.margin = ""; // Reset margin to default
+      document.body.style.padding = ""; // Reset padding to default
+      clearTimeout(timer);
+    };
   }, [navigate]);
+
+
   return (
-    <div style={{width:'100%',display:"flex",justifyContent:'center',margin:'0px',padding:'0px'}}>
-      <div style={{display:"flex",justifyContent:'center',alignItems:"center",width:'100%',backgroundColor:"rgb(243, 41, 0)",height:'100vh'}}>
+    <div style={{width:'100%',display:"flex",justifyContent:'center',margin:'0',padding:'0',boxSizing:'border-box'}}>
+      <div style={{maxWidth:"430px",display:"flex",justifyContent:'center',alignItems:"center",width:'100%',backgroundColor:"rgb(243, 41, 0)",height:'100vh'}}>
         <img src={netag} alt='logo' width="233px" height="200px" />
       </div>
     </div>
