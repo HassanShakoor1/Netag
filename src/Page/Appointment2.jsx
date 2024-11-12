@@ -3,7 +3,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import styles from "./Appointment2.module.css";
 import dayjs from 'dayjs';
-
+import { IoChevronBack } from "react-icons/io5";
 import { Switch } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { database } from '../firebase';
@@ -372,7 +372,11 @@ console.log(selectedDates);
     <div className={styles.main}>
       <div className={styles.section}>
         <div className={styles.navbar}>
-          <IoIosArrowBack style={{ color: 'red', fontSize: '30px',fontWeight:"100" }} onClick={handleBack} />
+        <IoChevronBack
+            onClick={handleBack}
+            className="bck"
+            style={{ paddingRight:"0px"}}
+          />
           <p style={{ textAlign: "center", fontFamily: 'Inter', fontSize: '20px', color: 'red' }}>Appointments</p>
           <button className={styles.addButton}>Add</button>
         </div>

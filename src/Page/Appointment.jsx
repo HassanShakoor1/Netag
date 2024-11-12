@@ -1,7 +1,6 @@
 import "./Appointment.css"
-import vector from "../images/vector.svg"
+import { IoChevronBack } from "react-icons/io5";
 import {useNavigate} from 'react-router-dom'
-
 import { database as db } from "../firebase.jsx"
 import { get, ref, query, orderByChild, equalTo, onValue } from "firebase/database"
 import { useEffect } from "react"
@@ -59,9 +58,11 @@ function Appointment() {
                 <div className="widthh">
                 {/* top-appointment */}
                 <div className="top-appointment">
-                    <div onClick={handleHome} style={{cursor:"pointer"}}>
-                        <img  src={vector} alt="" />
-                    </div>
+                <IoChevronBack
+            onClick={handleHome}
+            className="bck"
+            style={{ paddingTop: "1.5rem" }}
+          />
                     <div style={{fontWeight:'100',fontSize:"20px"}} className="color-font">Appointments</div>
                     <div >
                         <button style={{height:'30px',borderRadius:"20px",backgroundColor:"transparent"}} onClick={MoveAddappointment} className="btn-width">Add</button>
