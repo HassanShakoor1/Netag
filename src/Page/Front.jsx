@@ -12,7 +12,10 @@ const Front = () => {
     // For iOS status bar color (ensure the meta tag is set in HTML as mentioned)
     if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) {
       // iOS devices: set the background color for status bar
-      document.querySelector('meta[name="theme-color"]').setAttribute("content", "rgb(243, 41, 0)");
+      const metaTag = document.querySelector('meta[name="theme-color"]');
+      if (metaTag) {
+        metaTag.setAttribute("content", "rgb(243, 41, 0)");
+      }
     }
 
     // Redirect to the welcome page after 2 seconds (2000ms)
