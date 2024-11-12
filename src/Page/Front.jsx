@@ -4,7 +4,7 @@ import netag from '../images/netag.png';
 const Front = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    // Set the background color, margin, and padding when the component mounts
+    // Set the background color for the page content only (not system UI)
     document.body.style.backgroundColor = "rgb(243, 41, 0)";
     document.body.style.margin = "0"; // Remove margin
     document.body.style.padding = "0"; // Remove padding
@@ -22,6 +22,7 @@ const Front = () => {
       clearTimeout(timer);
     };
   }, [navigate]);
+
 
 
   return (
