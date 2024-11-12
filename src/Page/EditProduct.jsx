@@ -15,6 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import "./product.css"; // Assuming you have a CSS file for custom styles
 import Slider from "react-slick";
+import search from "../images/search.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import AOS from "aos";
@@ -50,7 +51,8 @@ function EditProduct() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [proid, setProid] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const categoryRefs = useRef([]);
   const navigate = useNavigate();
   const location = useLocation();
   const { name } = location.state || {};
@@ -193,6 +195,38 @@ function EditProduct() {
   }, [id]);
   console.log("products are ", products);
 
+
+
+
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+  
+    const trimmedSearchTerm = searchTerm.trim().toLowerCase();
+    const foundCategoryIndex = products.findIndex(
+      (category) => category.productname && category.productname.trim().toLowerCase() === trimmedSearchTerm
+    );
+  
+    if (foundCategoryIndex !== -1) {
+      // Assuming categoryRefs is an array of refs pointing to each contact category's DOM element
+      if (categoryRefs.current[foundCategoryIndex]) {
+        categoryRefs.current[foundCategoryIndex].scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    } else {
+      console.log("Category not found");
+    }
+  };
+
+
+
+
    
   if (loading) {
     return (
@@ -233,19 +267,23 @@ function EditProduct() {
           </button>
         </div>
 
-        <div className="search-field">
-          <input
-            style={{
-              textAlign: "center",
-              fontSize: "20px",
-              fontWeight: "100",
-              outline: "none",
-              border: "1px solid grey",
-            }}
-            type="text"
-            placeholder="Search"
-          />
-        </div>
+        <div className="categories-input">
+  <form onSubmit={handleSearchSubmit} style={{ display: "flex", alignItems: "center", width: "100%" }}>
+    <img 
+      onClick={handleSearchSubmit} // Directly reference the function here
+      src={search} 
+      alt="Search" 
+      style={{ marginRight: "8px", cursor: "pointer" }} // Add cursor style for better UX
+    />
+    <input
+      type="search"
+      value={searchTerm}
+      onChange={handleSearchChange}
+      placeholder="Search..."
+      style={{ color: "#929292", width: "100%", border: "none", outline: "none" }}
+    />
+  </form>
+</div>
         <br />
         <br />
 
@@ -256,6 +294,7 @@ function EditProduct() {
         <div style={{ width: "95%" }} className="Edit-product-Design">
           {products.map((product, index) => (
             <div
+             ref={(el) => (categoryRefs.current[index] = el)}
               data-aos="zoom-in"
               key={product.productid || `product-${index}`}
               style={{ marginTop: "20px",borderRadius:"20px" ,border:"1px solid #DDDDDD"}}

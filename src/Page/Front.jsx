@@ -11,8 +11,8 @@ const Front = () => {
     return () => clearTimeout(timer);
   }, [navigate]);
   return (
-    <div style={{width:'100%',display:"flex",justifyContent:'center'}}>
-      <div style={{maxWidth:"430px",display:"flex",justifyContent:'center',alignItems:"center",width:'100%',backgroundColor:"rgb(243, 41, 0)",height:'100vh'}}>
+    <div style={{width:'100%',display:"flex",justifyContent:'center',margin:'0px',padding:'0px'}}>
+      <div style={{display:"flex",justifyContent:'center',alignItems:"center",width:'100%',backgroundColor:"rgb(243, 41, 0)",height:'100vh'}}>
         <img src={netag} alt='logo' width="233px" height="200px" />
       </div>
     </div>

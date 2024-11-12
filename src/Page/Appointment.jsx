@@ -6,6 +6,7 @@ import { database as db } from "../firebase.jsx"
 import { get, ref, query, orderByChild, equalTo, onValue } from "firebase/database"
 import { useEffect } from "react"
 import { useState } from "react"
+import { heIL } from "@mui/x-date-pickers/locales"
 function Appointment() {
 
     const[appointment,setAppointment]=useState([])
@@ -47,6 +48,10 @@ function Appointment() {
         AppointmentData()
     },[])
 
+
+    const  MoveAddappointment=()=>{
+        navigate('/home/Addappoint')
+    }
     return (
         <div className="appoint-maindiv">
             <div className="div-center">
@@ -57,9 +62,9 @@ function Appointment() {
                     <div onClick={handleHome} style={{cursor:"pointer"}}>
                         <img  src={vector} alt="" />
                     </div>
-                    <div className="color-font">Appointments</div>
+                    <div style={{fontWeight:'100',fontSize:"20px"}} className="color-font">Appointments</div>
                     <div >
-                        <button className="btn-width">Add</button>
+                        <button style={{height:'30px',borderRadius:"20px",backgroundColor:"transparent"}} onClick={MoveAddappointment} className="btn-width">Add</button>
                     </div>
                 </div>
 

@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import "./product.css"; // Adjust the path if needed
 import { IoChevronBack } from "react-icons/io5";
+import search from "../images/search.png";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import dots from "../images/dots.png";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   ref,
   get,
@@ -27,6 +30,8 @@ function ProductCatagory() {
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const { productid } = useParams();
+  const [searchTerm, setSearchTerm] = useState("");
+  const categoryRefs = useRef([]);
   const location = useLocation();
   const { productCount } = location.state || {};
   console.log("top", productCount);
@@ -46,8 +51,10 @@ function ProductCatagory() {
     });
   }, []); // Empty dependency array ensures it runs only once
   const fetchBrands = async (userId) => {
+    toast.dismiss();
     try {
       setLoading(true)
+      toast.error("no data available")
       const brandsRef = ref(database, `ProductCategory`);
       const snapshot = await get(brandsRef);
 
@@ -179,10 +186,10 @@ function ProductCatagory() {
       setBrands((prevBrands) =>
         prevBrands.filter((brand) => brand.id !== activeBrandId)
       );
-
+     
       // Close the menu and notify the user
       handleCloseMenu();
-      alert("Brand and related products deleted successfully!");
+      toast.success("Brand and related products deleted successfully!");
     } catch (error) {
       console.error("Error deleting brand and related products:", error);
       alert("Error deleting brand and related products. Please try again.");
@@ -193,6 +200,40 @@ function ProductCatagory() {
     navigate(`/product-catagory/${id}`);
     console.log(id);
   };
+
+
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+  
+    const trimmedSearchTerm = searchTerm.trim().toLowerCase();
+    const foundCategoryIndex = brands.findIndex(
+      (category) => category.name && category.name.trim().toLowerCase() === trimmedSearchTerm
+    );
+  
+    if (foundCategoryIndex !== -1) {
+      // Assuming categoryRefs is an array of refs pointing to each contact category's DOM element
+      if (categoryRefs.current[foundCategoryIndex]) {
+        categoryRefs.current[foundCategoryIndex].scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    } else {
+      console.log("Category not found");
+    }
+  };
+
+
+
+
+
+
+
 
   const ITEM_HEIGHT = 48;
 
@@ -232,18 +273,30 @@ function ProductCatagory() {
           </button>
         </div>
 
-        <div className="search-field">
-          <input
-            style={{ textAlign: "center", fontSize: "20px", fontWeight: "100" }}
-            type="text"
-            placeholder="Search"
-          />
-        </div>
+        <div className="categories-input">
+  <form onSubmit={handleSearchSubmit} style={{ display: "flex", alignItems: "center", width: "100%" }}>
+    <img 
+      onClick={handleSearchSubmit} // Directly reference the function here
+      src={search} 
+      alt="Search" 
+      style={{ marginRight: "8px", cursor: "pointer" }} // Add cursor style for better UX
+    />
+    <input
+      type="search"
+      value={searchTerm}
+      onChange={handleSearchChange}
+      placeholder="Search..."
+      style={{ color: "#929292", width: "100%", border: "none", outline: "none" }}
+    />
+  </form>
+</div>
+
         <br />
 
         {brands.map((brand, index) => (
           <div
             data-aos="zoom-in"
+            ref={(el) => (categoryRefs.current[index] = el)} 
             key={`${brand.id}-${index}`}
             className="HairoilContainer"
             style={{ margin: "inherit" }}
@@ -378,6 +431,7 @@ function ProductCatagory() {
 
         {error && <div className="error">{error}</div>}
       </div>
+      <ToastContainer position="top-center" />
     </div>
   );
 }

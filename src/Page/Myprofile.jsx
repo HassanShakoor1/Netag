@@ -92,68 +92,120 @@ function Myprofile() {
     }
       {/* ----------------delete child profile-----------------*/}
 
+// async function handleDelete(id) {
+//     try {
+//         console.log("id to delete", id);
+
+//         // ----------------User table-----------------
+//         const ChildUserDB = ref(db, `User/${id}`);
+
+//         // ----------------Service----------------
+//         const Service =query
+//         ( ref(db, `/Services`),
+//         orderByChild('uid'),
+//         equalTo(id)
+//         );
+
+        
+//         const serviceSnap = await get(Service);
+//         const serviceData = serviceSnap.val();
+//         console.log(serviceData)
+
+//         // ----------------ServiceCategory----------------
+//         const ServiceCategory =query( 
+//         ref(db, `/ServiceCategory`),
+//         orderByChild('uid'),
+//         equalTo(id)
+//         )
+//         ;
+      
+//         const ServiceCategorySnap = await get(ServiceCategory);
+//         const ServiceCategoryData = ServiceCategorySnap.val();
+//         console.log(ServiceCategoryData)
+//             {/*---------------deleting ServiceCategory of child user-------------------*/}
+//          if(ServiceCategoryData)
+//          {
+//             for(const key in ServiceCategoryData)
+//             {
+//                 const ServiceCategoryDataRef=ref(db,`ServiceCategory/${key}`)
+//                 await remove(ServiceCategoryDataRef)
+//                 console.log('ServiceCategoryDataRef',ServiceCategoryDataRef)
+//                 console.log(" key of ServiceCategoryDataRef ",key)
+//             }
+//          }
+
+//                  {/*---------------deleting Services of child user -------------------*/}
+//                  if(serviceData)
+//                  {
+//                     for(const key in serviceData){
+//                         const serviceDataRef=ref(db,`Services/${key}`)
+
+//                         await remove(serviceDataRef)
+
+//                     }
+//                  }
+//                  {/*---------------child user Profile -------------------*/}
+//                  await remove(ChildUserDB)
+//                  setMultiProfile((previous)=>previous.filter((item)=>item.id!=id))
+
+        
+
+//     } catch (error) {
+//         console.error("Error deleting user and related data:", error);
+//     }
+// }
+
 async function handleDelete(id) {
     try {
-        console.log("id to delete", id);
-
-        // ----------------User table-----------------
-        const ChildUserDB = ref(db, `User/${id}`);
-
-        // ----------------Service----------------
-        const Service =query
-        ( ref(db, `/Services`),
-        orderByChild('uid'),
-        equalTo(id)
+      console.log("id to delete", id);
+  
+      // ----------------User table-----------------
+      const ChildUserDB = ref(db, `User/${id}`);
+  
+      // Array of tables to delete related data
+      const tables = [
+        { name: 'Services', path: `/Services`, uid:"uid" },
+        { name: 'ServiceCategory', path: `/ServiceCategory`, uid:"uid" },
+        { name: 'Products', path: `/Products`, uid:"uid" },
+        { name: 'ProductCategory', path: `/ProductCategory`, uid:"uid" },
+        { name: 'Orders', path: `/Orders`, uid:"uid" },
+        { name: 'Analytics', path: `/Analytic`, uid:"userid" },
+        { name: 'Contacts', path: `/Contacts`, uid:"userid" }
+        
+      ];
+  
+      // Loop through each table to delete related data
+      for (let table of tables) {
+        const tableRef = query(
+          ref(db, table.path),
+          orderByChild(table.uid),
+          equalTo(id)
         );
-
-        
-        const serviceSnap = await get(Service);
-        const serviceData = serviceSnap.val();
-        console.log(serviceData)
-
-        // ----------------ServiceCategory----------------
-        const ServiceCategory =query( 
-        ref(db, `/ServiceCategory`),
-        orderByChild('uid'),
-        equalTo(id)
-        )
-        ;
-      
-        const ServiceCategorySnap = await get(ServiceCategory);
-        const ServiceCategoryData = ServiceCategorySnap.val();
-        console.log(ServiceCategoryData)
-            {/*---------------deleting ServiceCategory of child user-------------------*/}
-         if(ServiceCategoryData)
-         {
-            for(const key in ServiceCategoryData)
-            {
-                const ServiceCategoryDataRef=ref(db,`ServiceCategory/${key}`)
-                await remove(ServiceCategoryDataRef)
-                console.log('ServiceCategoryDataRef',ServiceCategoryDataRef)
-                console.log(" key of ServiceCategoryDataRef ",key)
-            }
-         }
-
-                 {/*---------------deleting Services of child user -------------------*/}
-                 if(serviceData)
-                 {
-                    for(const key in serviceData){
-                        const serviceDataRef=ref(db,`Services/${key}`)
-
-                        await remove(serviceDataRef)
-
-                    }
-                 }
-                 {/*---------------child user Profile -------------------*/}
-                 await remove(ChildUserDB)
-                 setMultiProfile((previous)=>previous.filter((item)=>item.id!=id))
-
-        
-
+  
+        const snap = await get(tableRef);
+        const data = snap.val();
+        if (data) {
+          for (const key in data) {
+            const dataRef = ref(db, `${table.path}/${key}`);
+            await remove(dataRef);
+            console.log(`${table.name} data deleted:`, dataRef);
+          }
+        }
+      }
+  
+      // ---------------deleting child user Profile -------------------
+      await remove(ChildUserDB);
+      console.log("Child user profile deleted.");
+  
+      // Optionally remove the user from the frontend state (assuming `setMultiProfile` is used to manage the state)
+      setMultiProfile((previous) => previous.filter((item) => item.id !== id));
+  
+      console.log("Child user and related data deleted successfully.");
     } catch (error) {
-        console.error("Error deleting user and related data:", error);
+      console.error("Error deleting user and related data:", error);
     }
-}
+  }
+  
 
 
 

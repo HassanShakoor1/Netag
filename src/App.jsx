@@ -57,6 +57,7 @@ import ServiceEditCategory from "./Page/Editcategory";
 import Links from "./Page/Links";
 import Front from "./Page/Front";
 import Appointment from "./Page/Appointment";
+import Appointment2 from "./Page/Appointment2";
 
 // Correctly handle Protected Routes
 function ProtectedRoute({ element }) {
@@ -205,6 +206,10 @@ function App() {
            <Route
             path="/home/appoint"
             element={<Appointment />}
+          />
+           <Route
+            path="/home/Addappoint"
+            element={<Appointment2 />}
           />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

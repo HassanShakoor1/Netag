@@ -281,7 +281,8 @@ function Profile() {
 
       fetchData();
   }, []);
-  const updateData = async (leadMode) => {
+  const updateData = async (leadMode, action) => {
+    console.log(action);
       const userId = localStorage.getItem("userId");
       if (!userId) {
           console.error("No userId found in localStorage");
@@ -291,11 +292,15 @@ function Profile() {
       const userRef = ref(database, `User/${userId}`); // Adjust the path if needed
       try {
           // await userRef.update({ ...profileData, leadMode }); // Include leadMode in the update
+
+          action == "lead" ? 
           await update(userRef, {
-            ...profileData,
             leadMode: leadMode,
+          }) : 
+          await update(userRef, {
             directMode:direct === false ? true :false
           });
+
           console.log('User data updated successfully');
       } catch (error) {
           console.error('Error updating user data: ', error);
@@ -308,42 +313,58 @@ function Profile() {
     if (action === "lead") {
       if (direct) {
         alert("Please turn off Direct Mode before enabling Lead Mode.");
-        return; // Exit the function if direct mode is active
+        return;
       }
+  
+      // Toggle Lead Mode
       setLeadMode((prevLeadMode) => {
         const newLeadMode = !prevLeadMode;
-        updateData(newLeadMode); // Update the database with the new leadMode
-        setDirect(false); // Turn off direct mode when lead mode is activated
-        localStorage.setItem("leadMode", newLeadMode); // Save Lead mode state in localStorage
+        updateData(newLeadMode, "lead");
+        localStorage.setItem("leadMode", newLeadMode);
+  
+   
+        if (newLeadMode) {
+          setDirect(false);
+        }
+  
         return newLeadMode;
       });
     } else if (action === "direct") {
       if (leadMode) {
         alert("Please turn off Lead Mode before enabling Direct Mode.");
-        return; // Exit the function if lead mode is active
+        return;
       }
+  
+      // Toggle Direct Mode
       setDirect((prevDirect) => {
         const newDirect = !prevDirect;
-        updateData(newDirect); // Update the database with the new directMode
-        setLeadMode(false); // Turn off lead mode when direct mode is activated
-        localStorage.setItem("directMode", newDirect); // Save Direct mode state in localStorage
-   
-        // If Direct mode is enabled, set the first link's opacity to 1
-        if (newDirect && links.length > 0) {
-          const firstLinkId = links[0].id;
-          setSelectedLink(firstLinkId); // Select the first link
-          updateDirectLink(newDirect, links[0]); // Update the direct link in the database
-          localStorage.setItem("selectedLink", firstLinkId); // Save the selected link ID in localStorage
+        updateData(newDirect, "direct");
+        localStorage.setItem("directMode", newDirect);
+  
+        // Ensure Lead Mode is turned off when Direct Mode is enabled
+        if (newDirect) {
+          setLeadMode(false);
+  
+          // If Direct Mode is enabled, select and store the first link
+          if (links.length > 0) {
+            const firstLinkId = links[0].id;
+            setSelectedLink(firstLinkId);
+            updateDirectLink(newDirect, links[0]);
+            localStorage.setItem("selectedLink", firstLinkId);
+          }
         } else {
-          setSelectedLink(null); // No link selected if direct mode is off
+          // Reset selected link if Direct Mode is off
+          setSelectedLink(null);
           updateDirectLink(newDirect, null);
-          // localStorage.removeItem("selectedLink"); // Remove selected link ID from localStorage
+          localStorage.removeItem("selectedLink");
         }
-   
+  
         return newDirect;
       });
     }
   };
+  
+
   
   
 
@@ -545,7 +566,7 @@ function Profile() {
             </div>
             <div className="data" style={{ lineHeight: "0" }}>
               <h2 className="head" >
-                Phone:
+              {t("Phone")}:
                 <br />{" "}
                 <span
                   style={{ marginLeft: "145px", fontWeight: "100",paddingLeft:"5.5rem" }}
@@ -577,7 +598,7 @@ function Profile() {
                   textOverflow: "ellipsis",
                 }}
               >
-                {"Company"}:
+               {t("Company")}:
                 <span
                   className="para"
                   style={{
@@ -610,7 +631,7 @@ function Profile() {
           <div className="ip-btn" data-aos="zoom-in" style={{ width: "100%" }}>
             <div className="n-head" style={{ fontSize: "18px" }}>
               <h3 style={{ cursor: "pointer" }} className="link-heading">
-                Links
+              {t("Links")}
               </h3>
             </div>
             <div className="ii-btn">
@@ -630,7 +651,7 @@ function Profile() {
                     fontSize: "15px",
                   }}
                 >
-                  Lead Mode
+                  {t("Lead Mode")}:
                 </h2>
                 <div className="toggle-container">
                   <input
@@ -650,7 +671,7 @@ function Profile() {
                   className="mode-heading"
                   style={{ marginRight: "2px", fontSize: "15px" }}
                 >
-                  Direct Mode
+                 {t("Direct Mode")}:
                 </h2>
                 <div className="toggle-container">
                   <input

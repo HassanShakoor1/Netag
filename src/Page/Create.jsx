@@ -12,6 +12,8 @@ import { app } from "../firebase.jsx";
 import { useTranslation } from "react-i18next";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Import the icons
+
 function Create() {
   const navigate = useNavigate(); // Use the ho here
   const auth = getAuth(app);
@@ -21,6 +23,21 @@ function Create() {
   const [password, setpassword] = useState("");
   const [confirmpassword, setconfirmpassword] = useState("");
   const [isChecked, setIsChecked] = useState(false); // State for checkbox
+
+
+ 
+// state to toggle visibility for password
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // state to toggle visibility for confirm password
+  const [showPassword, setShowPassword] = useState(false); // state to toggle visibility
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
+
+  // Toggle visibility for confirm password
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword((prevState) => !prevState);
+  };
   //  for translation
   const { t } = useTranslation();
   // localStorage.getItem("lng")
@@ -113,6 +130,9 @@ function Create() {
         reqByOther: "",
         subscribed: "",
         subscription: "",
+        availabilityEndTime:"",
+        availabilityStartTime:"",
+
       });
       setname("");
       setusername("");
@@ -132,7 +152,7 @@ function Create() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          width: "90%",
+          width: "100%",
         }}
       >
         {/* top  */}
@@ -201,78 +221,109 @@ function Create() {
             required
             onChange={(e) => setemail(e.target.value)}
           />
+       
+
+       <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        borderRadius: "12px",
+        boxShadow: "0px 0px 4.5px 0px #00000040",
+        marginBottom: "10px",
+        height: "45px",
+      }}
+    >
+      <div style={{ width: "87%" }}>
+        <input
+          required
+          style={{
+            width: "100%",
+            height: "40px",
+            paddingLeft: "0px",
+            paddingRight: "0px",
+            border: "none",
+            outline: "none",
+            boxSizing: "border-box",
+          }}
+          type={showPassword ? "text" : "password"} // Toggle between text and password type
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setpassword(e.target.value)}
+        />
+      </div>
+      <div
+        style={{
+          width: "5%",
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        onClick={togglePasswordVisibility}
+      >
+        {/* Display icon based on the showPassword state */}
+        {showPassword ? (
+          <AiOutlineEye size={20} />
+        ) : (
+          <AiOutlineEyeInvisible size={20} />
+        )}
+      </div>
+    </div>
+
+
+
+
+
           <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              borderRadius: "12px",
-              boxShadow: "0px 0px 4.5px 0px #00000040",
-              marginBottom: "10px",
-              height: "45px",
-            }}
-          >
-            <div style={{ width: "87%" }}>
-              <input
-                style={{
-                  width: "100%",
-                  height: "40px",
-                  paddingLeft: "0px",
-                  paddingRight: "0px",
-                  border: "none",
-                  outline: "none",
-                  // borderRadius: "12px",
-                  boxSizing: "border-box",
-                  // marginBottom: "10px",
-                  // boxShadow: "0px 0px 4.5px 0px #00000040"
-                }}
-                required
-                type="text"
-                placeholder="Password"
-                onChange={(e) => setpassword(e.target.value)}
-              />
-            </div>
-            <div style={{ width: "5%" }}>
-              <img src={eye} alt="" />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              borderRadius: "12px",
-              boxShadow: "0px 0px 4.5px 0px #00000040",
-              marginBottom: "10px",
-              height: "45px",
-            }}
-          >
-            <div style={{ width: "87%" }}>
-              <input
-                required
-                style={{
-                  width: "100%",
-                  height: "40px",
-                  paddingLeft: "0px",
-                  paddingRight: "0px",
-                  border: "none",
-                  outline: "none",
-                  // borderRadius: "12px",
-                  boxSizing: "border-box",
-                  // marginBottom: "10px",
-                  // boxShadow: "0px 0px 4.5px 0px #00000040"
-                }}
-                type="text"
-                placeholder="Confirm Password"
-                onChange={(e) => setconfirmpassword(e.target.value)}
-              />
-            </div>
-            <div style={{ width: "5%" }}>
-              <img src={eye} alt="" />
-            </div>
-          </div>
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        borderRadius: "12px",
+        boxShadow: "0px 0px 4.5px 0px #00000040",
+        marginBottom: "10px",
+        height: "45px",
+      }}
+    >
+      <div style={{ width: "87%" }}>
+        <input
+          required
+          style={{
+            width: "100%",
+            height: "40px",
+            paddingLeft: "0px",
+            paddingRight: "0px",
+            border: "none",
+            outline: "none",
+            boxSizing: "border-box",
+          }}
+          type={showConfirmPassword ? "text" : "password"} // Toggle between text and password type
+          placeholder="Confirm Password"
+          value={confirmpassword}
+          onChange={(e) => setconfirmpassword(e.target.value)}
+        />
+      </div>
+      <div
+        style={{
+          width: "5%",
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        onClick={toggleConfirmPasswordVisibility}
+      >
+        {/* Display icon based on the showPassword state */}
+        {showConfirmPassword ? (
+          <AiOutlineEye size={20} /> 
+        ) : (
+          <AiOutlineEyeInvisible size={20} />
+        )}
+      </div>
+    </div>
           {/* <input style={inputStyle} type="password" placeholder="Password" /> */}
           {/* <input style={inputStyle} type="password" placeholder="Confirm Password" /> */}
           {/* para */}
@@ -289,7 +340,7 @@ function Create() {
           <div style={{ width: "100%" }}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <input
-                style={{ marginRight: "4px", marginLeft: "0px", width: "5%" }}
+                style={{ marginRight: "4px", marginLeft: "0px", width: "5%",backgroundColor:"red" }}
                 type="checkbox"
                 id="privacy-policy-checkbox" // Added id for accessibility
                 checked={isChecked} // Use state to control the checkbox

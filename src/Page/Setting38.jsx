@@ -14,7 +14,8 @@ import Logout from "../images/Logout.png";
 import vectorrr from "../images/vectorrr.svg";
 import { useNavigate, Link } from "react-router-dom";
 import {  query, orderByChild, equalTo, remove } from "firebase/database";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { AppContext } from "./LanguageContextProvider";
 
 import { useTranslation } from "react-i18next";
@@ -38,11 +39,12 @@ function Setting() {
     }
 
     const fetchData = async () => {
+      toast.dismiss();
       try {
         const userId = localStorage.getItem("userId");
 
         if (!userId) {
-          console.error("No userId found in localStorage");
+          toast.error("No userId found in localStorage");
          
           return;
         }
@@ -55,11 +57,11 @@ function Setting() {
           const userActiveTab = profileData.profileOn === 1 ? "ordersHistory" : "newOrders";
           setActiveTab(userActiveTab); // Set the tab based on profileOn field in Firebase
         } else {
-          console.log("No data available for this userId:", userId);
+          toast.error("No data available for this userId:", userId);
         }
 
       } catch (error) {
-        console.error("Error fetchinggggggg data:", error);
+        toast.error("Error fetchingg data:", error);
       } finally {
        
       }
@@ -142,12 +144,13 @@ function Setting() {
             }));
 
           console.log("User data is", arr);
+         
           setRecord(arr); // Set the filtered data in the state
         } else {
-          console.log("No data available");
+          toast.error("No data available");
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        toast.error("Error fetching data:", error);
       }
     };
 
@@ -186,12 +189,13 @@ function Setting() {
             snapshot.forEach((childSnapshot) => {
               // Use remove to delete the data at the child's reference
                remove(childSnapshot.ref);
+               toast.success(" data deleted");
             });
           } else {
-            console.log(`No data found for table: ${table}`);
+            toast.error(`No data found for table: ${table}`);
           }
         } catch (error) {
-          console.error(`Error while querying or deleting data from table ${table}:`, error);
+          toast.error(`Error while querying or deleting data from table ${table}:`, error);
         }
       }
       
@@ -201,7 +205,7 @@ function Setting() {
       console.log('Parent ID retrieved from localStorage:', parentID);
   
       if (!parentID) {
-        console.log("No parentID found in localStorage. Exiting function.");
+        toast.error("No parentID found in localStorage. Exiting function.");
         return;  // Exit if no parentID found
       }
   
@@ -226,16 +230,17 @@ function Setting() {
         parentSnapshot.forEach((childSnapshot) => {
           console.log(`Deleting user with UID: ${childSnapshot.key}`);
           remove(childSnapshot.ref); // Delete the user record
+          toast.success(" data deleted");
           
         });
 
       } else {
-        console.log(`No users found with parentID ${parentID}.`);
+        toast.error(`No users found with parentID ${parentID}.`);
       }
   
       console.log(`User data with UID ${uid} and related parentId entries deleted from all tables.`);
     } catch (error) {
-      console.error("Error deleting user data:", error);
+      toast.error("Error deleting user data:", error);
     }
   };
   
@@ -335,7 +340,7 @@ function Setting() {
                     }}
                     onClick={() => updateProfileOn("ordersHistory")}
                   >
-                    Profile On
+                    {t("Profile On")}
                   </div>
                 </div>
               </div>
@@ -413,9 +418,10 @@ function Setting() {
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
+                        cursor:"pointer"
                       }}
                     >
-                      <div style={{ display: "flex", alignItems: "center" }}>
+                      <div style={{ display: "flex", alignItems: "center" ,cursor:"pointer"}}>
                         <div>
                           <img src={lead} alt="" />
                         </div>
@@ -751,6 +757,7 @@ function Setting() {
         <br />
         <br />
         <Footer />
+        <ToastContainer position="top-center" />
       </div>
     </div>
   );

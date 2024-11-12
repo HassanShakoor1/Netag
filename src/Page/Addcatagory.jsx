@@ -11,7 +11,8 @@ import {
   uploadBytes,
   getDownloadURL,
 } from "firebase/storage";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
 
 function Addcatagory() {
@@ -28,7 +29,7 @@ function Addcatagory() {
   });
 
   useEffect(() => {
-    // Fetch existing data if `id` is provided
+  
     const fetchData = async () => {
       if (id) {
         const brandRef = ref(database, `ProductCategory/${id}`);
@@ -57,10 +58,11 @@ function Addcatagory() {
     const userId = localStorage.getItem("userId");
 
     if (!userId) {
-      alert("User ID not found. Please log in again.");
+      toast.error("User ID not found. Please log in again.");
       return;
     }
 
+    toast.dismiss();
     try {
       let brandImageUrl = formData.existingImageUrl; // Start with the existing image URL
 
@@ -84,7 +86,7 @@ function Addcatagory() {
         };
 
         await update(brandRef, updatedData);
-        alert("Brand data updated successfully!");
+        toast.success("Brand data updated successfully!");
       } else {
         // Create a new record
         const newBrandRef = ref(database, `ProductCategory`);
@@ -100,13 +102,13 @@ function Addcatagory() {
         };
 
         await set(newBrandRefWithKey, newRecord);
-        alert("New brand data added successfully!");
+        toast.success("New brand data added successfully!");
       }
 
       navigate(-1); // Navigate back to the previous page
     } catch (error) {
       console.error("Error handling brand data: ", error);
-      alert("Error handling data. Please try again.");
+      toast.error("Error handling data. Please try again.");
     }
   };
 
@@ -146,17 +148,22 @@ function Addcatagory() {
 
   const crossButtonStyle = {
     position: "absolute",
-    top: "10px",
-    right: "10px",
-    backgroundColor: "red",
-    color: "white",
+    top: "5px",
+    right: "5px",
+    background: "#FFEEEE",
+    color: "red",
     border: "none",
     borderRadius: "50%",
     width: "20px",
     height: "20px",
+    display: image ? "block" : "none", // Show button only if image exists
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     cursor: "pointer",
-    display: image ? "block" : "none",
-  };
+    fontSize: "17px", // Reduce font size to fit well inside the button
+    fontWeight: "100", // Ensure the cross is visible and prominent
+};
 
   return (
     <div className="AddcatagoryContainer">
@@ -219,7 +226,7 @@ function Addcatagory() {
             style={{
               width: "97%",
               borderRadius: "20px",
-              height: "30px",
+              height: "40px",
               backgroundColor: "#F7F7F7",
               border: "none",
               paddingLeft: "20px",
@@ -265,7 +272,7 @@ function Addcatagory() {
         {image ? (
           <div style={{ position: "relative", width: "100%" }}>
             <img
-              style={{ width: "100%", borderRadius: "5%", maxHeight: "200px" }}
+              style={{ width: "100%", borderRadius: "17px", maxHeight: "200px" }}
               src={image}
               alt="Uploaded"
             />
@@ -337,6 +344,7 @@ function Addcatagory() {
           </button>
         </div>
       </div>
+      <ToastContainer position="top-center" />
     </div>
   );
 }

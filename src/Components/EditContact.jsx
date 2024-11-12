@@ -13,7 +13,8 @@ import {
   ref,
   set,
   get,
-  remove
+  remove,
+  update
  
 } from "firebase/database";
 import {
@@ -86,6 +87,10 @@ function EditContact() {
 
     checkAuthAndFetchData();
   }, [navigate, app]);
+  
+  
+  
+  
   const fetchExistingMediaFiles = async (recordId) => {
     const database = getDatabase(app);
     
@@ -152,16 +157,16 @@ function EditContact() {
       const fileRef = storageRef(storage, `User/${recordid}/${file.name}`);
       try {
         await uploadBytes(fileRef, file);
-        const url = await getDownloadURL(fileRef);
+        const imageUrl = await getDownloadURL(fileRef);
   
-        const newMediaFile = { url, type: "image" };
+        const newMediaFile = { imageUrl, type: "image" };
   
         // Add the new media file to the array to be added to state
         newMediaFiles.push(newMediaFile);
   
         // Update state immediately for immediate rendering
         setImageFiles((prevFiles) => {
-          const newImageFiles = [...prevFiles, { url: newMediaFile.url, type: 'image' }];
+          const newImageFiles = [...prevFiles, { imageUrl: newMediaFile.imageUrl, type: 'image' }];
           console.log("Updated Image Files:", newImageFiles); // Check what URLs are being set
           return newImageFiles;
         });
@@ -209,8 +214,8 @@ function EditContact() {
     try {
       // Upload the video file
       await uploadBytes(fileRef, videoFile);
-      const url = await getDownloadURL(fileRef);
-      newMediaFiles.push({ url, type: "video" });
+      const videoUrl = await getDownloadURL(fileRef);
+      newMediaFiles.push({ videoUrl, type: "video" });
       setMediaFiles([...newMediaFiles]);
       await saveMediaFiles(recordid, newMediaFiles);
     } catch (error) {
@@ -230,47 +235,62 @@ function EditContact() {
     const featuredPhotosRef = `User/${userId}/featuredPhotos`;
     const featuredVideosRef = `User/${userId}/featuredVideos`;
   
-    const imageEntries = newMediaFiles
-      .filter(media => media.type === "image")
-      .map(media => ({
-        detail: "",
-        id: `${recordid}`,
-        imageUrl: media.url,
-        title: "",
-      }));
+    // Filter and map media files
+    const imageEntries = (Array.isArray(newMediaFiles) ? newMediaFiles : [])
+    .filter(media => media.type === "image")
+    .map(media => ({
+      detail: "",
+      id: `${recordid}`,
+      imageUrl: media.imageUrl, // Ensure 'imageUrl' exists
+      title: "",
+    }));
   
-    const videoEntries = newMediaFiles
-      .filter(media => media.type === "video")
-      .map(media => ({
-        detail: "Video details here",
-        id: `${recordid}`,
-        videoUrl: media.url,
-        title: "Video Title",
-      }));
+  
+    const videoEntries = (Array.isArray(newMediaFiles) ? newMediaFiles : [])
+    .filter(media => media.type === "video")
+    .map(media => ({
+      detail: "Video details here",
+      id: `${recordid}`,
+      videoUrl: media.videoUrl, // Ensure 'videoUrl' exists
+      title: "Video Title",
+    }));
+  
   
     try {
+      // Save images if any
       if (imageEntries.length > 0) {
         const snapshot = await get(ref(database, featuredPhotosRef));
         const existingFiles = snapshot.val() || {};
         let newImgKey = Object.keys(existingFiles).length;
   
-        for (const entry of imageEntries) {
+        // Ensure each image is unique
+        const imageUrlsInDb = Object.values(existingFiles).map(file => file.imageUrl);
+        const uniqueImageEntries = imageEntries.filter(entry => !imageUrlsInDb.includes(entry.imageUrl));
+  
+        // Save unique image entries
+        for (const entry of uniqueImageEntries) {
           const imageFilePath = `${featuredPhotosRef}/${newImgKey}`;
           await set(ref(database, imageFilePath), entry);
-          newImgKey += 1; // Increment key to avoid overwriting existing entries
+          newImgKey += 1;
         }
         console.log("Images saved successfully");
       }
   
+      // Save videos if any
       if (videoEntries.length > 0) {
         const videoSnapshot = await get(ref(database, featuredVideosRef));
         const existingVideoFiles = videoSnapshot.val() || {};
         let newVideoKey = Object.keys(existingVideoFiles).length;
   
-        for (const entry of videoEntries) {
+        // Ensure each video is unique
+        const videoUrlsInDb = Object.values(existingVideoFiles).map(file => file.videoUrl);
+        const uniqueVideoEntries = videoEntries.filter(entry => !videoUrlsInDb.includes(entry.videoUrl));
+  
+        // Save unique video entries
+        for (const entry of uniqueVideoEntries) {
           const videoFilePath = `${featuredVideosRef}/${newVideoKey}`;
           await set(ref(database, videoFilePath), entry);
-          newVideoKey += 1; // Increment key to avoid overwriting existing entries
+          newVideoKey += 1;
         }
         console.log("Videos saved successfully");
       }
@@ -284,34 +304,47 @@ function EditContact() {
   
   
   
-
- // Remove image by index and update mediaFiles
-const handleRemoveImage = async (recordId) => {
-  const updatedMediaFiles = imageFiles.filter((item, index) => index !== recordId);
-  const db = getDatabase();
   
-  // Assuming each image is stored under its unique key in the featuredPhotos
-  const dataRef = ref(db, `User/${userId}/featuredPhotos/${recordId}`);
-  
-  try {
-    // Get the snapshot of the data
-    const snapshot = await get(dataRef); // Await for the promise to resolve
 
-    if (snapshot.exists()) {
-      // If data exists, remove it
-      await remove(dataRef); // Await for the remove operation to complete
-      console.log("image deleted successfully!");
-    } else {
-      console.log("No data available at this path. image not found.");
+
+
+  const handleRemoveImage = async (recordId) => {
+    const db = getDatabase();
+    const imageRef = ref(db, `User/${userId}/featuredPhotos/${recordId}`);
+  
+    try {
+      // Remove the image reference from Firebase first
+      await remove(imageRef);
+  
+      // Filter out the image from local state by recordId
+      const newImgArr = imageFiles.filter((_, index) => index !== recordId);
+  
+      // Update the state with the new array without the removed image
+      setImageFiles(newImgArr);
+      setMediaFiles(newImgArr);
+  
+      // Re-index media files to match expected format in Firebase
+      const reindexedMediaFiles = newImgArr.reduce((acc, img, index) => {
+        acc[index] = img;
+        return acc;
+      }, {});
+  
+      // Completely replace the featured photos list with the reindexed entries
+      const updateRef = ref(db, `User/${userId}/featuredPhotos`);
+      await set(updateRef, reindexedMediaFiles);
+  
+      // Optionally save the media files locally or elsewhere if required
+      saveMediaFiles(recordId, reindexedMediaFiles);
+    } catch (error) {
+      console.error("Error removing image:", error);
     }
-  } catch (error) {
-    console.error("Error deleting image:", error);
-  }
-  setImageFiles(updatedMediaFiles);
-  setMediaFiles(updatedMediaFiles);
-  saveMediaFiles(recordId, updatedMediaFiles);
-  
-};
+  };
+
+
+
+
+
+
 
 
 
@@ -439,69 +472,70 @@ const handleRemoveVideo = async (recordId) => {
     className="grid-container"
     style={{ maxWidth: "430px", display: "flex", gap: "10px", flexWrap: "wrap" }}
   >
-    {imageFiles.length > 3 ? ( // Check if more than 3 images
-      <Slider {...settings} style={{ width: "100%" }}>
-        {imageFiles.map((file, index) => (
-          <div
-            key={index}
-            className="grid-item"
-            style={{
-              position: "relative",
-              overflow: "hidden",
-              height: '100%',
-              maxHeight: "100px",
-            }}
-          >
-            <img
-              src={file?.url}
-              alt={`Uploaded ${index}`}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                borderRadius: "10px",
-              }}
-            />
-            <button
-              onClick={() => handleRemoveImage(index)}
-              style={crossButtonStyle}
-            >
-              &times;
-            </button>
-          </div>
-        ))}
-      </Slider>
-    ) : (
-      imageFiles.map((file, index) => (
-        <div
-          key={index}
-          className="grid-item"
+{imageFiles.length > 3 ? ( // Check if more than 3 images
+  <Slider {...settings} style={{ width: "100%" }}>
+    {imageFiles.map((file, index) => (
+      <div
+        key={index}
+        className="grid-item"
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          height: '100%',
+          maxHeight: "100px",
+        }}
+      >
+        <img
+          src={file?.imageUrl} // Assuming 'url' is the correct property
+          alt={`Uploaded ${index}`}
           style={{
-            position: "relative",
-            overflow: "hidden",
-            height: '100%',
-            maxHeight: "100px",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: "10px",
           }}
+        />
+        <button
+          onClick={() => handleRemoveImage(index)}
+          style={crossButtonStyle}
         >
-          <img
-            src={file?.imageUrl}
-            alt={`Uploaded ${index}`}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "10px",
-            }}
-          />
-          <button
-            onClick={() => handleRemoveImage(index)}
-            style={crossButtonStyle}
-          >
-            &times;
-          </button>
-        </div>
-      ))
-    )}
+          &times;
+        </button>
+      </div>
+    ))}
+  </Slider>
+) : (
+  imageFiles.map((file, index) => (
+    <div
+      key={index}
+      className="grid-item"
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        height: '100%',
+        maxHeight: "100px",
+      }}
+    >
+      <img
+        src={file?.imageUrl} // Using 'url' consistently here
+        alt={`Uploaded ${index}`}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          borderRadius: "10px",
+        }}
+      />
+      <button
+        onClick={() => handleRemoveImage(index)}
+        style={crossButtonStyle}
+      >
+        &times;
+      </button>
+    </div>
+  ))
+)}
+
   </div>
 </div>
 
@@ -513,29 +547,28 @@ const handleRemoveVideo = async (recordId) => {
   <h2>Upload Video</h2>
   <div className="upload-1">
     <div className="img-btn">
-      {videoFiles.length > 0 ? (
-        videoFiles.map((item, index) => (
-          <div style={{ position: "relative" }} key={index}>
-          
-            <video
-              src={item.videoUrl} // Use video URL from videoFiles array
-              controls
-              style={{
-                width: "100%",
-                height: "140px",
-                borderRadius: "30px",
-                objectFit:"cover"
-              }}
-            />
-            <button
-              onClick={() => handleRemoveVideo(index)}
-              style={crossButtonStyle}
-            >
-              &times;
-            </button>
-          </div>
-        ))
-      ) : (
+    {videoFiles.length > 0 ? (
+  videoFiles.map((item, index) => (
+    <div style={{ position: "relative" }} key={index}>
+      <video
+        src={item?.videoUrl} // Ensure 'videoUrl' exists in the item object
+        controls
+        style={{
+          width: "100%",
+          height: "140px",
+          borderRadius: "30px",
+          objectFit: "cover"
+        }}
+      />
+      <button
+        onClick={() => handleRemoveVideo(index)} // Call to remove video
+        style={crossButtonStyle}
+      >
+        &times;
+      </button>
+    </div>
+  ))
+): (
         <>
           <img
             style={{

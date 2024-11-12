@@ -2,7 +2,7 @@ import search from "../images/search.png";
 import vector from "../images/Vector.svg";
 import pic from "../images/Ellipse.png";
 import { Modal, Box, Button } from "@mui/material";
-import { ref, get, query, orderByChild, equalTo } from "firebase/database";
+import { ref, get, query, orderByChild, equalTo,remove } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { database } from "../firebase";
@@ -59,10 +59,11 @@ const handleCopy = (name) => {
   const goback = () => {
     navigate(-1);
   };
+  const userId = localStorage.getItem("userId");
 
   const fetchData = async () => {
     try {
-      const userId = localStorage.getItem("userId");
+      
       if (!userId) {
         console.log("User ID not found");
         return;
@@ -91,6 +92,53 @@ const handleCopy = (name) => {
   useEffect(() => {
     fetchData();
   }, []);
+  const deleteData = async (contactId) => {
+    try {
+      await remove(ref(database, `Contacts/${contactId}`));
+      console.log("Data deleted successfully.");
+      
+      
+      setContactData(prevData => prevData.filter(contact => contact.id !== contactId));
+    } catch (error) {
+      console.error("Failed to delete data:", error);
+    }
+  };
+  
+
+  const downloadVCard = (ContactData) => {
+    const vCardContent = `
+  BEGIN:VCARD
+  VERSION:2.0
+  FN:${ContactData.name || "Unknown Name"}
+  TEL:${ContactData.phonenumber || ""}
+  EMAIL:${ContactData.email || ""}
+  ORG:${ContactData.companyname || ""}
+  TITLE:${ContactData.imageview || ""}
+  ADR;TYPE=WORK:${ContactData.designation || ""}
+  NOTE:${ContactData.message || ""}
+  END:VCARD
+    `.trim();
+    
+    // Encode the content in base64 for Safari compatibility
+    const vCardData = `data:text/vcard;charset=utf-8,${encodeURIComponent(vCardContent)}`;
+    
+    // Create an anchor element
+    const a = document.createElement("a");
+    a.href = vCardData;
+    a.download = `${ContactData.name || "Contact"}.vcf`;
+    
+    // Append, click, and clean up
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+  
+  
+  
+  
+
+
+
 
 
   const handleCloseModal = () => {
@@ -122,6 +170,7 @@ const handleCopy = (name) => {
     }
   };
   
+ 
 
   return (
     <div className="categories-maindiv">
@@ -138,8 +187,10 @@ const handleCopy = (name) => {
 
             {/* Search Input */}
             <div className="categories-input">
-              <form onSubmit={handleSearchSubmit} style={{ display: "flex", alignItems: "center", width: "100%" }}>
-                <img src={search} alt="Search" style={{ marginRight: "8px" }} />
+              <form onSubmit={handleSearchSubmit} style={{ display: "flex", alignItems: "center", width: "100%",cursor:'pointer' }}>
+                <img
+                 onClick={handleSearchSubmit}
+                 src={search} alt="Search" style={{ marginRight: "8px" }} />
                 <input
                   type="search"
                   value={searchTerm}
@@ -334,10 +385,16 @@ const handleCopy = (name) => {
 
 <div style={{width:'48%',background:"rgb(232, 224, 222)",height:"auto",borderRadius:"10px"}}>
 
-<div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:"0px 5px"}}>
+<div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:"0px 15px"}}>
 
 <IoBriefcaseOutline />
-<p>{openedData?.designation}</p>
+<p style={{
+      paddingLeft:'10px',
+      flex: 1, // Allow email text to take up remaining space
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis' // Truncate with ellipsis if overflow
+    }}>{openedData?.designation}</p>
 <FaRegCopy
   style={{
     cursor: "pointer",
@@ -352,10 +409,16 @@ const handleCopy = (name) => {
 </div>
 
 <div style={{width:'48%',background:"rgb(232, 224, 222)",height:"auto",borderRadius:"10px"}}>
-<div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:"0px 5px"}}>
+<div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:"0px 15px"}}>
 
 <HiOutlineBuildingOffice />
-<p>{openedData?.companyname}</p>
+<p style={{
+      paddingLeft:'10px',
+      flex: 1, // Allow email text to take up remaining space
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis' // Truncate with ellipsis if overflow
+    }}>{openedData?.companyname}</p>
 <FaRegCopy
   style={{
     cursor: "pointer",
@@ -377,10 +440,16 @@ const handleCopy = (name) => {
 
 <div style={{width:'48%',background:"rgb(232, 224, 222)",height:"auto",borderRadius:"10px"}}>
 
-<div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:"0px 5px"}}>
+<div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:"0px 15px"}}>
 
 <IoCallOutline />
-<p>{openedData?.phonenumber}</p>
+<p style={{
+      paddingLeft:'10px',
+      flex: 1, // Allow email text to take up remaining space
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis' // Truncate with ellipsis if overflow
+    }}>{openedData?.phonenumber}</p>
 <FaRegCopy
   style={{
     cursor: "pointer",
@@ -395,10 +464,18 @@ const handleCopy = (name) => {
 </div>
 
 <div style={{width:'48%',background:"rgb(232, 224, 222)",height:"auto",borderRadius:"10px"}}>
-<div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:"0px 5px"}}>
+<div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:"0px 15px"}}>
 
 <CiMail />
-<p>{openedData?.email}</p>
+<p style={{
+      paddingLeft:'10px',
+      flex: 1, // Allow email text to take up remaining space
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis' // Truncate with ellipsis if overflow
+    }}>
+      {openedData?.email}
+    </p>
 <FaRegCopy
   style={{
     cursor: "pointer",
@@ -414,9 +491,16 @@ const handleCopy = (name) => {
     </div>
 
     <div style={{marginTop:"20px", backgroundColor:"#E8E0DF",borderRadius:"10px",display:'flex',justifyContent:'space-between',alignItems:"center"}} >
-    <div  style={{display:'flex',width:'80%',margin:'0px auto',alignItems:"center",margin:"0",padding:'10px',gap:"10px"}}>
+    <div  style={{display:'flex',width:'80%',margin:'0px auto',alignItems:"center",margin:"0",padding:'15px',gap:"10px"}}>
     <CiCircleInfo />
-        <p>{openedData?.message}</p>
+        <p style={{
+      paddingLeft:'10px',
+      flex: 1, // Allow email text to take up remaining space
+      overflow: 'hidden',
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis' // Truncate with ellipsis if overflow
+    }} >{openedData?.message} 
+        </p>
 
     </div>
     <FaRegCopy
@@ -435,7 +519,7 @@ const handleCopy = (name) => {
 </div>
 
 <div style={{width:"100%",padding:'15px 15px'}}>
-    <button style={{width:'100%',height:"50px",cursor:"pointer",borderRadius:"10px",border:"none",outline:'none',backgroundColor:"red",color:"white",fontSize:'17px'}}> Download Vcf</button>
+    <button   onClick={() => downloadVCard(ContactData)} style={{width:'100%',height:"50px",cursor:"pointer",borderRadius:"10px",border:"none",outline:'none',backgroundColor:"red",color:"white",fontSize:'17px'}}> Download Vcf</button>
 </div>
 
 
@@ -448,6 +532,7 @@ const handleCopy = (name) => {
                           </Box>
                         </Modal>
                         <button
+                        onClick={()=>{deleteData(item.id)}}
                           style={{
                             backgroundColor: "white",
                             marginTop: "5px",

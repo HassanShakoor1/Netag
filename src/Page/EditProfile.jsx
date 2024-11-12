@@ -333,6 +333,7 @@ console.log(currentProfile)
         <div className="input-data">
           <div className="edit-field">
           <CustomTextField
+          style={{width:'100%'}}
   label="Name"
   name="name"
   size="small"
@@ -344,6 +345,7 @@ console.log(currentProfile)
 />
 
             <CustomTextField
+            style={{width:'100%'}}
               label="Username"
               name="username"
               size="small"
@@ -357,6 +359,7 @@ console.log(currentProfile)
 
           <div className="edit-field">
             <CustomTextField
+            style={{width:'100%'}}
               label="Designation"
               name="designation"
               size="small"
@@ -367,6 +370,7 @@ console.log(currentProfile)
   }}
             />
             <CustomTextField
+            style={{width:'100%'}}
               label="Company"
               name="company"
               size="small"
@@ -380,6 +384,7 @@ console.log(currentProfile)
 
           <div className="edit-field">
             <CustomTextField
+            style={{width:'100%'}}
               label="Phone No"
               name="phone"
               size="small"
@@ -391,6 +396,7 @@ console.log(currentProfile)
             />
 
             <CustomTextField
+            style={{width:'100%'}}
               label="businesslocation"
               name="businesslocatioon"
               size="small"
@@ -406,7 +412,7 @@ console.log(currentProfile)
             style={{ justifyContent: "start", width: "100%" }}
           >
             <CustomTextField
-              style={{ width: "94%",margin:"0px auto",marginLeft:"20px" }}
+              style={{ width: "100%",margin:"0px auto" }}
               label="about"
               name="bio"
               size="small"
