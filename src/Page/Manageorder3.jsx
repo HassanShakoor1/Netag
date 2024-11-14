@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { database as db } from "../firebase.jsx";
 import { equalTo, get, orderByChild, query, ref } from "firebase/database";
+import { useTranslation } from "react-i18next";
 
 function Manageorder3() {
   const userId = localStorage.getItem("userId");
@@ -11,7 +12,8 @@ function Manageorder3() {
   const [activeTab, setActiveTab] = useState("OrdersHistory");
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
-
+  const { t } = useTranslation(); // useTranslation inside the function
+  
   const orderData = async () => {
     try {
       const orderRef = ref(db, "/Orders");
@@ -85,7 +87,7 @@ function Manageorder3() {
                 />
               </div>
               <div style={{ color: "#EE0000", fontWeight: "500" }}>
-                Manage Orders
+               {t("Manage Orders")}
               </div>
               <div></div>
             </div>
@@ -127,7 +129,7 @@ function Manageorder3() {
                     navigate(-1);
                   }}
                 >
-                  New Orders
+                  {t("New Orders")}
                 </div>
                 <div
                   style={{
@@ -143,7 +145,7 @@ function Manageorder3() {
                   }}
                   onClick={() => setActiveTab("OrdersHistory")}
                 >
-                  Orders History
+                  {t("Orders History")}
                 </div>
               </div>
             </div>
@@ -170,7 +172,7 @@ function Manageorder3() {
                     }}
                   >
                     <span style={{ color: "white", fontSize: "12px" }}>
-                      Successful
+                      {t("Successful")}
                     </span>
                   </div>
 
@@ -268,7 +270,7 @@ function Manageorder3() {
                       }}
                     >
                       <span style={{ color: "white", fontSize: "12px" }}>
-                        Cancelled
+                       {t("Cancelled")}
                       </span>
                     </div>
                     <div

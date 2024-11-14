@@ -9,7 +9,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import All from '../images/alltime.png';
 import one from '../images/one.png';
 import { useNavigate } from 'react-router-dom';
-
+import { useTranslation } from "react-i18next";
 const carouselSettings = {
   dots: true,
   infinite: true,
@@ -22,6 +22,8 @@ const carouselSettings = {
 };
 
 function Subscription() {
+  const { t } = useTranslation(); // useTranslation inside the function
+  
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState('monthly'); // Default to 'monthly'
 
@@ -147,22 +149,22 @@ function Subscription() {
             style={{ fontSize: '25px', color: 'red', cursor: 'pointer', position: 'absolute', }}
           />
           <p style={{ color: 'red', fontSize: '22px', margin: '0 auto' }}>
-            Subscription Plans
+            {t("Subscription Plans")}
           </p>
         </div>
 
         <br /><br /><br />
 
         <h4 style={{ color: "red", textAlign: "center", width: '80%', fontSize: "23px", margin: '0px auto' }}>
-          Please Buy Subscription Plans to Uncloak This Feature
+          {t("Please Buy Subscription Plans to Uncloak This Feature")}
         </h4>
         <br /><br />
 
         <div className="many" style={{ margin: '2px auto', display: 'flex', flexDirection: "column", alignItems: 'center' }}>
-          <p style={{ textAlign: 'center', color: '#727272' }}>Select Plan</p>
+          <p style={{ textAlign: 'center', color: '#727272' }}>{t("Select Plan")}</p>
           <div style={containerStyle}>
-            <div style={monthlyStyle} onClick={handleMonthlyClick}>Monthly</div>
-            <div style={yearlyStyle} onClick={handleYearlyClick}>Yearly</div>
+            <div style={monthlyStyle} onClick={handleMonthlyClick}>{t("Monthly")}</div>
+            <div style={yearlyStyle} onClick={handleYearlyClick}>{t("Yearly")}</div>
           </div>
         </div>
         <br /><br /><br />
@@ -173,19 +175,19 @@ function Subscription() {
             <div>
               <div style={slideStyle}>
 
-                <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: 'red', fontSize: '20px' }}>Professional</h3>
-                <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>For small Business</p>
+                <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: 'red', fontSize: '20px' }}>{t("Professional")}</h3>
+                <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>{t("For small Business")}</p>
                 <div className="rate" style={rateStyle}>
                   {
                     selectedPlan === 'monthly' ? (
                       <>
                         <h1 style={{ margin: 0, color: 'red', fontSize: '3rem' }}>$4.99</h1>
-                        <p style={{ margin: 0 }}>per month</p>
+                        <p style={{ margin: 0 }}>{t("per Month")}</p>
                       </>
                     ) : (
                       <>
                         <h1 style={{ margin: 0, color: 'red', fontSize: '3rem' }}>$20.99</h1>
-                        <p style={{ margin: 0 }}>per year</p>
+                        <p style={{ margin: 0 }}>{t("per Year")}</p>
                       </>
                     )
                   }
@@ -194,41 +196,41 @@ function Subscription() {
                 <br /><br />
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Manage 1 Social And Business Profile</p>
+                  <p>{t("Manage 1 Social And Business Profile")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Access your Profile ON/OFF Feature</p>
+                  <p>{t("Access your Profile ON/OFF Feature")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Activate Your own Tag</p>
+                  <p>{t("Activate Your own Tag")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px", background: "white" }} src={one} alt="all" />
-                  <p>Customize Your Profile Colouring</p>
+                  <p>{t("Customize Your Profile Colouring")}</p>
                 </div>
                 <br /><br /><br /><br />
-                <div style={saveButtonStyle} className="save">Subscribe Plan</div>
+                <div style={saveButtonStyle} className="save">{t("Subscribe Plan")}</div>
                 <br /><br />
               </div>
             </div>
 
             <div>
               <div style={slideStyle}>
-                <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: 'rgb(117, 244, 96)', fontSize: '20px' }}>Premium</h3>
-                <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>For Medium Business</p>
+                <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: 'rgb(117, 244, 96)', fontSize: '20px' }}>{t("Premium")}</h3>
+                <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>{t("For Medium Business")}</p>
                 <div className="rate" style={rateStyle2}>
                 {selectedPlan==='monthly'?(
 
                   <>
                   <h1 style={{ margin: 0, color: 'rgb(117, 244, 96)', fontSize: '3rem' }}>$18.99</h1>
-                  <p style={{ margin: 0 }}>per month</p>
+                  <p style={{ margin: 0 }}>{t("per Month")}</p>
                   </>
                 ):(
                   <>
                   <h1 style={{ margin: 0, color: 'rgb(117, 244, 96)', fontSize: '3rem' }}>$30.99</h1>
-                  <p style={{ margin: 0 }}>per Year</p>
+                  <p style={{ margin: 0 }}>{t("per Year")}</p>
                   </>
 
 
@@ -237,40 +239,40 @@ function Subscription() {
                 <br /><br />
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Create upto 10 Business Profiles</p>
+                  <p>{t("Create up to 10 Business Profiles")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Access your Profile ON/OFF Feature</p>
+                  <p>{t("Access your Profile ON/OFF Feature")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Activate Your own Tag</p>
+                  <p>{t("Activate Your own Tag")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px", background: "white" }} src={one} alt="all" />
-                  <p>Customize Your Profile Colouring</p>
+                  <p>{t("Customize Your Profile Colouring")}</p>
                 </div>
                 <br /><br /><br /><br />
-                <div style={saveButtonStyle2} className="save">Subscribe Plan</div>
+                <div style={saveButtonStyle2} className="save">{t("Subscribe Plan")}</div>
                 <br /><br />
               </div>
             </div>
 
             <div>
               <div style={slideStyle}>
-                <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: '#4F00CF', fontSize: '20px' }}>Business</h3>
-                <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>For Large Business</p>
+                <h3 style={{ textAlign: 'center', margin: 0, marginTop: '20px', color: '#4F00CF', fontSize: '20px' }}>{t("Business")}</h3>
+                <p style={{ textAlign: "center", margin: '0', fontSize: '18px', letterSpacing: '1px', color: 'rgb(136, 136, 136)' }}>{t("For Large Business")}</p>
                 <div className="rate" style={rateStyle3}>
                 {selectedPlan==='monthly'?(
                   <>
                   <h1 style={{ margin: 0, color: '#4F00CF', fontSize: '3rem' }}>$49.99</h1>
-                  <p style={{ margin: 0 }}>per month</p>
+                  <p style={{ margin: 0 }}>{t("per Month")}</p>
 </>
                 ):(
                   <>
                   <h1 style={{ margin: 0, color: '#4F00CF', fontSize: '3rem' }}>$109.99</h1>
-                  <p style={{ margin: 0 }}>per year</p>
+                  <p style={{ margin: 0 }}>{t("per Year")}</p>
 </>
                 )}
                  
@@ -278,22 +280,22 @@ function Subscription() {
                 <br /><br />
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Create Unlimited Business Profiles</p>
+                  <p>{t("Create Unlimited Business Profiles")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Access your Profile ON/OFF Feature</p>
+                  <p>{t("Access your Profile ON/OFF Feature")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Activate Your own Tag</p>
+                  <p>{t("Activate Your own Tag")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px", background: "white" }} src={one} alt="all" />
-                  <p>Customize Your Profile Colouring</p>
+                  <p>{t("Customize Your Profile Colouring")}</p>
                 </div>
                 <br /><br /><br /><br />
-                <div style={saveButtonStyle3} className="save">Subscribe Plan</div>
+                <div style={saveButtonStyle3} className="save">{t("Subscribe Plan")}</div>
                 <br /><br />
               </div>
             </div>
@@ -306,12 +308,12 @@ function Subscription() {
                 {selectedPlan==='monthly'?(
                   <>
                        <h1 style={{ margin: 0, color: '#00D1EE', fontSize: '3rem' }}>$99.99</h1>
-                  <p style={{ margin: 0 }}>per month</p>
+                  <p style={{ margin: 0 }}>{t("per Month")}</p>
                   </>
                 ):(
                   <>
                        <h1 style={{ margin: 0, color: '#00D1EE', fontSize: '3rem' }}>$150.99</h1>
-                  <p style={{ margin: 0 }}>per year</p>
+                  <p style={{ margin: 0 }}>{t("per Year")}</p>
                   </>
                 )}
                
@@ -319,36 +321,35 @@ function Subscription() {
                 <br /><br />
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Create Unlimited Business Profiles</p>
+                  <p>{t("Create Unlimited Business Profiles")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Access your Profile ON/OFF Feature</p>
+                  <p>{t("Access your Profile ON/OFF Feature")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px" }} src={All} alt="all" />
-                  <p>Activate Your own Tag</p>
+                  <p>{t("Activate Your own Tag")}</p>
                 </div>
                 <div className="pic-p">
                   <img style={{ width: '30px', height: "30px", background: "white" }} src={one} alt="all" />
-                  <p>Customize Your Profile Colouring</p>
+                  <p>{t("Customize Your Profile Colouring")}</p>
                 </div>
                 <br /><br /><br /><br />
-                <div style={saveButtonStyle4} className="save">Subscribe Plan</div>
+                <div style={saveButtonStyle4} className="save">{t("Subscribe Plan")}</div>
                 <br /><br />
               </div>
             </div>
-
 
           </Slider>
         </div>
         <br /><br /><br />
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '40%', margin: '2px auto', backgroundColor: 'rgb(255, 222, 222)', border: '1px solid red', boxShadow: 'none', color: 'red' }} className="save">
-          Contact with us
+         {t("Contact with us")}
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <p style={{ textAlign: 'center', width: '82px', fontSize: '10px', borderBottom: '1px solid black', }}>Terms of Services</p>
+          <p style={{ textAlign: 'center', width: '82px', fontSize: '10px', borderBottom: '1px solid black', }}>{t("Terms of Services")}</p>
         </div>
 
 

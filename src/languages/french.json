@@ -173,5 +173,155 @@
     " ipsum dolor sit amet, consectetur elit. Neque sunt enim incidunt invent consequatur possimus blanditiis provident debitis atque beatae.": "Lorem, ipsum dolor sit amet, consectetur elit. Neque sunt enim incidunt invent consequatur possimus blanditiis provident debitis atque beatae.",
     "By Signing up you agree to our": "En vous inscrivant, vous acceptez nos",
     "Terms of Use": "Conditions d'utilisation",
-    "Already have an account?": "Vous avez déjà un compte?"
+    "Already have an account?": "Vous avez déjà un compte?",
+    
+        "Products": "Produits",
+        "Services": "Services",
+        "Manage Order": "Gérer les commandes",
+        "Photos And Video": "Photos et Vidéo",
+        
+        "Links": "Liens",
+        "Lead Mode": "Mode Lead",
+        "Direct Mode": "Mode Direct",
+        "+Add": "Ajouter+",
+        
+            "whatsapp": "WhatsApp",
+            "vimeo": "Vimeo",
+            "call": "Appel",
+            "facebook": "Facebook",
+            "mail": "Email",
+            "instagram": "Instagram",
+            "telegram": "Telegram",
+            "snapchat": "Snapchat",
+            "tiktok": "TikTok",
+            "youtube": "YouTube",
+            "raddit": "Raddit",
+            "twitter": "Twitter",
+            "pinterest": "Pinterest",
+            "website": "Site Web",
+            "custom": "Personnalisé",
+            "spotify": "Spotify",
+            "paypal": "PayPal",
+            
+                "linkedin": "LinkedIn",
+                "x": "X",
+                
+                    "Product Category": "Catégorie de Produit",
+                    "Explore more": "Explorer Plus"
+                  ,
+                  
+                    "Edit Product": "Modifier le Produit",
+                    "Delete Product": "Supprimer le Produit",
+                  
+                    
+                        "Update": "Mettre à jour",
+                        
+                            "Add Photo": "Ajouter une Photo",
+                            
+                                "Product Details": "Détails du Produit",
+                                "Product name": "Nom du Produit",
+                                "Price": "Prix",
+                                "Size": "Taille",
+                                "Color": "Couleur",
+                                "Save": "Enregistrer",
+                                "Saving": "Économiser",
+                                
+                                    "Service name": "Nom du service",
+                                    "Business Contact": "Contact commercial",
+                                    "Website": "Site web",
+                                   
+                                    "Available for Appointment": "Disponible pour un rendez-vous",
+                                    "Service Details": "Détails du service",
+                                    
+                                        "Manage Orders": "Gérer les commandes",
+                                        "New Orders": "Nouvelles commandes",
+                                        "Orders History": "Historique des commandes",
+                                        "No new orders available.": "Aucune nouvelle commande disponible."
+                                      
+                                      ,
+                                      "View Order": "Voir la Commande",
+                                      "Successful": "Réussi",
+                                      "Cancelled": "Annulé",
+                                      "Accept Offer": "Accepter l'Offre",
+                                      "Reject Offer": "Rejeter l'Offre",
+                                      "Your Profiles": "Vos Profils",
+                                      "Leads": "Prospects",
+                                      "Membership": "Abonnement",
+                                      "Shop": "Boutique",
+                                      "Languages": "Langues",
+                                      "Privacy Policy & Terms & Conditions": "Politique de confidentialité et Conditions Générales",
+                                      "Choose a Profile": "Choisir un profil",
+                                      "Logout": "Se déconnecter",
+                                      "Profile On": "Profil Activé",
+                                      "Create New Profile": "Créer un nouveau profil",
+                                      "Phone No": "Numéro de téléphone",
+                                      "Business Location": "Emplacement de l'entreprise",
+                                      "Bio": "Biographie",
+                                      "Creating...": "Création en cours...",
+                                      "Updating...": "Mise à jour en cours...",
+                                      "Update Profile": "Mettre à jour le profil",
+                                    
+                                      "Download Vcf": "Télécharger Vcf",
+                                      "Open": "Ouvrir",
+                                      "Subscription Plans": "Plans d'abonnement",
+  "Please Buy Subscription Plans to Uncloak This Feature": "Veuillez acheter des plans d'abonnement pour débloquer cette fonctionnalité",
+  "Monthly": "Mensuel",
+  "Yearly": "Annuel",
+  "Professional": "Professionnel",
+  "For small Business": "Pour les petites entreprises",
+  "Premium": "Premium",
+  "For Medium Business": "Pour les entreprises moyennes",
+  "Business": "Entreprise",
+  "For Large Business": "Pour les grandes entreprises",
+  "EnterPrise": "Entreprise",
+  "For EnterPrise": "Pour l'entreprise",
+  "Manage 1 Social And Business Profile": "Gérer 1 profil social et professionnel",
+  "Access your Profile ON/OFF Feature": "Accédez à la fonctionnalité Activer/Désactiver votre profil",
+  "Activate Your own Tag": "Activez votre propre étiquette",
+  "customize Your Profile Colouring": "Personnalisez la couleur de votre profil",
+  "Subscribe Plan": "Souscrire au plan",
+  "Contact with us": "Contactez-nous",
+  "Terms of Services": "Conditions de service",
+  "per Month": "Par mois",
+  "per Year": "Par an",
+  "Create up to 10 Business Profiles": "Créer jusqu'à 10 profils d'entreprise",
+  "Create Unlimited Business Profiles": "Créer des profils d'entreprise illimités",
+  "Select Plan": "Sélectionner le plan",
+  "Total Pops": "Nombre total de clics",
+  "Total Link clicks": "Nombre total de clics sur les liens",
+  "New Connections": "Nouvelles connexions",
+  "Total Orders": "Commandes totales",
+  "Sales Graph": "Graphique des ventes",
+  "Taps": "Touches",
+  "Clicks": "Clics",
+  "daily": "quotidien",
+  "weekly": "hebdomadaire",
+  "monthly": "mensuel",
+  "yearly": "annuel",
+  "Times user clicked on": "Nombre de clics de l'utilisateur sur",
+  "Analytics": "Analytique",
+  "Activate Tag": "Activer l'Étiquette",
+  "Your": "Votre",
+  "product will be Activated with username": "le produit sera activé avec le nom d'utilisateur",
+  "Activate Ne Tag Card": "Activer la Carte NeTag",
+  "Somali": "Somali",
+  "Amharic": "Amharique",
+  "Tigrinya": "Tigrinya",
+  "Afaan": "Afaan"
+                                   
+                                  
+                                  
+                              
+                              
+                          
+                          
+                      
+                  
+              
+              
+          
+          
+
+      
+      
 }

@@ -25,6 +25,7 @@ import instagram from "../images/instagram.png";
 import paypal from "../images/paypal.png";
 import tick from "../images/tick.png";
 import { database } from "../firebase";
+import { useTranslation } from "react-i18next";
 
 // Fetch User ID from localStorage
 const USER_ID = localStorage.getItem("userId");
@@ -83,14 +84,14 @@ const links = {
     {
       id: 8,
       imageUrl: tiktok,
-      linkName: "tikTok",
+      linkName: "tiktok",
       place: "Enter Username",
       instruction: `1. Enter your Tiktok Username .\n2. Make sure it is a valid Username.\n3. Check for any typos in the userName.\n4. Ensure the Profile is accessible.`,
     },
     {
       id: 9,
       imageUrl: youtube,
-      linkName: "youTube",
+      linkName: "youtube",
       place: "Enter URL",
       instruction: `1. Enter your youtube Url .\n2. Make sure it is a valid Youtube Url.\n3. Check for any typos in the URL.\n4. Ensure the Account is publicly accessible.`,
     },
@@ -171,7 +172,8 @@ function Links() {
   const [recordStatuses, setRecordStatuses] = useState([]);
   const navigate = useNavigate();
   const db = getDatabase();
-
+  const { t } = useTranslation(); // useTranslation inside the function
+  
   useEffect(() => {
 
 
@@ -347,7 +349,7 @@ function Links() {
                     alt={link.linkName}
                     onClick={() => handleSlide(link)}
                   />
-                  <p style={{ fontSize: "12px" }}>{link.linkName}</p>
+                  <p style={{ fontSize: "12px" }}>{t(link.linkName)}</p>
                   {match && (
                     <img
                       src={tick}
@@ -395,7 +397,7 @@ function Links() {
                     alt={link.linkName}
                     onClick={() => handleSlide(link)}
                   />
-                  <p style={{ fontSize: "12px" }}>{link.linkName}</p>
+                  <p style={{ fontSize: "12px" }}>{t(link.linkName)}</p>
                   {match && (
                     <img
                       src={tick}
@@ -443,7 +445,7 @@ function Links() {
                     alt={link.linkName}
                     onClick={() => handleSlide(link)}
                   />
-                  <p style={{ fontSize: "12px" }}>{link.linkName}</p>
+                  <p style={{ fontSize: "12px" }}>{t(link.linkName)}</p>
                   {match && (
                     <img
                       src={tick}

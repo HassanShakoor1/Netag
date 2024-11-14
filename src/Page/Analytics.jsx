@@ -27,6 +27,7 @@ import custom from "../images/custom.png";
 import spotify from "../images/spotify.png";
 import instagram from "../images/instagram.png";
 import tick from "../images/tick.png";
+import { useTranslation } from "react-i18next";
 
 import telegram from "../images/telegram.png";
 import linkedin from "../images/linkedin.png";
@@ -37,14 +38,17 @@ import { LineChart } from "@mui/x-charts/LineChart";
 function Analytics() {
   const userId = localStorage.getItem("userId");
   const [count, setCount] = useState(0);
-
+  const { t } = useTranslation();
   const [link, setLinks] = useState([]);
 
   const counter = () => {
     setCount(count + 1);
   };
   const ReturnIcon = (name) => {
-    switch (name) {
+    // Convert the name to lowercase to handle both capitalized and lowercase inputs
+    const iconName = name.toLowerCase();
+  
+    switch (iconName) {
       case "vimeo":
         return vimeo;
       case "call":
@@ -85,6 +89,7 @@ function Analytics() {
         return null;
     }
   };
+  
 
   useEffect(() => {
     const FetchAnalytics = async () => {
@@ -109,7 +114,7 @@ function Analytics() {
     <div className="Analytics-container">
       <div className="analytics-design">
         <p style={{ textAlign: "center", fontSize: "23px", color: "red" }}>
-          Analytics
+          {t("Analytics")}
         </p>
 
         <div className="row">
@@ -132,11 +137,9 @@ function Analytics() {
                       fontSize: "12px",
                     }}
                   >
-                    Total Pops
+                    {t("Total Pops")}
                   </p>
-                  <p style={{ fontSize: "8px", color: "grey" }}>
-                    Lorem ipsum dolor consectetur
-                  </p>
+                 
                 </div>
                 <img
                   style={{ width: "50px", height: "50px", cursor: "pointer" }}
@@ -176,11 +179,9 @@ function Analytics() {
                       fontSize: "12px",
                     }}
                   >
-                    Total Link clicks
+                    {t("Total Link clicks")}
                   </p>
-                  <p style={{ fontSize: "8px", color: "grey" }}>
-                    Lorem ipsum dolor consectetur
-                  </p>
+                 
                 </div>
                 <img
                   style={{ width: "50px", height: "50px", cursor: "pointer" }}
@@ -222,11 +223,9 @@ function Analytics() {
                       fontSize: "12px",
                     }}
                   >
-                    New Connections
+                    {t("New Connections")}
                   </p>
-                  <p style={{ fontSize: "8px", color: "grey" }}>
-                    Lorem ipsum dolor consectetur
-                  </p>
+                 
                 </div>
                 <img
                   style={{ width: "50px", height: "50px", cursor: "pointer" }}
@@ -265,11 +264,9 @@ function Analytics() {
                       fontSize: "12px",
                     }}
                   >
-                    Total Orders
+                   {t("Total Orders")}
                   </p>
-                  <p style={{ fontSize: "8px", color: "grey" }}>
-                    Lorem ipsum dolor consectetur
-                  </p>
+                 
                 </div>
                 <img
                   style={{ width: "50px", height: "50px", cursor: "pointer" }}
@@ -309,11 +306,9 @@ function Analytics() {
               <p
                 style={{ fontWeight: "bold", margin: "0px", fontSize: "15px" }}
               >
-                Sales Graph
+                {t("Sales Graph")}
               </p>
-              <p style={{ fontSize: "12px", color: "grey", lineHeight: "0px" }}>
-                Lorem ipsum dolor consectetur
-              </p>
+           
             </div>
           </div>
 
@@ -339,7 +334,7 @@ function Analytics() {
                     border: "2px solid #d7baba",
                   }}
                 ></div>
-                <h1 style={{ fontSize: "12px" }}>= Taps</h1>
+                <h1 style={{ fontSize: "12px" }}>= {t("Taps")}</h1>
               </div>
               <div
                 style={{ display: "flex", alignItems: "center", gap: "10px" }}
@@ -353,7 +348,7 @@ function Analytics() {
                     border: "2px solid #d7baba",
                   }}
                 ></div>
-                <h1 style={{ fontSize: "12px" }}>= Clicks</h1>
+                <h1 style={{ fontSize: "12px" }}>= {t("Clicks")}</h1>
               </div>
             </div>
           </div>
@@ -374,13 +369,13 @@ function Analytics() {
                       case 0:
                         return "0";
                       case 1:
-                        return "daily";
+                        return t("daily");
                       case 2:
-                        return "weekly";
+                        return t("weekly");
                       case 3:
-                        return "monthly";
+                        return t("monthly");
                       case 4:
-                        return "yearly";
+                        return t("yearly");
                       default:
                         return "";
                     }
@@ -478,12 +473,12 @@ function Analytics() {
                   style={{ flex: "1", marginRight: "1rem" }}
                 >
                   <p style={{ margin: "0", fontSize: "1rem" }}>
-                    {linkItem.name}
+                    {t(linkItem.name).toLocaleLowerCase()}
                   </p>
                   <p style={{ fontSize: "0.75rem", gap: "10px" }}>
                     {" "}
                     <span style={{ padding: "4px" }}>{linkItem?.clicks}</span>
-                    times user click on Upwork
+                    {t("Times user clicked on")} {t(linkItem?.name)}
                   </p>
                 </div>
 

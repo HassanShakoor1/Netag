@@ -20,6 +20,8 @@ function Addcatagory() {
   const { id } = useParams(); // Get the ID from the URL parameters
   const storage = getStorage();
   const [image, setImage] = useState(null);
+  const { t } = useTranslation(); // useTranslation inside the function
+  
   const [formData, setFormData] = useState({
     brandName: "",
     brandDescription: "",
@@ -197,7 +199,7 @@ function Addcatagory() {
               marginTop: "3rem",
             }}
           >
-            Product category
+           {t("Product Category")}
           </h4>
           <div style={{ width: "25px" }}></div>
         </div>
@@ -210,7 +212,7 @@ function Addcatagory() {
             fontSize: "20px",
           }}
         >
-          Product
+         {t("Products")}
         </h3>
         <div className="name-input">
           <p
@@ -220,7 +222,7 @@ function Addcatagory() {
               marginBottom: "7px",
             }}
           >
-            Name
+            {t("Name")}
           </p>
           <input
             style={{
@@ -248,7 +250,7 @@ function Addcatagory() {
               marginBottom: "7px",
             }}
           >
-            Description
+            {t("Description")}
           </p>
           <input
             style={{
@@ -319,7 +321,7 @@ function Addcatagory() {
                 color: "grey",
               }}
             >
-              Add Photo
+             {t("Add Photo")}
             </label>
           </div>
         )}
@@ -340,7 +342,8 @@ function Addcatagory() {
               fontSize:"20px"
             }}
           >
-            {id ? "Update" : "Add"}
+           { id ? t("Update") : t("Add") }
+
           </button>
         </div>
       </div>

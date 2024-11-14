@@ -3,6 +3,8 @@ import "./managescreen.css";
 import vector from "../images/Vector.svg";
 import { useNavigate, useParams } from "react-router-dom";
 import { database as db } from "../firebase.jsx";
+import { useTranslation } from "react-i18next";
+
 import {
   equalTo,
   get,
@@ -18,7 +20,8 @@ function Managescreen2() {
   const userId = localStorage.getItem("userId");
   const [orderDetails, setOrderDetails] = useState(null);
   console.log("order", orderDetails); // Log the order details to check the structure
-
+  const { t } = useTranslation(); // useTranslation inside the function
+  
   const orderData = async () => {
     try {
       const orderRef = ref(db, "/Orders");
@@ -95,7 +98,7 @@ function Managescreen2() {
                 />
               </div>
               <div style={{ color: "#EE0000", fontWeight: "500" }}>
-                Manage Orders
+                {t("Manage Orders")}
               </div>
               <div></div>
             </div>
@@ -291,7 +294,7 @@ function Managescreen2() {
                     padding: "14px",
                   }}
                 >
-                  Reject Offer
+                 {t("Reject Offer")}
                 </button>
                 <button
                   onClick={() => updateOrderStatus("accepted")}
@@ -310,7 +313,7 @@ function Managescreen2() {
                     padding: "14px",
                   }}
                 >
-                  Accept Offer
+                  {t("Accept Offer")}
                 </button>
               </div>
             </div>

@@ -147,7 +147,7 @@ function ServiceaddcategoryAddnewProduct() {
                 style={{ paddingLeft: "10px", fontWeight: "100" }}
                 className="formHeading"
               >
-                Service name
+                {t("Service name")}
               </label>
               <input
                 style={{
@@ -169,7 +169,7 @@ function ServiceaddcategoryAddnewProduct() {
                 style={{ paddingLeft: "10px", fontWeight: "100" }}
                 className="formHeading"
               >
-                Price
+                {t("Price")}
               </label>
               <input
                 style={{
@@ -195,7 +195,7 @@ function ServiceaddcategoryAddnewProduct() {
                 style={{ paddingLeft: "10px", fontWeight: "100" }}
                 className="formHeading"
               >
-                Business Contact
+                {t("Business Contact")}
               </label>
               <input
                 style={{
@@ -216,7 +216,7 @@ function ServiceaddcategoryAddnewProduct() {
                 style={{ paddingLeft: "10px", fontWeight: "100" }}
                 className="formHeading"
               >
-                Website
+                {t("Website")}
               </label>
               <input
                 style={{
@@ -241,7 +241,7 @@ function ServiceaddcategoryAddnewProduct() {
                 style={{ paddingLeft: "10px", fontWeight: "100" }}
                 className="formHeading"
               >
-                Email
+                {t("Email")}
               </label>
               <input
                 style={{
@@ -274,7 +274,8 @@ function ServiceaddcategoryAddnewProduct() {
     name="mail"
     onChange={(e) => setIsavaliable(e.target.checked)} // Use e.target.checked for checkboxes
   />
-  <p>Avaliable for Appointment</p>
+ <p>{t("Available for Appointment")}</p>
+
 </div>
 
 
@@ -294,7 +295,7 @@ function ServiceaddcategoryAddnewProduct() {
               </div>
               <div style={{ width: "100%" }}>
                 <textarea
-                  placeholder="lorem ipsum"
+                  placeholder="Please Enter Descreption"
                   // style={{ padding:"10px",outline:"none",resize: "none", width: "100%", height: "20vh", backgroundColor: "#F7F7F7", borderRadius: "16px",  border:"none",boxSizing: "border-box" }}
                   style={{
                     padding: "10px 24px", // Adjust the horizontal padding

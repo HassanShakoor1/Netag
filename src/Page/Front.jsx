@@ -12,10 +12,7 @@ const Front = () => {
     // For iOS status bar color (ensure the meta tag is set in HTML as mentioned)
     if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) {
       // iOS devices: set the background color for status bar
-      const metaTag = document.querySelector('meta[name="theme-color"]');
-      if (metaTag) {
-        metaTag.setAttribute("content", "rgb(243, 41, 0)");
-      }
+      document.querySelector('meta[name="theme-color"]').setAttribute("content", "rgb(243, 41, 0)");
     }
 
     // Redirect to the welcome page after 2 seconds (2000ms)
@@ -25,7 +22,7 @@ const Front = () => {
 
     // Cleanup function to reset the background color, margin, and padding after the timer
     return () => {
-      document.body.style.backgroundColor = ""; // Reset background color to default
+      document.body.style.backgroundColor = "#fff"; // Reset background color to default
       document.body.style.margin = ""; // Reset margin to default
       document.body.style.padding = ""; // Reset padding to default
       clearTimeout(timer);

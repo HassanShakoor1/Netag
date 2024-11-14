@@ -4,6 +4,8 @@ import { IoChevronBack } from "react-icons/io5";
 import edit from "../images/edit.png";
 import editcontact from "../images/editcontact.png";
 import "./Edit.css";
+import { useTranslation } from "react-i18next";
+
 import "../App.css";
 import nav from "../images/nav.png";
 import { TextField, useForkRef } from "@mui/material";
@@ -37,7 +39,8 @@ function CreateNewProfile() {
   const navigate = useNavigate();
 
   const { id } = useParams();
-
+  const { t } = useTranslation(); // useTranslation inside the function
+  
   const [username, setusername] = useState("");
   const [name, setName] = useState("");
   const [designation, setdesignation] = useState("");
@@ -83,18 +86,7 @@ function CreateNewProfile() {
     setCropModal(false); // Close the cropping modal
   };
 
-  // const handleFileChange = (event, type) => {
-  //     const file = event.target.files[0];
-  //     if (file) {
-  //         const reader = new FileReader();
-  //         reader.onloadend = () => {
-  //             setCurrentImage(reader.result);
-  //             setImageType(type);
-  //             setCropModal(true);
-  //         };
-  //         reader.readAsDataURL(file);
-  //     }
-  // };
+ 
 
   const handleProfileImageUpload = (e, type) => {
     const file = e.target.files[0];
@@ -107,9 +99,7 @@ function CreateNewProfile() {
       };
       reader.readAsDataURL(file); // Read file to a data URL
 
-      // // Set display image URL for immediate feedback (before cropping)
-      // const imageUrl = URL.createObjectURL(file);
-      // setDisplayProfileImageUrl(imageUrl);
+
     }
   };
 
@@ -124,9 +114,7 @@ function CreateNewProfile() {
       };
       reader.readAsDataURL(file); // Read file to a data URL
 
-      // // Set display image URL for immediate feedback (before cropping)
-      // const imageUrl = URL.createObjectURL(file);
-      // setDisplayDpImageUrl(imageUrl);
+   
     }
   };
 
@@ -456,7 +444,7 @@ function CreateNewProfile() {
         <div className="input-data">
           <div className="edit-field">
             <CustomTextField
-              label="name"
+              label={t("Name")}
               name="name"
               size="small"
               value={name}
@@ -466,7 +454,7 @@ function CreateNewProfile() {
   }}
             />
             <CustomTextField
-              label="username"
+              label={t("Username")}
               name="username"
               size="small"
               value={username}
@@ -479,7 +467,7 @@ function CreateNewProfile() {
 
           <div className="edit-field">
             <CustomTextField
-              label="designation"
+              label={t("Designation")}
               name="designation"
               size="small"
               value={designation}
@@ -489,7 +477,7 @@ function CreateNewProfile() {
   }}
             />
             <CustomTextField
-              label="company"
+              label={t("Company")}
               name="company"
               size="small"
               value={company}
@@ -502,7 +490,7 @@ function CreateNewProfile() {
 
           <div className="edit-field">
             <CustomTextField
-              label="phone"
+              label={t("Phone")}
               name="phone"
               size="small"
               value={phone}
@@ -512,7 +500,7 @@ function CreateNewProfile() {
   }}
             />
             <CustomTextField
-              label="businesslocatioon"
+               label={t("Business Location")}
               name="businesslocatioon"
               size="small"
               value={businesslocatioon}
@@ -531,7 +519,7 @@ function CreateNewProfile() {
           >
             <CustomTextField
               style={{ width: "100%" ,margin:"0px auto",marginLeft:"20px"  }}
-              label="About"
+              label={t("Bio")}
               name="bio"
               size="small"
               value={bio}
@@ -554,11 +542,11 @@ function CreateNewProfile() {
             >
               {!saving
                 ? id
-                  ? "Update Profile"
-                  : "Create New Profile"
+                  ? t("Update Profile")
+                  : t("Create New Profile")
                 : id
-                ? "updating..."
-                : "creating..."}
+                ? t("Updating...")
+                : t("Creating...")}
             </button>
           </div>
         </div>

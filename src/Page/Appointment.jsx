@@ -61,7 +61,7 @@ function Appointment() {
                 <IoChevronBack
             onClick={handleHome}
             className="bck"
-            style={{ paddingTop: "1.5rem" }}
+            
           />
                     <div style={{fontWeight:'100',fontSize:"20px"}} className="color-font">Appointments</div>
                     <div >

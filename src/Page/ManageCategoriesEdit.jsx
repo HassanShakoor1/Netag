@@ -147,7 +147,7 @@ function ManageCategoriesEdit() {
                style={{ paddingLeft: "10px", fontWeight: "100" }}
                className="formHeading"
              >
-               Service name
+               {t("Service name")}
              </label>
              <input
                style={{
@@ -172,7 +172,7 @@ function ManageCategoriesEdit() {
                style={{ paddingLeft: "10px", fontWeight: "100" }}
                className="formHeading"
              >
-               Price
+               {t("Price")}
              </label>
              <input
                style={{
@@ -199,7 +199,7 @@ function ManageCategoriesEdit() {
                style={{ paddingLeft: "10px", fontWeight: "100" }}
                className="formHeading"
              >
-               Business Contact
+               {t("Business Contact")}
              </label>
              <input
                style={{
@@ -221,7 +221,7 @@ function ManageCategoriesEdit() {
                style={{ paddingLeft: "10px", fontWeight: "100" }}
                className="formHeading"
              >
-               Website
+               {t("Website")}
              </label>
              <input
                style={{
@@ -247,7 +247,7 @@ function ManageCategoriesEdit() {
                style={{ paddingLeft: "10px", fontWeight: "100" }}
                className="formHeading"
              >
-               Email
+               {t("Email")}
              </label>
              <input
                style={{
@@ -284,7 +284,7 @@ function ManageCategoriesEdit() {
   onChange={(e) => setIsavaliable(e.target.checked)} // Use e.target.checked for checkboxes
 />
 
-  <p>Avaliable for Appointment</p>
+<p>{t("Available for Appointment")}</p>
 </div>
 
 

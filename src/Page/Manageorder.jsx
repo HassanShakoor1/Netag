@@ -5,13 +5,21 @@ import { useNavigate } from "react-router-dom";
 import { database as db } from "../firebase.jsx";
 import { equalTo, get, orderByChild, query, ref } from "firebase/database";
 import CircularProgress from "@mui/material/CircularProgress"; 
+import { useTranslation } from "react-i18next";
+
 function Manageorder() {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState("newOrders");
   const [loading, setLoading] = useState(false);
+
+  const { t } = useTranslation(); // useTranslation inside the function
+  
+
   const orderData = async () => {
+
+    
     try {
       setLoading(true)
       console.log("Fetching orders for user ID:", userId); // Log userId
@@ -111,7 +119,7 @@ function Manageorder() {
                 alt=""
               />
               <div style={{ color: "#EE0000", fontWeight: "500" }}>
-                Manage Orders
+                {t("Manage Orders")}
               </div>
               <div></div>
             </div>
@@ -149,7 +157,7 @@ function Manageorder() {
                   }}
                   onClick={() => setActiveTab("newOrders")}
                 >
-                  New Orders
+                  {t("New Orders")}
                 </div>
                 <div
                   style={{
@@ -168,7 +176,7 @@ function Manageorder() {
                     handleorder3();
                   }}
                 >
-                  Orders History
+                  {t("Orders History")}
                 </div>
               </div>
             </div>
@@ -228,7 +236,7 @@ function Manageorder() {
                           cursor: "pointer",
                         }}
                       >
-                        View Order
+                        {t("View Order")}
                       </div>
                     </div>
                   </div>
@@ -243,8 +251,7 @@ function Manageorder() {
                 }}
               >
                 {activeTab === "newOrders"
-                  ? "No new orders available."
-                  : "No order history available."}
+                ? t("No new orders available.") : t("No order history available.")}
               </p>
             )}
           </div>

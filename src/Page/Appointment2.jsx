@@ -375,7 +375,7 @@ console.log(selectedDates);
         <IoChevronBack
             onClick={handleBack}
             className="bck"
-            style={{ paddingRight:"0px"}}
+            style={{ paddingRight:"0px",paddingLeft:"0px"}}
           />
           <p style={{ textAlign: "center", fontFamily: 'Inter', fontSize: '20px', color: 'red' }}>Appointments</p>
           <button className={styles.addButton}>Add</button>

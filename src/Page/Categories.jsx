@@ -371,7 +371,7 @@ console.log(Firebasedata)
                               }
                             >
                               <DoneAllIcon style={{ marginRight: "8px" }} />
-                              Edit Profile
+                              {t("Edit Product")}
                             </MenuItem>
                             <div
                               style={{
@@ -388,7 +388,7 @@ console.log(Firebasedata)
                               onClick={() => handleDelete(x.id)}
                             >
                               <DeleteIcon style={{ marginRight: "8px" }} />
-                              Delete
+                              {t("Delete Product")}
                             </MenuItem>
                           </Menu>
                         </div>

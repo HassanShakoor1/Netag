@@ -1,22 +1,4 @@
 
-// import { createContext ,useState} from "react";
-// import i18n from './i18n.js'
-
-//   const AppContext=createContext()
-
-//  const AppProvider=({children})=>{
-//     const [language, setLanguage] = useState(i18n.language)
-
-//     return(
-//         <LanguageContext.Provider value={{language, setLanguage}}>
-//             {children}
-//         </LanguageContext.Provider>
-//     )
-// }
-// export default {AppContext,AppProvider}
-
-
-// LanguageContextProvider.js
 import { createContext, useState } from "react";
 import i18n from './i18n.js';
 

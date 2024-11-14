@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ref, set, push, get, update } from "firebase/database";
+import { useTranslation } from "react-i18next";
+
 import {
   ref as storageRef,
   uploadBytes,
@@ -17,7 +19,7 @@ function Editproductdetail() {
   const { id, productid } = useParams();
   console.log("categoryid from params:", id);
   console.log("productid from params:", productid);
-
+  const { t } = useTranslation(); 
   const location = useLocation();
   const { name } = location.state || {};
 
@@ -26,7 +28,7 @@ function Editproductdetail() {
   const [formData, setFormData] = useState({
     categoryid: "",
     categoryname: name,
-    color:"",
+    color:[],
     description: "",
     imgurl: [],
     price: "",
@@ -202,7 +204,7 @@ function Editproductdetail() {
               marginTop: "3rem",
             }}
           >
-            Product category
+            {t("Product Category")}
           </h4>
         </div>
 
@@ -216,7 +218,7 @@ function Editproductdetail() {
             fontSize: "20px",
           }}
         >
-          Product Details
+         {t("Product Details")}
         </h3>
 
         <div className="formContainer">
@@ -226,7 +228,7 @@ function Editproductdetail() {
                 style={{ paddingLeft: "10px", fontWeight: "100" }}
                 className="formHeading"
               >
-                Product name
+               {t("Product name")}
               </label>
               <input
                 style={{
@@ -247,7 +249,7 @@ function Editproductdetail() {
                 style={{ paddingLeft: "10px", fontWeight: "100" }}
                 className="formHeading"
               >
-                Price
+                {t("Price")}
               </label>
               <input
                 style={{
@@ -270,7 +272,7 @@ function Editproductdetail() {
                 style={{ paddingLeft: "10px", fontWeight: "100" }}
                 className="formHeading"
               >
-                Size
+                {t("Size")}
               </label>
               <input 
                 style={{
@@ -295,7 +297,7 @@ function Editproductdetail() {
                 style={{ paddingLeft: "10px", fontWeight: "100" }}
                 className="formHeading"
               >
-                Color
+                {t("Color")}
               </label>
               <input
                 style={{
@@ -307,8 +309,9 @@ function Editproductdetail() {
                 className="formInput"
                 name="color"
                 type="text"
-                value={formData.color}
+                value={formData?.color}
                 placeholder="Color"
+                onChange={handleInputChange}
                 
              / >
               
@@ -327,7 +330,7 @@ function Editproductdetail() {
           }}
           className="formHeading"
         >
-          Description
+          {t("Description")}
         </label>
         <input
           style={{
@@ -598,7 +601,8 @@ function Editproductdetail() {
           }}
           disabled={loading}
         >
-          {loading ? "Saving..." : "Save"}
+          {loading ? t("Saving...") : t("Save")}
+
         </button>
       </div>
     </div>

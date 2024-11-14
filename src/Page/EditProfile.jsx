@@ -4,6 +4,7 @@ import { IoChevronBack } from "react-icons/io5";
 import editcontact from "../images/editcontact.png";
 import "./Edit.css";
 import "../App.css";
+import { useTranslation } from "react-i18next";
 import nav from "../images/nav.png";
 import { TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -28,6 +29,8 @@ const CustomTextField = styled(TextField)({
 
 function EditProfile() {
   const navigate = useNavigate();
+  const { t } = useTranslation(); // useTranslation inside the function
+  
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [designation, setDesignation] = useState("");
@@ -334,7 +337,7 @@ console.log(currentProfile)
           <div className="edit-field">
           <CustomTextField
           style={{width:'100%'}}
-  label="Name"
+  label={t("Name")}
   name="name"
   size="small"
   value={name}
@@ -346,7 +349,7 @@ console.log(currentProfile)
 
             <CustomTextField
             style={{width:'100%'}}
-              label="Username"
+              label={t("Username")}
               name="username"
               size="small"
               value={username}
@@ -360,7 +363,7 @@ console.log(currentProfile)
           <div className="edit-field">
             <CustomTextField
             style={{width:'100%'}}
-              label="Designation"
+              label={t("Designation")}
               name="designation"
               size="small"
               value={designation}
@@ -371,7 +374,7 @@ console.log(currentProfile)
             />
             <CustomTextField
             style={{width:'100%'}}
-              label="Company"
+              label={t("Company")}
               name="company"
               size="small"
               value={company}
@@ -385,7 +388,7 @@ console.log(currentProfile)
           <div className="edit-field">
             <CustomTextField
             style={{width:'100%'}}
-              label="Phone No"
+              label={t("Phone No")}
               name="phone"
               size="small"
               value={phone}
@@ -397,7 +400,7 @@ console.log(currentProfile)
 
             <CustomTextField
             style={{width:'100%'}}
-              label="businesslocation"
+              label={t("Business Location")}
               name="businesslocatioon"
               size="small"
               value={businesslocatioon}
@@ -413,7 +416,7 @@ console.log(currentProfile)
           >
             <CustomTextField
               style={{ width: "100%",margin:"0px auto" }}
-              label="about"
+              label={t("Bio")}
               name="bio"
               size="small"
               value={bio}
@@ -435,7 +438,7 @@ console.log(currentProfile)
               style={saveButtonStyle}
               className="save2"
             >
-              {isSaving ? "Saving..." : "Save"}
+              {isSaving ? t("Saving...") : t("Save")}
             </button>
           </div>
         </div>

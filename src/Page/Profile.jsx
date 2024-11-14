@@ -36,20 +36,17 @@ import spotify from "../images/spotify.png";
 import instagram from "../images/instagram.png";
 import paypal from "../images/paypal.png";
 import Links from "./Links";
-import { PaddingTwoTone } from "@mui/icons-material";
-import zIndex from "@mui/material/styles/zIndex";
 
 function Profile() {
   const navigate = useNavigate();
 
-  const [socialLinks, setSocialLink] = useState([]);
+
   const { t } = useTranslation();
  
 
   const [loading, setLoading] = useState(true); // State for loading
   const [links, setLinks] = useState([]); // State to store fetched links
-  
-  const [activeToggle, setActiveToggle] = useState(null); // State to manage active toggle
+
   const [profileData, setProfileData] = useState({
     username: "",
     name: "",
@@ -369,12 +366,10 @@ function Profile() {
   
 
   useEffect(() => {
-    // Load the saved states from localStorage
+   
     const savedDirectMode = localStorage.getItem("directMode");
     const savedLeadMode = localStorage.getItem("leadMode");
-   
   
-    // Set the states if they exist in localStorage
     if (savedDirectMode !== null) {
       setDirect(JSON.parse(savedDirectMode)); // Parse and set Direct mode state
     }
@@ -427,7 +422,7 @@ function Profile() {
   
   const [selectedLink, setSelectedLink] = useState(links.length > 0 ? links[0].id : null); 
   
-  // Function to return the appropriate icon based on id
+ 
 
   if (loading) {
     return (
@@ -466,6 +461,7 @@ function Profile() {
  
 
 
+ 
 
 
   console.log("i am cover",profileData.coverUrl)
@@ -738,57 +734,56 @@ function Profile() {
                   fontSize: "12px",
                 }}
               >
-                Add
+          {t( "Add")}
               </p>
             </div>
 
             {/* Render links */}
             {links.map((link, index) => (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  gap: "10px",
-                  cursor: "pointer",
-                }}
-              >
-           <img
-  key={link.id}
-  onClick={
-    direct
-      ? () => {
-          setSelectedLink(link.id);  // Set the selected link when clicked
-          localStorage.setItem("selectedLink", link.id);  // Save the selected link ID to localStorage
-          updateDirectLink(direct, link);  // Update the link in Direct mode
-        }
-      : () => handleImageClick(link?.baseUrl, link?.name)
-  }
-  src={ReturnIcon(link.id)}
-  alt={link?.name || "Link"}
-  style={{
-    width: "50px",
-    height: "50px",
-    opacity: link.id === selectedLink
-      ? "1"  // Full opacity for the selected link
-      : direct
-      ? "40%"  // Reduced opacity for unselected links in Direct mode
-      : "1",  // Default opacity for all images
-    transition: "opacity 0.3s ease",  // Smooth transition effect
-  }}
-  onError={(e) => {
-    e.target.src = "path/to/default/image.png";  // Fallback on error
-  }}
-/>
+  <div
+    key={index}
+    style={{
+      display: "flex",
+      alignItems: "center",
+      flexDirection: "column",
+      gap: "10px",
+      cursor: "pointer",
+    }}
+  >
+    <img
+      key={link.id}
+      onClick={
+        direct
+          ? () => {
+              setSelectedLink(link.id);  // Set the selected link when clicked
+              localStorage.setItem("selectedLink", link.id);  // Save the selected link ID to localStorage
+              updateDirectLink(direct, link);  // Update the link in Direct mode
+            }
+          : () => handleImageClick(link?.baseUrl, link?.name)
+      }
+      src={ReturnIcon(link.id)}
+      alt={link?.name || "Link"}
+      style={{
+        width: "50px",
+        height: "50px",
+        opacity: link.id === selectedLink
+          ? "1"  // Full opacity for the selected link
+          : direct
+          ? "40%"  // Reduced opacity for unselected links in Direct mode
+          : "1",  // Default opacity for all images
+        transition: "opacity 0.3s ease",  // Smooth transition effect
+      }}
+      onError={(e) => {
+        e.target.src = "path/to/default/image.png";  // Fallback on error
+      }}
+    />
 
+    <span style={{ color: "#898787", fontSize: "12px" }}>
+      {t(link?.name)}  {/* Translated text based on link.name */}
+    </span>
+  </div>
+))}
 
-
-                <span style={{ color: "#898787", fontSize: "12px" }}>
-                  {link?.name}
-                </span>
-              </div>
-            ))}
           </div>
           <br />
           <br />

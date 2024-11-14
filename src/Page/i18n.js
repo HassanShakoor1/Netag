@@ -6,6 +6,10 @@ import English from "../languages/english.json"
 import Arabic from "../languages/arabic.json"
 import Spain from "../languages/spain.json"
 import France from "../languages/french.json"
+import Somali  from "../languages/somali.json"
+import Amharic from "../languages/amharic.json"
+import Tigrinya from "../languages/Tigrinya.json"
+
 
 i18next
 .use(initReactI18next)
@@ -22,6 +26,15 @@ i18next
         },
         France:{
             translation:France
+        },
+        Somali:{
+            translation:Somali
+        },
+        Amharic:{
+            translation:Amharic
+        },
+        Tigrinya:{
+            translation:Tigrinya
         }
     },
     lng: localStorage.getItem('lng') || 'English', // Default language

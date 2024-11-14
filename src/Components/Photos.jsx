@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick'; // Import the Slider component
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-
+import { useTranslation } from "react-i18next";
 function Photos() {
   const [mediaFiles, setMediaFiles] = useState([]);
   const userId = localStorage.getItem('userId');
-  
+  const { t } = useTranslation(); 
   const navigate = useNavigate();
 
   
@@ -90,7 +90,7 @@ useEffect(()=>{
       <div className="p-vContainer">
         <div className="data" style={{ display: 'flex', justifyContent: 'space-between' }}>
           <h2 className='head' style={{ fontSize: '22px', fontWeight: '100', color: 'rgb(238, 2, 0)', padding: '10px', margin: '0px' }}>
-            Photos and Video
+          {t("Photos And Video")}
           </h2>
         </div>
      
@@ -160,7 +160,7 @@ useEffect(()=>{
           textAlign: 'center',
           borderRadius: '12px',
         }} onClick={handleImagemove}>
-          +Add
+        {t("+Add")}
         </label>
       </div>
     </div>

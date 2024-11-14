@@ -19,6 +19,8 @@ import search from "../images/search.png";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import AOS from "aos";
+import { useTranslation } from "react-i18next";
+
 import "aos/dist/aos.css";
 import { MdNavigateNext } from "react-icons/md";
 const ITEM_HEIGHT = 48;
@@ -42,7 +44,8 @@ function EditProduct() {
   const { id } = useParams(); // Category ID
   const { productid } = useParams();
   console.log("id at editproduct", products); // Should log the value of productid if available
-
+  const { t } = useTranslation(); // useTranslation inside the function
+  
   const sliderRef = useRef(null);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -263,7 +266,7 @@ function EditProduct() {
             style={{ marginTop: "1.5rem" }}
             className="add-btn"
           >
-            Add
+            {t("Add")}
           </button>
         </div>
 
@@ -385,7 +388,7 @@ function EditProduct() {
                     }}
                   >
                     <DoneAllIcon style={{ marginRight: "8px" }} />
-                    Edit Product
+                    {t("Edit Product")}
                   </MenuItem>
                   <div
                     style={{
@@ -400,7 +403,7 @@ function EditProduct() {
                     onClick={handleDeleteProduct}
                   >
                     <DeleteIcon style={{ marginRight: "8px" }} />
-                    Delete Product
+                   {t("Delete Product")}
                   </MenuItem>
                 </Menu>
               </div>

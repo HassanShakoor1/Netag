@@ -193,7 +193,186 @@
     "Edit Category": "تعديل الفئة",
     "Edit": "تعديل",
     "Manage Health Products": "إدارة المنتجات الصحية",
-    "Add Category Products": "إضافة منتجات الفئة"
+    "Add Category Products": "إضافة منتجات الفئة",
+   
 
+    
+        "Products": "المنتجات",
+        "Services": "الخدمات",
+        "Manage Order": "إدارة الطلبات",
+        "Photos And Video": "الصور والفيديو",
+        
+            "Links": "الروابط",
+            "Lead Mode": "وضع القيادة",
+            "Direct Mode": "الوضع المباشر",
+            "+Add": "+إضافة",
+            
+                "whatsapp": "واتساب",
+                "vimeo": "فيميو",
+                "call": "مكالمة",
+                "facebook": "فيسبوك",
+                "mail": "بريد إلكتروني",
+                "instagram": "إنستاجرام",
+                "telegram": "تلغرام",
+                "snapchat": "سناب شات",
+                "tiktok": "تيك توك",
+                "youtube": "يوتيوب",
+                "reddit": "رادييت",
+                "twitter": "تويتر",
+                "pinterest": "بينتريست",
+                "website": "موقع إلكتروني",
+                "custom": "مخصص",
+                "spotify": "سبوتيفاي",
+                "paypal": "باي بال",
+                    "linkedin": "لينكدإن",
+                    "x": "تويتر",
+
+
+
+
+
+                    "Whatsapp": "واتساب",
+                    "Vimeo": "فيميو",
+                    "Call": "مكالمة",
+                    "Facebook": "فيسبوك",
+                    "Mail": "بريد إلكتروني",
+                    "Instagram": "إنستاجرام",
+                    "Telegram": "تلغرام",
+                    "Snapchat": "سناب شات",
+                    "Tiktok": "تيك توك",
+                    "Youtube": "يوتيوب",
+                    "Reddit": "رادييت",
+                    "Twitter": "تويتر",
+                    "Pinterest": "بينتريست",
+
+                    "Custom": "مخصص",
+                    "Spotify": "سبوتيفاي",
+                    "Paypal": "باي بال",
+                        "Linkedin": "لينكدإن",
+                        "X": "تويتر",
+
+                    
+                        "Product Category": "فئة المنتج",
+                        "Explore more": "استكشاف المزيد"
+                      ,
+                      
+                        "Edit Product": "تعديل المنتج",
+                        "Delete Product": "حذف المنتج",
+                        
+                            "Update": "تحديث",
+                            
+                                "Add Photo": "إضافة صورة"
+                              ,
+                              
+                                "Product Details": "تفاصيل المنتج",
+                                "Product name": "اسم المنتج",
+                                "Price": "السعر",
+                                "Size": "الحجم",
+                                "Color": "اللون",
+                                "Save": "حفظ",
+                                "Saving": "توفير",
+                                
+                                    "Service name": "اسم الخدمة",
+                                    "Business Contact": "جهة الاتصال التجارية",
+                                    "Website": "الموقع الإلكتروني",
+                               
+                                    "Available for Appointment": "متاح للمواعيد",
+                                    "Service Details": "تفاصيل الخدمة",
+                                    
+                                        "Manage Orders": "إدارة الطلبات",
+                                        "New Orders": "الطلبات الجديدة",
+                                        "Orders History": "تاريخ الطلبات"
+                                      ,
+                                      "No new orders available.": "لا توجد طلبات جديدة.",
+                                      "View Order": "عرض الطلب",
+                                      "Successful": "ناجح",
+                                      "Cancelled": "ملغى",
+                                      "Accept Offer": "قبول العرض",
+                                      "Reject Offer": "رفض العرض",
+                                      "Your Profiles": "حساباتك",
+                                      "Leads": "العملاء المحتملون",
+                                      "Membership": "العضوية",
+                                      "Shop": "المتجر",
+                                      "Languages": "اللغات",
+                                      "Choose a Profile": "اختر ملف التعريف",
+                                      "Privacy Policy & Terms & Conditions": "سياسة الخصوصية والشروط والأحكام",
+                                      "Logout": "تسجيل الخروج",
+                                      "Profile On": "الملف الشخصي مفعل",
+                                      "Create New Profile": "إنشاء ملف تعريف جديد",
+                                      "Phone No": "رقم الهاتف",
+                                      "Business Location": "موقع العمل",
+                                      "Bio": "السيرة الذاتية",
+                                      "Creating...": "جاري الإنشاء...",
+                                      "Updating...": "جاري التحديث...",
+                                      "Update Profile": "تحديث الملف الشخصي",
+                                     
+                                      "Download Vcf": "تحميل Vcf",
+                                      "Open": "فتح",
+                                      "Subscription Plans": "خطط الاشتراك",
+                                      "Please Buy Subscription Plans to Uncloak This Feature": "يرجى شراء خطط الاشتراك لفتح هذه الميزة",
+                                      "Monthly": "شهري",
+                                      "Yearly": "سنوي",
+                                      "Professional": "محترف",
+                                      "For small Business": "للشركات الصغيرة",
+                                      "Premium": "مميز",
+                                      "For Medium Business": "للشركات المتوسطة",
+                                      "Business": "أعمال",
+                                      "For Large Business": "للشركات الكبيرة",
+                                      "EnterPrise": "مؤسسة",
+                                      "For EnterPrise": "للمؤسسات",
+                                      "Manage 1 Social And Business Profile": "إدارة 1 ملف تعريف اجتماعي وتجاري",
+                                      "Access your Profile ON/OFF Feature": "الوصول إلى ميزة تشغيل/إيقاف ملفك الشخصي",
+                                      "Activate Your own Tag": "تفعيل علامتك الخاصة",
+                                      "Customize Your Profile Colouring": "تخصيص ألوان ملفك الشخصي",
+                                      "Subscribe Plan": "اشترك في الخطة",
+                                      "Contact with us": "تواصل معنا",
+                                      "Terms of Services": "شروط الخدمة",
+                                      "per Month": "شهريًا",
+                                      "per Year": "سنويًا",
+                                      "Create up to 10 Business Profiles": "أنشئ ما يصل إلى 10 ملفات أعمال",
+                                      "Create Unlimited Business Profiles": "أنشئ عددًا غير محدود من ملفات الأعمال",
+                                      "Select Plan": "اختر الخطة",
+                                      "Total Pops": "إجمالي النقرات",
+                                      "Total Link clicks": "إجمالي النقرات على الروابط",
+                                      "New Connections": "اتصالات جديدة",
+                                      "Total Orders": "إجمالي الطلبات",
+                                      "Sales Graph": "رسم بياني للمبيعات",
+                                      "Taps": "نقرات",
+                                      "Clicks": "نقرات",
+                                      "daily": "يومي",
+                                      "weekly": "أسبوعي",
+                                      "monthly": "شهري",
+                                      "yearly": "سنوي",
+                                      "Times user clicked on": "مرات نقر المستخدم على",
+                                      "Analytics": "تحليلات",
+                                      "Activate Tag": "تفعيل العلامة",
+                                      "Your": "الخاص بك",
+                                      "product will be Activated with username": "سيتم تفعيل المنتج باستخدام اسم المستخدم",
+                                      "Activate Ne Tag Card": "تفعيل بطاقة NeTag",
+                                      "Somali": "الصومالية",
+    "Amharic": "الأمهرية",
+    "Tigrinya": "التغرينية",
+    "Afaan": "أفان"
+                                    
+                                   
+                                      
+                                  
+                                  
+                              
+                              
+                              
+                          
+                      
+                      
+                      
+                  
+                  
+
+               
+              
+
+          
+          
+      
     
 }

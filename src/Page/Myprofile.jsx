@@ -14,9 +14,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
+
 const ITEM_HEIGHT = 48;
 function Myprofile() {
-
+   
     const [multiprofile, setMultiProfile] = useState([])
     const [currentItemId, setCurrentItemId] = useState(null);
     
@@ -229,7 +230,7 @@ async function handleDelete(id) {
                                 <img style={{ cursor: "pointer" }} onClick={goback} src={vector} alt="" />
                             </div>
                             <div style={{ color: "#EE0000", fontWeight: "600", }}>
-                                Choose a Profile
+                                {t("Choose a Profile")}
                             </div>
                             <div></div>
                         </div>
@@ -350,7 +351,7 @@ async function handleDelete(id) {
 
                         <div style={{ marginTop: "2rem" }}>
                             <Link to={"/home/create-new-profile"}>
-                                <button style={{ border: "none", width: "100%", backgroundColor: "#EE0000", height: "7vh", borderRadius: "12px", color: "white" }}>Create New Profile</button>
+                                <button style={{ border: "none", width: "100%", backgroundColor: "#EE0000", height: "7vh", borderRadius: "12px", color: "white" }}>{t("Create New Profile")}</button>
                             </Link>
 
                         </div>

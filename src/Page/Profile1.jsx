@@ -16,13 +16,17 @@ import { CiCircleInfo } from "react-icons/ci";
 import { CiMail } from "react-icons/ci";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import { useTranslation } from "react-i18next";
+
 function Profile1() {
   const [ContactData, setContactData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const categoryRefs = useRef([]);
   const [openedData ,setOpenedData]=useState(null);
-
+  const { t } = useTranslation(); // useTranslation inside the function
+  
 
 
 // Reference array for each item
@@ -181,7 +185,7 @@ const handleCopy = (name) => {
               <div>
                 <img style={{ cursor: "pointer" }} onClick={goback} src={vector} alt="" />
               </div>
-              <div style={{ color: "#EE0000", fontWeight: "100", fontSize: "20px" }}>Leads</div>
+              <div style={{ color: "#EE0000", fontWeight: "100", fontSize: "20px" }}>{t("Leads")}</div>
               <div></div>
             </div>
 
@@ -243,7 +247,7 @@ const handleCopy = (name) => {
                             cursor: "pointer",
                           }}
                         >
-                          Open
+                          {t("Open")}
                         </Button>
 
                         <Modal
@@ -308,7 +312,7 @@ const handleCopy = (name) => {
 
   {/* Centered Heading */}
   <h2 id="slide-modal-title" style={{ margin: "0px",fontSize:"20px",color:"red" }}>
-    Contact Details
+    {t("Contact Details")}
   </h2>
 
   {/* Empty Div (optional for future elements) */}
@@ -519,7 +523,7 @@ const handleCopy = (name) => {
 </div>
 
 <div style={{width:"100%",padding:'15px 15px'}}>
-    <button   onClick={() => downloadVCard(ContactData)} style={{width:'100%',height:"50px",cursor:"pointer",borderRadius:"10px",border:"none",outline:'none',backgroundColor:"red",color:"white",fontSize:'17px'}}> Download Vcf</button>
+    <button   onClick={() => downloadVCard(ContactData)} style={{width:'100%',height:"50px",cursor:"pointer",borderRadius:"10px",border:"none",outline:'none',backgroundColor:"red",color:"white",fontSize:'17px'}}> {t("Download Vcf")}</button>
 </div>
 
 
@@ -544,7 +548,7 @@ const handleCopy = (name) => {
                             cursor: "pointer",
                           }}
                         >
-                          Remove
+                          {t("Remove")}
                         </button>
                       </div>
                     </div>

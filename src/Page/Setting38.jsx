@@ -382,7 +382,7 @@ function Setting() {
                             fontSize: "16px",
                           }}
                         >
-                          Your Profiles
+                          {t("Your Profiles")}
                         </div>
                       </div>
                       <div>
@@ -432,7 +432,7 @@ function Setting() {
                             fontSize: "16px",
                           }}
                         >
-                          Leads
+                         {t("Leads")}
                         </div>
                       </div>
                       <div>
@@ -482,7 +482,7 @@ function Setting() {
                             cursor: "pointer",
                           }}
                         >
-                          Membership
+                          {t("Membership")}
                         </div>
                       </div>
                       <div>
@@ -533,7 +533,7 @@ function Setting() {
                             fontSize: "16px",
                           }}
                         >
-                          Shop
+                          {t("Shop")}
                         </div>
                       </div>
                       <div>
@@ -585,7 +585,7 @@ function Setting() {
                               fontSize: "16px",
                             }}
                           >
-                            Languages
+                            {t("Languages")}
                           </div>
                         </Link>
                       </div>
@@ -639,7 +639,8 @@ function Setting() {
                             fontSize: "16px",
                           }}
                         >
-                          Privacy Policy & Terms & Conditions
+                      {t("Privacy Policy & Terms & Conditions")}
+
                         </div>
                       </div>
                       <div>
@@ -689,7 +690,7 @@ function Setting() {
                             fontSize: "16px",
                           }}
                         >
-                          Delete Account
+                          {t("Delete Account")}
                         </div>
                       </div>
                       <div>
@@ -738,7 +739,7 @@ function Setting() {
                             fontSize: "16px",
                           }}
                         >
-                          Logout
+                          {t("Logout")}
                         </div>
                       </div>
                       <div>

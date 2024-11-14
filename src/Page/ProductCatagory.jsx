@@ -9,6 +9,8 @@ import MenuItem from "@mui/material/MenuItem";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ToastContainer, toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+
 import "react-toastify/dist/ReactToastify.css";
 import {
   ref,
@@ -29,13 +31,13 @@ function ProductCatagory() {
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
-  const { productid } = useParams();
   const [searchTerm, setSearchTerm] = useState("");
   const categoryRefs = useRef([]);
   const location = useLocation();
   const { productCount } = location.state || {};
   console.log("top", productCount);
-
+  const { t } = useTranslation(); // useTranslation inside the function
+  
   useEffect(() => {
     const userId = localStorage.getItem("userId");
     if (userId) {
@@ -262,14 +264,14 @@ function ProductCatagory() {
             style={{ paddingTop: "1.5rem",paddingLeft:"10px" }}
           />
           <h4 style={{ color: "red", fontSize: "20px", fontWeight: "100" }}>
-            Product Category
+           {t("Product Category")}
           </h4>
           <button
             onClick={handleAddClick}
             style={{ marginTop: "1.5rem" }}
             className="add-btn"
           >
-            Add
+            {t("Add")}
           </button>
         </div>
 
@@ -325,7 +327,7 @@ function ProductCatagory() {
               >
                 {brand.name}{" "}
                 <span style={{ fontSize: "13px", color: "rgb(197, 197, 197)" }}>
-                  ({brand.productCount} Products)
+                  ({brand.productCount} {t("Products")})
                 </span>
               </h3>
               <div className="p-dots">
@@ -387,7 +389,7 @@ function ProductCatagory() {
                     }}
                   >
                     <DoneAllIcon style={{ marginRight: "8px" }} />
-                    Edit Product
+                   {t("Edit Product")}
                   </MenuItem>
                   <div
                     style={{
@@ -402,7 +404,7 @@ function ProductCatagory() {
                     onClick={handleDeleteProduct}
                   >
                     <DeleteIcon style={{ marginRight: "8px" }} />
-                    Delete Product
+                  {t("Delete Product")}
                   </MenuItem>
                 </Menu>
               </div>
@@ -422,7 +424,7 @@ function ProductCatagory() {
                 onClick={() => handleEditProdu(brand.id, brand.name)}
                 className="save"
               >
-                Explore more
+               {t("Explore more")}
               </button>
               <br />
             </div>
