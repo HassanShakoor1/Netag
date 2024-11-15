@@ -144,17 +144,17 @@
             "Japanese": "Jabbaaniis",
             "German": "Jarmal",
             "Urdu": "Urdu",
-            "France": "Faransiis",
+            
             "Italian": "Talyaani",
             "Thai": "Taylaandi",
-            "Arabic": "Carabi",
+           
             "English": "Ingiriisi",
             "Privacy Policy": "Siyaasadda Qarsoodiga",
             "Terms of use": "Shuruudaha Isticmaalka",
             "About App": "Ku saabsan App-ka",
             "Profile Off": "Profile-ka Xiran",
-            "English (UK)": "Ingiriisi (UK)",
-            "Spain": "Isbaanish",
+          
+          
             "profile_off": "Profile-ka lama furo",
             "profile_on": "Profile-ka waa la furo",
             "your_profiles": "Profile-yadaada",
@@ -324,9 +324,11 @@
                     "product will be Activated with username": "Alaabtaada waxay ku shaqeyn doontaa magaca isticmaalahaga",
                     "Activate Ne Tag Card": "Fur Kaarka Ne Tag",
                     "Somali": "Somali",
-                    "Amharic": "Amxaariga",
-                    "Tigrinya": "Tigrinya",
-                    "Afaan": "Afaan"
+                    "Photos and Videos": "Sawirro iyo Muuqaal",
+                    "Upload Video": "Soo gelinta Muuqaalka",
+                    "Upload Photos": "Soo gelinta Sawirrada",
+                    "Upload": "Soo gelin"
+                 
                 
                 
             

@@ -12,6 +12,9 @@ import united from "../images/united.png";
 import somali from "../images/somali.png";
 import France from "../images/France.png";
 import chek from '../images/chek.svg';
+import amhar from '../images/amhar.jpg';
+import tigi from '../images/tigi.png';
+import afan from '../images/afan.png';
 
 function Language() {
   const { setLanguage } = useContext(AppContext);
@@ -19,9 +22,11 @@ function Language() {
 
   const [selectedLanguage, setSelectedLanguage] = useState(null); // Track the selected language ID or name
 
+  // Update language in localStorage and context
   const handleSelectLanguage = (language) => {
     setSelectedLanguage(language); // Set the currently selected language
     setLanguage(language); // Update language context
+    localStorage.setItem('selectedLanguage', language); // Save to localStorage
   };
 
   // Updating user language in Firebase
@@ -31,6 +36,14 @@ function Language() {
       language: selectedLanguage,
     });
   };
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('selectedLanguage');
+    if (savedLanguage) {
+      setSelectedLanguage(savedLanguage); // Set selected language from localStorage on page load
+      setLanguage(savedLanguage); // Update context to match saved language
+    }
+  }, []);
 
   useEffect(() => {
     if (selectedLanguage) {
@@ -44,9 +57,9 @@ function Language() {
     { id: 'France', name: 'France', image: France },
     { id: 'Arabic', name: 'Arabic', image: united },
     { id: 'Somali', name: 'Somali', image: somali },
-    { id: 'Amharic', name: 'Amharic', image: somali },
-    { id: 'Tigrinya', name: 'Tigrinya', image: somali },
-    { id: 'Afaan', name: 'Afaan', image: somali },
+    { id: 'Amharic', name: 'Amharic', image: amhar },
+    { id: 'Tigrinya', name: 'Tigrinya', image: tigi },
+    { id: 'Afaan', name: 'Afaan', image: afan },
   ];
 
   return (

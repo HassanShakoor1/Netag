@@ -8,6 +8,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import 'slick-carousel/slick/slick.css'; 
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
+import { useTranslation } from "react-i18next";
+
 import {
   getDatabase,
   ref,
@@ -35,7 +37,8 @@ function EditContact() {
  const [videoFiles, setVideoFiles] = useState([]);
  const [loading, setLoading] = useState(false);
   const [recordid, setRecordid] = useState(null);
-
+  const { t } = useTranslation(); // useTranslation inside the function
+  
   const navigate = useNavigate();
  
   const userId = localStorage.getItem("userId");
@@ -422,14 +425,14 @@ const handleRemoveVideo = async (recordId) => {
             }}
           />
           <p style={{ fontSize: "20px", color: "red", margin: "0" }}>
-            Photos and Videos
+            {t("Photos and Videos")}
           </p>
         </nav>
 
         <br />
       
               <div className="Upload-p">
-  <h2>Upload Photo</h2>
+  <h2>{t("Upload Photos")}</h2>
   <div className="upload-1">
     <div className="img-btn">
       <img
@@ -463,7 +466,7 @@ const handleRemoveVideo = async (recordId) => {
             .click()
         }
       >
-        Upload
+        {t("Upload")}
       </button>
     </div>
   </div>
@@ -544,7 +547,7 @@ const handleRemoveVideo = async (recordId) => {
       
 
         <div className="Upload-p">
-  <h2>Upload Video</h2>
+  <h2>{t("Upload Video")}</h2>
   <div className="upload-1">
     <div className="img-btn">
     {videoFiles.length > 0 ? (
@@ -598,7 +601,7 @@ const handleRemoveVideo = async (recordId) => {
               document.querySelector('input[type="file"][accept="video/*"]').click()
             }
           >
-            Upload
+            {t("Upload")}
           </button>
         </>
       )}

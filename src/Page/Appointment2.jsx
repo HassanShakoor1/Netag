@@ -27,35 +27,99 @@ const Appointment2 = () => {
 
   const [finalSlots, setFinalSlots] = useState([]);
 
-  const handleSlotClick = (slot) => {
-    // Check if the slot is already in the finalSlots array
-    const isSelected = finalSlots.some((finalSlot) => finalSlot.startTime === slot.startTime && finalSlot.endTime === slot.endTime);
-    
-    if (isSelected) {
-      // If the slot is already selected, remove it
-      setFinalSlots(finalSlots.filter((finalSlot) => finalSlot.startTime !== slot.startTime || finalSlot.endTime !== slot.endTime));
-    } else {
-      // Otherwise, add it to the finalSlots array
-      setFinalSlots([...finalSlots, slot]);
-    }
-  };
 
+  useEffect(() => {
+    // On component mount, retrieve the selected slots from localStorage
+    const savedSlots = localStorage.getItem('finalSlots');
+    if (savedSlots) {
+      setFinalSlots(JSON.parse(savedSlots)); // Parse and set the slots in state
+    }
+  }, []);
+
+  const handleSlotClick = (slot) => {
+    // Check if the slot is already selected
+    const isSelected = finalSlots.some(
+      (finalSlot) => finalSlot.startTime === slot.startTime && finalSlot.endTime === slot.endTime
+    );
+  
+    let updatedSlots;
+    if (isSelected) {
+      // If the slot is already selected, remove it from finalSlots
+      updatedSlots = finalSlots.filter(
+        (finalSlot) => finalSlot.startTime !== slot.startTime || finalSlot.endTime !== slot.endTime
+      );
+    } else {
+      // Otherwise, add it to finalSlots
+      updatedSlots = [...finalSlots, slot];
+    }
+  
+    // Update the finalSlots state with the updated slots
+    setFinalSlots(updatedSlots);
+  
+    // Store the updated slots in localStorage
+    localStorage.setItem('finalSlots', JSON.stringify(updatedSlots));
+  };
+  
+
+  console.log("final",finalSlots)
   
   const handleBack = () => {
     navigate(-1);
   };
 
+  useEffect(() => {
+    // Check if startTime and endTime are in localStorage, and load them
+    const savedStartTime = localStorage.getItem('startTime');
+    const savedEndTime = localStorage.getItem('endTime');
+
+    if (savedStartTime) {
+      setStartTime(savedStartTime); // Set saved startTime to state
+    }
+
+    if (savedEndTime) {
+      setEndTime(savedEndTime); // Set saved endTime to state
+    }
+  }, []); // Empty dependency array to run only on mount
+
   const handleStartTimeChange = (event) => {
-    setStartTime(event.target.value);
+    const newStartTime = event.target.value;
+    setStartTime(newStartTime);
+    localStorage.setItem('startTime', newStartTime); // Save to localStorage
   };
 
   const handleEndTimeChange = (event) => {
-    setEndTime(event.target.value);
+    const newEndTime = event.target.value;
+    setEndTime(newEndTime);
+    localStorage.setItem('endTime', newEndTime); // Save to localStorage
   };
   
+ 
+  useEffect(() => {
+    // Retrieve the saved duration and checked state from localStorage
+    const savedDuration = localStorage.getItem('selectedDuration');
+    const savedChecked = localStorage.getItem('checked');
+
+    if (savedDuration) {
+      setSelectedDuration(savedDuration); // Set the saved duration
+    }
+    if (savedChecked) {
+      setChecked(JSON.parse(savedChecked)); // Set the saved checked state (convert string to boolean)
+    }
+  }, []);
+
   const handleChange = (event) => {
+    // Update the state
     setSelectedDuration(event.target.value);
-    setChecked(event.target.checked);
+
+    // If it's a checkbox, update the checked state
+    if (event.target.type === 'checkbox') {
+      setChecked(event.target.checked);
+      // Save the new checked state to localStorage
+      localStorage.setItem('checked', JSON.stringify(event.target.checked));
+    } else {
+      // Save the new selected duration to localStorage
+      localStorage.setItem('selectedDuration', event.target.value);
+    }
   };
 
   const formatTime = (time) => {
@@ -144,12 +208,16 @@ const Appointment2 = () => {
     // Save generated slots to localStorage
     localStorage.setItem("generatedTimeSlots", JSON.stringify(generatedSlots));
   
-    // Log to verify localStorage contains the slots
-
-  
-    SaveData(); // Save start and end times to Firebase
+    
   };
   
+
+const save=()=>{
+  SaveData();
+}
+
+
+
   const fromLocal = localStorage.getItem("generatedTimeSlots");
 
   // Parse the time slots from localStorage
@@ -243,16 +311,17 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
       const startTimestamp = dayjs(`${today} ${startTime}`, 'YYYY-MM-DD HH:mm').unix();
       const endTimestamp = dayjs(`${today} ${endTime}`, 'YYYY-MM-DD HH:mm').unix();
   
-      console.log(startTimestamp, endTimestamp);
+      console.log("Start Timestamp:", startTimestamp);
+      console.log("End Timestamp:", endTimestamp);
   
       // Prepare the AppointmentSlots object where dates will be keys
       const appointmentSlots = {};
-      console.log(selectedDates);
+      console.log("Selected Dates:", selectedDates);
   
       // Iterate over selectedDates to create slots for each date
       selectedDates.forEach((date) => {
         const formattedDate = dayjs(date).format('MM-DD-YYYY'); // Format the selected date (e.g., "08-11-2024")
-        console.log(formattedDate);
+        console.log("Formatted Date:", formattedDate);
   
         // Structure for each date (including date, duration, and the generated time slots)
         appointmentSlots[formattedDate] = {
@@ -262,18 +331,56 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
         };
       });
   
-      console.log(finalSlots);
-      console.log(appointmentSlots);
+      console.log("Generated Appointment Slots:", appointmentSlots);
   
-      // If isRepeatSlots is true, create repeatedSlots with the same time slots, repeating daily starting from today
+      // Fetch the existing data from Firebase (if any)
+      const existingDataSnapshot = await get(userRef);
+      let existingAppointmentSlots = existingDataSnapshot.val()?.AppointmentSlots || {};
+      let existingRepeatedSlots = existingDataSnapshot.val()?.repeatedSlots || {};
+  
+      // Remove old slots that no longer exist in the updated data (based on selected dates)
+      const updatedAppointmentSlots = { ...existingAppointmentSlots };
+      Object.keys(existingAppointmentSlots).forEach((dateKey) => {
+        if (!selectedDates.some(date => dayjs(date).format('MM-DD-YYYY') === dateKey)) {
+          console.log(`Deleting slot for date: ${dateKey}`);
+          delete updatedAppointmentSlots[dateKey]; // Remove the date slot if it's no longer selected
+        }
+      });
+  
+      // Check if the duration has changed and remove timeSlots if duration is updated
+      Object.keys(appointmentSlots).forEach((dateKey) => {
+        if (existingAppointmentSlots[dateKey]) {
+          // Compare the current duration with the new duration
+          if (existingAppointmentSlots[dateKey].duration !== appointmentSlots[dateKey].duration) {
+            console.log(`Duration changed for ${dateKey}. Clearing timeSlots.`);
+            // If the duration has changed, clear all timeSlots for that date
+            updatedAppointmentSlots[dateKey] = {
+              ...updatedAppointmentSlots[dateKey],
+              timeSlots: [], // Explicitly clear the timeSlots array
+            };
+          }
+        }
+      });
+  
+      console.log("Updated Appointment Slots (after clearing timeSlots where needed):", updatedAppointmentSlots);
+  
+      // Reindex timeSlots after deletion or update
+      Object.keys(updatedAppointmentSlots).forEach((dateKey) => {
+        if (updatedAppointmentSlots[dateKey]?.timeSlots?.length > 0) {
+          updatedAppointmentSlots[dateKey].timeSlots = updatedAppointmentSlots[dateKey].timeSlots.map((slot, index) => {
+            return { ...slot, index }; // Reassign index after deletion
+          });
+        }
+      });
+  
+      console.log("Reindexed TimeSlots:", updatedAppointmentSlots);
+  
+      // If isRepeatSlots is true, handle the repeated slots
       let repeatedSlots = {};
       if (checked) {
         const currentDate = dayjs(); // Use current date
-        
-        // Generate the current date and store it as the key in repeatedSlots
         const formattedRepeatedDate = currentDate.format('MM-DD-YYYY'); // Format as "MM-DD-YYYY"
   
-        // Set the current date as the key for repeatedSlots
         repeatedSlots[formattedRepeatedDate] = {
           date: formattedRepeatedDate, // The current date
           duration: parseInt(selectedDuration, 10), // Duration for each repeated slot
@@ -283,13 +390,13 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
         console.log("Current Repeated Slot:", repeatedSlots);
       }
   
-      // Save data to Firebase, now including repeatedSlots correctly
+      // Update Firebase with new data, including the removed old slots
       await update(userRef, {
         availabilityStartTime: startTimestamp,
         availabilityEndTime: endTimestamp,
         isRepeatSlots: checked || false,
-        AppointmentSlots: appointmentSlots, // Save the entire appointmentSlots object
-        repeatedSlots: checked ? repeatedSlots : {}, // Only save repeatedSlots if checked is true
+        AppointmentSlots: { ...updatedAppointmentSlots, ...appointmentSlots }, // Combine existing and new slots
+        repeatedSlots: checked ? repeatedSlots : existingRepeatedSlots, // Only save repeatedSlots if checked is true
       });
   
       console.log("Data saved successfully with AppointmentSlots and repeatedSlots!");
@@ -297,10 +404,13 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
     } catch (error) {
       console.error("Error saving data:", error);
     }
+  };
   
-
   
-  }
+  
+  
+  
+  
   
 
 
@@ -342,29 +452,80 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
 
   const [selectedDates, setSelectedDates] = useState([]);
 
-  const onChange = (date) => {
-    // If the date is already selected, remove it from the list
-    const index = selectedDates.findIndex(
-      (selectedDate) => selectedDate.toDateString() === date.toDateString()
-    );
-
-    if (index !== -1) {
-      // Remove the date if already selected
-      setSelectedDates(selectedDates.filter((_, i) => i !== index));
-    } else {
-      // Add the date to the list of selected dates
-      setSelectedDates([...selectedDates, date]);
+  useEffect(() => {
+    const savedSelectedDates = localStorage.getItem('selectedDates');
+    if (savedSelectedDates) {
+      // Parse the stored stringified dates and ensure they are Date objects
+      const parsedDates = JSON.parse(savedSelectedDates).map((dateString) => new Date(dateString));
+      setSelectedDates(parsedDates);
     }
-  };
-console.log(selectedDates);
-  // Function to check if a date is selected
-  const isSelected = (date) => {
-    return selectedDates.some(
-      (selectedDate) => selectedDate.toDateString() === date.toDateString()
-    );
-  }; 
-  
+  }, []);
 
+  // Check if a date is selected
+  const isSelected = (date) => {
+    const formattedDate = date.toDateString();
+    return selectedDates.some(
+      (selectedDate) => selectedDate.toDateString() === formattedDate
+    );
+  };
+
+  // Check if a date is today (ignoring the time part)
+  const isToday = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time part for today's date comparison
+    const currentDate = new Date(date);
+    currentDate.setHours(0, 0, 0, 0); // Reset time part for comparison
+
+    return today.getTime() === currentDate.getTime();
+  };
+
+  // Handle date change (select or deselect a date)
+  const onChange = (date) => {
+    console.log(date); // Log to check the clicked date
+    
+    setSelectedDates((prevSelectedDates) => {
+      const formattedDate = date.toDateString();
+      const isDateSelected = prevSelectedDates.some(
+        (selectedDate) => selectedDate.toDateString() === formattedDate
+      );
+
+      let updatedSelectedDates;
+      if (isDateSelected) {
+        // If the date is already selected, remove it
+        updatedSelectedDates = prevSelectedDates.filter(
+          (selectedDate) => selectedDate.toDateString() !== formattedDate
+        );
+      } else {
+        // If the date is not selected, add it
+        updatedSelectedDates = [...prevSelectedDates, date];
+      }
+
+      // Store the updated selected dates in localStorage, converting Date objects to strings
+      localStorage.setItem('selectedDates', JSON.stringify(updatedSelectedDates.map((date) => date.toISOString())));
+
+      // Return the updated state
+      return updatedSelectedDates;
+    });
+  };
+
+  useEffect(() => {
+    const savedCheckedState = localStorage.getItem('checkedState');
+    if (savedCheckedState !== null) {
+      setChecked(JSON.parse(savedCheckedState)); // Parse and set the state
+    }
+  }, []);
+
+  // Handle change in switch state
+  const handleSwitchChange = (event) => {
+    const newCheckedState = event.target.checked;
+    setChecked(newCheckedState);
+
+    // Save the updated state to localStorage
+    localStorage.setItem('checkedState', JSON.stringify(newCheckedState));
+  };
+
+
+ 
 
   
 
@@ -408,7 +569,7 @@ console.log(selectedDates);
           <select
             className={styles.inputField}
             style={{ marginBottom: '10px', paddingRight: '15px', width: "100%" }}
-            value={appointmentSlots?.duration}
+            value={selectedDuration}
             onChange={handleChange}
           >
             <option value="" disabled>
@@ -420,17 +581,19 @@ console.log(selectedDates);
             <option value="60">60 mins</option>
           </select>
 
+          <button style={{height:'50px',fontSize:"20px"}} className={styles.updateButton} onClick={handleUpdateClick}>Update</button>
+
 <div style={{display:'flex',justifyContent:"space-between",alignItems:'center',width:"99%"}}>
 <div style={{display:"flex",gap:'10px',width:"80%",justifyContent:"space-between",alignItems:'center'}}>
 <CiCircleInfo  style={{fontSize:"30px"}}/>
   <p style={{fontSize:'14px'}}>Repeat the Selected Slots Daily (untill you turn this switch off)</p>
 </div>
 
-  <IOSSwitch
-      checked={checked}
-      onChange={(e) => setChecked(e.target.checked)}
-      inputProps={{ 'aria-label': 'iOS style switch' }}
-    />
+<IOSSwitch
+        checked={checked}
+        onChange={handleSwitchChange}
+        inputProps={{ 'aria-label': 'iOS style switch' }}
+      />
 </div>
 
          
@@ -443,16 +606,21 @@ console.log(selectedDates);
             <div style={{ backgroundColor: "#F8F8F8", borderRadius: "25px", border: "1px solid #B7B6B6" }}>
              
             <Calendar
-        onChange={onChange}
-        value={appointmentSlots?.date}
-        tileClassName={({ date, view }) => {
-          // Apply the class only to dates in 'month' view
-          if (view === 'month' && isSelected(date)) {
-            return 'selected-date'; // Return the class for selected dates
+      onChange={onChange}
+      value={selectedDates} // Use selectedDates for the calendar's value
+      tileClassName={({ date, view }) => {
+        if (view === 'month') {
+          if (isSelected(date)) {
+            return 'selected-date'; // Apply the class for selected dates
           }
-          return null; // Return null for unselected dates
-        }}
-      /> 
+          if (isToday(date)) {
+            return 'today'; // Apply the class for today's date
+          }
+        }
+        return null;
+      }}
+    />
+
 
             </div>
           </div>
@@ -495,7 +663,7 @@ console.log(selectedDates);
   <p>No time slots available</p>
 )}
 
-<button style={{height:'50px',fontSize:"20px"}} className={styles.updateButton} onClick={handleUpdateClick}>Update</button>
+<button style={{height:'50px',fontSize:"20px"}} className={styles.updateButton} onClick={save}>Save</button>
 
 
             </div>

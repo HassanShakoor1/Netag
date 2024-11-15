@@ -9,6 +9,7 @@ import France from "../languages/french.json"
 import Somali  from "../languages/somali.json"
 import Amharic from "../languages/amharic.json"
 import Tigrinya from "../languages/Tigrinya.json"
+import Afaan from "../languages/afaan.json"
 
 
 i18next
@@ -35,6 +36,9 @@ i18next
         },
         Tigrinya:{
             translation:Tigrinya
+        },
+        Afaan:{
+            translation:Afaan
         }
     },
     lng: localStorage.getItem('lng') || 'English', // Default language

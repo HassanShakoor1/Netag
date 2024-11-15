@@ -146,19 +146,19 @@
                 "Japanese": "ጃፓንኛ",
                 "German": "ጀርመን",
                 "Urdu": "ኡርዱ",
-                "France": "ፈረንሳይ",
+                
                 "Italian": "ጣሊያን",
                 "Thai": "ታይ",
-                "Arabic": "አረቢኛ"
-              ,
+               
+              
               
                 "English": "እንግሊዝኛ",
                 "Privacy Policy": "የግል መረጃ ፖሊሲ",
                 "Terms of use": "ስምምነቶች ለመጠቀም",
                 "About App": "ስለ መተግበሪያ",
                 "Profile Off": "ፕሮፋይል ዝግታ",
-                "English (UK)": "እንግሊዝኛ (UK)",
-                "Spain": "ስፓን",
+               
+               
                 "profile_off": "ፕሮፋይል አልተከፈተም",
                 "profile_on": "ፕሮፋይል ተከፈተ",
                 "your_profiles": "ፕሮፋይሎችዎ",
@@ -323,7 +323,11 @@
                 "Sales Graph": "ጠቋበ ትውስት",
                 "Taps": "ስም ማኅተሜ",
                 "Clicks": "ተርᑉ",
-                "daily": "ተረፈ ፕᠪ"
+                "daily": "ተረፈ ፕᠪ",
+                "Photos and Videos": "ፎቶና ቪዲዮ",
+                "Upload Video": "ቪዲዮ አስገባ",
+                "Upload Photos": "ፎቶን አስገባ",
+                "Upload": "አስገባ"
               
 }
               

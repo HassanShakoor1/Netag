@@ -118,6 +118,8 @@
     "Cv": "سيرة ذاتية",
     "CV": "سيرة ذاتية",
     "QR Code": "رمز الاستجابة السريعة",
+
+
     "Scan QR Code": "امسح رمز الاستجابة السريعة",
     "Copy": "نسخ",
     "Share": "مشاركة",
@@ -144,7 +146,7 @@
     "Japanese": "ياباني",
     "German": "ألماني",
     "Urdu": "أردو",
-    "France": "فرنسي",
+   
     "Italian": "إيطالي",
     "Thai": "تايلاندي",
     "Arabic": "عربي",
@@ -153,8 +155,8 @@
     "Terms of use": "شروط الاستخدام",
     "About App": "حول التطبيق",
     "Profile Off": "تسجيل الخروج",
-    "English (UK)": "الإنجليزية (بريطانيا)",
-    "Spain": "الإسبانية",
+
+   
   
     "profile_off": "الملف الشخصي غير مفعل",
     "profile_on": "الملف الشخصي مفعل",
@@ -177,6 +179,9 @@
     "Terms of Use": "شروط الاستخدام",
     "Already have an account?": "هل لديك حساب بالفعل؟",
     "Lorem": "لوريم",
+
+
+
     "ipsum dolor sit amet, consectetur elit. Neque sunt enim incidunt invent consequatur possimus blanditiis provident debitis atque beatae.": "لوريم إيبسوم دولور سيت أميت، كونسيكتتور إيليت. نيكي سونت إنيم إنسيدونت إنفنت كونسيكتراتور بلاسبيس بروفيدنت ديبيس أتكي بياتاي.",
     "let_s_get_connected": "لنترابط",
     "Welcome Back": "مرحبا بعودتك",
@@ -233,6 +238,9 @@
 
                     "Whatsapp": "واتساب",
                     "Vimeo": "فيميو",
+
+
+                    
                     "Call": "مكالمة",
                     "Facebook": "فيسبوك",
                     "Mail": "بريد إلكتروني",
@@ -349,11 +357,12 @@
                                       "Your": "الخاص بك",
                                       "product will be Activated with username": "سيتم تفعيل المنتج باستخدام اسم المستخدم",
                                       "Activate Ne Tag Card": "تفعيل بطاقة NeTag",
-                                      "Somali": "الصومالية",
-    "Amharic": "الأمهرية",
-    "Tigrinya": "التغرينية",
-    "Afaan": "أفان"
-                                    
+                                      "Photos and Videos": "الصور والفيديو",
+                                      "Upload Video": "رفع الفيديو",
+                                      "Upload Photos": "رفع الصور",
+  "Upload": "رفع"
+                        
+                                 
                                    
                                       
                                   

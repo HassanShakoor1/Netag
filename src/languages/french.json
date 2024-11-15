@@ -147,14 +147,14 @@
     "France": "Français",
     "Italian": "Italien",
     "Thai": "Thaïlandais",
-    "Arabic": "Arabe",
+   
     "English": "Anglais",
     "Privacy Policy": "Politique de confidentialité",
     "Terms of use": "Conditions d'utilisation",
     "About App": "À propos de l'application",
     "Profile Off": "Profil désactivé",
-    "English (UK)": "Anglais (Royaume-Uni)",
-    "Spain": "Espagnol",
+  
+   
     "profile_off": "Profil désactivé",
     "profile_on": "Profil activé",
     "your_profiles": "Vos profils",
@@ -304,10 +304,11 @@
   "Your": "Votre",
   "product will be Activated with username": "le produit sera activé avec le nom d'utilisateur",
   "Activate Ne Tag Card": "Activer la Carte NeTag",
-  "Somali": "Somali",
-  "Amharic": "Amharique",
-  "Tigrinya": "Tigrinya",
-  "Afaan": "Afaan"
+  "Photos and Videos": "Photos et Vidéos",
+  "Upload Video": "Télécharger la vidéo",
+  "Upload Photos": "Télécharger des Photos",
+  "Upload": "Télécharger"
+ 
                                    
                                   
                                   
