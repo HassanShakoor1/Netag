@@ -4,7 +4,7 @@ import './Activecard.css';
 import { ref, query, get, orderByChild, equalTo, update } from "firebase/database";
 import { database } from '../firebase.jsx';
 import { useTranslation } from 'react-i18next';
-import { QrReader } from 'react-qr-reader';
+import QrScanner from 'react-qr-scanner'; // Import the correct QR Scanner
 
 function ActiveCard() {
   const { t } = useTranslation();
@@ -114,7 +114,7 @@ function ActiveCard() {
   const handleQrError = (err) => {
     console.error('QR Reader Error:', err);
     // Handle the error by saving its message to state and displaying it in the UI
-    setQrResult(err?.message || 'An unknown error occurred');
+    setQrError(err?.message || 'An unknown error occurred');
   };
 
   useEffect(() => {
@@ -168,18 +168,11 @@ function ActiveCard() {
 
         {showQRReader && (
           <div style={{ margin: '20px auto', width: '90%' }}>
-            <QrReader
+            <QrScanner
               delay={300} // Increase delay between scans to avoid overloading the scanner
-              onResult={(result, error) => {
-                if (result) {
-                  handleQrScan(result?.text); // Handle the QR result, extracting the text from it
-                }
-                if (error) {
-                  handleQrError(error); // Pass the error to your error handler
-                }
-              }}
+              onScan={handleQrScan} // Use onScan to handle the scanned data
+              onError={handleQrError} // Use onError to handle the error
               style={{ width: '100%' }}
-              facingMode="environment" // Use rear camera for better scanning performance
             />
           </div>
         )}

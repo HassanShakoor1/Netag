@@ -41,6 +41,7 @@
     "react-modal": "^3.16.1",
     "react-qr-code": "^2.0.15",
     "react-qr-reader": "^3.0.0-beta-1",
+    "react-qr-scanner": "^1.0.0-alpha.11",
     "react-router-dom": "^6.26.0",
     "react-scroll": "^1.9.0",
     "react-slick": "^0.30.2",
