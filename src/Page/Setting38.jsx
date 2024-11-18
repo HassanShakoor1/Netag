@@ -209,11 +209,6 @@ function Setting() {
         return;  // Exit if no parentID found
       }
   
-      // 3. Query all users with the same parentId
-      // const userTableRef = ref(database, 'User');
-      // const parentQuery = query(userTableRef, orderByChild('parentID'), equalTo(parentID));
-      // const parentSnapshot = await get(parentQuery);
-
       const parentQuery = query(
         ref(database, `User`),
         orderByChild("parentID"),
@@ -308,6 +303,7 @@ function Setting() {
                     display: "flex",
                     justifyContent: "space-between",
                     height: "6vh",
+                    marginBottom:"60px"
                   }}
                 >
                   <div

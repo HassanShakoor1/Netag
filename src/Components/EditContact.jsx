@@ -121,10 +121,8 @@ function EditContact() {
       
       if (videosSnapshot.exists()) {
         const existingVideos = videosSnapshot.val();
-        const videosArray = Object.values(existingVideos);
-        existingMediaFiles = existingMediaFiles.concat(videosArray);
-        console.log("Fetched videos successfully:", videosArray);
-        setVideoFiles(videosArray);
+    
+        setVideoFiles(existingVideos);
       } else {
         console.log("No existing media files found in featuredVideos.");
       }
