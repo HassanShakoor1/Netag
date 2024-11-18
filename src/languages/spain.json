@@ -305,12 +305,39 @@
   "Photos and Videos": "Fotos y Videos",
   "Upload Video": "Subir Video",
   "Upload Photos": "Subir Fotos",
-  "Upload": "Subir"
+  "Upload": "Subir",
+  "appointments": "Citas",
+  "selectAvailability": "Seleccionar disponibilidad",
+  "startingTime": "Hora de inicio",
+  "endingTime": "Hora de finalización",
+  "repeatSlotsDaily": "Repetir los intervalos seleccionados todos los días (hasta que apague este interruptor)",
+  "selectDate": "Seleccionar fecha",
+  "selectDateForMaintenance": "¡Selecciona la fecha que deseas para el mantenimiento!",
+  "selectTime": "Seleccionar hora",
+  "selectAvailableTimeForMaintenance": "Seleccionar la hora disponible para el mantenimiento!",
  
 
-
+  
+  
+    "Appointments": "Citas",
+    "Select Availability": "Seleccionar disponibilidad",
+    "Starting Time": "Hora de inicio",
+    "Ending Time": "Hora de finalización",
+    "Repeat the Selected Slots Daily": "Repetir los intervalos seleccionados todos los días (hasta que apague este interruptor)",
+    "Select Date": "Seleccionar fecha",
+    "Select date you want for maintenance!": "¡Selecciona la fecha que deseas para el mantenimiento!",
+    "Select Time": "Seleccionar hora",
+    "Select available time you want for maintenance!": "Seleccionar la hora disponible para el mantenimiento!"
+  
+  
                                           
-                                          
+               ,
+             
+                "Switch to the Offline mode": "Cambiar al modo sin conexión",
+                "Scan the QR Code to Share your Profile": "Escanea el código QR para compartir tu perfil",
+                "Share QR Code": "Compartir Código QR"
+              
+                                         
                                       
                                       
                                   

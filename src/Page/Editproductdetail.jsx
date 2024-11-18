@@ -426,18 +426,22 @@ function Editproductdetail() {
                 />
                 <button
                   style={{
-                    width: "20px",
-                    height: "20px",
-                    borderRadius: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    border: "none",
-                    background: "#FFB9B9",
                     position: "absolute",
-                    top: "5px",
-                    right: "5px",
-                    cursor: "pointer",
+  top: "5px",
+  right: "px",
+  background: "#FFEEEE",
+  color: "red",
+  border: "none",
+  borderRadius: "50%",
+  width: "20px",
+  height: "20px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  fontSize: "14px", // Reduce font size to fit well inside the button
+  fontWeight:"700",
+  padding:'0px 0px 2px 0px' ,
                     zIndex: 1,
                   }}
                   onClick={() => handleImageRemove(0)}
@@ -477,18 +481,22 @@ function Editproductdetail() {
                 />
                 <button
                   style={{
-                    width: "20px",
-                    height: "20px",
-                    borderRadius: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    border: "none",
-                    background: "#FFB9B9",
                     position: "absolute",
-                    top: "5px",
-                    right: "5px",
-                    cursor: "pointer",
+  top: "5px",
+  right: "px",
+  background: "#FFEEEE",
+  color: "red",
+  border: "none",
+  borderRadius: "50%",
+  width: "20px",
+  height: "20px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  fontSize: "17px", // Reduce font size to fit well inside the button
+  fontWeight:"700",
+  padding:'0px 0px 2px 0px' ,
                     zIndex: 1,
                   }}
                   onClick={() => handleImageRemove(1)}
@@ -538,23 +546,27 @@ function Editproductdetail() {
                   />
                   <button
                     style={{
-                      width: "20px",
-                      height: "20px",
-                      borderRadius: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      border: "none",
-                      background: "#FFB9B9",
                       position: "absolute",
-                      top: "5px",
-                      right: "5px",
-                      cursor: "pointer",
+  top: "5px",
+  right: "px",
+  background: "#FFEEEE",
+  color: "red",
+  border: "none",
+  borderRadius: "50%",
+  width: "20px",
+  height: "20px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  fontSize: "17px", // Reduce font size to fit well inside the button
+  fontWeight:"500",
+  padding:'0px 0px 2px 0px' ,
                       zIndex: 1,
                     }}
                     onClick={() => handleImageRemove(2)}
                   >
-                    <FaTimes style={{ color: "red" }} />
+                     <FaTimes style={{ color: "red" }} />
                   </button>
                 </div>
 

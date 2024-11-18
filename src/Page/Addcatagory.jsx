@@ -164,7 +164,9 @@ function Addcatagory() {
     justifyContent: "center",
     cursor: "pointer",
     fontSize: "17px", // Reduce font size to fit well inside the button
-    fontWeight: "100", // Ensure the cross is visible and prominent
+  
+    fontWeight:"700",
+    padding:'0px 2px 0px 0px' // Ensure the cross is visible and prominent
 };
 
   return (

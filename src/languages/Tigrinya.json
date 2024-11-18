@@ -286,6 +286,27 @@
   "Upload Video": "ክፍለት ቪዲዮ",
   "Upload Photos": "ፎቶታት ኣስገባ",
   "Upload": "ኣስገባ"
+  ,
+
+
+    "Appointments": "ቀጣይ ጊዜ",
+    "Select Availability": "ዝርዝሩን ይምረጡ",
+    "Starting Time": "መነሻ ጊዜ",
+    "Ending Time": "መጨረሻ ጊዜ",
+    "Repeat the Selected Slots Daily": "እንደዚህ ያሉትን ቦታዎች ቀንን በቀን ይዘው እስከምትቋረጡ ተደጋጋሚ እንደሆኑ",
+    "Select Date": "ቀንን ይምረጡ",
+    "Select date you want for maintenance!": "ምን ቀን ለተጠባባቂ ተፈላላሊ እንደምትባሉ ምረጡ!",
+    "Select Time": "ሰአትን ይምረጡ",
+    "Select available time you want for maintenance!": "ለተጠባባቂ ስራ ሰአት ይምረጡ!"
+
+  ,
+  
+  
+    "Switch to the Offline mode": "እንደ ድምር ምንጭ ይለዋወጡ",
+    "Scan the QR Code to Share your Profile": "የቄር ኮድን ማንበብ ለመገለጽ ፕሮፋይልዎን ይስተዋሉ",
+    "Share QR Code": "ማንበብ ቄር ኮድ"
+  
+  
 }
       
 

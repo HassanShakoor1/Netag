@@ -5,8 +5,9 @@ import { database as db } from "../firebase.jsx"
 import { get, ref, query, orderByChild, equalTo, onValue } from "firebase/database"
 import { useEffect } from "react"
 import { useState } from "react"
-import { heIL } from "@mui/x-date-pickers/locales"
+import { useTranslation } from "react-i18next";
 function Appointment() {
+    const { t } = useTranslation();
 
     const[appointment,setAppointment]=useState([])
 
@@ -54,7 +55,7 @@ function Appointment() {
     return (
         <div className="appoint-maindiv">
             <div className="div-center">
-                <div style={{display:"flex",justifyContent:"center"}}>
+                <div style={{display:"flex",justifyContent:"space-between"}}>
                 <div className="widthh">
                 {/* top-appointment */}
                 <div className="top-appointment">
@@ -63,9 +64,9 @@ function Appointment() {
             className="bck"
             
           />
-                    <div style={{fontWeight:'100',fontSize:"20px"}} className="color-font">Appointments</div>
+                    <div style={{fontWeight:'100',fontSize:"20px"}} className="color-font">{t("Appointments")}</div>
                     <div >
-                        <button style={{height:'30px',borderRadius:"20px",backgroundColor:"transparent"}} onClick={MoveAddappointment} className="btn-width">Add</button>
+                        <button style={{height:'30px',borderRadius:"20px",backgroundColor:"transparent"}} onClick={MoveAddappointment} className="btn-width">{t("Add")}</button>
                     </div>
                 </div>
 

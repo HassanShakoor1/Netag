@@ -17,8 +17,7 @@ import { ToastContainer, toast } from 'react-toastify';
 // <<<<<<< HEAD
 
 import { useTranslation } from 'react-i18next';
-import { CollectionsOutlined } from "@mui/icons-material";
-
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"; // Import the icons
 function Signup() {
   const navigate = useNavigate(); // Use the hook here
 
@@ -28,6 +27,12 @@ function Signup() {
     const auth = getAuth(app)
     const [email, setemail] = useState("")
     const [password, setpassword] = useState("")
+    const [showPassword, setShowPassword] = useState(false); 
+
+
+    const togglePasswordVisibility = () => {
+      setShowPassword((prevState) => !prevState);
+    };
     // const signin = async () => {
     //   toast.dismiss()
 
@@ -87,9 +92,12 @@ function Signup() {
     // }
 
     const signin = async () => {
+
+
       // Dismiss all previous toasts before starting the process
       toast.dismiss();
   
+
       // Validation for email and password fields
       if (!email) {
         toast.error("Email is required");
@@ -194,34 +202,57 @@ function Signup() {
             type="text"
             placeholder="Password"
           /> */}
-            <div style={{
-              display: "flex", justifyContent: "center", alignItems: "center",
-              width: "90%", borderRadius: "12px", boxShadow: "0px 0px 4.5px 0px #00000040"
-            }}>
-              <div style={{ width: "82%" }}>
-                <input
-                  style={{
-                    width: "100%",
-                    padding: "15px",
-                    paddingLeft: "0px",
-                    paddingRight: "0px",
-                    border: "none",
-                    outline: "none"
-                    // borderRadius: "12px",
-                    // boxSizing: "border-box",
-                    // marginBottom: "10px",
-                    // boxShadow: "0px 0px 4.5px 0px #00000040"
-                  }}
-                  type="text"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setpassword(e.target.value)}
-                />
-              </div>
-              <div style={{ width: "10%" }}>
-                <img src={eye} alt="" />
-              </div>
-            </div>
+          <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "90%",
+        borderRadius: "12px",
+        boxShadow: "0px 0px 4.5px 0px #00000040",
+        marginBottom: "10px",
+        height: "45px",
+      }}
+    >
+      <div style={{ width: "87%" }}>
+        <input
+          required
+          style={{
+            width: "90%",
+            height: "40px",
+            paddingLeft: "0px",
+            paddingRight: "0px",
+            border: "none",
+            outline: "none",
+            boxSizing: "border-box",
+          }}
+          type={showPassword ? "text" : "password"} // Toggle between text and password type
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setpassword(e.target.value)}
+        />
+      </div>
+      <div
+        style={{
+          width: "5%",
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        onClick={togglePasswordVisibility}
+      >
+        {/* Display icon based on the showPassword state */}
+        {showPassword ? (
+          <AiOutlineEye size={20} />
+        ) : (
+          <AiOutlineEyeInvisible size={20} />
+        )}
+      </div>
+    </div>
+
+
+
             <div style={{ display: "flex", justifyContent: "flex-end", width: "90%" }}>
               <Link to="/forget" style={{ textDecoration: 'none' }}>
                 <span style={forgetPasswordStyle}>
@@ -270,7 +301,8 @@ function Signup() {
     borderRadius: "12px",
     boxSizing: "border-box",
     marginBottom: "10px",
-    boxShadow: "0px 0px 4.5px 0px #00000040"
+    boxShadow: "0px 0px 4.5px 0px #00000040",
+    outline:"none"
   };
   const buttonStyle = {
     backgroundColor: "red",

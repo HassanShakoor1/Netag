@@ -327,11 +327,27 @@
                     "Photos and Videos": "Sawirro iyo Muuqaal",
                     "Upload Video": "Soo gelinta Muuqaalka",
                     "Upload Photos": "Soo gelinta Sawirrada",
-                    "Upload": "Soo gelin"
-                 
-                
-                
-            
+                    "Upload": "Soo gelin",
+                    
+                     
+                        "Appointments": "Ballamaha",
+                        "Select Availability": "Dooro Helitaanka",
+                        "Starting Time": "Waqtiga Bilowga",
+                        "Ending Time": "Waqtiga Dhamaadka",
+                        "Repeat the Selected Slots Daily": "Ku celi fursadaha la doortay maalin kasta (illaa aad damiso baddalkaan)",
+                        "Select Date": "Dooro Taariikhda",
+                        "Select date you want for maintenance!": "Dooro taariikhda aad rabto ee dayactirka!",
+                        "Select Time": "Dooro Waqtiga",
+                        "Select available time you want for maintenance!": "Dooro waqtiga la heli karo ee dayactirka!"
+                      
+                      ,
+                      
+                       
+                        "Switch to the Offline mode": "U beddel Qaabka Offline",
+                        "Scan the QR Code to Share your Profile": "Scan Koodhka QR si aad u wadaagto Profile-kaaga",
+                        "Share QR Code": "Wadaag Koodhka QR"
+                      
+                      
             
         
         

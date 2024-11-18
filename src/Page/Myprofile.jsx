@@ -219,6 +219,34 @@ async function handleDelete(id) {
     }, [])
 
 
+
+
+    const [users, setUsers] = useState([]);
+const userId=localStorage.getItem("userId")
+useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const dbRef = ref(db, `User/${userId}`);
+        const snapshot = await get(dbRef);
+  
+        if (snapshot.exists()) {
+          setUsers(snapshot.val()); // Directly set the object
+        } else {
+          console.log("No data available");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    fetchUsers();
+  }, []);
+  
+  console.log(users); // Should log the object
+  console.log("user data is", users?.isProVersion); // Should work now
+  
+
+
     return (
         <div className="categories-maindiv">
             <div className="categories-width">
@@ -350,9 +378,40 @@ async function handleDelete(id) {
 
 
                         <div style={{ marginTop: "2rem" }}>
-                            <Link to={"/home/create-new-profile"}>
-                                <button style={{ border: "none", width: "100%", backgroundColor: "#EE0000", height: "7vh", borderRadius: "12px", color: "white" }}>{t("Create New Profile")}</button>
-                            </Link>
+                        {users?.isProVersion === false ? (
+  <Link to={"/home/setting/subscript"}>
+    <button
+      style={{
+        border: "none",
+        width: "100%",
+        backgroundColor: "#EE0000",
+        height: "7vh",
+        borderRadius: "12px",
+        color: "white",
+        cursor:"pointer"
+      }}
+    >
+      {t("Create New Profile")}
+    </button>
+  </Link>
+) : (
+  <Link to={"/home/create-new-profile"}>
+    <button
+      style={{
+        border: "none",
+        width: "100%",
+        backgroundColor: "#EE0000",
+        height: "7vh",
+        borderRadius: "12px",
+        color: "white",
+        cursor:"pointer"
+      }}
+    >
+      {t("Create New Profile")}
+    </button>
+  </Link>
+)}
+
 
                         </div>
 

@@ -302,7 +302,7 @@ function Setting() {
                 <div
                   style={{
                     padding: "1px",
-                    width: "60%",
+                    width: "70%",
                     backgroundColor: "#FFFFFF",
                     borderRadius: "48px",
                     display: "flex",

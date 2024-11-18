@@ -36,7 +36,7 @@ function Welcome(){
                     <div style={{width:"100%",display:"flex",alignItems:"center",flexDirection:"column",justifyContent:"space-between",}}>
                         <div  style={{width:"100%"}}>
                             <Link to="/create">
-                        <button style={{height:"50px",color:"white"}} className="btn-colr">Sign Up With Email</button>
+                        <button style={{height:"50px",color:"white",cursor:'pointer'}} className="btn-colr">Sign Up With Email</button>
                         </Link>
                         </div>
                         

@@ -7,12 +7,12 @@ import { IoChevronBack } from "react-icons/io5";
 import { Switch } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { database } from '../firebase';
-import { ref, update, get } from "firebase/database"; // import these functions
+import { ref, update, get,remove } from "firebase/database"; // import these functions
 import { CiCircleInfo } from "react-icons/ci";
 
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Import the default CSS for styling
-
+import { useTranslation } from "react-i18next";
 const Appointment2 = () => {
   const [slots, setSlots] = useState([]);
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const Appointment2 = () => {
   const [selectedDuration, setSelectedDuration] = useState("");
   const [checked, setChecked] = React.useState(false);
   const [timeSlotHistory, setTimeSlotHistory] = useState([]);
-
+  const { t } = useTranslation();
 
 
   const [finalSlots, setFinalSlots] = useState([]);
@@ -202,14 +202,45 @@ const Appointment2 = () => {
     // Generate the time slots
     const generatedSlots = generateTimeSlots(startTimestamp, endTimestamp, selectedDuration);
   
+    // Remove old time slots from localStorage
+    localStorage.removeItem("generatedTimeSlots");
+   
+
+console.log(`User/${userId}/AppointmentSlots/${selectedDates}`)
+const selectedDate = new Date(selectedDates);  // Convert selectedDates to Date
+
+// Check if it's a valid Date
+if (isNaN(selectedDate)) {
+  console.error("Invalid date:", selectedDates);
+} else {
+  // Format the date to MM-DD-YYYY format
+  const formattedDate = `${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}-${selectedDate.getFullYear()}`;
+
+  const timeSlotsRef = ref(database, `User/${userId}/AppointmentSlots/${formattedDate}`);
+
+  remove(timeSlotsRef)
+    .then(() => {
+      console.log("timeSlots deleted successfully!");
+    })
+    .catch((error) => {
+      console.error("Error deleting timeSlots: ", error);
+    });
+}
+
+  
+    // Save newly generated slots to localStorage
+    localStorage.setItem("generatedTimeSlots", JSON.stringify(generatedSlots));
+
+    localStorage.removeItem("finalSlots")
+   
+    
+
     // Update the timeSlotHistory state with the generated slots
     setTimeSlotHistory(generatedSlots);
-  
-    // Save generated slots to localStorage
-    localStorage.setItem("generatedTimeSlots", JSON.stringify(generatedSlots));
-  
-    
+
+
   };
+  
   
 
 const save=()=>{
@@ -532,22 +563,24 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
   return (
     <div className={styles.main}>
       <div className={styles.section}>
-        <div className={styles.navbar}>
+        <div style={{display:"flex",justifyContent:"space-between"}} className={styles.navbar}>
         <IoChevronBack
             onClick={handleBack}
             className="bck"
-            style={{ paddingRight:"0px",paddingLeft:"0px"}}
+            style={{ paddingRight:"0px",paddingLeft:"0px",fontSize:"25px"}}
           />
-          <p style={{ textAlign: "center", fontFamily: 'Inter', fontSize: '20px', color: 'red' }}>Appointments</p>
-          <button className={styles.addButton}>Add</button>
+          <p style={{ textAlign: "center", fontFamily: 'Inter', fontSize: '22px', color: 'red' }}>{t("Appointments")}</p>
+         <div>
+
+         </div>
         </div>
 
         <div className={styles.timeset}>
-          <p style={{ textAlign: "center", fontFamily: 'Inter', fontSize: '20px', fontWeight:"500" }}>Select Availability</p>
+          <p style={{ textAlign: "center", fontFamily: 'Inter', fontSize: '20px', fontWeight:"500" }}>{t("Select Availability")}</p>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
             <div className={styles.start}>
-              <p style={{ fontSize: "17px", paddingLeft: "10px" }}>Starting Time</p>
+              <p style={{ fontSize: "17px", paddingLeft: "10px" }}>{t("Starting Time")}</p>
               <input
                 type="time"
                 className={styles.inputField}
@@ -556,7 +589,7 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
               />
             </div>
             <div className={styles.end}>
-              <p style={{ fontSize: "17px", paddingLeft: "10px" }}>Ending Time</p>
+              <p style={{ fontSize: "17px", paddingLeft: "10px" }}>{t("Ending Time")}</p>
               <input
                 type="time"
                 className={styles.inputField}
@@ -573,7 +606,7 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
             onChange={handleChange}
           >
             <option value="" disabled>
-              Select Appointment Duration
+              {t("Select Appointment Duration")}
             </option>
             <option value="15">15 mins</option>
             <option value="30">30 mins</option>
@@ -581,12 +614,12 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
             <option value="60">60 mins</option>
           </select>
 
-          <button style={{height:'50px',fontSize:"20px"}} className={styles.updateButton} onClick={handleUpdateClick}>Update</button>
+          <button style={{height:'50px',fontSize:"20px"}} className={styles.updateButton} onClick={handleUpdateClick}>{t("Update")}</button>
 
 <div style={{display:'flex',justifyContent:"space-between",alignItems:'center',width:"99%"}}>
 <div style={{display:"flex",gap:'10px',width:"80%",justifyContent:"space-between",alignItems:'center'}}>
 <CiCircleInfo  style={{fontSize:"30px"}}/>
-  <p style={{fontSize:'14px'}}>Repeat the Selected Slots Daily (untill you turn this switch off)</p>
+  <p style={{fontSize:'14px'}}>{t("Repeat the Selected Slots Daily (untill you turn this switch off)")}</p>
 </div>
 
 <IOSSwitch
@@ -599,9 +632,9 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
          
 
           <div className={styles.datePickerSection}>
-            <p style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: '20px' }}>Select Date</p>
+            <p style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: '20px' }}>{t("Select Date")}</p>
             <p style={{ textAlign: 'center', fontSize: '14px', fontFamily: 'Inter', color: "#666" }}>
-              Select date you want for maintenance!
+              {t("Select date you want for maintenance!")}
             </p>
             <div style={{ backgroundColor: "#F8F8F8", borderRadius: "25px", border: "1px solid #B7B6B6" }}>
              
@@ -626,9 +659,9 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
           </div>
 
           <div className={styles.timeSlots}>
-            <p style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: '16px' }}>Select Time</p>
+            <p style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: '16px' }}>{t("Select Time")}</p>
             <p style={{ textAlign: 'center', fontSize: '12px', fontFamily: 'Inter', color: "#666" }}>
-              Select available time you want for maintenance!
+              {t("Select available time you want for maintenance!")}
             </p>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
@@ -663,7 +696,7 @@ if (appointmentSlots && Object.keys(appointmentSlots).length > 0) {
   <p>No time slots available</p>
 )}
 
-<button style={{height:'50px',fontSize:"20px"}} className={styles.updateButton} onClick={save}>Save</button>
+<button style={{height:'50px',fontSize:"20px"}} className={styles.updateButton} onClick={save}>{t("Save")}</button>
 
 
             </div>

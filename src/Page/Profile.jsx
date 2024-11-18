@@ -549,63 +549,28 @@ function Profile() {
               </span>
             </h2>
             
-            <div className="data" style={{ lineHeight: "0" ,marginTop:"20px"}}>
-              <h2 className="head">
-                {t("Designation")}:
-                <span
-                  style={{ fontWeight: "100", margin: "53px" }}
-                  className="para"
-                >
-                  {profileData.designation}
-                </span>
-              </h2>
-            </div>
-            <div className="data" style={{ lineHeight: "0" }}>
-              <h2 className="head" >
-              {t("Phone")}:
-                <br />{" "}
-                <span
-                  style={{ marginLeft: "145px", fontWeight: "100",paddingLeft:"5.5rem" }}
-                  className="para"
-                >
-                  {profileData.phone}
-                </span>
-              </h2>
-            </div>
-            <div
-              className="data"
-              style={{
-                lineHeight: "1.5",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                flexWrap: "nowrap",
-                gap: "10px",
-              }}
-            >
-              <h2
-                className="head"
-                style={{
-                  margin: "0px",
-                  flex: "1 1 auto",
-                  minWidth: "0",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-               {t("Company")}:
-                <span
-                  className="para"
-                  style={{
-                    fontWeight: "400",
-                    paddingLeft: "15px",
-                  }}
-                >
-                  {profileData.companyname}
-                </span>
-              </h2>
-            </div>
+            <div className="data-container">
+  <div className="data">
+    <h2 className="head">
+      {t("Designation")}:
+    </h2>
+    <span className="para">{profileData.designation}</span>
+  </div>
+
+  <div className="data">
+    <h2 className="head">
+      {t("Phone")}:
+    </h2>
+    <span className="para">{profileData.phone}</span>
+  </div>
+
+  <div className="data">
+    <h2 className="head">
+      {t("Company")}:
+    </h2>
+    <span className="para">{profileData.companyname}</span>
+  </div>
+</div>
 
           
           </div>
@@ -636,7 +601,7 @@ function Profile() {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  padding: "10px",
+               gap:"5px"
                 }}
               >
                 <h2

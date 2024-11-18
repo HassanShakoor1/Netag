@@ -81,15 +81,17 @@ body {
 
 .data {
   display: flex;
-  line-height: 1;
+  line-height: 0;
+  align-items: center;
 }
 .head {
   font-size: 15px;
+  width: 30%;
 }
 .para {
-  margin-left: 2rem !important;
+  /* margin-left: 2rem !important; */
   color: rgb(153, 153, 153);
-  text-align: right;
+  
 }
 .p-btn {
   width: 100px;
@@ -230,9 +232,10 @@ body {
 
 .ii-btn {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-}
+  gap: 5px;
+} 
 
 .mode-heading {
   font-size: 13px;
@@ -502,4 +505,14 @@ width: 100% !important;
   color:white !important;
   border-radius: 100% !important;
   height: 54px !important;
+}
+
+
+.data-container {
+  display: flex;
+  flex-direction: column;
+
+  margin-top: 20px;
+  justify-content:"center";
+  
 }

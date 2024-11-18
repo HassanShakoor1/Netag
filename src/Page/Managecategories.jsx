@@ -29,7 +29,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: "270px",
-  // maxWidth:"50%",
+  
   bgcolor: '#F5F5F5',
   borderRadius: "12px",
   boxShadow: 24,
@@ -53,13 +53,17 @@ function Managecategories() {
   const [currentItemId, setCurrentItemId] = useState(null);
   const openMenu = Boolean(anchorEl);
   const location = useLocation();
-  const { state } = location; // Access the state from location
-  const { FireBasedata } = state || {}; // Access Firebasedata
+  const { Firebasedata } = location.state || {};  // Access Firebasedata from location state
+  
+  console.log("name is", Firebasedata?.name); // Check if Firebasedata is logged correctly
+
   const [count, setCount] = useState(0); 
-  const name=FireBasedata?.name
+
+  
+
   const categoryRefs = useRef([]);
 
-  console.log( "name is",name);
+
 
   // id from header 
   const { id } = useParams();
@@ -192,7 +196,7 @@ function Managecategories() {
                 <img style={{ cursor: "pointer" }} onClick={() => goback(count)} src={vector} alt="" />
               </div>
               <div style={{ color: "#EE0000", fontWeight: "100",fontSize:"20px" }}>
-               <p>{name}</p>
+               <p>{Firebasedata?.name}</p>
               </div>
               <div style={{ backgroundColor: "none" }}>
                 <Link to={`/home/services/catagory-products/${id}/serviceaddcategory-product`}>

@@ -172,6 +172,7 @@ function ActiveCard() {
               delay={300} // Increase delay between scans to avoid overloading the scanner
               onScan={handleQrScan} // Use onScan to handle the scanned data
               onError={handleQrError} // Use onError to handle the error
+              facingMode="environment"
               style={{ width: '100%' }}
             />
           </div>

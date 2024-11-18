@@ -6,11 +6,13 @@ import './setting.css';
 import { useNavigate,useLocation  } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 function Scanner() {
 
   const location = useLocation();
   const currentURL = `${window.location.origin}${location.pathname}`;
-
+  const { t } = useTranslation();
   console.log(currentURL)
      
   const [value, setValue] = useState("");
@@ -36,7 +38,7 @@ function Scanner() {
             style={{ fontSize: '22px', color: 'red', cursor: 'pointer', position: 'absolute', left: '0' }}
           />
           <p style={{ color: 'red', fontSize: '22px', margin: '0 auto' }}>
-            QR Code
+            {t("QR Code")}
           </p>
         </div>
 
@@ -44,7 +46,7 @@ function Scanner() {
         <br /><br />
 
         <div className="saver">
-          <span style={{ color: 'red' }}>Switch to the Offline mode</span>
+          <span style={{ color: 'red' }}>{t("Switch to the Offline mode")}</span>
           <label className="switch">
             <input type="checkbox" />
             <span className="slider round"></span>
@@ -52,8 +54,8 @@ function Scanner() {
         </div>
 
         <div className="fun" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', margin: "2px auto", alignItems: "center" }}>
-          <h3 style={{ textAlign: 'center', color: 'red', width: '90%' }}>Scan QR Code</h3>
-          <p style={{ textAlign: 'center', margin: '-13px', color: "rgb(119, 119, 119)", width: "90%" }}>Scan the QR Code to Share your Profile</p>
+          <h3 style={{ textAlign: 'center', color: 'red', width: '90%' }}>{t("Scan QR Code")}</h3>
+          <p style={{ textAlign: 'center', margin: '-13px', color: "rgb(119, 119, 119)", width: "90%" }}>{t("Scan the QR Code to Share your Profile")}</p>
         </div>
 
         <br /><br />
@@ -207,7 +209,7 @@ function Scanner() {
 
 
         <br /><br /><br /><br />
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '2px auto', color: 'white', fontSize: '20px', width: '80%', height: '60px', borderRadius: '23px', boxShadow: 'none' }} className="save">Share Qr Code</div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '2px auto', color: 'white', fontSize: '20px', width: '80%', height: '60px', borderRadius: '23px', boxShadow: 'none',marginBottom:"30px" }} className="save">{t("Share QR Code")}</div>
       </div>
       <br /><br /><br />
       <Footer />

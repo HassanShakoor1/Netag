@@ -20,10 +20,14 @@ const carouselSettings = {
   autoplay: true,
   autoplaySpeed: 2000,
 };
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function Subscription() {
   const { t } = useTranslation(); // useTranslation inside the function
-  
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState('monthly'); // Default to 'monthly'
 
@@ -36,6 +40,19 @@ function Subscription() {
   };
   const handleHome = () => {
     navigate(-1);
+  };
+
+
+
+  const handleSubscribeClick = () => {
+    toast.info("If you want to subscribe, please download the app.", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
   };
 
   // Styles for the container and options
@@ -140,6 +157,9 @@ function Subscription() {
     background: 'linear-gradient(to bottom, #00D1EE, #000AEE)',
   };
 
+
+
+
   return (
     <div className='Subs-Container' style={{ display: 'flex', justifyContent: 'center', marginBottom: '5rem' }}>
       <div className="subs-design">
@@ -211,7 +231,9 @@ function Subscription() {
                   <p>{t("Customize Your Profile Colouring")}</p>
                 </div>
                 <br /><br /><br /><br />
-                <div style={saveButtonStyle} className="save">{t("Subscribe Plan")}</div>
+                <div style={saveButtonStyle} className="save" onClick={handleSubscribeClick}>
+        {t("Subscribe Plan")}
+      </div>
                 <br /><br />
               </div>
             </div>
@@ -254,7 +276,9 @@ function Subscription() {
                   <p>{t("Customize Your Profile Colouring")}</p>
                 </div>
                 <br /><br /><br /><br />
-                <div style={saveButtonStyle2} className="save">{t("Subscribe Plan")}</div>
+                <div style={saveButtonStyle2} className="save" onClick={handleSubscribeClick}>
+        {t("Subscribe Plan")}
+      </div>
                 <br /><br />
               </div>
             </div>
@@ -295,7 +319,9 @@ function Subscription() {
                   <p>{t("Customize Your Profile Colouring")}</p>
                 </div>
                 <br /><br /><br /><br />
-                <div style={saveButtonStyle3} className="save">{t("Subscribe Plan")}</div>
+                <div style={saveButtonStyle3} className="save" onClick={handleSubscribeClick}>
+        {t("Subscribe Plan")}
+      </div>
                 <br /><br />
               </div>
             </div>
@@ -336,7 +362,9 @@ function Subscription() {
                   <p>{t("Customize Your Profile Colouring")}</p>
                 </div>
                 <br /><br /><br /><br />
-                <div style={saveButtonStyle4} className="save">{t("Subscribe Plan")}</div>
+                <div style={saveButtonStyle4} className="save" onClick={handleSubscribeClick}>
+        {t("Subscribe Plan")}
+      </div>
                 <br /><br />
               </div>
             </div>
@@ -356,6 +384,7 @@ function Subscription() {
 
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 }

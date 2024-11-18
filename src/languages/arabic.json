@@ -360,23 +360,26 @@
                                       "Photos and Videos": "الصور والفيديو",
                                       "Upload Video": "رفع الفيديو",
                                       "Upload Photos": "رفع الصور",
-  "Upload": "رفع"
+  "Upload": "رفع",
+  "Appointments": "المواعيد",
+  "Select Availability": "حدد التوافر",
+  "Starting Time": "وقت البدء",
+  "Ending Time": "وقت الانتهاء",
+  "Repeat he Selected Slots Daily": "كرر الفترات المحددة يومياً (حتى تقوم بإيقاف هذا التبديل)",
+  "Select Date": "حدد التاريخ",
+  "Select date you want for maintenance!": "حدد التاريخ الذي ترغب فيه للصيانة!",
+  "Select Time": "حدد الوقت",
+  "Select available time you want for maintenance!": "حدد الوقت المتاح للصيانة!"
+                        ,
+                        
+                      
+                          "Switch to the Offline mode": "التبديل إلى وضع عدم الاتصال",
+                          "Scan the QR Code to Share your Profile": "امسح رمز الاستجابة السريعة لمشاركة ملفك الشخصي",
+                          "Share QR Code": "مشاركة رمز الاستجابة السريعة"
+                        
                         
                                  
-                                   
-                                      
-                                  
-                                  
-                              
-                              
-                              
-                          
-                      
-                      
-                      
-                  
-                  
-
+ 
                
               
 

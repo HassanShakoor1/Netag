@@ -307,10 +307,37 @@
   "Photos and Videos": "Photos et Vidéos",
   "Upload Video": "Télécharger la vidéo",
   "Upload Photos": "Télécharger des Photos",
-  "Upload": "Télécharger"
+  "Upload": "Télécharger",
+  "appointments": "Rendez-vous",
+  "selectAvailability": "Sélectionner la disponibilité",
+  "startingTime": "Heure de début",
+  "endingTime": "Heure de fin",
+  "repeatSlotsDaily": "Répéter les créneaux sélectionnés tous les jours (jusqu'à ce que vous désactiviez ce commutateur)",
+  "selectDate": "Sélectionner la date",
+  "selectDateForMaintenance": "Sélectionnez la date souhaitée pour la maintenance!",
+  "selectTime": "Sélectionner l'heure",
+  "selectAvailableTimeForMaintenance": "Sélectionner l'heure disponible pour la maintenance!",
  
                                    
-                                  
+
+    
+    "Appointments": "Rendez-vous",
+    "Select Availability": "Sélectionner la disponibilité",
+    "Starting Time": "Heure de début",
+    "Ending Time": "Heure de fin",
+    "Repeat the Selected Slots Daily": "Répéter les créneaux sélectionnés tous les jours (jusqu'à ce que vous désactiviez ce commutateur)",
+    "Select Date": "Sélectionner la date",
+    "Select date you want for maintenance!": "Sélectionnez la date souhaitée pour la maintenance!",
+    "Select Time": "Sélectionner l'heure",
+    "Select available time you want for maintenance!": "Sélectionner l'heure disponible pour la maintenance!"
+  
+    
+        ,
+        "Switch to the Offline mode": "Passer en mode hors ligne",
+        "Scan the QR Code to Share your Profile": "Scannez le code QR pour partager votre profil",
+        "Share QR Code": "Partager le Code QR"
+      
+      
                                   
                               
                               

@@ -327,8 +327,26 @@
                 "Photos and Videos": "ፎቶና ቪዲዮ",
                 "Upload Video": "ቪዲዮ አስገባ",
                 "Upload Photos": "ፎቶን አስገባ",
-                "Upload": "አስገባ"
+                
+                  "Upload": "ማስመልከቻ",
+                  "Appointments": "ቀጣይ ስምሪት",
+                  "Select Availability": "መጠቀም ስምሪት ምረጥ",
+                  "Starting Time": "መነሻ ሰዓት",
+                  "Ending Time": "መጨረሻ ሰዓት",
+                  "Repeat the Selected Slots Daily": "እነሱን ስምሪቶች ቀን በቀን ይዘው እስከምትቋረጡ ይደጋገሙ",
+                  "Select Date": "ቀንን ይምረጡ",
+                  "Select date you want for maintenance!": "በማሰተኛ ጊዜ ምን ቀን ይምረጡ!",
+                  "Select Time": "ሰዓትን ይምረጡ",
+                  "Select available time you want for maintenance!": "በማሰተኛ ጊዜ ምን ተወዳጅ ሰዓት ነው!"
+                ,
               
+                 
+                  "Switch to the Offline mode": "እንደ ኦፍላይን ሞድ ይለዋወጡ",
+                  "Scan the QR Code to Share your Profile": "ቄር ኮድን ማንበብ ለመገለጽ ፕሮፋይልዎን ይስተዋሉ",
+                  "Share QR Code": "ቄር ኮድ ማንበብ"
+                
+                
+                
 }
               
             

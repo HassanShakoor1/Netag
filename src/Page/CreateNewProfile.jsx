@@ -287,6 +287,30 @@ function CreateNewProfile() {
     navigate(-1);
   };
 
+
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const dbRef = sRef(db, "User");
+        const snapshot = await get(dbRef);
+
+        if (snapshot.exists()) {
+          setUsers(Object.values(snapshot.val())); // Convert object to array
+        } else {
+          console.log("No data available");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  console.log(users)
+
   return (
     <div className="container">
       <div className="edit-profile">

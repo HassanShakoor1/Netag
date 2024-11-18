@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext,useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ref as sRef, update } from 'firebase/database';
 import { AppContext } from './LanguageContextProvider';
@@ -15,13 +15,14 @@ import chek from '../images/chek.svg';
 import amhar from '../images/amhar.jpg';
 import tigi from '../images/tigi.png';
 import afan from '../images/afan.png';
-
+import { IoChevronBack } from "react-icons/io5";
 function Language() {
   const { setLanguage } = useContext(AppContext);
   const { t } = useTranslation();
 
   const [selectedLanguage, setSelectedLanguage] = useState(null); // Track the selected language ID or name
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const categoryRefs = useRef([]);
   // Update language in localStorage and context
   const handleSelectLanguage = (language) => {
     setSelectedLanguage(language); // Set the currently selected language
@@ -62,6 +63,36 @@ function Language() {
     { id: 'Afaan', name: 'Afaan', image: afan },
   ];
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+  
+    const trimmedSearchTerm = searchTerm.trim().toLowerCase();
+    
+    // Find the index of the language based on the search term
+    const foundCategoryIndex = languages.findIndex(
+      (category) =>
+        category.name.toLowerCase().includes(trimmedSearchTerm) // Match by name
+    );
+  
+    if (foundCategoryIndex !== -1) {
+      // Scroll to the matching category
+      if (categoryRefs.current[foundCategoryIndex]) {
+        categoryRefs.current[foundCategoryIndex].scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    } else {
+      console.log("Category not found");
+    }
+  };
+  
+
+
   return (
     <div className="categories-maindiv">
       <div className="categories-width">
@@ -77,31 +108,50 @@ function Language() {
                   width: '100%',
                 }}
               >
-                <div>
+                <div  >
                   <Link to="/home/setting">
-                    <img src={vector} alt="Back" />
+                  <IoChevronBack style={{color:"red",fontSize:'25px'}}/>
                   </Link>
                 </div>
-                <div style={{ color: '#EE0000', fontWeight: '600', width: '68%' }}>
+                <div style={{ color: '#EE0000',fontSize:"20px",textAlign:"start" }}>
                   {t('Choose language')}
+                </div>
+
+                <div>
+
                 </div>
               </div>
             </div>
             {/* Input */}
-            <div style={{ backgroundColor: '#F3F3F3', border: 'none', height: '10vh' }} className="categories-input">
-              <div style={{ width: '60%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <img src={search} alt="Search" />
-                </div>
-                <div style={{ color: '#616161', fontSize: '14px', width: '90%' }}>
-                  {t('Search Language')}
-                </div>
-              </div>
-            </div>
+          
+
+              <div className="categories-input">
+  <form onSubmit={handleSearchSubmit} style={{ display: "flex", alignItems: "center", width: "100%" }}>
+    <img 
+      onClick={handleSearchSubmit} // Directly reference the function here
+      src={search} 
+      alt="Search" 
+      style={{ marginRight: "8px", cursor: "pointer" }} // Add cursor style for better UX
+    />
+    <input
+      type="search"
+      value={searchTerm}
+      onChange={handleSearchChange}
+      placeholder="Search..."
+      style={{ color: "#929292", width: "100%", border: "none", outline: "none" }}
+    />
+  </form>
+</div>
+
+
+              
+       
 
             {/* Languages */}
-            {languages.map((language) => (
-              <div style={{ display: 'flex', justifyContent: 'center' }} key={language.id}>
+            {languages.map((language,index) => (
+              <div 
+               ref={(el) => (categoryRefs.current[index] = el)} 
+               style={{ display: 'flex', justifyContent: 'center' }} key={language.id}>
                 <div style={{ marginTop: '1rem', width: '100%' }}>
                   <div
                     style={{

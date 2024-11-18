@@ -129,8 +129,11 @@ function Categories() {
     setAnchorEl(null);
   };
 
+ 
+  
+
   const handlemanage = (id,Firebasedata) => {
-    console.log(Firebasedata)
+   
     navigate(`/home/services/catagory/${id}`,{state:{Firebasedata}});
   };
 console.log(Firebasedata)

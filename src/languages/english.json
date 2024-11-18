@@ -283,6 +283,28 @@
                     "Somali": "Somali",
                     "Amharic": "Amharic",
                     "Tigrinya": "Tigrinya",
-                    "Afaan": "Afaan"
+                    "Afaan": "Afaan",
+                    
+                    
+                        "Upload": "Upload",
+                        "Appointments": "Appointments",
+                        "Select Availability": "Select Availability",
+                        "Starting Time": "Starting Time",
+                        "Ending Time": "Ending Time",
+                        "Repeat the Selected Slots Daily": "Repeat the Selected Slots Daily (until you turn this switch off)",
+                        "Select Date": "Select Date",
+                        "Select date you want for maintenance!": "Select date you want for maintenance!",
+                        "Select Time": "Select Time",
+                        "Select available time you want for maintenance!": "Select available time you want for maintenance!"
+                      
+                      ,
+                    
+                      
+                        "Switch to the Offline mode": "Switch to the Offline mode",
+                        "Scan the QR Code to Share your Profile": "Scan the QR Code to Share your Profile",
+                        "Share QR Code": "Share QR Code"
+                    
+                      
+                      
        
 }
