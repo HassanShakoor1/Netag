@@ -5,7 +5,8 @@ import crox from '../images/crox.png';
 import { getDatabase, ref, set, update, get, child, push, remove } from 'firebase/database';
 import Modal from 'react-modal';
 import { database } from '../firebase'; // Ensure this path is correct
-
+import { toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 Modal.setAppElement('#root'); // This is required for accessibility
 
 function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
@@ -30,6 +31,7 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
 
 
     const fetchData = async () => {
+      toast.dismiss();
       const userId = localStorage.getItem('userId'); // Fetch userId from localStorage
 
       if (userId && linkdata?.id) {
@@ -78,7 +80,7 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
 
   const handleSave = async () => {
     const userId = localStorage.getItem('userId');
-  
+    
     if (!userId) {
       alert('User is not authenticated');
       return;
@@ -141,11 +143,11 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
       if (existingKey) {
         // Update existing link
         await update(ref(database, `User/${userId}/links/${existingKey}`), linkData);
-        alert('Data updated successfully!');
+        toast.success('Data updated successfully!');
       } else {
         // Save new link at the next available index
         await set(ref(database, `User/${userId}/links/${nextIndex}`), linkData);
-        alert('Data saved successfully!');
+        toast.success("Data saved successfully!");
       }
   
       setRecordStatus(linkData.isShared);
@@ -153,9 +155,10 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
       setInputValue('');
     } catch (error) {
       console.error('Error saving or updating data:', error);
-      alert('Failed to save or update data');
+      toast.error('Failed to save or update data');
     }
   };
+  
   
   
   
@@ -286,6 +289,7 @@ function IconOpener({ handleSlide, linkdata, ReturnIcon, setRecordStatus }) {
     </div>
   </div>
 </Modal>
+ 
   </>
    
   );

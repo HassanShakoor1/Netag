@@ -40,7 +40,7 @@ const styles = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: '100%',
-    maxWidth: '390px',
+    maxWidth: '370px',
     backgroundColor: 'rgba(255, 255, 255, 0.9)', // Slight opacity for the background
     padding: '20px',
     borderRadius: '10px',

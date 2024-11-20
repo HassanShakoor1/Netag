@@ -89,7 +89,7 @@ useEffect(()=>{
     <div className='profile-design'>
       <div className="p-vContainer">
         <div className="data" style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <h2 className='head' style={{ fontSize: '22px', fontWeight: '100', color: 'rgb(238, 2, 0)', padding: '10px', margin: '0px',width:"auto" }}>
+          <h2 className='head' style={{ fontSize: '22px', fontWeight: '500', color: 'rgb(238, 2, 0)', padding: '10px', margin: '0px',width:"auto" }}>
           {t("Photos And Video")}
           </h2>
         </div>

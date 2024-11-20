@@ -26,6 +26,8 @@ import paypal from "../images/paypal.png";
 import tick from "../images/tick.png";
 import { database } from "../firebase";
 import { useTranslation } from "react-i18next";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Fetch User ID from localStorage
 const USER_ID = localStorage.getItem("userId");
@@ -35,77 +37,77 @@ const links = {
     {
       id: 1,
       imageUrl: vimeo,
-      linkName: "vimeo",
+      linkName: "Vimeo",
       place: "Enter URL",
       instruction: `1. Enter your Url for  Vimeo.\n2. Make sure it is a valid Vimeo ID.\n3. Check for any typos in the URL.\n4. Ensure the account is accessible.`,
     },
     {
       id: 2,
       imageUrl: call,
-      linkName: "whatsapp",
+      linkName: "Whatsapp",
       place: "Enter whatsapp number",
       instruction: `1. Enter your WhatsApp number.\n2. Make sure the number includes the country code.\n3. Verify the number is active on WhatsApp .\n4. Ensure the number is publicly accessible.`,
     },
     {
       id: 3,
       imageUrl: facebook,
-      linkName: "facebook",
+      linkName: "Facebook",
       place: "Enter Facebook URL",
       instruction: `1. Enter your Facebook Url .\n2. Make sure it is a valid Facebook Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.`,
     },
     {
       id: 4,
       imageUrl: linkedin,
-      linkName: "linkedin",
+      linkName: "Linkedin",
       place: "Enter Url",
       instruction: ` 1. Enter your Linkedin URL.\n2. Make sure it is a valid URL .\n3. Check for any typos in the URL .\n4. Ensure the Linkedin account is active and accessible.`,
     },
     {
       id: 5,
       imageUrl: instagram,
-      linkName: "instagram",
+      linkName: "Instagram",
       place: "Enter URL",
       instruction: `1. Enter your Instagram Url .\n2. Make sure it is a valid Instagram Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.`,
     },
     {
       id: 6,
       imageUrl: telegram,
-      linkName: "telegram",
+      linkName: "Telegram",
       place: "Enter telegram number",
       instruction: `1. Enter your telegram number .\n2. Make sure it is a valid number Url.`,
     },
     {
       id: 7,
       imageUrl: snapchat,
-      linkName: "snapchat",
+      linkName: "Snapchat",
       place: "Enter UserName",
       instruction: `1. Enter your snapchat userName .\n2. Make sure it is a valid UserName .\n3. Check for any typos in the Username.\n4. Ensure the Profile is  accessible.`,
     },
     {
       id: 8,
       imageUrl: tiktok,
-      linkName: "tiktok",
+      linkName: "Tiktok",
       place: "Enter Username",
       instruction: `1. Enter your Tiktok Username .\n2. Make sure it is a valid Username.\n3. Check for any typos in the userName.\n4. Ensure the Profile is accessible.`,
     },
     {
       id: 9,
       imageUrl: youtube,
-      linkName: "youtube",
+      linkName: "Youtube",
       place: "Enter URL",
       instruction: `1. Enter your youtube Url .\n2. Make sure it is a valid Youtube Url.\n3. Check for any typos in the URL.\n4. Ensure the Account is publicly accessible.`,
     },
     {
       id: 10,
       imageUrl: raddit,
-      linkName: "reddit",
+      linkName: "Reddit",
       place: "Enter URL",
       instruction: `1. Enter your Radit Url .\n2. Make sure it is a valid  Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.`,
     },
     {
       id: 11,
       imageUrl: twitter,
-      linkName: "x",
+      linkName: "X",
       place: "Enter URL",
       instruction: `1. Enter your Twitter Url .\n2. Make sure it is a valid Twitter Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is  accessible.`,
     },
@@ -121,28 +123,28 @@ const links = {
     {
       id: 13,
       imageUrl: whatsapp,
-      linkName: "call",
+      linkName: "Call",
       place: "Enter phone number",
       instruction: `1. Enter your Phone number.\n2. Make sure the number includes the country code.\n3. Ensure the number is publicly accessible.`,
     },
     {
       id: 14,
       imageUrl: website,
-      linkName: "website",
+      linkName: "Website",
       place: "Enter URL",
       instruction: `1. Enter your Website Url .\n2. Make sure it is a valid Website Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.`,
     },
     {
       id: 15,
       imageUrl: custom,
-      linkName: "custom",
+      linkName: "Custom",
       place: "Enter URL",
       instruction: `1. Enter your Custom Url .\n2. Make sure it is a valid  Url.\n3. Check for any typos in the URL.`,
     },
     {
       id: 16,
       imageUrl: mail,
-      linkName: "mail",
+      linkName: "Mail",
       place: "Enter Email",
       instruction: ` 1. Enter your email address.\n2. Make sure it is a valid email address.\n3. Check for any typos in the email address.\n4. Ensure the email account is active and accessible.`,
     },
@@ -151,14 +153,14 @@ const links = {
     {
       id: 17,
       imageUrl: spotify,
-      linkName: "spotify",
+      linkName: "Spotify",
       place: "Enter URL",
       instruction: ` 1. Enter your Spotify URL.\n2. Make sure it is a valid URL .\n3. Check for any typos in the  URL.`,
     },
     {
       id: 18,
       imageUrl: paypal,
-      linkName: "paypal",
+      linkName: "Paypal",
       place: "Enter number",
       instruction: ` 1. Enter your paypal number.\n2. Make sure it is a valid number .`,
     },
@@ -219,7 +221,7 @@ function Links() {
       case 3:
         return facebook;
       case 4:
-        return mail;
+        return linkedin;
       case 5:
         return instagram;
       case 6:
@@ -268,7 +270,7 @@ function Links() {
             alignItems: "center",
             justifyContent: "center",
             position: "relative",
-            marginTop: "20px",
+            // marginTop: "20px",
           }}
         >
           <IoChevronBack
@@ -465,6 +467,7 @@ function Links() {
           </div>
         </div>
       </div>
+      <ToastContainer position="top-center" />
     </div>
   );
 }

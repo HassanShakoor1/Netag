@@ -8,7 +8,7 @@ body {
 }
 
 .add-btn{
-  width: auto !important;
+  width: 60px !important;
 }
 .ProfileContainer {
   width: 100%;
@@ -327,7 +327,8 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin-left: 5%;
+  
+ 
 }
 
 .flex-item {
@@ -387,7 +388,7 @@ body {
   height: 80px;
   border-radius: 50%;
   background-color: #e93428;
-  margin-top: -63px;
+  margin-top: -73px;
   box-shadow: 1px 2px 2px 2px rgb(200, 197, 197);
   display: flex;
   justify-content: center;
@@ -511,8 +512,14 @@ width: 100% !important;
 .data-container {
   display: flex;
   flex-direction: column;
-
   margin-top: 20px;
   justify-content:"center";
   
 }
+
+
+.slide_main_div{
+ max-width: 430px !important;
+
+}
+

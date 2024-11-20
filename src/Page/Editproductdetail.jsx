@@ -180,7 +180,7 @@ function Editproductdetail() {
             alignItems: "center",
             justifyContent: "center",
             position: "relative",
-            paddingLeft: "1rem",
+            
           }}
         >
           <IoChevronBack
@@ -200,7 +200,7 @@ function Editproductdetail() {
             style={{
               color: "red",
               fontSize: "20px",
-              fontWeight: "100",
+              fontWeight: "500",
               marginTop: "3rem",
             }}
           >
@@ -211,7 +211,7 @@ function Editproductdetail() {
      
         <h3
           style={{
-            paddingLeft: "1rem",
+            
             margin: "20px",
             color: "red",
             fontWeight: "300",
@@ -225,7 +225,7 @@ function Editproductdetail() {
           <div className="formRow">
             <div className="formColumn">
               <label
-                style={{ paddingLeft: "10px", fontWeight: "100" }}
+                style={{ paddingLeft: "10px", fontWeight: "500" }}
                 className="formHeading"
               >
                {t("Product name")}
@@ -234,7 +234,7 @@ function Editproductdetail() {
                 style={{
                   borderRadius: "20px",
                   backgroundColor: "#F7F7F7",
-                  width: "90%",
+                  width: "96%",
                 }}
                 type="text"
                 className="formInput"
@@ -246,7 +246,7 @@ function Editproductdetail() {
             </div>
             <div className="formColumn">
               <label
-                style={{ paddingLeft: "10px", fontWeight: "100" }}
+                style={{ paddingLeft: "10px", fontWeight: "500" }}
                 className="formHeading"
               >
                 {t("Price")}
@@ -255,7 +255,7 @@ function Editproductdetail() {
                 style={{
                   borderRadius: "20px",
                   backgroundColor: "#F7F7F7",
-                  width: "90%",
+                  width: "96%",
                 }}
                 type="text"
                 className="formInput"
@@ -269,7 +269,7 @@ function Editproductdetail() {
           <div style={{ marginTop: "20px" }} className="formRow">
             <div className="formColumn">
               <label
-                style={{ paddingLeft: "10px", fontWeight: "100" }}
+                style={{ paddingLeft: "10px", fontWeight: "500" }}
                 className="formHeading"
               >
                 {t("Size")}
@@ -278,7 +278,7 @@ function Editproductdetail() {
                 style={{
                   borderRadius: "20px",
                   backgroundColor: "#F7F7F7",
-                  width: "90%",
+                  width: "96%",
                   padding: "10px",
                 }}
                 className="formInput"
@@ -294,7 +294,7 @@ function Editproductdetail() {
 
             <div className="formColumn">
               <label
-                style={{ paddingLeft: "10px", fontWeight: "100" }}
+                style={{ paddingLeft: "10px", fontWeight: "500" }}
                 className="formHeading"
               >
                 {t("Color")}
@@ -303,7 +303,7 @@ function Editproductdetail() {
                 style={{
                   borderRadius: "20px",
                   backgroundColor: "#F7F7F7",
-                  width: "90%",
+                  width: "96%",
                   padding: "10px",
                 }}
                 className="formInput"
@@ -316,7 +316,7 @@ function Editproductdetail() {
              / >
               
 
-              <div style={{ position: "relative", width: "100%" }}></div>
+              <div style={{ position: "relative", width: "500%" }}></div>
             </div>
           </div>
         </div>
@@ -324,38 +324,44 @@ function Editproductdetail() {
         <label
           style={{
             paddingLeft: "10px",
-            marginLeft: "1.7rem",
-            fontWeight: "100",
+            marginLeft: "0.5rem",
+            fontWeight: "500",
             lineHeight: "2",
           }}
           className="formHeading"
         >
           {t("Description")}
         </label>
-        <input
-          style={{
-            borderRadius: "20px",
-            marginLeft: "1.7rem",
-            backgroundColor: "#F7F7F7",
-            width: "90%",
-            paddingBottom: "7rem",
-            outline: "none",
-          }}
-          type="text"
-          className="formInput"
-          placeholder="Please enter your product details......."
-          name="description"
-          value={formData.description}
-          onChange={handleInputChange}
-        />
-        <div style={{ marginLeft: "8px" }}>
+        <textarea
+  style={{
+    borderRadius: "20px",
+    marginLeft: "0.5rem",
+    backgroundColor: "#F7F7F7",
+    width: "94%",
+    paddingBottom: "7rem", // Adjust if needed for proper padding
+    outline: "none",
+    resize: "none", // Prevents resizing
+    height: "150px", // Adjust the height as needed
+    fontFamily: "Arial, sans-serif", // Set your desired font style here
+    fontSize: "14px", // Adjust the font size as needed
+    fontWeight: "normal", // Ensures the font weight is normal
+  }}
+  className="formInput"
+  placeholder="Please enter your product details......."
+  name="description"
+  value={formData.description}
+  onChange={handleInputChange}
+/>
+
+
+        <div  >
           {/* First Row */}
           <div
             style={{
               display: "flex",
-              padding: "15px",
+              padding: "14px",
               gap: "10px",
-              marginLeft: "8px",
+             
             }}
           >
             {/* File Input */}
@@ -598,7 +604,7 @@ function Editproductdetail() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            width: "90%",
+            width: "94%",
             height: "50px",
             marginTop: "20px",
             padding: "10px 20px",
@@ -609,7 +615,7 @@ function Editproductdetail() {
             cursor: "pointer",
             fontSize: "20px",
             margin: "0px auto",
-            marginLeft:"27px"
+            marginLeft:"13px"
           }}
           disabled={loading}
         >

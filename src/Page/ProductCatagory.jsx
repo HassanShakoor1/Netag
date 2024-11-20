@@ -263,12 +263,12 @@ function ProductCatagory() {
             className="bck"
             style={{ paddingTop: "1.5rem",paddingLeft:"10px" }}
           />
-          <h4 style={{ color: "red", fontSize: "20px", fontWeight: "100" }}>
+          <h4 style={{ color: "red", fontSize: "20px", fontWeight: "500" }}>
            {t("Product Category")}
           </h4>
           <button
             onClick={handleAddClick}
-            style={{ marginTop: "1.5rem" }}
+            style={{ marginTop: "1.5rem" ,width:"0px" }}
             className="add-btn"
           >
             {t("Add")}
@@ -321,12 +321,12 @@ function ProductCatagory() {
                   marginTop: "2rem",
                   paddingLeft: "1rem",
                   color: "red",
-                  fontWeight: "100",
+                  fontWeight: "500",
                   fontSize: "26px",
                 }}
               >
                 {brand.name}{" "}
-                <span style={{ fontSize: "13px", color: "rgb(197, 197, 197)" }}>
+                <span style={{ fontSize: "13px", color: "rgb(197, 197, 197)" ,fontWeight:"500" }}>
                   ({brand.productCount} {t("Products")})
                 </span>
               </h3>

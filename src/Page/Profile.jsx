@@ -542,6 +542,7 @@ function Profile() {
                   color: "rgb(146, 146, 146)",
                   fontWeight: "100",
                   fontSize: "16px",
+                  fontWeight:'700'
                 }}
               >
                 {" "}
@@ -591,7 +592,7 @@ function Profile() {
 
           <div className="ip-btn" data-aos="zoom-in" style={{ width: "100%" }}>
             <div className="n-head" style={{ fontSize: "18px" }}>
-              <h3 style={{ cursor: "pointer" }} className="link-heading">
+              <h3 style={{ cursor: "pointer" ,fontWeight:"500" }} className="link-heading">
               {t("Links")}
               </h3>
             </div>
@@ -610,6 +611,7 @@ function Profile() {
                     marginLeft: "rem",
                     marginRight: "2px",
                     fontSize: "15px",
+                    fontWeight:"500"
                   }}
                 >
                   {t("Lead Mode")}:
@@ -630,7 +632,7 @@ function Profile() {
               <div className="ii-btn">
                 <h2
                   className="mode-heading"
-                  style={{ marginRight: "2px", fontSize: "15px" }}
+                  style={{ marginRight: "2px", fontSize: "15px",fontWeight:"500" }}
                 >
                  {t("Direct Mode")}:
                 </h2>

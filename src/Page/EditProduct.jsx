@@ -258,7 +258,7 @@ function EditProduct() {
             className="bck"
             style={{ paddingTop: "1.5rem" }}
           />
-          <h4 style={{ color: "red", fontSize: "20px", fontWeight: "100" }}>
+          <h4 style={{ color: "red", fontSize: "20px", fontWeight: "500" }}>
             {name}
           </h4>
           <button

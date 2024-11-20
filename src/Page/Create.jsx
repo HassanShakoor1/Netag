@@ -1,6 +1,7 @@
 import vector from "../images/Vector.svg";
 import logo from "../images/logo.svg";
 import { Link } from "react-router-dom";
+import "../App.css";
 import "./imges.css";
 import { useNavigate } from "react-router-dom";
 import eye from "../images/eye.svg";
@@ -73,6 +74,7 @@ function Create() {
       toast.error("UserName is Taken");
       return;
     }
+ 
     try {
       const credential = await createUserWithEmailAndPassword(
         auth,
@@ -136,7 +138,7 @@ function Create() {
       navigate("/home");
     } catch (error) {
       console.log(error);
-      toast.error("");
+      toast.error(" user Already exist");
     }
   };
   const handlegoBack = () => {
@@ -336,14 +338,53 @@ function Create() {
 
           <div style={{ width: "100%" }}>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <input
-                style={{ marginRight: "4px", marginLeft: "0px", width: "5%",backgroundColor:"red" }}
-                type="checkbox"
-                id="privacy-policy-checkbox" // Added id for accessibility
-                checked={isChecked} // Use state to control the checkbox
-                onChange={(e) => setIsChecked(e.target.checked)} // Update state on change
-              />
-              <p style={{ fontSize: "9px", color: "#C3C1C1", width: "95%" }}>
+            <label
+        htmlFor="privacy-policy-checkbox"
+        style={{
+          display: "inline-block",
+          position: "relative",
+          width: "20px",
+          height: "20px",
+          cursor: "pointer",
+          backgroundColor: isChecked ? "red" : "white", // Red when checked
+          border: "1px solid red",
+          borderRadius: "4px", // Optional for rounded corners
+        }}
+      >
+        <input
+          type="checkbox"
+          id="privacy-policy-checkbox"
+          checked={isChecked}
+          onChange={(e) => setIsChecked(e.target.checked)}
+          style={{
+            appearance: "none", // Hide default checkbox styles
+            width: "100%",
+            height: "100%",
+            margin: 0,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            cursor: "pointer",
+            opacity: 0, // Make the input element invisible
+          }}
+        />
+        <span
+          style={{
+            content: '""',
+            display: isChecked ? "block" : "none",
+            position: "absolute",
+            top: "3px",
+            left: "6px",
+            width: "4px",
+            height: "10px",
+            border: "solid white",
+            borderWidth: "0 2px 2px 0",
+            transform: "rotate(45deg)",
+          }}
+        ></span>
+      </label>
+              
+              <p style={{ paddingLeft:"20px", fontSize: "12px", color: "#C3C1C1", width: "95%" }}>
                 {t("By Signing up you agree to our")}{" "}
                 <span style={{ color: "#EE0000", fontWeight: "bold" }}>
                   {t("Privacy Policy")}

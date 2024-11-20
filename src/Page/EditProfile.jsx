@@ -235,99 +235,102 @@ console.log(currentProfile)
         </nav>
 
         <div className="rel-div" style={{ flexDirection: "column" }}>
-          <div className="lady" style={ladyStyle}>
-            {currentProfile ? (
-              <div style={{ position: "relative" }}>
-                <img
-                  style={{
-                    width: "120px",
-                    height: "120px",
-                    borderRadius: "100%",
-                    objectFit: "cover",
-                  }}
-                  src={
-                    typeof currentProfile === "string"
-                      ? currentProfile
-                      : URL.createObjectURL(currentProfile)
-                  }
-                  alt="Uploaded Lady Image"
-                />
-                <button
-                  onClick={() => setCurrentProfile(null)}
-                  style={crossButtonStyle}
-                >
-                  &times;
-                </button>
-              </div>
-            ) : (
-              <img style={imgStyle} src={editcontact} alt="Upload Icon" />
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              id="lady-img-upload"
-              style={{ display: "none" }}
-              onChange={(e) => handleFileChange(e, "profile")}
-            />
-            {!currentProfile && (
-              <label htmlFor="lady-img-upload" style={uploadLabelStyle}>
-                Upload Photos
-              </label>
-            )}
-          </div>
+  {/* Profile Image Section */}
+  <label
+    htmlFor="lady-img-upload"
+    className="lady"
+    style={{ ...ladyStyle, cursor: "pointer" }}
+  >
+    {currentProfile ? (
+      <div style={{ position: "relative" }}>
+        <img
+          style={{
+            width: "120px",
+            height: "120px",
+            borderRadius: "100%",
+            objectFit: "cover",
+          }}
+          src={
+            typeof currentProfile === "string"
+              ? currentProfile
+              : URL.createObjectURL(currentProfile)
+          }
+          alt="Uploaded Lady Image"
+        />
+        <button
+          onClick={(e) => {
+            e.preventDefault(); // Prevent triggering the file input
+            setCurrentProfile(null);
+          }}
+          style={crossButtonStyle}
+        >
+          &times;
+        </button>
+      </div>
+    ) : (
+      <img style={imgStyle} src={editcontact} alt="Upload Icon" />
+    )}
+    <input
+      type="file"
+      accept="image/*"
+      id="lady-img-upload"
+      style={{ display: "none" }}
+      onChange={(e) => handleFileChange(e, "profile")}
+    />
+    {!currentProfile && <span style={uploadLabelStyle}>Upload Photos</span>}
+  </label>
 
-          <div>
-            <div className="main-img" style={mainImgStyle}>
-              {currentCover ? (
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "100%",
-                  }}
-                >
-                  <img
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: "2rem",
-                    }}
-                    src={
-                      typeof currentCover === "string"
-                        ? currentCover
-                        : URL.createObjectURL(currentCover)
-                    }
-                    alt="Uploaded Main Image"
-                  />
-                  <button
-                    onClick={() => setCurrentCover(null)}
-                    style={crossButtonStyle}
-                  >
-                    &times;
-                  </button>
-                </div>
-              ) : (
-                <img
-                  style={uploadIconStyle}
-                  src={editcontact}
-                  alt="Upload Icon"
-                />
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                id="main-img-upload"
-                style={{ display: "none" }}
-                onChange={(e) => handleFileChange(e, "cover")}
-              />
-              {!currentCover && (
-                <label htmlFor="main-img-upload" style={uploadLabelStyle}>
-                  Upload Photos
-                </label>
-              )}
-            </div>
-          </div>
-        </div>
+  {/* Cover Image Section */}
+  <label
+    htmlFor="main-img-upload"
+    className="main-img"
+    style={{ ...mainImgStyle, cursor: "pointer" }}
+  >
+    {currentCover ? (
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <img
+          style={{
+            width: "100%",
+            height: "100%",
+            borderRadius: "2rem",
+          }}
+          src={
+            typeof currentCover === "string"
+              ? currentCover
+              : URL.createObjectURL(currentCover)
+          }
+          alt="Uploaded Main Image"
+        />
+        <button
+          onClick={(e) => {
+            e.preventDefault(); // Prevent triggering the file input
+            setCurrentCover(null);
+          }}
+          style={crossButtonStyle}
+        >
+          &times;
+        </button>
+      </div>
+    ) : (
+      <img style={uploadIconStyle} src={editcontact} alt="Upload Icon" />
+    )}
+    <input
+      type="file"
+      accept="image/*"
+      id="main-img-upload"
+      style={{ display: "none" }}
+      onChange={(e) => handleFileChange(e, "cover")}
+    />
+    {!currentCover && <span style={uploadLabelStyle}>Upload Photos</span>}
+  </label>
+</div>
+
 
         <br />
         <br />
@@ -336,7 +339,7 @@ console.log(currentProfile)
         <div className="input-data">
           <div className="edit-field">
           <CustomTextField
-          style={{width:'100%'}}
+          style={{width:'100%', outline:'none'}}
   label={t("Name")}
   name="name"
   size="small"
@@ -348,7 +351,7 @@ console.log(currentProfile)
 />
 
             <CustomTextField
-            style={{width:'100%'}}
+            style={{width:'100%', outline:'none'}}
               label={t("Username")}
               name="username"
               size="small"
@@ -362,7 +365,7 @@ console.log(currentProfile)
 
           <div className="edit-field">
             <CustomTextField
-            style={{width:'100%'}}
+            style={{width:'100%', outline:'none'}}
               label={t("Designation")}
               name="designation"
               size="small"
@@ -373,7 +376,7 @@ console.log(currentProfile)
   }}
             />
             <CustomTextField
-            style={{width:'100%'}}
+            style={{width:'100%', outline:'none'}}
               label={t("Company")}
               name="company"
               size="small"
@@ -386,20 +389,32 @@ console.log(currentProfile)
           </div>
 
           <div className="edit-field">
-            <CustomTextField
-            style={{width:'100%'}}
-              label={t("Phone No")}
-              name="phone"
-              size="small"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              InputProps={{
+          <CustomTextField
+  style={{ width: "100%", outline: "none" }}
+  label={t("Phone No")}
+  name="phone"
+  size="small"
+  value={phone}
+  onChange={(e) => {
+    const value = e.target.value;
+    // Allow only numbers
+    if (/^\d*$/.test(value)) {
+      setPhone(value);
+    }
+  }}
+  InputProps={{
     style: { paddingLeft: 0 },
   }}
-            />
+  error={phone && phone.length < 11} // Show error if length is less than 11
+  helperText={
+    phone && phone.length < 11 ? t("Phone number must be at least 11 digits") : ""
+  }
+/>
+
+
 
             <CustomTextField
-            style={{width:'100%'}}
+            style={{width:'100%', outline:'none'}}
               label={t("Business Location")}
               name="businesslocatioon"
               size="small"
@@ -415,7 +430,7 @@ console.log(currentProfile)
             style={{ justifyContent: "start", width: "100%" }}
           >
             <CustomTextField
-              style={{ width: "100%",margin:"0px auto" }}
+              style={{ width: "100%",margin:"0px auto", outline:'none' }}
               label={t("Bio")}
               name="bio"
               size="small"

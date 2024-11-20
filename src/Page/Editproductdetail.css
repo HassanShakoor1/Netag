@@ -6,7 +6,7 @@
 .new-details-design {
     width: 100%;
     max-width: 430px;
-    margin: 20px auto;
+    margin: 0px auto;
 }
 
 input::placeholder {
@@ -17,7 +17,7 @@ input::placeholder {
 .formContainer {
     display: flex;
     flex-direction: column;
-   margin-left: 1.5rem; /* Adjusted margin */
+   margin-left: 0.5rem; /* Adjusted margin */
     gap: 1rem; /* Space between rows */
     width: 95%;
    

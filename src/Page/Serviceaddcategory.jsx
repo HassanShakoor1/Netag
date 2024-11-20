@@ -172,121 +172,133 @@ function Serviceaddcategory() {
                 {t("Description")}
               </div>
               <div>
-                <textarea
-                  placeholder="lorem ipsum"
-                  style={{
-                    outline: "none",
-                    resize: "none",
-                    width: "100%",
-                    height: "20vh",
-                    backgroundColor: "#F7F7F7",
-                    borderRadius: "16px",
-                    padding: "18px",
-                    boxSizing: "border-box",
-                    border: "none",
-                  }}
-                  onChange={(e) => setdescription(e.target.value)}
-                />
+              <textarea
+  placeholder="Enter the description"
+  style={{
+    outline: "none",
+    resize: "none",
+    width: "100%",
+    height: "20vh",
+    backgroundColor: "#F7F7F7",
+    borderRadius: "16px",
+    padding: "18px",
+    boxSizing: "border-box",
+    border: "none",
+    fontStyle: "normal", // Set font style to normal
+    fontFamily: "inherit", // Optionally inherit font from parent
+    fontSize: "16px", // Optional: adjust font size
+    color: "#000", // Optional: set default text color
+  }}
+  onChange={(e) => setdescription(e.target.value)}
+/>
+
               </div>
 
               <div style={{ marginTop: "6px" }}>
-                {image ? (
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "25vh",
-                      position: "relative",
-                    }}
-                  >
-                    <div
-                      onClick={handleRemoveImage}
-                      style={{ position: "absolute", right: "1px" }}
-                    >
-                      <img src={redcross} alt="" />
-                    </div>
-                    <div style={{ width: "100%", height: "25vh" }}>
-                      <img
-                        src={URL.createObjectURL(image)}
-                        alt="Uploaded"
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "12px",
-                        }}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "25vh",
-                      position: "relative",
-                    }}
-                  >
-                    <div
-                      style={{ position: "absolute", right: "38%", top: "28%" }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          flexDirection: "column",
-                        }}
-                      >
-                        <img
-                          src={camera}
-                          alt="Default"
-                          style={{
-                            width: "50%",
-                            height: "50%",
-                            objectFit: "cover",
-                            borderRadius: "12px",
-                          }}
-                        />
+  {image ? (
+    <div
+      style={{
+        width: "100%",
+        height: "25vh",
+        position: "relative",
+        cursor: "pointer", // Makes the entire div clickable
+      }}
+      onClick={() => document.getElementById("upload-photos").click()} // Trigger file input click on div click
+    >
+      <div
+        onClick={handleRemoveImage}
+        style={{ position: "absolute", right: "1px", cursor: "pointer" }}
+      >
+        <img src={redcross} alt="" />
+      </div>
+      <div style={{ width: "100%", height: "25vh" }}>
+        <img
+          src={URL.createObjectURL(image)}
+          alt="Uploaded"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: "12px",
+          }}
+        />
+      </div>
+    </div>
+  ) : (
+    <div
+      style={{
+        width: "100%",
+        height: "25vh",
+        position: "relative",
+        cursor: "pointer", // Makes the entire div clickable
+      }}
+      onClick={() => document.getElementById("upload-photos").click()} // Trigger file input click on div click
+    >
+      <div
+        style={{ position: "absolute", right: "38%", top: "28%" }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <img
+            src={camera}
+            alt="Default"
+            style={{
+              width: "50%",
+              height: "50%",
+              objectFit: "cover",
+              borderRadius: "12px",
+            }}
+          />
 
-                        <input
-                          type="file"
-                          accept="image/*"
-                          style={{ display: "none" }}
-                          id="upload-photos"
-                          onChange={handleFileChange}
-                        />
-                        <label
-                          htmlFor="upload-photos"
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            border: "none",
-                            width: "110px",
-                            fontSize: "10px",
-                            marginTop: "8px",
-                            height: "27px",
-                            borderRadius: "6px",
-                            cursor: "pointer",
-                            textAlign: "center",
-                            color: "#726F6F",
-                            // backgroundColor: "#F1F1F1", // Optional: Add a background color to make it more visible
-                          }}
-                        >
-                          Click to Upload
-                        </label>
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "25vh",
-                        backgroundColor: "#F1F1F1",
-                        border: "none",
-                        borderRadius: "12px",
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            id="upload-photos"
+            onChange={handleFileChange}
+          />
+          <label
+            htmlFor="upload-photos"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              border: "none",
+              width: "110px",
+              fontSize: "10px",
+              marginTop: "8px",
+              height: "27px",
+              borderRadius: "6px",
+              cursor: "pointer",
+              textAlign: "center",
+              color: "#726F6F",
+              // backgroundColor: "#F1F1F1", // Optional: Add a background color to make it more visible
+            }}
+          >
+            Click to Upload
+          </label>
+        </div>
+      </div>
+      <div
+        style={{
+          width: "100%",
+          height: "25vh",
+          backgroundColor: "#F1F1F1",
+          border: "none",
+          borderRadius: "12px",
+        }}
+      />
+    </div>
+  )}
+</div>
+
+
+
               {/* button  */}
               <div style={{ marginTop: "30px" }}>
                 <button
