@@ -9,9 +9,10 @@ import MenuItem from "@mui/material/MenuItem";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
 
-import "react-toastify/dist/ReactToastify.css";
+
 import {
   ref,
   get,
@@ -229,10 +230,6 @@ function ProductCatagory() {
       console.log("Category not found");
     }
   };
-
-
-
-
 
 
 
