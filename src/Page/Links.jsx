@@ -66,7 +66,7 @@ const links = {
       id: 5,
       imageUrl: instagram,
       linkName: "Instagram",
-      place: "Enter URL",
+      place: "Enter Username",
       instruction: `1. Enter your Instagram Url .\n2. Make sure it is a valid Instagram Url.\n3. Check for any typos in the URL.\n4. Ensure the Profile is publicly accessible.`,
     },
     {

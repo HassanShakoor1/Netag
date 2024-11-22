@@ -2,6 +2,7 @@ import React from 'react';
 import Array from './Array';
 import settingIcon from '../images/seting-icon.png';
 import bag from '../images/bag.png';
+import pp from '../images/pp.png';
 import { useTranslation } from "react-i18next";
 
 function Card() {
@@ -12,17 +13,17 @@ function Card() {
 
   const arr = [
     {
-      imageUrl: bag,
+      imageUrl: pp,
       text: t('Products'),
       navigate: '/edit-product',
     },
     {
-      imageUrl: settingIcon,
+      imageUrl: bag,
       text: t('Manage Order'),
       navigate: '/home/order'
     },
     {
-      imageUrl: bag,
+      imageUrl: settingIcon,
       text: t("Services"),
       navigate: '/home/services'
     },

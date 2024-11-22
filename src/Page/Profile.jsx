@@ -535,7 +535,7 @@ function Profile() {
               />
             </div>
             {/* Profile details */}
-            <h2 style={{ color: "red", margin: "5px" }}>
+            <h2 style={{ color: "red", margin: "5px", width:'60%' }}>
               {profileData?.name} <br />
               <span
                 style={{

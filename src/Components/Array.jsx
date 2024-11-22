@@ -21,7 +21,7 @@ function Array({prp,text,path}) {
    <div className="div">
      <div onClick={handleNavigate} className="col-icon">
      
-       <img style={{cursor:'pointer'}} src={prp} alt="set-icon"  />
+       <img style={{cursor:'pointer',width:"20px"}} src={prp} alt="set-icon"  />
      </div>
    </div>
    <p style={{ textAlign: 'center', color: '#E93428', fontWeight: 'bold',fontSize:"13px" }}>{text}</p>

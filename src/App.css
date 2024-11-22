@@ -523,3 +523,74 @@ width: 100% !important;
 
 }
 
+
+._end_1qu0l_29 p {
+  font-family:Arial, Helvetica, sans-serif!important;
+  font-size: 10px;
+  line-height: 12.1px;
+  color: red;
+}
+
+
+.css-10o2lyd-MuiStack-root {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: block !important
+;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  overflow: none !important;
+  padding-top: 8px;
+}
+
+
+.css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input {
+  font: inherit;
+  letter-spacing: inherit;
+  color: currentColor;
+  padding: 4px 0 5px;
+  border: 0;
+  box-sizing: content-box;
+  background: white !important;
+  height: 1.4375em;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  min-width: 0;
+  width: 100%;
+  -webkit-animation-name: mui-auto-fill-cancel;
+  animation-name: mui-auto-fill-cancel;
+  -webkit-animation-duration: 10ms;
+  animation-duration: 10ms;
+  padding: 16.5px 14px;
+  padding-right: 0;
+}
+
+.css-19lgl72-MuiInputBase-root-MuiOutlinedInput-root {
+
+  background: white !important; 
+}
+
+.css-1b1fjlj-MuiFormControl-root-MuiTextField-root {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex
+;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: relative;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  vertical-align: top;
+  width: 48% !important;
+}
+
+.css-jupps9-MuiInputBase-root-MuiOutlinedInput-root:focus-visible{
+  outline:  red !important;
+}

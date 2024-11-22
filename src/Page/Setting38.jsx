@@ -17,7 +17,7 @@ import {  query, orderByChild, equalTo, remove } from "firebase/database";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AppContext } from "./LanguageContextProvider";
-
+import { getAuth, deleteUser } from 'firebase/auth';
 import { useTranslation } from "react-i18next";
 import { database } from "../firebase";
 function Setting() {
@@ -121,10 +121,20 @@ function Setting() {
     /*--------------------------logout--------------------------*/
   }
   function logout() {
-    localStorage.removeItem("userId");
-    localStorage.removeItem("parentId");
-    navigate("/signup");
+    // Show confirmation dialog before logging out
+    const isConfirmed = window.confirm('Are you sure you want to log out?');
+  
+    if (isConfirmed) {
+      // If confirmed, remove user data from localStorage and navigate to the signup page
+      localStorage.removeItem("userId");
+      localStorage.removeItem("parentId");
+      navigate("/signup"); // Redirect to the signup page
+    } else {
+      // If canceled, do nothing or show a message (optional)
+      toast.info('Logout canceled');
+    }
   }
+  
   
   useEffect(() => {
     const fetch = async () => {
@@ -164,16 +174,27 @@ function Setting() {
   
   // Make sure to initialize your Firebase app and database
 
+
+
   const deleteUserData = async (uid) => {
+    // Confirm before deleting
+    const isConfirmed = window.confirm('Are you sure you want to delete this user and all associated data?');
+    
+    if (!isConfirmed) {
+      toast.info('Deletion cancelled');
+      return; // Exit if the user cancels the deletion
+    }
+  
+    const auth = getAuth(); // Get Firebase Auth instance
     try {
       // Tables in which the UID is stored
-      const tables = ['User', 'Products', 'Services', 'ProductCategory', 'ServiceCategory', 'Orders','Notifications'];
+      const tables = ['User', 'Products', 'Services', 'ProductCategory', 'ServiceCategory', 'Orders', 'Notifications'];
   
       // 1. First, delete all entries where `uid` is directly matching the UID in each table.
       for (const table of tables) {
         const tableRef = ref(database, table);
         let uidQuery;
-      
+  
         if (table === 'User') {
           uidQuery = query(tableRef, orderByChild('id'), equalTo(uid)); // For the 'User' table, query by 'id'
         } else if (table === 'Notifications' || table === 'Analytic') {
@@ -181,24 +202,25 @@ function Setting() {
         } else {
           uidQuery = query(tableRef, orderByChild('uid'), equalTo(uid)); // For all other tables, query by 'uid'
         }
-      
+  
         try {
           const snapshot = await get(uidQuery);
           if (snapshot.exists()) {
+            // Show toast before starting the delete operation
+            toast.success(`Deleting data from table: ${table}`);
+  
             // Iterate over each child in the snapshot and remove it
             snapshot.forEach((childSnapshot) => {
               // Use remove to delete the data at the child's reference
-               remove(childSnapshot.ref);
-               toast.success(" data deleted");
+              remove(childSnapshot.ref);
             });
           } else {
             toast.error(`No data found for table: ${table}`);
           }
         } catch (error) {
-          toast.error(`Error while querying or deleting data from table ${table}:`, error);
+          toast.error(`Error while querying or deleting data from table ${table}: ${error}`);
         }
       }
-      
   
       // 2. Retrieve the `parentID` from localStorage
       const parentID = localStorage.getItem("parentId");
@@ -206,31 +228,42 @@ function Setting() {
   
       if (!parentID) {
         toast.error("No parentID found in localStorage. Exiting function.");
-        return;  // Exit if no parentID found
+        return; // Exit if no parentID found
       }
   
       const parentQuery = query(
         ref(database, `User`),
         orderByChild("parentID"),
         equalTo(parentID)
-      
-    );
-    const parentSnapshot = await get(parentQuery);
-    console.log("parent data",parentSnapshot)
-
+      );
+      const parentSnapshot = await get(parentQuery);
+      console.log("parent data", parentSnapshot);
   
       if (parentSnapshot.exists()) {
-        console.log( "hyy",parentSnapshot)
         console.log(`Found ${parentSnapshot.size} records with parentID ${parentID}. Deleting them...`);
+  
+        // Show toast before deleting parent records
+        toast.success(`Deleting ${parentSnapshot.size} users with parentID ${parentID}`);
+  
         parentSnapshot.forEach((childSnapshot) => {
           console.log(`Deleting user with UID: ${childSnapshot.key}`);
           remove(childSnapshot.ref); // Delete the user record
-          toast.success(" data deleted");
-          
         });
-
       } else {
         toast.error(`No users found with parentID ${parentID}.`);
+      }
+  
+      // 3. Delete the user from Firebase Authentication
+      const user = await auth.getUser(uid); // Get the user object by UID
+      if (user) {
+        // Show toast before deleting user from Firebase Authentication
+        toast.success(`Deleting user with UID: ${uid} from Authentication`);
+  
+        // Deleting user from Firebase Authentication
+        await deleteUser(user); // Delete user from Firebase Authentication
+        toast.success(`User with UID: ${uid} deleted from Authentication`);
+      } else {
+        toast.error(`User with UID: ${uid} not found in Firebase Authentication.`);
       }
   
       console.log(`User data with UID ${uid} and related parentId entries deleted from all tables.`);
@@ -239,6 +272,7 @@ function Setting() {
     }
   };
   
+  
 
   
   
@@ -246,7 +280,7 @@ function Setting() {
   const handleDelete = () => {
     const userUid = localStorage.getItem("userId");  // Replace with the UID you want to delete
     deleteUserData(userUid);
-    navigate("/")
+
   };
 
   return (
@@ -500,6 +534,9 @@ function Setting() {
               <div style={{ width: "90%" }}>
                 <div className="settingcard">
                   <div
+                  onClick={() => {
+      window.open('https://netagstore.com/shop/', '_blank');
+  }}
                     style={{
                       display: "flex",
                       justifyContent: "center",
@@ -516,9 +553,7 @@ function Setting() {
                         cursor:"pointer"
                       }}
                     >
-                      <div  onClick={() => {
-      window.open('https://netagstore.com/shop/', '_blank');
-  }} style={{ display: "flex", alignItems: "center",cursor:'pointer' }}>
+                      <div   style={{ display: "flex", alignItems: "center",cursor:'pointer' }}>
                         <div>
                           <img src={shop} alt="" />
                         </div>
@@ -550,6 +585,11 @@ function Setting() {
             >
               <div style={{ width: "90%" }}>
                 <div className="settingcard">
+
+                <Link
+                          to="/home/setting/language"
+                          style={{ textDecoration: "none" }}
+                        >
                   <div
                     style={{
                       display: "flex",
@@ -570,10 +610,7 @@ function Setting() {
                         <div>
                           <img src={languages} alt="" />
                         </div>
-                        <Link
-                          to="/home/setting/language"
-                          style={{ textDecoration: "none" }}
-                        >
+                      
                           <div
                             style={{
                               color: "#868686",
@@ -583,13 +620,15 @@ function Setting() {
                           >
                             {t("Languages")}
                           </div>
-                        </Link>
+                   
                       </div>
                       <div>
                         <img src={vectorrr} alt="" />
                       </div>
                     </div>
+               
                   </div>
+                  </Link>
                 </div>
               </div>
             </div>
