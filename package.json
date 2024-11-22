@@ -41,7 +41,6 @@
     "react-image-crop": "^11.0.6",
     "react-loading-skeleton": "^3.5.0",
     "react-modal": "^3.16.1",
-    "react-placeholder": "^4.1.0",
     "react-qr-code": "^2.0.15",
     "react-qr-reader": "^3.0.0-beta-1",
     "react-qr-scanner": "^1.0.0-alpha.11",
